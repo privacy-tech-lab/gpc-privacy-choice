@@ -7,14 +7,12 @@ privacy-tech-lab, https://privacytechlab.org/
 /*
 background.js
 ================================================================================
-background.js is the main background script handling OptMeowt's
-main opt-out functionality
+background.js is the main background script handling OptMeowt's main opt-out functionality
 */
 
 /**
  * Initializers
  */
-
 var tabs = {}; /// Store all active tab id's, domain, requests, and response
 var wellknown = {} /// Store information about `well-known/gpc` files per tabs
 var signalPerTab = {} /// Store information on a signal being sent for updateUI
@@ -110,9 +108,6 @@ function updateDomainsAndSignal(details) {
     // console.log("sendsignal:", sendSignal);
   });
 }
-
-
-
 
 /**
  * Updates HTTP headers with Do Not Sell headers according
@@ -267,11 +262,12 @@ function incrementBadge() {
     requests = tabs[activeTabID].REQUEST_DOMAINS;
     // console.log(tabs[activeTabID]);
   }
+  
   // chrome.browserAction.setBadgeText({ text: numberOfRequests.toString() });
   function handleSendMessageError() {
     const error = chrome.runtime.lastError;
     if (error){
-      console.warn(error.message)
+      console.log(error.message)
     }
   }
 
