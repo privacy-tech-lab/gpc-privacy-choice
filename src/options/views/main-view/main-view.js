@@ -20,7 +20,6 @@ import {
 } from "../../components/util.js";
 import { settingsView } from "../settings-view/settings-view.js";
 import { domainlistView } from "../domainlist-view/domainlist-view.js";
-import { aboutView } from "../about-view/about-view.js";
 
 /**
  * Opens the `Settings` page
@@ -48,20 +47,6 @@ function displayDomainlist(bodyTemplate) {
       });
       document.querySelector('.navbar-item.active').classList.remove('active')
       document.querySelector('#main-view-domainlist').classList.add('active')
-}
-
-/**
- * Opens the `Display` page
- * @param {string} bodyTemplate - stringified HTML template
- */
-function displayAbout(bodyTemplate) {
-    animateCSS("#scaffold", 'fadeOut', async function() {
-        document.getElementById('scaffold').remove()
-        await aboutView(bodyTemplate)
-        animateCSS("#scaffold", 'fadeIn');
-      });
-      document.querySelector('.navbar-item.active').classList.remove('active')
-      document.querySelector('#main-view-about').classList.add('active')
 }
 
 /**
@@ -93,8 +78,5 @@ export async function mainView() {
   document
     .getElementById("main-view-domainlist")
     .addEventListener("click", () => displayDomainlist(bodyTemplate));
-  document
-    .getElementById("main-view-about")
-    .addEventListener("click", () => displayAbout(bodyTemplate));
   })
 }
