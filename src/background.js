@@ -262,7 +262,7 @@ function incrementBadge() {
     requests = tabs[activeTabID].REQUEST_DOMAINS;
     // console.log(tabs[activeTabID]);
   }
-  
+
   // chrome.browserAction.setBadgeText({ text: numberOfRequests.toString() });
   function handleSendMessageError() {
     const error = chrome.runtime.lastError;
@@ -305,7 +305,7 @@ function enable() {
         );
         chrome.storage.local.set({ ENABLED: true });
 
-        // console.log("DOM signal to navigator");
+        // console.log("DOM signal to navigator"); => this could be deleted
         chrome.webNavigation.onCommitted.addListener(
           addDomSignal
         )
@@ -523,21 +523,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // console.log("DOM content loaded message received in background.js. global_domains is:", global_domains);
   }
 
-  if (request.msg === "WELLKNOWNREQUEST") {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-      // console.log("Received wellknown request")
-      // console.log("Received wellknown tabs callback: ", tabs[0]["id"])
-      tabID = tabs[0]["id"]
-      // console.log(`tabID for wellknownrequest: ${tabID}`)
-      let wellKnownData = wellknown[tabID]
-      // console.log("wellKnownData: ", wellKnownData)
+  // if (request.msg === "WELLKNOWNREQUEST") {
+  //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+  //     // console.log("Received wellknown request")
+  //     // console.log("Received wellknown tabs callback: ", tabs[0]["id"])
+  //     tabID = tabs[0]["id"]
+  //     // console.log(`tabID for wellknownrequest: ${tabID}`)
+  //     let wellKnownData = wellknown[tabID]
+  //     // console.log("wellKnownData: ", wellKnownData)
 
-      chrome.runtime.sendMessage({
-        msg: "WELLKNOWNRESPONSE",
-        data: wellKnownData,
-      });
-    });
-   }
+  //     chrome.runtime.sendMessage({
+  //       msg: "WELLKNOWNRESPONSE",
+  //       data: wellKnownData,
+  //     });
+  //   });
+  //  }
 
   if (request.msg === "WELLKNOWNCS") {
     // console.log(`.well-known from ContentScr: ${JSON.stringify(request.data)}`);
