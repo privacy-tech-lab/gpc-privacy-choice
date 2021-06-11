@@ -1,5 +1,5 @@
 {
-  "name": "OptMeowt Tester",
+  "name": "OptMeowt-R",
   "version": "1.1.4",
   "description": "OptMeowt allows Web users to make use of their rights to opt out from the sale and sharing of personal data",
   "permissions": [
@@ -16,7 +16,7 @@
     "128": "assets/face-icons/icon128-face-circle.png"
   },
   "browser_action": {
-    "default_title": "OptMeowt Tester",
+    "default_title": "OptMeowt-R",
     "default_popup": "popup/popup.html"
   },
   "content_scripts": [
