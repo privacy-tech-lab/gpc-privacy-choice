@@ -11,14 +11,6 @@ styles.css is the main css page for OptMeowt's options page
 */
 
 /*
-Dark Mode Switch
-Based on https://github.com/coliff/dark-mode-switch
-*/
-@import "../libs/dark-mode-switch-1.0.0/dark-mode.css";
-
-/********************************************************/
-
-/*
 Colors
 */
 :root {
@@ -66,23 +58,6 @@ pre, code{
 
 a {
   text-decoration: underline;
-}
-
-/********************************************************/
-
-/*
-About page Q/A heading style
-*/
-.question {
-  color: var(--text-color-darker);
-  font-size: x-large;
-  user-select: none;
-}
-
-.answer {
-  color: var(--text-color);
-  font-size: medium;
-  user-select: none;
 }
 
 /********************************************************/
@@ -316,38 +291,4 @@ https://codepen.io/aaroniker/pen/oaQdQZ
 }
 .switch-smaller input + span:active {
   transform: scale(0.65);
-}
-
-/*========================================================================================*/
-/*Walkthrough popups css*/
-
-.tippy-box[data-theme~="custom-1"] {
-  background-color: #87cefa;
-  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.43);
-  color: white;
-  border-radius: 5px;
-  padding: 10px;
-  text-align: left;
-  float: left;
-}
-
-.tippy-box[data-theme~="custom-1"] button {
-  color: white;
-}
-
-.tippy-box[data-theme~="custom-1"][data-placement^="top"]
-  > .tippy-arrow::before {
-  border-top-color: #87cefa;
-}
-.tippy-box[data-theme~="custom-1"][data-placement^="bottom"]
-  > .tippy-arrow::before {
-  border-bottom-color: #87cefa;
-}
-.tippy-box[data-theme~="custom-1"][data-placement^="left"]
-  > .tippy-arrow::before {
-  border-left-color: #87cefa;
-}
-.tippy-box[data-theme~="custom-1"][data-placement^="right"]
-  > .tippy-arrow::before {
-  border-right-color: #87cefa;
 }
