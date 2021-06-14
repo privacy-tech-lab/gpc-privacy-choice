@@ -16,68 +16,94 @@ var optout_headers = {};
 var userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
 var global_domains = {};
 
-
-/**
- * Manipulates Headers and adds Do Not Sell signal if functionality is on
- * @param {Object} details - retrieved info passed into callback
- * @return {HttpHeaders} array of modified HTTP headers to be sent (request headers)
- */
-const addHeaders = (details) => {
-  if (!(details.type === "TEST")) {
-    updateDomainsAndSignal(details);
-
-    if (sendSignal) {
-      signalPerTab[details.tabId] = true
-      initUSP();
-      updateUI(details);
-      return updateHeaders(details);
-    }
-  } else {
-    // console.log("Caught unessential request");
+// Generates ENABLED, DOMAINLIST_ENABLED, and DOMAINS keys in local storage [checked]
+chrome.storage.local.get(
+  ["ENABLED", "DOMAINLIST_ENABLED", "DOMAINS", "DOMAINLIST_PRESSED"],
+  function (result) {
+    if (result.ENABLED == undefined) chrome.storage.local.set({ ENABLED: true });
+    if (result.DOMAINLIST_ENABLED == undefined) chrome.storage.local.set({ DOMAINLIST_ENABLED: false });
+    if (result.DOMAINS == undefined) chrome.storage.local.set({ DOMAINS: {} });
+    if (result.DOMAINLIST_PRESSED == undefined) chrome.storage.local.set({ DOMAINLIST_PRESSED: false });
   }
-};
+);
 
-/**
- * Updates HTTP headers with Do Not Sell headers according
- * to whether or not a site should recieve them.
- * @param {Object} details - details object
- */
-const updateHeaders = (details) => {
-  if (sendSignal) {
-    for (let signal in optout_headers) {
-      let s = optout_headers[signal];
-      details.requestHeaders.push({ name: s.name, value: s.value });
-    }
-    return { requestHeaders: details.requestHeaders };
-  } else {
-    return { requestHeaders: details.requestHeaders };
+// Runs on startup to query current tab [checked]
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  if (tabs.id !== undefined) {
+    activeTabID = tab.id;
   }
-}
+});
+
+// Runs on startup to enable/disable extension [checked]
+chrome.storage.local.get(["ENABLED"], function (result) {
+  if (result.ENABLED === false) {
+    disable();
+  } else {
+    enable();
+  }
+});
+
+// Directs users to the options page upon installing the extension
+chrome.runtime.onInstalled.addListener(function (object) {
+  chrome.storage.local.set(
+    { FIRSTINSTALL: true, FIRSTINSTALL_POPUP: true },
+    function () {
+      chrome.runtime.openOptionsPage(() => 
+      {});
+    }
+  );
+});
+
+// Listener for runtime messages: in partuclar "TAB" from contentScript.js
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.ENABLED != null) {
+    if (request.ENABLED) {
+      enable();
+      sendResponse("DONE");
+    } else {
+      disable();
+      sendResponse("DONE");
+    }
+  }
+  if (request.msg === "LOADED") global_domains = {};
+  if (request.msg === "TAB") {
+    let url = new URL(sender.origin);
+    let parsed = psl.parse(url.hostname);
+    let domain = parsed.domain;
+    let tabID = sender.tab.id;
+    if (tabs[tabID] === undefined) {
+      tabs[tabID] = {
+        DOMAIN: domain,
+        REQUEST_DOMAINS: {},
+        TIMESTAMP: request.data,
+      };
+    } else if (tabs[tabID].DOMAIN !== domain) {
+      tabs[tabID].DOMAIN = domain;
+      let urls = tabs[tabID]["REQUEST_DOMAINS"];
+      for (var key in urls) {
+        if (urls[key]["TIMESTAMP"] >= request.data) {
+          tabs[tabID]["REQUEST_DOMAINS"][key] = urls[key];
+        } else {
+          delete tabs[tabID]["REQUEST_DOMAINS"][key];
+        }
+      }
+      tabs[tabID]["TIMESTAMP"] = request.data;
+    }
+  } 
+});
 
 
-/**
- * Manipulates received headers if need be. Logs data and updates popup badge
- * @param {Object} details - retrieved info passed into callback
- */
-const receivedHeaders = (details) => {
-  logData(details);
-  incrementBadge(details);
-};
-
-
-// Adds current domain to local storage domain list.
-// Verifies a signal should be sent to a particular domain
-// Set `sendSignal` bool flag accordingly. [checked]
+// Add current bool flag accordingly. [checked]
 const updateDomainsAndSignal = (details) => {
   /// Add current domain to list of domains to send headers to on current tab
-  var url = new URL(details.url);
-  var parsed = psl.parse(url.hostname);
-  var d = parsed.domain;
+  let url = new URL(details.url);
+  let parsed = psl.parse(url.hostname);
+  let d = parsed.domain;
   global_domains[d] = true;
 
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result) {
-    var domains = result.DOMAINS;
-    for (const domain in global_domains) {
+    let domains = result.DOMAINS;
+    for (let domain in global_domains) {
       if (domains[domain] === undefined) {
         domains[domain] = true;
       }
@@ -94,6 +120,34 @@ const updateDomainsAndSignal = (details) => {
     }
   });
 }
+
+// Updates HTTP headers with Do Not Sell headers according to whether or not a site should recieve them. [checked]
+const updateHeaders = (details) => {
+  if (sendSignal) {
+    for (let signal in optout_headers) {
+      let s = optout_headers[signal];
+      details.requestHeaders.push({ name: s.name, value: s.value });
+    }
+    return { requestHeaders: details.requestHeaders };
+  } else {
+    return { requestHeaders: details.requestHeaders };
+  }
+}
+
+// Manipulates Headers and adds Do Not Sell signal
+const addHeaders = (details) => {
+  // what is the details.type === TEST?
+  if (!(details.type === "TEST")) {
+
+    updateDomainsAndSignal(details);
+    if (sendSignal) {
+      signalPerTab[details.tabId] = true
+      // initUSP();
+      updateUI(details);
+      return updateHeaders(details);
+    }
+  } 
+};
 
 
 // Initializes the GPC dom signal functionality in dom.js [checked]
@@ -128,18 +182,6 @@ const addDomSignal = (details) => {
   }
 }
 
-/**
- * Allows for all background page resets necessary on a page navigate. 
- * Mainly to reset the well-known boolean check for a specific tab.
- * @param {Object} details - retrieved info passed into callback
- */
-const beforeNavigate = (details) => {
-  if (details.frameId === 0) {
-    wellknown[details.tabId] = null
-    signalPerTab[details.tabId] = false
-  }
-}
-
 // Updates OptMeowt icon to reflect a Do Not Sell signal sent status [checked]
 const updateUI = (details) => {
   if (wellknown[details.tabId] === undefined) {
@@ -158,7 +200,22 @@ const updateUI = (details) => {
   }
 }
 
-// Logs all urls of a domain with response headers to local `tabs` object
+// Manipulates received headers if need be. Logs data and updates popup badge [???]
+const receivedHeaders = (details) => {
+  logData(details);
+  // incrementBadge(details);
+};
+
+
+// Allows for all background page resets necessary on a page navigate. Mainly to reset the well-known boolean check for a specific tab. [???]
+const beforeNavigate = (details) => {
+  if (details.frameId === 0) {
+    wellknown[details.tabId] = null
+    signalPerTab[details.tabId] = false
+  }
+}
+
+// Logs all urls of a domain with response headers to local `tabs` object [???]
 const logData = (details) => {
   var url = new URL(details.url);
   var parsed = psl.parse(url.hostname);
@@ -192,7 +249,7 @@ const logData = (details) => {
   }
 }
 
-// Enable Opt-Meowt 
+// Enable Opt-Meowt [checked]
 const enable = () => {
   fetch("json/headers.json")
     .then((response) => response.text())
@@ -255,7 +312,7 @@ const enable = () => {
     );
 }
 
-// Disable Functionality
+// Disable Functionality [checked]
 const disable = () => {
   optout_headers = {};
   chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
@@ -265,99 +322,3 @@ const disable = () => {
   chrome.storage.local.set({ ENABLED: false });
   var counter = 0;
 }
-
-// Listener for tab switch that updates curr tab badge counter
-chrome.tabs.onActivated.addListener(function (info) {
-  activeTabID = info.tabId;
-  incrementBadge();
-});
-
-// Runs on startup to query current tab
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  if (tabs.id !== undefined) {
-    activeTabID = tab.id;
-  }
-});
-
-// Generates ENABLED, DOMAINLIST_ENABLED, and DOMAINS keys in local storage
-chrome.storage.local.get(
-  ["ENABLED", "DOMAINLIST_ENABLED", "DOMAINS", "DOMAINLIST_PRESSED"],
-  function (result) {
-    if (result.ENABLED == undefined) {
-      chrome.storage.local.set({ ENABLED: true });
-    }
-    if (result.DOMAINLIST_ENABLED == undefined) {
-      chrome.storage.local.set({ DOMAINLIST_ENABLED: false });
-    }
-    if (result.DOMAINS == undefined) {
-      chrome.storage.local.set({ DOMAINS: {} });
-    }
-    if (result.DOMAINLIST_PRESSED == undefined) {
-      chrome.storage.local.set({ DOMAINLIST_PRESSED: false });
-    }
-  }
-);
-
-// Runs on startup to enable/disable extension
-chrome.storage.local.get(["ENABLED"], function (result) {
-  if (result.ENABLED === false) {
-    disable();
-  } else {
-    enable();
-  }
-});
-
-// Listener for runtime messages, in partuclar "TAB" from contentScript.js or for "INIT" to start popup badge counter
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.ENABLED != null) {
-    if (request.ENABLED) {
-      enable();
-      sendResponse("DONE");
-    } else {
-      disable();
-      sendResponse("DONE");
-    }
-  }
-  if (request.msg === "LOADED") {
-    global_domains = {};
-    // console.log("DOM content loaded message received in background.js. global_domains is:", global_domains);
-  }
-  if (request.msg === "TAB") {
-    var url = new URL(sender.origin);
-    var parsed = psl.parse(url.hostname);
-    var domain = parsed.domain;
-    var tabID = sender.tab.id;
-    if (tabs[tabID] === undefined) {
-      tabs[tabID] = {
-        DOMAIN: domain,
-        REQUEST_DOMAINS: {},
-        TIMESTAMP: request.data,
-      };
-    } else if (tabs[tabID].DOMAIN !== domain) {
-      tabs[tabID].DOMAIN = domain;
-      let urls = tabs[tabID]["REQUEST_DOMAINS"];
-      // console.log("urls are:", urls)
-      for (var key in urls) {
-        if (urls[key]["TIMESTAMP"] >= request.data) {
-          tabs[tabID]["REQUEST_DOMAINS"][key] = urls[key];
-        } else {
-          delete tabs[tabID]["REQUEST_DOMAINS"][key];
-        }
-      }
-
-      tabs[tabID]["TIMESTAMP"] = request.data;
-    }
-  } 
-});
-
-chrome.runtime.onInstalled.addListener(function (object) {
-  chrome.storage.local.set(
-    { FIRSTINSTALL: true, FIRSTINSTALL_POPUP: true },
-    function () {
-      // console.log("Set fresh install value. Opening options page...");
-      chrome.runtime.openOptionsPage(() => 
-      // console.log("Opened options page.")
-      {});
-    }
-  );
-});
