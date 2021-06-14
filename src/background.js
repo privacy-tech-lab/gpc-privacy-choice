@@ -1,14 +1,12 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
 // Initializers
-var tabs = {}; /// Store all active tab id's, domain, requests, and response
-var wellknown = {} /// Store information about `well-known/gpc` files per tabs
-var signalPerTab = {} /// Store information on a signal being sent for updateUI
-var activeTabID = 0;
-var sendSignal = false;
-var optout_headers = {};
-var userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
-var global_domains = {};
+let tabs = {}; /// Store all active tab id's, domain, requests, and response
+let activeTabID = 0;
+let sendSignal = false;
+let optout_headers = {};
+let userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
+let global_domains = {};
 
 // Generates ENABLED, DOMAINLIST_ENABLED, and DOMAINS keys in local storage [checked]
 // Initial configuration: enabled, not domainlist enabled, empty domain list
@@ -60,6 +58,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let parsed = psl.parse(url.hostname);
     let domain = parsed.domain;
     let tabID = sender.tab.id;
+    console.log("tabID is " + tabID)
     if (tabs[tabID] === undefined) {
       tabs[tabID] = {
         DOMAIN: domain,
@@ -163,17 +162,11 @@ const addDomSignal = (details) => {
 
 // Updates OptMeowt icon to reflect a Do Not Sell signal sent status [checked]
 const updateUI = (details) => {
-  if (sendSignal) {
-    chrome.browserAction.setIcon(
-      {tabId: details.tabId, path: "assets/face-icons/optmeow-face-circle-green-ring-128.png"},
-      function () { }
-    );
-  } else {
-    chrome.browserAction.setIcon(
-      { tabId: details.tabId, path: "assets/face-icons/optmeow-face-circle-red-128.png"},
-      function () { }
-    );
-  }
+  let iconPath = sendSignal ? "assets/face-icons/optmeow-face-circle-green-ring-128.png" : "assets/face-icons/optmeow-face-circle-red-128.png";
+  chrome.browserAction.setIcon(
+    {tabId: details.tabId, path: iconPath},
+    function () { }
+  );
 }
 
 // Enable Opt-Meowt [checked]
