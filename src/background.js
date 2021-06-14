@@ -1,9 +1,3 @@
-/*
-OptMeowt is licensed under the MIT License
-Copyright (c) 2020 Kuba Alicki, Daniel Knopf, Abdallah Salia, Sebastian Zimmeck
-privacy-tech-lab, https://privacytechlab.org/
-*/
-
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
 // Initializers
@@ -17,13 +11,13 @@ var userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "ch
 var global_domains = {};
 
 // Generates ENABLED, DOMAINLIST_ENABLED, and DOMAINS keys in local storage [checked]
+// Initial configuration: enabled, not domainlist enabled, empty domain list
 chrome.storage.local.get(
-  ["ENABLED", "DOMAINLIST_ENABLED", "DOMAINS", "DOMAINLIST_PRESSED"],
+  ["ENABLED", "DOMAINLIST_ENABLED", "DOMAINS"],
   function (result) {
     if (result.ENABLED == undefined) chrome.storage.local.set({ ENABLED: true });
     if (result.DOMAINLIST_ENABLED == undefined) chrome.storage.local.set({ DOMAINLIST_ENABLED: false });
     if (result.DOMAINS == undefined) chrome.storage.local.set({ DOMAINS: {} });
-    if (result.DOMAINLIST_PRESSED == undefined) chrome.storage.local.set({ DOMAINLIST_PRESSED: false });
   }
 );
 
@@ -36,20 +30,15 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
 // Runs on startup to enable/disable extension [checked]
 chrome.storage.local.get(["ENABLED"], function (result) {
-  if (result.ENABLED === false) {
-    disable();
-  } else {
-    enable();
-  }
+  if (result.ENABLED === false) disable();
+  else enable();
 });
 
 // Directs users to the options page upon installing the extension
 chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set(
     { FIRSTINSTALL: true, FIRSTINSTALL_POPUP: true },
-    function () {
-      chrome.runtime.openOptionsPage(() => 
-      {});
+    function () {chrome.runtime.openOptionsPage(() => {});
     }
   );
 });
@@ -91,7 +80,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   } 
 });
-
 
 // Add current bool flag accordingly. [checked]
 const updateDomainsAndSignal = (details) => {
@@ -136,19 +124,10 @@ const updateHeaders = (details) => {
 
 // Manipulates Headers and adds Do Not Sell signal
 const addHeaders = (details) => {
-  // what is the details.type === TEST?
-  if (!(details.type === "TEST")) {
-
-    updateDomainsAndSignal(details);
-    if (sendSignal) {
-      signalPerTab[details.tabId] = true
-      // initUSP();
-      updateUI(details);
-      return updateHeaders(details);
-    }
-  } 
+  updateDomainsAndSignal(details);
+  updateUI(details);
+  return updateHeaders(details);
 };
-
 
 // Initializes the GPC dom signal functionality in dom.js [checked]
 const initDomJS = (details) => {
@@ -184,68 +163,16 @@ const addDomSignal = (details) => {
 
 // Updates OptMeowt icon to reflect a Do Not Sell signal sent status [checked]
 const updateUI = (details) => {
-  if (wellknown[details.tabId] === undefined) {
-    wellknown[details.tabId] = null
-  }
-  if (wellknown[details.tabId] === null) {
+  if (sendSignal) {
     chrome.browserAction.setIcon(
-      {
-        tabId: details.tabId,
-        path: "assets/face-icons/optmeow-face-circle-green-ring-128.png",
-      },
-      function () {
-        // console.log("Updated OptMeowt icon to GREEN RING");
-      }
+      {tabId: details.tabId, path: "assets/face-icons/optmeow-face-circle-green-ring-128.png"},
+      function () { }
     );
-  }
-}
-
-// Manipulates received headers if need be. Logs data and updates popup badge [???]
-const receivedHeaders = (details) => {
-  logData(details);
-  // incrementBadge(details);
-};
-
-
-// Allows for all background page resets necessary on a page navigate. Mainly to reset the well-known boolean check for a specific tab. [???]
-const beforeNavigate = (details) => {
-  if (details.frameId === 0) {
-    wellknown[details.tabId] = null
-    signalPerTab[details.tabId] = false
-  }
-}
-
-// Logs all urls of a domain with response headers to local `tabs` object [???]
-const logData = (details) => {
-  var url = new URL(details.url);
-  var parsed = psl.parse(url.hostname);
-
-  if (tabs[details.tabId] === undefined) {
-    tabs[details.tabId] = { DOMAIN: null, REQUEST_DOMAINS: {}, TIMESTAMP: 0 };
-    tabs[details.tabId].REQUEST_DOMAINS[parsed.domain] = {
-      URLS: {},
-      RESPONSE: details.responseHeaders,
-      TIMESTAMP: details.timeStamp,
-    };
-    tabs[details.tabId].REQUEST_DOMAINS[parsed.domain].URLS = {
-      URL: details.url,
-      RESPONSE: details.responseHeaders,
-    };
   } else {
-    if (tabs[details.tabId].REQUEST_DOMAINS[parsed.domain] === undefined) {
-      tabs[details.tabId].REQUEST_DOMAINS[parsed.domain] = {
-        URLS: {},
-        RESPONSE: details.responseHeaders,
-        TIMESTAMP: details.timeStamp,
-      };
-      tabs[details.tabId].REQUEST_DOMAINS[parsed.domain].URLS[details.url] = {
-        RESPONSE: details.responseHeaders,
-      };
-    } else {
-      tabs[details.tabId].REQUEST_DOMAINS[parsed.domain].URLS[details.url] = {
-        RESPONSE: details.responseHeaders,
-      };
-    }
+    chrome.browserAction.setIcon(
+      { tabId: details.tabId, path: "assets/face-icons/optmeow-face-circle-red-128.png"},
+      function () { }
+    );
   }
 }
 
@@ -265,14 +192,6 @@ const enable = () => {
         );
         chrome.storage.local.set({ ENABLED: true });
         chrome.webNavigation.onCommitted.addListener(addDomSignal);
-        chrome.webNavigation.onBeforeNavigate.addListener(beforeNavigate);
-        chrome.webRequest.onHeadersReceived.addListener(
-          receivedHeaders,
-          {
-            urls: ["<all_urls>"],
-          },
-          ["responseHeaders", "blocking"]
-        );
         chrome.storage.local.set({ ENABLED: true });
       } else {
         chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -289,19 +208,6 @@ const enable = () => {
             urls: ["<all_urls>"],
           }
         )
-        chrome.webNavigation.onBeforeNavigate.addListener(
-          beforeNavigate,
-          {
-            urls: ["<all_urls>"],
-          }
-        )
-        chrome.webRequest.onHeadersReceived.addListener(
-          receivedHeaders,
-          {
-            urls: ["<all_urls>"],
-          },
-          ["responseHeaders", "extraHeaders", "blocking"]
-        );
         chrome.storage.local.set({ ENABLED: true });
       }
     })
