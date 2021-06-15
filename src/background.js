@@ -26,9 +26,7 @@ chrome.storage.local.get(["ENABLED"], function (result) {
   else enable();
 });
 
-
-
-// Listener for runtime messages: in partuclar "TAB" from contentScript.js
+// Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.ENABLED != null) {
     if (request.ENABLED) {
