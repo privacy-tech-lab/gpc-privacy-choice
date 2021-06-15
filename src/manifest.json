@@ -1,11 +1,5 @@
 {
   "name": "OptMeowt-R",
-<<<<<<< HEAD
-=======
-  "name": "OptMeowt Tester",
->>>>>>> Removed 'About' tab, Dark-Mode switch, and initial walkthrough from the Options page #4
-=======
->>>>>>> Last second changes #4
   "version": "1.1.4",
   "description": "OptMeowt allows Web users to make use of their rights to opt out from the sale and sharing of personal data",
   "permissions": [
@@ -23,12 +17,6 @@
   },
   "browser_action": {
     "default_title": "OptMeowt-R",
-<<<<<<< HEAD
-=======
-    "default_title": "OptMeowt Tester",
->>>>>>> Removed 'About' tab, Dark-Mode switch, and initial walkthrough from the Options page #4
-=======
->>>>>>> Last second changes #4
     "default_popup": "popup/popup.html"
   },
   "content_scripts": [
