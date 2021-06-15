@@ -2,28 +2,22 @@
 
 // Initializers
 let tabs = {}; /// Store all active tab id's, domain, requests, and response
-let activeTabID = 0;
 let sendSignal = false;
 let optout_headers = {};
 let userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
 let global_domains = {};
 
-// Generates ENABLED, DOMAINLIST_ENABLED, and DOMAINS keys in local storage [checked]
-// Initial configuration: enabled, not domainlist enabled, empty domain list
-chrome.storage.local.get(
-  ["ENABLED", "DOMAINLIST_ENABLED", "DOMAINS"],
-  function (result) {
-    if (result.ENABLED == undefined) chrome.storage.local.set({ ENABLED: true });
-    if (result.DOMAINLIST_ENABLED == undefined) chrome.storage.local.set({ DOMAINLIST_ENABLED: false });
-    if (result.DOMAINS == undefined) chrome.storage.local.set({ DOMAINS: {} });
-  }
-);
-
-// Runs on startup to query current tab [checked]
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  if (tabs.id !== undefined) {
-    activeTabID = tab.id;
-  }
+// Directs users to the options page upon installing the extension
+chrome.runtime.onInstalled.addListener(function (object) {
+  chrome.storage.local.set(
+    { FIRSTINSTALL: true, 
+      FIRSTINSTALL_POPUP: true, 
+      ENABLED: true, 
+      DOMAINLIST_ENABLED: false, 
+      DOMAINS: {}},
+    function () {chrome.runtime.openOptionsPage(() => {});
+    }
+  );
 });
 
 // Runs on startup to enable/disable extension [checked]
@@ -32,16 +26,7 @@ chrome.storage.local.get(["ENABLED"], function (result) {
   else enable();
 });
 
-// Directs users to the options page upon installing the extension
-chrome.runtime.onInstalled.addListener(function (object) {
-  chrome.storage.local.set(
-    { FIRSTINSTALL: true, FIRSTINSTALL_POPUP: true },
-    function () {chrome.runtime.openOptionsPage(() => {});
-    }
-  );
-});
-
-// Listener for runtime messages: in partuclar "TAB" from contentScript.js
+// Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.ENABLED != null) {
     if (request.ENABLED) {
@@ -53,31 +38,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   }
   if (request.msg === "LOADED") global_domains = {};
-  if (request.msg === "TAB") {
-    let url = new URL(sender.origin);
-    let parsed = psl.parse(url.hostname);
-    let domain = parsed.domain;
-    let tabID = sender.tab.id;
-    console.log("tabID is " + tabID)
-    if (tabs[tabID] === undefined) {
-      tabs[tabID] = {
-        DOMAIN: domain,
-        REQUEST_DOMAINS: {},
-        TIMESTAMP: request.data,
-      };
-    } else if (tabs[tabID].DOMAIN !== domain) {
-      tabs[tabID].DOMAIN = domain;
-      let urls = tabs[tabID]["REQUEST_DOMAINS"];
-      for (var key in urls) {
-        if (urls[key]["TIMESTAMP"] >= request.data) {
-          tabs[tabID]["REQUEST_DOMAINS"][key] = urls[key];
-        } else {
-          delete tabs[tabID]["REQUEST_DOMAINS"][key];
-        }
-      }
-      tabs[tabID]["TIMESTAMP"] = request.data;
-    }
-  } 
 });
 
 // Add current bool flag accordingly. [checked]
