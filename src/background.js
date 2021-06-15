@@ -53,31 +53,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   }
   if (request.msg === "LOADED") global_domains = {};
-  if (request.msg === "TAB") {
-    let url = new URL(sender.origin);
-    let parsed = psl.parse(url.hostname);
-    let domain = parsed.domain;
-    let tabID = sender.tab.id;
-    console.log("tabID is " + tabID)
-    if (tabs[tabID] === undefined) {
-      tabs[tabID] = {
-        DOMAIN: domain,
-        REQUEST_DOMAINS: {},
-        TIMESTAMP: request.data,
-      };
-    } else if (tabs[tabID].DOMAIN !== domain) {
-      tabs[tabID].DOMAIN = domain;
-      let urls = tabs[tabID]["REQUEST_DOMAINS"];
-      for (var key in urls) {
-        if (urls[key]["TIMESTAMP"] >= request.data) {
-          tabs[tabID]["REQUEST_DOMAINS"][key] = urls[key];
-        } else {
-          delete tabs[tabID]["REQUEST_DOMAINS"][key];
-        }
-      }
-      tabs[tabID]["TIMESTAMP"] = request.data;
-    }
-  } 
 });
 
 // Add current bool flag accordingly. [checked]
