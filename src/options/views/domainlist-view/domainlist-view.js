@@ -1,36 +1,14 @@
-/*
-OptMeowt is licensed under the MIT License
-Copyright (c) 2020 Kuba Alicki, Daniel Knopf, Abdallah Salia, Sebastian Zimmeck
-privacy-tech-lab, https://privacytechlab.org/
-*/
-
-
-/*
-domainlist-view.js
-================================================================================
-domainlist-view.js loads domainlist-view.html when clicked on the options page
-*/
-
-
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, toggleListener, permRemoveFromDomainlist } from "../../../domainlist.js";
 
-/**
- * @typedef headings
- * @property {string} headings.title - Title of the given page
- * @property {string} headings.subtitle - Subtitle of the given page
- */
 const headings = {
     title: 'Domain List',
     subtitle: "Toggle which domains you would like to receive Do Not Sell signals"
 }
 
-/**
- * Creates the event listeners for the `domainlist` page buttons and options
- */
+// Creates the event listeners for the `domainlist` page buttons and options
 function eventListeners() {
     document.getElementById('searchbar').addEventListener('keyup', filterList )
-    // document.getElementById('plus-button').addEventListener('keyup', plusButton )
     createToggleListeners();
 
     window.onscroll = function() { stickyNavbar() };
@@ -38,40 +16,24 @@ function eventListeners() {
     var sb = document.getElementById("searchbar")
     var sticky = nb.offsetTop;
 
-    /**
-     * Sticky navbar
-     */
+    // Sticky navbar
     function stickyNavbar() {
-      if (window.pageYOffset >= sticky) {
-        nb.classList.add("sticky")
-        // nb.classList.add("uk-grid")
-        // sb.classList.add("uk-width-1-2")
-        // document.getElementById("width-expand").classList.remove("uk-width-expand")
-      } else {
-        nb.classList.remove("sticky")
-        // sb.classList.remove("uk-width-3-4")
-      }
+      if (window.pageYOffset >= sticky) nb.classList.add("sticky")
+      else nb.classList.remove("sticky")
     }
 }
 
-/**
- * Creates the specific Domain List toggles as well as the perm delete
- * buttons for each domain
- */
+// Creates the specific Domain List toggles as well as the perm delete
 function createToggleListeners() {
   chrome.storage.local.get(["DOMAINS"], function (result) {
     for (let domain in result.DOMAINS) {
-      // MAKE SURE THE ID MATCHES EXACTLY
       toggleListener(domain, domain)
       deleteButtonListener(domain)
     }
   });
 }
 
-/**
- * Delete buttons for each domain
- * @param {string} domain
- */
+// Delete buttons for each domain
 function deleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",
     (async () => {
@@ -86,12 +48,7 @@ NOTE: It will be automatically added back to the list when the domain is request
   }))
 }
 
-/**
- * Filterd lists code heavily inspired by
- * `https://www.w3schools.com/howto/howto_js_filter_lists.asp`
- *
- * Enables live filtering of domains via the search bar
- */
+// Filterd lists code heavily inspired by
 function filterList() {
   let input, list, li, count
   input = document.getElementById('searchbar').value.toLowerCase();
@@ -110,10 +67,7 @@ function filterList() {
   };
 }
 
-/**
- * Builds the list of domains in the domainlist, and their respective
- * options, to be displayed
- */
+// Builds the list of domains in the domainlist, and their respective options, to be displayed
 function buildList() {
   let items = ""
   chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -181,10 +135,7 @@ function buildList() {
   });
 }
 
-/**
- * Renders the `domain list` view in the options page
- * @param {string} scaffoldTemplate - stringified HTML template
- */
+// Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {
     const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
     let content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view')

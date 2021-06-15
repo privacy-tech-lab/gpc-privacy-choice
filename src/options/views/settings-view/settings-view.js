@@ -1,36 +1,18 @@
 /*
-OptMeowt is licensed under the MIT License
-Copyright (c) 2020 Kuba Alicki, Daniel Knopf, Abdallah Salia, Sebastian Zimmeck
-privacy-tech-lab, https://privacytechlab.org/
-*/
-
-/*
 settings-view.js
 ================================================================================
 settings-view.js loads settings-view.html when clicked on the options page
 */
-
 import { renderParse, fetchParse } from "../../components/util.js";
-import {
-  handleDownload,
-  startUpload,
-  handleUpload,
-} from "../../../domainlist.js";
+import { handleDownload } from "../../../domainlist.js";
 import "../../../libs-js/FileSaver.js";
 
-/**
- * @typedef headings
- * @property {string} headings.title - Title of the given page
- * @property {string} headings.subtitle - Subtitle of the given page
- */
 const headings = {
   title: "Settings",
   subtitle: "Adjust extension settings",
 };
 
-/**
- * Creates the event listeners for the `Settings` page buttons and options
- */
+// Creates the event listeners for the `Settings` page buttons and options
 function eventListeners() {
   document
     .getElementById("settings-view-radio0")
@@ -53,23 +35,9 @@ function eventListeners() {
   document
     .getElementById("download-button")
     .addEventListener("click", handleDownload);
-  document.getElementById("upload-button").addEventListener("click", () => {
-    const verify = confirm(
-      `This option will override your current domain preferences.\n Do you wish to continue?`
-    );
-    if (verify) {
-      startUpload();
-    }
-  });
-  document
-    .getElementById("upload-domainlist")
-    .addEventListener("change", handleUpload, false);
 }
 
-/**
- * Renders the `Settings` view in the options page
- * @param {string} scaffoldTemplate - stringified HTML template
- */
+// Renders the `Settings` view in the options page
 export async function settingsView(scaffoldTemplate) {
   const body = renderParse(scaffoldTemplate, headings, "scaffold-component");
   let content = await fetchParse(
