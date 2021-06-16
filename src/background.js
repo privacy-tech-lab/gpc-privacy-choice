@@ -169,6 +169,7 @@ const enable = () => {
         `Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`
       )
     );
+  sendSignal = true;
 }
 
 // Disable Functionality [checked]
@@ -179,5 +180,5 @@ const disable = () => {
   chrome.webNavigation.onCommitted.removeListener(addDomSignal);
   chrome.webNavigation.onBeforeNavigate.removeListener(beforeNavigate);
   chrome.storage.local.set({ ENABLED: false });
-  var counter = 0;
+  sendSignal = false;
 }

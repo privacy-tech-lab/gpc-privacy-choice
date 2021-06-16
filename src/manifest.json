@@ -13,7 +13,7 @@
     "tabs"
   ],
   "icons": {
-    "128": "assets/face-icons/icon128-face-circle.png"
+    "128": "assets/face-icons/optmeow-face-circle-green-ring-128.png"
   },
   "browser_action": {
     "default_title": "OptMeowt-R",
