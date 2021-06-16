@@ -1,30 +1,8 @@
-/*
-OptMeowt is licensed under the MIT License
-Copyright (c) 2020 Kuba Alicki, Daniel Knopf, Abdallah Salia, Sebastian Zimmeck
-privacy-tech-lab, https://privacytechlab.org/
-*/
-
-
-/*
-main-view.js
-================================================================================
-main-view.js handles the navigation between different parts of the options page
-and loads them when called through the navigation bar
-*/
-
-
-import {
-  fetchTemplate,
-  parseTemplate,
-  animateCSS,
-} from "../../components/util.js";
+import { fetchTemplate, parseTemplate, animateCSS } from "../../components/util.js";
 import { settingsView } from "../settings-view/settings-view.js";
 import { domainlistView } from "../domainlist-view/domainlist-view.js";
 
-/**
- * Opens the `Settings` page
- * @param {string} bodyTemplate - stringified HTML template
- */
+// Opens the `Settings` page
 async function displaySettings(bodyTemplate) {
     animateCSS("#scaffold", 'fadeOut', async function() {
         document.getElementById('scaffold').remove()
@@ -35,10 +13,7 @@ async function displaySettings(bodyTemplate) {
       document.querySelector('#main-view-settings').classList.add('active')
 }
 
-/**
- * Opens the `Domainlist` page
- * @param {string} bodyTemplate - stringified HTML template
- */
+// Opens the `Domainlist` page
 function displayDomainlist(bodyTemplate) {
     animateCSS("#scaffold", 'fadeOut', async function() {
         document.getElementById('scaffold').remove()
@@ -49,9 +24,7 @@ function displayDomainlist(bodyTemplate) {
       document.querySelector('#main-view-domainlist').classList.add('active')
 }
 
-/**
- * Prepares the `Main` page elements and intializes the default `Settings` page
- */
+// Prepares the `Main` page elements and intializes the default `Settings` page
 export async function mainView() {
   let docTemplate = await fetchTemplate("./views/main-view/main-view.html");
   const bodyTemplate = await fetchTemplate(
