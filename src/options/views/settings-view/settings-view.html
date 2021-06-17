@@ -18,23 +18,6 @@ options page when clicked
     the `settings view` is called by a user from within the options page.
 -->
 <template id="settings-view">
-  <div id="welcome-modal" uk-modal>
-    <div class="uk-modal-dialog">
-        <button class="uk-modal-close-default" type="button" uk-close></button>
-        <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-            <img src="../../../assets/face-icons/icon64-face-circle.png" alt="" style="margin: 0px;">
-            <h2 class="uk-align-center text-color-darker">Welcome to OptMeowt!</h2>
-        </div>
-        <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-          OptMeowt has been successfully installed on your browser! Would you like a quick walkthrough of the options page?
-        </div>
-        <div class="uk-modal-footer">
-          <button id="modal-button-1" class="text-color uk-button uk-button-default uk-align-right" style="margin: 0px 10px;">NOT NOW</button>
-          <button id="modal-button-2" class="text-color uk-button uk-button-default uk-align-right" style="margin: 0px 10px;">OK</button>
-        </div>
-    </div>
-  </div>
-
   <div>
     <label>
       <div uk-grid class="uk-grid-column-small" style="margin-left: 0px;">
@@ -122,53 +105,5 @@ options page when clicked
         Export Domain List
       </a>
     </div>
-    <div>
-      <button
-        id="upload-button" class="importexport-button tutorial-tooltip2"
-      >
-        Import from File
-      </button>
-      <input
-        hidden
-        type="file"
-        accept=".json"
-        id="upload-domainlist"
-      >
-      </input>
-    </div>
   </div>
-  <hr>
-  <div uk-grid class="uk-margin-top" style="margin-bottom: 4%;">
-    <div
-      class="uk-width-expand uk-margin-auto-vertical "
-      style="font-weight: bold; font-size: medium;"
-    >
-      Dark Mode
-    </div>
-    <div uk-grid>
-      <div class="uk-width-auto">
-        <label class="custom-control-label switch" for="darkSwitch">
-          <input type="checkbox" class="custom-control-input" id="darkSwitch" />
-          <span class="tutorial-tooltip3"></span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <div id="thank-you-modal" uk-modal>
-    <div class="uk-modal-dialog">
-        <button class="uk-modal-close-default" type="button" uk-close></button>
-        <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-            <img src="../../../assets/face-icons/optmeow-face-circle-green-ring-128.png" alt="">
-        </div>
-        <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-          <h2 class="text-color-darker">Enjoy Using OptMeowt!</h2>
-        </div>
-        <div class="uk-modal-footer">
-          <button id="modal-button-3" class="text-color uk-button uk-button-default uk-align-center">Learn More About Us</button>
-        </div>
-    </div>
-  </div>
-  <!-- <script src="../../../libs/dark-mode-switch-1.0.0/dark-mode-switch.min.js" ></script> -->
-  <!-- For some reason, this script is not loading from here... -->
 </template>
