@@ -17,9 +17,15 @@ overlayDiv.style.display = "none";
 // adding HTML to the modal
 overlayDiv.innerHTML = `
         <div id="container">
-            <h1>Sample Prompt will go here....</h1>
+            <h2> Your Privacy Choice</h2>
             <hr>
-            <button id="close-btn">Close</button>
+            <p>You have a right to make your privacy choice under the law.
+            This website is sharing your personal information for advertising purposes.</p>
+            <br>
+            <button id="allow-btn">Allow</button>
+            <button id="dont-allow-btn">Don't Allow</button>
+            <br>
+            Apply to all websites you visit: <input value="Empty" id="apply-all" type="checkbox">
         </div> 
     `
 
@@ -28,7 +34,10 @@ body.appendChild(overlayDiv);
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
-    if(event.target.id === 'close-btn') {
+    if(event.target.id === 'allow-btn') {
+        removeOverlay();
+    }
+    else if(event.target.id === 'dont-allow-btn') {
         removeOverlay();
     }
 })
@@ -40,7 +49,8 @@ function styleOverlay() {
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
   contentContainer.style.width = '53%'; 
-  contentContainer.style.height = '17vh';
+  contentContainer.style.height = '30vh';
+  contentContainer.style.border = 'solid rgba(0, 140, 255, 1)';
 }
 
 // function used to show the modal
