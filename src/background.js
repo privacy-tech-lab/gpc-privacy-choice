@@ -12,16 +12,17 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set(
     { FIRSTINSTALL: true, 
       FIRSTINSTALL_POPUP: true, 
-      ENABLED: true, 
+      ENABLED: false, 
       DOMAINLIST_ENABLED: false, 
       DOMAINS: {}},
-    function () {chrome.runtime.openOptionsPage(() => {});
-    }
+      // chrome.runtime.openOptionsPage(() => {});
+      function () {}
   );
 });
 
 // Runs on startup to enable/disable extension [checked]
 chrome.storage.local.get(["ENABLED"], function (result) {
+  console.log(result.ENABLED);
   if (result.ENABLED === false) disable();
   else enable();
 });
@@ -38,6 +39,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   }
   if (request.msg === "LOADED") global_domains = {};
+  // listen to the "ENABLE" messeage from the contentScript
+  if (request.greeting == "ENABLE") {
+    console.log("message received!");
+    sendResponse({farewell: "goodbye"});
+  }
 });
 
 // Add current bool flag accordingly. [checked]

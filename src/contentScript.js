@@ -82,5 +82,35 @@ function removeOverlay(){
     overlayDiv.style.display = 'none';
 }
 
-// currently just showing the modal. todo: need to check the 
-displayOverlay();
+chrome.storage.local.get(["ENABLED", "DOMAINLIST_ENABLED"], function (result) {
+    console.log(result.ENABLED);
+    console.log(result.DOMAINLIST_ENABLED);
+
+    // if GPC is turned off for all domains
+    if (result.ENABLED == false){ 
+        console.log("GPC is disabled for all! Asking the user to change preference...");
+        displayOverlay();
+    } else { 
+        // GPC signal is turned on in this condition
+        // If GPC the domain_list is on, check if the current domain is enabling GPC
+        if (result.DOMAINLIST_ENABLED == true) {
+            chrome.storage.local.get(["DOMAINS"], function (d) {
+            let domains = d.DOMAINS;
+            let currentDomain = window.location.hostname
+            console.log(domains[currentDomain])
+            // if the GPC is currently turned off for the current domain, ask the user
+            if (domains[currentDomain]== false){
+                displayOverlay();
+            }
+        })
+    }
+
+        
+    }
+
+
+});
+  
+chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
+    console.log(response.farewell);
+});
