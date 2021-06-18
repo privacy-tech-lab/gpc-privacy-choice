@@ -11,28 +11,40 @@ overlayDiv.style.left = '0';
 overlayDiv.style.right = '0';
 overlayDiv.style.bottom = '0';
 overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-overlayDiv.style.zIndex = '2';
+overlayDiv.style.zIndex = '999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
 
 // adding HTML to the modal
 overlayDiv.innerHTML = `
         <div id="container">
-            <h2> Your Privacy Choice</h2>
-            <hr style="background-color:rgb(51, 153, 255);"</hr>
-            <p>You have a right to make your privacy choice under the law.
-            This website is sharing your personal information for advertising purposes.</p>
+            <h1
+                style="font-weight:bold;font-size:4em;font:caption;"
+                >Your Privacy Choice
+            </h1>
+            <hr>
+            <p
+                style="font-weight:normal;font-size:1.2em;font:caption;"
+                >You have a right to make your privacy choice under the law.
+                This website is sharing your personal information for advertising purposes.
+            </p>
             <br>
             <button 
                 id="allow-btn" 
                 style="border:none;background-color:rgb(51, 153, 255);color:white;padding:0.5em;border-radius:3.5px;"
-                >Allow</button>
+                >Allow
+            </button>
             <button 
                 id="dont-allow-btn" 
                 style="border:none;background-color:rgb(51, 153, 255);color:white;padding:0.5em;border-radius:3.5px;"
-                >Don't Allow</button>
+                >Don't Allow
+            </button>
             <br>
-            Apply to all websites you visit: <input value="Empty" id="apply-all" type="checkbox">
+            Apply to all websites you visit <input 
+                value="Empty" 
+                id="apply-all" 
+                type="checkbox" 
+                >
         </div> 
     `
 
@@ -88,7 +100,7 @@ function styleOverlay() {
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
   contentContainer.style.padding = '1em';
-  contentContainer.style.width = '75%';
+  contentContainer.style.width = '300px';
   contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
   contentContainer.style.color = 'Black';
   contentContainer.style.borderRadius = '10px';
