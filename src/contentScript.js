@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
 
+
 // adding css styles to the modal
 overlayDiv.style.position = 'fixed';
 overlayDiv.style.width = '100%';
@@ -82,35 +83,43 @@ function removeOverlay(){
     overlayDiv.style.display = 'none';
 }
 
+// logic that handles whether the banner will pop up or not
+// banner only pops up in the two situations below:
+// - the user has GPC off 
+// - the user has GPC on and domain list option on but the current domain is not included in the domain lists
 chrome.storage.local.get(["ENABLED", "DOMAINLIST_ENABLED"], function (result) {
-    console.log(result.ENABLED);
-    console.log(result.DOMAINLIST_ENABLED);
-
     // if GPC is turned off for all domains
     if (result.ENABLED == false){ 
-        console.log("GPC is disabled for all! Asking the user to change preference...");
         displayOverlay();
     } else { 
         // GPC signal is turned on in this condition
-        // If GPC the domain_list is on, check if the current domain is enabling GPC
+        // if domain_list option is on, check if the current domain is enabling GPC
         if (result.DOMAINLIST_ENABLED == true) {
             chrome.storage.local.get(["DOMAINS"], function (d) {
             let domains = d.DOMAINS;
             let currentDomain = window.location.hostname
-            console.log(domains[currentDomain])
+
+            // console.log(domains[currentDomain])
             // if the GPC is currently turned off for the current domain, ask the user
-            if (domains[currentDomain]== false){
+            if (!(domains[currentDomain]== true)){
                 displayOverlay();
-            }
-        })
+                }
+            })
+        }  
     }
-
-        
-    }
-
-
 });
-  
+
+// starter code for interaction between the button and the background.js
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
     console.log(response.farewell);
 });
+
+// Listener for runtime messages from background js
+// this code should return the domain name of the current tab to background.js
+// chrome.runtime.onMessage.addListener(
+//     function(request, sender, sendResponse) {
+//       if (request.message == "GET DOMAIN"){ // Filter out other messages
+//         alert("background wants domain");
+//         sendResponse({hostName: window.location.hostname});
+//       }
+//   });

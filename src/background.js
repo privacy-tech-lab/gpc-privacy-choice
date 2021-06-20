@@ -6,25 +6,19 @@ let sendSignal = false;
 let optout_headers = {};
 let userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
 let global_domains = {};
+let activeTabId = undefined;
+let currentHostname = undefined;
 
-// Directs users to the options page upon installing the extension
+// Set the initial configuration of the extension, disable the extenstion on installation
 chrome.runtime.onInstalled.addListener(function (object) {
-  chrome.storage.local.set(
-    { FIRSTINSTALL: true, 
-      FIRSTINSTALL_POPUP: true, 
-      ENABLED: false, 
-      DOMAINLIST_ENABLED: false, 
-      DOMAINS: {}},
-      // chrome.runtime.openOptionsPage(() => {});
-      function () {}
-  );
-});
-
-// Runs on startup to enable/disable extension [checked]
-chrome.storage.local.get(["ENABLED"], function (result) {
-  console.log(result.ENABLED);
-  if (result.ENABLED === false) disable();
-  else enable();
+  chrome.storage.local.set({ENABLED: false});
+  chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+  chrome.storage.local.set({DOMAINS: {}});
+  chrome.storage.local.get(["ENABLED"], function (result) {
+    console.log("enabled status: " + result.ENABLED);
+    if (result.ENABLED === false) disable();
+    else enable();
+  });
 });
 
 // Listener for runtime messages
@@ -46,12 +40,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
+// this code below should be executed when the new tab is opened
+// currentHostname should be recived from contentScript.js, which is then used to update the domain and signal
+// chrome.tabs.onUpdated.addListener(
+//   chrome.tabs.query({active: true, currentWindow: true},function(tabs) {
+//     console.log("current tabs are: " + tabs[0]);
+//     chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
+//       currentHostname = response.hostName;
+//       console.log(currentHostname);
+//     });
+//   })
+
 // Add current bool flag accordingly. [checked]
 const updateDomainsAndSignal = (details) => {
-  /// Add current domain to list of domains to send headers to on current tab
+  // Add current domain to list of domains to send headers to on current tab
   let url = new URL(details.url);
   let parsed = psl.parse(url.hostname);
   let d = parsed.domain;
+  // the code below will ideally replace the three lines of code above
+  // let d = currentHostname;
   global_domains[d] = true;
 
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result) {
@@ -182,9 +189,7 @@ const enable = () => {
 const disable = () => {
   optout_headers = {};
   chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
-  chrome.webRequest.onBeforeSendHeaders.removeListener(receivedHeaders);
   chrome.webNavigation.onCommitted.removeListener(addDomSignal);
-  chrome.webNavigation.onBeforeNavigate.removeListener(beforeNavigate);
   chrome.storage.local.set({ ENABLED: false });
   sendSignal = false;
 }
