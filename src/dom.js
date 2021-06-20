@@ -1,9 +1,3 @@
-/*
-OptMeowt is licensed under the MIT License
-Copyright (c) 2020 Kuba Alicki, Daniel Knopf, Abdallah Salia, Sebastian Zimmeck
-privacy-tech-lab, https://privacytechlab.org/
-*/
-
 function setDomSignal () {
     try {
         if ('globalPrivacyControl' in Navigator.prototype) {
