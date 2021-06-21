@@ -11,7 +11,7 @@ overlayDiv.style.left = '0';
 overlayDiv.style.right = '0';
 overlayDiv.style.bottom = '0';
 overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-overlayDiv.style.zIndex = '999';
+overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
 
