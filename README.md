@@ -1,4 +1,4 @@
-# Optmeowt Research Browser Extension
+# OptMeowt Research Browser Extension
   
  This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
 
