@@ -28,8 +28,8 @@ For every website you visit OptMeowt will automatically add its domain to the `d
 ## Files and Directories in this Repo
 
 - `src/`: Contains the main contents of the OptMeowt browser extension.
-- `src/assets`: Contains the graphical elements of the extension, including the logos and button images.
-- `src/libs`: Contains all of the libraries used in the browser extension.
+- `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
+- `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
 - `src/popup`: Contains the UI elements and scripts for the popup inside the extensions bar.
 - `src/json`: Contains the JSON configuration files for OptMeowt's Do Not Sell cookies and headers.
@@ -48,7 +48,6 @@ OptMeowt uses the following third party libraries. We thank the developers.
 - [animate.css](https://github.com/animate-css/animate.css)
 - [FileSaver.js](https://github.com/eligrey/FileSaver.js)
 - [mustache.js](https://github.com/janl/mustache.js)
-- [popper.js](https://github.com/popperjs/popper-core)
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [Switch Animation by Aaron Iker](https://codepen.io/aaroniker/pen/oaQdQZ)
 - [uikit](https://github.com/uikit/uikit)
