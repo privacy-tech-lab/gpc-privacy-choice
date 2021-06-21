@@ -7,7 +7,7 @@
 This browser extension presents users with a dialog that obtains their preferences on whether a website may track them or not. Depending on each respective user's decision, all websites may be _denied_ tracking rights, all websites may be _allowed_ tracking rights, or the user also may personally customize which websites they allow to track them.
 
 **Customizing which Sites Receive Do Not Sell Signals**
-For every website you visit OptMeowt will automatically add its domain to the `domain list` meaning that it will receive a Do Not Sell signal. However, you can exclude domains that should not receive a Do Not Sell signal. This functionality is available on OptMeowt's settings page that you can access from OptMeowt's options page.
+For every website you visit OptMeowt will automatically add its domain to the `domain list` meaning that it will receive a Do Not Sell signal. However, you can exclude domains that should not receive a Do Not Sell signal. This functionality is available on OptMeowt's settings page that you can access from OptMeowt's icon in the 'Extensions' tab.
 
 ## Installing and Running OptMeowt from Source on Chromium-based Browsers
 
