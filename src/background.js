@@ -42,23 +42,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // this code below should be executed when the new tab is opened
 // currentHostname should be recived from contentScript.js, which is then used to update the domain and signal
-// chrome.tabs.onUpdated.addListener(
-//   chrome.tabs.query({active: true, currentWindow: true},function(tabs) {
-//     console.log("current tabs are: " + tabs[0]);
-//     chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
-//       currentHostname = response.hostName;
-//       console.log(currentHostname);
-//     });
-//   })
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {          
+  if (changeInfo.status == 'complete') {   
+     chrome.tabs.query({active: true}, function(tabs){
+        chrome.tabs.sendMessage(tabs[0].id, {"message": "GET_DOMAIN"}, function(response) {
+            currentHostname = response.hostName;
+        });
+     })
+  }
+});
 
 // Add current bool flag accordingly. [checked]
 const updateDomainsAndSignal = (details) => {
   // Add current domain to list of domains to send headers to on current tab
-  let url = new URL(details.url);
-  let parsed = psl.parse(url.hostname);
-  let d = parsed.domain;
+  // let url = new URL(details.url);
+  // let parsed = psl.parse(url.hostname);
+  // let d = parsed.domain;
+
   // the code below will ideally replace the three lines of code above
-  // let d = currentHostname;
+  let d = currentHostname;
   global_domains[d] = true;
 
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result) {
