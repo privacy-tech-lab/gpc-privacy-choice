@@ -17,41 +17,90 @@ overlayDiv.style.display = "none";
 
 // adding HTML to the modal
 overlayDiv.innerHTML = `
-        <div id="container1">
-            <h1
-                style="font-weight:200;font-size:4em;font:caption;"
-                >Your Privacy Choice
-            </h1>
-            <hr>
-            <p
-                style="font-weight:200;font-size:1.2em;font:caption;"
-                >You have a right to make your privacy choice under the law.
+        <div id="privacy-res-popup-container">
+            <div style="
+                line-height: 1.5;
+            ">
+            Your Privacy Choice
+            </div>
+            <hr 
+                style="
+                    height: .01px; 
+                    padding:0;
+                    margin:0px 0px;
+                    display: block;
+                    unicode-bidi: isolate;
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    margin-inline-start: auto;
+                    margin-inline-end: auto;
+                    line-height: 1px;
+                    border: 0;
+                    border-top: 1px solid;
+                    font-weight:300;
+            ">
+            <div
+                style="
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    margin-inline-start: auto;
+                    margin-inline-end: auto;
+                    font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                    font-weight:300;
+            ">
+                You have a right to make your privacy choice under the law.
                 This website is sharing your personal information for advertising purposes.
-            </p>
-            <button 
-                id="allow-btn" 
-                style="border:none;background-color:rgb(51, 153, 255);color:white;padding:0.5em;border-radius:3.5px;"
-                >Allow
-            </button>
-            <button 
-                id="dont-allow-btn" 
-                style="border:none;background-color:rgb(51, 153, 255);color:white;padding:0.5em;border-radius:3.5px;"
-                >Don't Allow
-            </button>
-            <br>
+            </div>
+            <div
+                style="
+                        margin-block-start: 0.5em;
+                        margin-block-end: 0.5em;
+                        margin-inline-start: auto;
+                        margin-inline-end: auto;
+                        font: 16px/1.231 arial,helvetica,clean,sans-serif;
+            ">
             <input 
                 value="Empty" 
                 id="apply-all" 
                 type="checkbox"
-                style="position:relative;right:50px;padding:0.5em;"
+                style="-webkit-appearance:checkbox;"
                 >
-            <label
+            <label 
                 for="apply-all"
-                style="position:relative;right:50px;"
+                style="
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    display:unset;
+                    font-weight:300;
+                    color:black;
+                    font-size:16px;
+                    "
                 >
                 Apply to all websites you visit
                 </label>
-            <br>
+                <button 
+                    id="allow-btn" 
+                    style="font-size:16px;
+                        border:none;
+                        background-color:
+                        rgb(51, 153, 255);
+                        color:white;
+                        padding:0.5em;
+                        border-radius:3.5px;
+                        font-weight:300;"
+                    >Allow
+                </button>
+                <button 
+                    id="dont-allow-btn" 
+                    style="font-size:16px;
+                        border:none;background-color:
+                        rgb(51, 153, 255);
+                        color:white;
+                        padding:0.5em;
+                        border-radius:3.5px;
+                        font-weight:300;"
+                    >Don't Allow
+                </button>
         </div> 
     `
 
@@ -102,16 +151,22 @@ body.addEventListener('click', event => {
 
 // function used to add extra style the modal
 function styleOverlay() {
-  const contentContainer = document.querySelector('#container1');
+  const contentContainer = document.querySelector('#privacy-res-popup-container');
+  
   contentContainer.style.textAlign = 'center';   
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
   contentContainer.style.padding = '1em';
-  contentContainer.style.width = '25em';
-  contentContainer.style.height = '13em';
+  contentContainer.style.width = '500px';
+  contentContainer.style.height = 'max-content';
   contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
   contentContainer.style.color = 'Black';
   contentContainer.style.borderRadius = '10px';
+  contentContainer.style.fontFamily='Arial';
+  contentContainer.style.fontSize='20px';
+  contentContainer.style.lineSpacing='1px';
+  contentContainer.style.boxSizing='unset';
+
 }
 
 // function used to show the modal
