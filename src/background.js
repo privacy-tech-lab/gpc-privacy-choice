@@ -4,18 +4,17 @@
 let tabs = {}; /// Store all active tab id's, domain, requests, and response
 let sendSignal = false;
 let optout_headers = {};
-let userAgent = window.navigator.userAgent.indexOf("Firefox") > -1 ? "moz" : "chrome"
 let global_domains = {};
 let activeTabId = undefined;
 let currentHostname = undefined;
 
 // Set the initial configuration of the extension, disable the extenstion on installation
 chrome.runtime.onInstalled.addListener(function (object) {
-  chrome.storage.local.set({ENABLED: false});
-  chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+  chrome.storage.local.set({ENABLED: true});
+  chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   chrome.storage.local.get(["ENABLED"], function (result) {
-    console.log("enabled status: " + result.ENABLED);
+    // console.log("enabled status: " + result.ENABLED);
     if (result.ENABLED === false) disable();
     else enable();
   });
@@ -35,7 +34,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.msg === "LOADED") global_domains = {};
   // listen to the "ENABLE" messeage from the contentScript
   if (request.greeting == "ENABLE") {
-    console.log("message received!");
+    // console.log("message received!");
     sendResponse({farewell: "goodbye"});
   }
 });
@@ -45,31 +44,23 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
       chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
-          console.log("response is: " + response);
+          // console.log("response is: " + response);
           currentHostname = response.hostName;
-          console.log("current hostname is: " + currentHostname);
+          // console.log("current hostname is: " + currentHostname);
       });
     })
   }
 });
 
-// Add current bool flag accordingly. [checked]
+// Add current bool flag accordingly
 const updateDomainsAndSignal = (details) => {
-  // Add current domain to list of domains to send headers to on current tab
-  // let url = new URL(details.url);
-  // let parsed = psl.parse(url.hostname);
-  // let d = parsed.domain;
-
-  // the code below will ideally replace the three lines of code above
-  let d = currentHostname;
-  global_domains[d] = true;
+  // Assume that global domain keep tracks of all the domain that we have ever seen
+  global_domains[currentHostname] = true;
 
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result) {
     let domains = result.DOMAINS;
     for (let domain in global_domains) {
-      if (domains[domain] === undefined) {
-        domains[domain] = true;
-      }
+      if (domains[domain] === undefined) domains[domain] = null;
     }
 
     chrome.storage.local.set({ DOMAINS: domains }, function(){});
@@ -84,7 +75,7 @@ const updateDomainsAndSignal = (details) => {
   });
 }
 
-// Updates HTTP headers with Do Not Sell headers according to whether or not a site should recieve them. [checked]
+// Updates HTTP headers with Do Not Sell headers according to whether or not a site should recieve them
 const updateHeaders = (details) => {
   if (sendSignal) {
     for (let signal in optout_headers) {
@@ -145,40 +136,19 @@ const updateUI = (details) => {
   );
 }
 
-// Enable Opt-Meowt [checked]
+// Enable Opt-Meowt on Chrome
 const enable = () => {
   fetch("json/headers.json")
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      if (userAgent === "moz") {
-        chrome.webRequest.onBeforeSendHeaders.addListener(
-          addHeaders,
-          {
-            urls: ["<all_urls>"],
-          },
-          ["requestHeaders", "blocking"]
-        );
-        chrome.storage.local.set({ ENABLED: true });
-        chrome.webNavigation.onCommitted.addListener(addDomSignal);
-        chrome.storage.local.set({ ENABLED: true });
-      } else {
-        chrome.webRequest.onBeforeSendHeaders.addListener(
-          addHeaders,
-          {
-            urls: ["<all_urls>"],
-          },
-          ["requestHeaders", "extraHeaders", "blocking"]
-        );
-        chrome.storage.local.set({ ENABLED: true });
-        chrome.webNavigation.onCommitted.addListener(
-          addDomSignal,
-          {
-            urls: ["<all_urls>"],
-          }
-        )
-        chrome.storage.local.set({ ENABLED: true });
-      }
+      // this needs to be confirmed
+      chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"],}
+      );
+      chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders,
+          {urls: ["<all_urls>"],}, ["requestHeaders", "extraHeaders", "blocking"]
+      );
+      chrome.storage.local.set({ ENABLED: true });
     })
     .catch((e) =>
       console.log(
@@ -188,11 +158,11 @@ const enable = () => {
   sendSignal = true;
 }
 
-// Disable Functionality [checked]
+// Disable Functionality
 const disable = () => {
   optout_headers = {};
   chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
-  chrome.webNavigation.onCommitted.removeListener(addDomSignal);
+  chrome.webRequest.onBeforeRequest.removeListener(addDomSignal);
   chrome.storage.local.set({ ENABLED: false });
   sendSignal = false;
 }
