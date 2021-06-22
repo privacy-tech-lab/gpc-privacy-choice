@@ -45,13 +45,13 @@ export function buildToggle(domain, bool) {
   return toggle
 }
 
-// Creates an event listener that toggles a given domain's stored value in the domainlist if a user clicks on the object with the given element ID
+// Turn on / off the domain from the setting page
 export async function toggleListener(elementId, domain) {
 
   document.getElementById(elementId).addEventListener("click", () => {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
     chrome.storage.local.get(["DOMAINS"], function (result) {
-      if (result.DOMAINS[domain]) removeFromDomainlist(domain);
+      if (result.DOMAINS[domain]==true) removeFromDomainlist(domain);
       else addToDomainlist(domain);
     })
   })

@@ -85,7 +85,6 @@ function removeOverlay(){
 
 const asyncFunctionWithAwait = async (request, sender, sendResponse) => {
     if (request.message == "GET_DOMAIN"){
-        console.log("background.js asking for domain");
         sendResponse({hostName: window.location.hostname});
         return true
     }
@@ -99,37 +98,33 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Listener for runtime messages from background js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message == "GET_DOMAIN"){
-        console.log("background.js asking for domain");
-        // sendResponse({hostName: window.location.hostname});
+        // console.log("background.js asking for domain");
+        sendResponse({hostName: window.location.hostname});
     }
 });
 
-// logic that handles whether the banner will pop up or not
-// banner only pops up in the two situations below:
-// - the user has GPC off 
-// - the user has GPC on and domain list option on but the current domain is not included in the domain lists
-chrome.storage.local.get(["ENABLED", "DOMAINLIST_ENABLED"], function (result) {
-    // if GPC is turned off for all domains
-    if (result.ENABLED == false){ 
-        displayOverlay();
-    } else { 
-        // GPC signal is turned on in this condition
-        // if domain_list option is on, check if the current domain is enabling GPC
-        if (result.DOMAINLIST_ENABLED == true) {
-            chrome.storage.local.get(["DOMAINS"], function (d) {
+// Logic for the banner pop up: 
+// - only when DOMAINLIST_ENABLED == true &&
+// - the current domain is a new domain 
+chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
+    if (result.DOMAINLIST_ENABLED == true) {
+       
+        chrome.storage.local.get(["DOMAINS"], function (d) {
             let domains = d.DOMAINS;
+
+            // keeping this temporarily for debugging purpose
+            console.log("the domains look like this right now:")
+            for (let d in domains){
+                console.log(d + ": " + domains[d])
+            }
+
             let currentDomain = window.location.hostname
-            // if the GPC is currently turned off for the current domain, ask the user
-            if (!(domains[currentDomain]== true)){
-                displayOverlay();
-                }
-            })
-        }  
-    }
+            if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
+        })
+    }  
 });
 
 // starter code for interaction between the button and the background.js
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
     console.log(response.farewell);
 });
-
