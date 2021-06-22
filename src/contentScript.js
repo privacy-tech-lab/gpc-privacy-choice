@@ -53,11 +53,34 @@ body.addEventListener('mouseover', event => {
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
+    let currentDomain = window.location.hostname;
     if(event.target.id === 'allow-btn' || event.target.id === 'dont-allow-btn') { 
         removeOverlay();
-        }
+        // situation 1: enable GPC for the current domain
+        // chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+        // chrome.storage.local.get(["DOMAINS"], function (result) {
+        //     new_domains = result.DOMAINS;
+        //     new_domains[currentDomain] = true;
+        //     chrome.storage.local.set({ DOMAINS: new_domains });
+        // })
+
+        // situation 2: disable GPC for the current domain
+        // chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+        // chrome.storage.local.get(["DOMAINS"], function (result) {
+        //     new_domains = result.DOMAINS;
+        //     console.log(new_domains);
+        //     new_domains[currentDomain] = false;
+        //     chrome.storage.local.set({ DOMAINS: new_domains });
+        // })
+
+        // situation 3: enable GPC for all future domains
+        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+
+        // situation 4: disable GPC for all future domains
+        // chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        
     }
-)
+})
 
 // function used to add extra style the modal
 function styleOverlay() {
@@ -108,15 +131,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 // - the current domain is a new domain 
 chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
     if (result.DOMAINLIST_ENABLED == true) {
-       
+
         chrome.storage.local.get(["DOMAINS"], function (d) {
             let domains = d.DOMAINS;
 
             // keeping this temporarily for debugging purpose
-            console.log("the domains look like this right now:")
-            for (let d in domains){
-                console.log(d + ": " + domains[d])
-            }
+            // console.log("the domains look like this right now:")
+            // for (let d in domains){
+            //     console.log(d + ": " + domains[d])
+            // }
 
             let currentDomain = window.location.hostname
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();

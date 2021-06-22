@@ -8,7 +8,7 @@ let global_domains = {};
 let activeTabId = undefined;
 let currentHostname = undefined;
 
-// Set the initial configuration of the extension, disable the extenstion on installation
+// Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({ENABLED: true});
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -67,7 +67,7 @@ const updateDomainsAndSignal = (details) => {
 
     /// Set to true if domainlist is off, or if domainlist is on AND domain is in domainlist
     if (result.DOMAINLIST_ENABLED) {
-      if (domains[d] === true) sendSignal = true;
+      if (domains[currentHostname] === true) sendSignal = true;
       else sendSignal = false;
     } else {
       sendSignal = true; 
@@ -118,9 +118,7 @@ const addDomSignal = (details) => {
           contentType === 'text/json' ||
           contentType === 'text/rss+xml' ||
           contentType === 'application/rss+xml'
-      ) {
-          return
-      }
+      ) return
   } catch (e) {
   }
     initDomJS(details);
@@ -143,7 +141,7 @@ const enable = () => {
     .then((value) => {
       optout_headers = JSON.parse(value);
       // this needs to be confirmed
-      chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"],}
+      chrome.webNavigation.onCommitted.addListener(addDomSignal, {urls: ["<all_urls>"],}
       );
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders,
           {urls: ["<all_urls>"],}, ["requestHeaders", "extraHeaders", "blocking"]
@@ -162,7 +160,7 @@ const enable = () => {
 const disable = () => {
   optout_headers = {};
   chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
-  chrome.webRequest.onBeforeRequest.removeListener(addDomSignal);
+  chrome.webNavigation.onCommitted.removeListener(addDomSignal);
   chrome.storage.local.set({ ENABLED: false });
   sendSignal = false;
 }
