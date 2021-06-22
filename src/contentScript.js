@@ -117,14 +117,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     asyncFunctionWithAwait(request, sender, sendResponse);
 })
 
-// Listener for runtime messages from background js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.message == "GET_DOMAIN"){
-        // console.log("background.js asking for domain");
-        sendResponse({hostName: window.location.hostname});
-    }
-});
-
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
