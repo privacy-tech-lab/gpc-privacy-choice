@@ -22,21 +22,8 @@ chrome.runtime.onInstalled.addListener(function (object) {
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.ENABLED != null) {
-    if (request.ENABLED) {
-      enable();
-      sendResponse("DONE");
-    } else {
-      disable();
-      sendResponse("DONE");
-    }
-  }
-  if (request.msg === "LOADED") global_domains = {};
-  // listen to the "ENABLE" messeage from the contentScript
-  if (request.greeting == "ENABLE") {
-    // console.log("message received!");
-    sendResponse({farewell: "goodbye"});
-  }
+  // if (request.msg === "LOADED") global_domains = {};
+  if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
 });
 
@@ -45,9 +32,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
       chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
-          // console.log("response is: " + response);
           currentHostname = response.hostName;
-          // console.log("current hostname is: " + currentHostname);
       });
     })
   }
@@ -55,15 +40,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 // Add current bool flag accordingly
 const updateDomainsAndSignal = (details) => {
-  // Assume that global domain keep tracks of all the domain that we have ever seen
   global_domains[currentHostname] = true;
-
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result) {
     let domains = result.DOMAINS;
     for (let domain in global_domains) {
       if (domains[domain] === undefined) domains[domain] = null;
     }
-
     chrome.storage.local.set({ DOMAINS: domains }, function(){});
 
     /// Set to true if domainlist is off, or if domainlist is on AND domain is in domainlist
