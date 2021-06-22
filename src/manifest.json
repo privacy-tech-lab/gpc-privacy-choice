@@ -12,9 +12,6 @@
     "cookies",
     "tabs"
   ],
-  "icons": {
-    "128": "assets/face-icons/optmeow-face-circle-green-ring-128.png"
-  },
   "browser_action": {
     "default_title": "OptMeowt-R",
     "default_popup": "popup/popup.html"
