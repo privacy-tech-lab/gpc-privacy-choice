@@ -37,6 +37,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // console.log("message received!");
     sendResponse({farewell: "goodbye"});
   }
+  if (request.message == "DISABLE_ALL") disable();
 });
 
 // Send message "GET_DOMAIN" to contentscript to retrive current domain
