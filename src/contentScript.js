@@ -83,11 +83,24 @@ function removeOverlay(){
     overlayDiv.style.display = 'none';
 }
 
-// Listener for runtime messages from background js
-// this code should return the domain name of the current tab to background.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.message == "GET_DOMAIN"){ // Filter out other messages
+const asyncFunctionWithAwait = async (request, sender, sendResponse) => {
+    if (request.message == "GET_DOMAIN"){
+        console.log("background.js asking for domain");
         sendResponse({hostName: window.location.hostname});
+        return true
+    }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    asyncFunctionWithAwait(request, sender, sendResponse);
+})
+
+
+// Listener for runtime messages from background js
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.message == "GET_DOMAIN"){
+        console.log("background.js asking for domain");
+        // sendResponse({hostName: window.location.hostname});
     }
 });
 

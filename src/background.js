@@ -40,15 +40,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-// this code below should be executed when the new tab is opened
-// currentHostname should be recived from contentScript.js, which is then used to update the domain and signal
+// Send message "GET_DOMAIN" to contentscript to retrive current domain
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {          
-  if (changeInfo.status == 'complete') {   
-     chrome.tabs.query({active: true}, function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, {"message": "GET_DOMAIN"}, function(response) {
-            currentHostname = response.hostName;
-        });
-     })
+  if (changeInfo.status == 'complete') {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+      chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
+          console.log("response is: " + response);
+          currentHostname = response.hostName;
+          console.log("current hostname is: " + currentHostname);
+      });
+    })
   }
 });
 
