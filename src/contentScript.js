@@ -78,7 +78,7 @@ body.addEventListener('click', event => {
 
         // situation 4: disable GPC for all future domains
         // chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-        
+        // chrome.runtime.sendMessage({message: "DISABLE_ALL"});
     }
 })
 
@@ -116,7 +116,6 @@ const asyncFunctionWithAwait = async (request, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     asyncFunctionWithAwait(request, sender, sendResponse);
 })
-
 
 // Listener for runtime messages from background js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
