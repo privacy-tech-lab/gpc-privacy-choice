@@ -17,7 +17,7 @@ overlayDiv.style.display = "none";
 
 // adding HTML to the modal
 overlayDiv.innerHTML = `
-        <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset;">
+        <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
             <div style="
                 line-height: 1.5;
                 font-family:unset !important;
@@ -41,33 +41,36 @@ overlayDiv.innerHTML = `
                     font-weight:300;">
             <div style="
                     margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
                     margin-inline-start: auto;
                     margin-inline-end: auto;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
-                    padding-bottom:7px;
+                    padding-bottom:3px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
                         This website is sharing your personal information for advertising purposes.
             </div>
-            <input value="Empty" id="apply-all" type="checkbox" style="-webkit-appearance:checkbox;">
+            <input value="Empty" id="apply-all" type="checkbox" style="
+                -webkit-appearance:checkbox;
+                display:inline-flex;
+                margin:unset;">
             <label for="apply-all" style="
                 margin-block-start: 0.5em;
                 margin-block-end: 0.5em;
-                display:unset;
+                display: inline-flex;
                 font-weight:300;
                 color:black !important;
                 font-size:16px;
                 font:16px/1.231 arial,helvetica,clean,sans-serif;
                 font-weight: 300;
-                padding-right:20px;
+                margin-bottom:10px;
+                margin-left:unset;
                 font-family: unset;">
                     Apply to all websites you visit
             </label>
             <div style="
                 padding: unset;
-                padding-top: 3px;
+                margin-top: 7px;
                 width: 10px;
                 display: inline;
                 font-family:unset !important;
@@ -161,7 +164,7 @@ function styleOverlay() {
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
   contentContainer.style.padding = '1em';
-  contentContainer.style.width = '500px';
+  contentContainer.style.width = '250px';
   contentContainer.style.height = 'max-content';
   contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
   contentContainer.style.color = 'Black';
