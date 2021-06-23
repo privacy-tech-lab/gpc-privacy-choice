@@ -68,13 +68,12 @@ body.addEventListener('click', event => {
         // chrome.storage.local.set({DOMAINLIST_ENABLED: true});
         // chrome.storage.local.get(["DOMAINS"], function (result) {
         //     new_domains = result.DOMAINS;
-        //     console.log(new_domains);
         //     new_domains[currentDomain] = false;
         //     chrome.storage.local.set({ DOMAINS: new_domains });
         // })
 
         // situation 3: enable GPC for all future domains
-        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        // chrome.storage.local.set({DOMAINLIST_ENABLED: false});
 
         // situation 4: disable GPC for all future domains
         // chrome.storage.local.set({DOMAINLIST_ENABLED: false});

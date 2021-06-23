@@ -50,7 +50,7 @@ const updateDomainsAndSignal = (details) => {
 
     /// Set to true if domainlist is off, or if domainlist is on AND domain is in domainlist
     if (result.DOMAINLIST_ENABLED) {
-      if (domains[currentHostname] === true) sendSignal = true;
+      if (!(domains[currentHostname] == false)) sendSignal = true;
       else sendSignal = false;
     } else {
       sendSignal = true; 
@@ -73,8 +73,9 @@ const updateHeaders = (details) => {
 
 // Manipulates Headers and adds Do Not Sell signal
 const addHeaders = (details) => {
-  updateDomainsAndSignal(details);
-  updateUI(details);
+  if (sendSignal){
+    updateDomainsAndSignal(details);
+  }
   return updateHeaders(details);
 };
 
@@ -109,13 +110,13 @@ const addDomSignal = (details) => {
 }
 
 // Updates OptMeowt icon to reflect a Do Not Sell signal sent status [checked]
-const updateUI = (details) => {
-  let iconPath = sendSignal ? "assets/face-icons/optmeow-face-circle-green-ring-128.png" : "assets/face-icons/optmeow-face-circle-red-128.png";
-  chrome.browserAction.setIcon(
-    {tabId: details.tabId, path: iconPath},
-    function () { }
-  );
-}
+// const updateUI = (details) => {
+//   let iconPath = sendSignal ? "assets/face-icons/optmeow-face-circle-green-ring-128.png" : "assets/face-icons/optmeow-face-circle-red-128.png";
+//   chrome.browserAction.setIcon(
+//     {tabId: details.tabId, path: iconPath},
+//     function () { }
+//   );
+// }
 
 // Enable Opt-Meowt on Chrome
 const enable = () => {
