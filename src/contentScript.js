@@ -38,7 +38,10 @@ overlayDiv.innerHTML = `
                     line-height: 1px;
                     border: 0;
                     border-top: 1px solid;
+<<<<<<< HEAD
                     color:blacl;
+=======
+>>>>>>> a035aa102f65209a3f18171003357008b17d1f0f
                     font-weight:300;">
             <div style="
                     margin-block-start: 0.5em;
@@ -66,9 +69,13 @@ overlayDiv.innerHTML = `
                 font-weight: 300;
                 margin-bottom:10px;
                 margin-left:unset;
+<<<<<<< HEAD
                 font-family: unset;
                 position:unset;
                 top:unset;">
+=======
+                font-family: unset;">
+>>>>>>> a035aa102f65209a3f18171003357008b17d1f0f
                     Apply to all websites you visit
             </label>
             <div style="
