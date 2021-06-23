@@ -38,10 +38,7 @@ overlayDiv.innerHTML = `
                     line-height: 1px;
                     border: 0;
                     border-top: 1px solid;
-<<<<<<< HEAD
-                    color:blacl;
-=======
->>>>>>> a035aa102f65209a3f18171003357008b17d1f0f
+                    color:black;
                     font-weight:300;">
             <div style="
                     margin-block-start: 0.5em;
@@ -54,30 +51,40 @@ overlayDiv.innerHTML = `
                         You have a right to make your privacy choice under the law.
                         This website is sharing your personal information for advertising purposes.
             </div>
-            <input value="Empty" id="apply-all" type="checkbox" style="
-                -webkit-appearance:checkbox;
-                display:inline-flex;
-                margin:unset;">
-            <label for="apply-all" style="
-                margin-block-start: 0.5em;
-                margin-block-end: 0.5em;
-                display: inline-flex;
-                font-weight:300;
-                color:black !important;
-                font-size:16px;
-                font:16px/1.231 arial,helvetica,clean,sans-serif;
-                font-weight: 300;
-                margin-bottom:10px;
-                margin-left:unset;
-<<<<<<< HEAD
-                font-family: unset;
-                position:unset;
-                top:unset;">
-=======
-                font-family: unset;">
->>>>>>> a035aa102f65209a3f18171003357008b17d1f0f
-                    Apply to all websites you visit
-            </label>
+            <div style="
+                display:flex;
+                align-tems: center;
+                align: center;
+                width: 100%">
+                <input value="Empty" id="apply-all" type="checkbox" style="
+                    float: unset;
+                    height: unset;
+                    margin: unset;
+                    opacity: unset;
+                    position: unset;
+                    display:inline-flex;
+                    width:unset;
+                    -webkit-appearance:checkbox;
+                    align-self: center;
+                    margin:unset;">
+                <label for="apply-all" style="
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    display: inline-flex;
+                    color:black !important;
+                    font-size:16px;
+                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                    font-weight: 300;
+                    margin-bottom:10px;
+                    margin-left: 5px;
+                    font-family: unset;
+                    position:unset;
+                    padding:unset;
+                    text-transform:unset;
+                    top:unset;">
+                        Apply to all websites you visit
+                </label>
+            </div>
             <div style="
                 padding: unset;
                 margin-top: 7px;
