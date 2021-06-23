@@ -52,14 +52,13 @@ overlayDiv.innerHTML = `
                         This website is sharing your personal information for advertising purposes.
             </div>
             <div style="
-                display:flex;
+                display:inline;
                 align-tems: center;
                 align: center;
                 width: 100%">
                 <input value="Empty" id="apply-all" type="checkbox" style="
                     float: unset;
                     height: unset;
-                    margin: unset;
                     opacity: unset;
                     position: unset;
                     display:inline-flex;
@@ -90,6 +89,7 @@ overlayDiv.innerHTML = `
                 margin-top: 7px;
                 width: 10px;
                 display: inline;
+                width: unset;
                 font-family:unset !important;
                 font-size: unset !important;
                 color: unset !important;">
@@ -190,6 +190,7 @@ function styleOverlay() {
   contentContainer.style.fontSize='20px';
   contentContainer.style.lineSpacing='1px';
   contentContainer.style.boxSizing='unset';
+  contentContainer.style.letterSpacing='0';
 
 }
 
