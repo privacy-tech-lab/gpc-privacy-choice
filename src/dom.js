@@ -1,3 +1,10 @@
+
+/*
+OptMeowt-Research is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
+
 function setDomSignal () {
     try {
         if ('globalPrivacyControl' in Navigator.prototype) {
