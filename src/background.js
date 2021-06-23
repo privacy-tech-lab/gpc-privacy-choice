@@ -75,8 +75,12 @@ const updateDomains = () => {
 const updateSendSignal = () => {
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result){
     let domains = result.DOMAINS;
-    sendSignal = false;
-    if (result.DOMAINLIST_ENABLED && domains[currentHostname]) sendSignal = true;
+    sendSignal = true;
+    if (result.DOMAINLIST_ENABLED){
+      if (!(domains[currentHostname] === true)) {
+        sendSignal = false;
+      }
+    }
   })
 }
 
