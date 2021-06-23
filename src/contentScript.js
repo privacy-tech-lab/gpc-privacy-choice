@@ -38,6 +38,7 @@ overlayDiv.innerHTML = `
                     line-height: 1px;
                     border: 0;
                     border-top: 1px solid;
+                    color:blacl;
                     font-weight:300;">
             <div style="
                     margin-block-start: 0.5em;
@@ -65,7 +66,9 @@ overlayDiv.innerHTML = `
                 font-weight: 300;
                 margin-bottom:10px;
                 margin-left:unset;
-                font-family: unset;">
+                font-family: unset;
+                position:unset;
+                top:unset;">
                     Apply to all websites you visit
             </label>
             <div style="
