@@ -57,12 +57,12 @@ body.addEventListener('click', event => {
     if(event.target.id === 'allow-btn' || event.target.id === 'dont-allow-btn') { 
         removeOverlay();
         // situation 1: enable GPC for the current domain
-        // chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-        // chrome.storage.local.get(["DOMAINS"], function (result) {
-        //     new_domains = result.DOMAINS;
-        //     new_domains[currentDomain] = true;
-        //     chrome.storage.local.set({ DOMAINS: new_domains });
-        // })
+        chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+        chrome.storage.local.get(["DOMAINS"], function (result) {
+            new_domains = result.DOMAINS;
+            new_domains[currentDomain] = true;
+            chrome.storage.local.set({ DOMAINS: new_domains });
+        })
 
         // situation 2: disable GPC for the current domain
         // chrome.storage.local.set({DOMAINLIST_ENABLED: true});
