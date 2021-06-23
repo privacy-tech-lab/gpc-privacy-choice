@@ -17,14 +17,15 @@ overlayDiv.style.display = "none";
 
 // adding HTML to the modal
 overlayDiv.innerHTML = `
-        <div id="privacy-res-popup-container">
+        <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset;">
             <div style="
                 line-height: 1.5;
-            ">
-            Your Privacy Choice
+                font-family:unset !important;
+                font-size: unset !important;
+                color: unset !important;">
+                Your Privacy Choice
             </div>
-            <hr 
-                style="
+            <hr style="
                     height: .01px; 
                     padding:0;
                     margin:0px 0px;
@@ -37,70 +38,73 @@ overlayDiv.innerHTML = `
                     line-height: 1px;
                     border: 0;
                     border-top: 1px solid;
-                    font-weight:300;
-            ">
-            <div
-                style="
+                    font-weight:300;">
+            <div style="
                     margin-block-start: 0.5em;
                     margin-block-end: 0.5em;
                     margin-inline-start: auto;
                     margin-inline-end: auto;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
-            ">
-                You have a right to make your privacy choice under the law.
-                This website is sharing your personal information for advertising purposes.
+                    padding-bottom:7px;
+                    color: black;">
+                        You have a right to make your privacy choice under the law.
+                        This website is sharing your personal information for advertising purposes.
             </div>
-            <div
-                style="
-                        margin-block-start: 0.5em;
-                        margin-block-end: 0.5em;
-                        margin-inline-start: auto;
-                        margin-inline-end: auto;
-                        font: 16px/1.231 arial,helvetica,clean,sans-serif;
-            ">
-            <input 
-                value="Empty" 
-                id="apply-all" 
-                type="checkbox"
-                style="-webkit-appearance:checkbox;"
-                >
-            <label 
-                for="apply-all"
-                style="
-                    margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
-                    display:unset;
-                    font-weight:300;
-                    color:black;
-                    font-size:16px;
-                    "
-                >
-                Apply to all websites you visit
-                </label>
-                <button 
-                    id="allow-btn" 
-                    style="font-size:16px;
+            <input value="Empty" id="apply-all" type="checkbox" style="-webkit-appearance:checkbox;">
+            <label for="apply-all" style="
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                display:unset;
+                font-weight:300;
+                color:black !important;
+                font-size:16px;
+                font:16px/1.231 arial,helvetica,clean,sans-serif;
+                font-weight: 300;
+                padding-right:20px;
+                font-family: unset;">
+                    Apply to all websites you visit
+            </label>
+            <div style="
+                padding: unset;
+                padding-top: 3px;
+                width: 10px;
+                display: inline;
+                font-family:unset !important;
+                font-size: unset !important;
+                color: unset !important;">
+                    <div id="allow-btn" style="
+                        font-size:16px;
                         border:none;
                         background-color:
                         rgb(51, 153, 255);
                         color:white;
                         padding:0.5em;
                         border-radius:3.5px;
-                        font-weight:300;"
-                    >Allow
-                </button>
-                <button 
-                    id="dont-allow-btn" 
-                    style="font-size:16px;
-                        border:none;background-color:
-                        rgb(51, 153, 255);
+                        font-weight:300;
+                        width: fit-content;
+                        display:inline;
+                        margin:3px;
+                        font-family: unset;
+                        cursor:pointer;">
+                            Allow
+                    </div>
+                    <div id="dont-allow-btn" style="
+                        font-size:16px;
+                        border:none;
+                        background-color:rgb(51, 153, 255);
                         color:white;
                         padding:0.5em;
                         border-radius:3.5px;
-                        font-weight:300;"
-                    >Don't Allow
-                </button>
+                        font-weight:300;
+                        width: fit-content;
+                        display:inline;
+                        margin:3px;
+                        font-family: unset;
+                        cursor:pointer;">
+                            Don't Allow
+                    </div>
+            <div/>
         </div> 
     `
 
@@ -109,11 +113,11 @@ body.appendChild(overlayDiv);
 
 // buttons change color when the cursor hovers over them
 body.addEventListener('mouseover', event => {
-    let button = event.target;
-    if(button.id === 'allow-btn' || button.id === 'dont-allow-btn') {
-        button.style.backgroundColor = 'rgb(0, 102, 204)';
+    let button_preb = event.target;
+    if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+        button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
         setTimeout( () => {
-            button.style.backgroundColor = 'rgb(51, 153, 255)';
+            button_preb.style.backgroundColor = 'rgb(51, 153, 255)';
         }, 500); 
     }
 }
