@@ -65,7 +65,7 @@ const updateDomains = () => {
   chrome.storage.local.get(["DOMAINS"], function (result) {
     let domains = result.DOMAINS;
     for (let domain in global_domains) {
-      if (domains[domain] === undefined) domains[domain] = null;
+      if (domains[domain] === undefined) domains[domain] = undefined;
     }
     chrome.storage.local.set({ DOMAINS: domains }, function(){});
   });
