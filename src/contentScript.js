@@ -37,7 +37,7 @@ overlayDiv.innerHTML = `
                     margin-inline-end: auto;
                     line-height: 1px;
                     border: 0;
-                    border-top: 1px solid;
+                    border-top: 1px solid !important;
                     color:black;
                     font-weight:300;">
             <div style="
@@ -99,11 +99,13 @@ overlayDiv.innerHTML = `
                 align: center;
                 width: 100%">
                 <input value="Empty" id="apply-all" type="checkbox" style="
+                    color-scheme: light !important;
                     float: unset;
                     height: unset;
                     opacity: unset;
-                    position: unset;
+                    position: unset !important;
                     display:inline-flex;
+                    color: unset !important;
                     width:unset;
                     -webkit-appearance:checkbox;
                     align-self: center;
