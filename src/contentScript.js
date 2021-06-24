@@ -101,6 +101,7 @@ overlayDiv.innerHTML = `
                 <input value="Empty" id="apply-all" type="checkbox" style="
                     color-scheme: light !important;
                     float: unset;
+                    pointer-events: unset;
                     height: unset;
                     opacity: unset;
                     position: unset !important;
@@ -110,7 +111,7 @@ overlayDiv.innerHTML = `
                     -webkit-appearance:checkbox;
                     align-self: center;
                     margin:unset;">
-                <label for="apply-all" style="
+                <div for="apply-all" style="
                     margin-block-start: 0.5em;
                     margin-block-end: 0.5em;
                     display: inline-flex;
