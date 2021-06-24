@@ -99,8 +99,11 @@ overlayDiv.innerHTML = `
                 align: center;
                 width: 100%">
                 <input value="Empty" id="apply-all" type="checkbox" style="
+                    content: none !important;
                     color-scheme: light !important;
                     float: unset;
+                    cursor:pointer;
+                    pointer-events: unset !important;
                     height: unset;
                     opacity: unset;
                     position: unset !important;
@@ -110,7 +113,7 @@ overlayDiv.innerHTML = `
                     -webkit-appearance:checkbox;
                     align-self: center;
                     margin:unset;">
-                <label for="apply-all" style="
+                <div for="apply-all" style="
                     margin-block-start: 0.5em;
                     margin-block-end: 0.5em;
                     display: inline-flex;
@@ -126,7 +129,7 @@ overlayDiv.innerHTML = `
                     text-transform:unset;
                     top:unset;">
                         Apply to all websites you visit
-                </label>
+                </div>
             </div>
         </div> 
     `
