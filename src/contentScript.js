@@ -54,7 +54,7 @@ body.addEventListener('mouseover', event => {
 // add event listener to close the modal
 body.addEventListener('click', event => {
     let currentDomain = window.location.hostname;
-    if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === false) { 
+    if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === false) { 
         removeOverlay();
         // situation 1: enable GPC for the current domain
          chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -64,7 +64,7 @@ body.addEventListener('click', event => {
              chrome.storage.local.set({ DOMAINS: new_domains });
          })
     }
-        else if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === false) {
+        else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === false) {
         // situation 2: disable GPC for the current domain
             removeOverlay();
              chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -75,12 +75,12 @@ body.addEventListener('click', event => {
              chrome.storage.local.set({ DOMAINS: new_domains });
          })
     }
-        else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === true) {
+        else if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === true) {
             removeOverlay();
         // situation 3: enable GPC for all future domains
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
     }
-        else if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === true){
+        else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === true){
             removeOverlay();
         // situation 4: disable GPC for all future domains
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
