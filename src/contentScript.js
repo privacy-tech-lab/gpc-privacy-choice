@@ -16,7 +16,10 @@ overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
 
+<<<<<<< HEAD
 //adding class used to hide pseudo elements
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 imbedStyle.innerHTML=`
     .hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
 // adding HTML to the modal
@@ -154,8 +157,11 @@ body.addEventListener('mouseover', event => {
 }
 )
 
+<<<<<<< HEAD
 //add class that hides pseudo elements to apply-all button
 document.getElementById('apply-all').classList.add('hide_pseudo');
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
@@ -207,6 +213,14 @@ body.addEventListener('click', event => {
 // function used to add extra style the modal
 function styleOverlay() {
   const contentContainer = document.querySelector('#privacy-res-popup-container');
+<<<<<<< HEAD
+=======
+
+  document.getElementById('apply-all').classList.add('hide_pseudo');
+
+ 
+
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
   contentContainer.style.textAlign = 'center';   
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
