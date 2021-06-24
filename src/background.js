@@ -1,10 +1,8 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
 // Initializers
-let tabs = {}; /// Store all active tab id's, domain, requests, and response
 let sendSignal = false;
 let optout_headers = {};
-let global_domains = [];
 let currentHostname = undefined;
 
 // Set the initial configuration of the extension
@@ -59,18 +57,6 @@ const disable = () => {
   sendSignal = false;
 }
 
-// Add the new domain into the domain list
-const updateDomains = () => {
-  global_domains.push(currentHostname);
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    let domains = result.DOMAINS;
-    for (let domain in global_domains) {
-      if (domains[domain] === undefined) domains[domain] = null;
-    }
-    chrome.storage.local.set({ DOMAINS: domains }, function(){});
-  });
-}
-
 // Update the sendSignal boolean for the current page
 const updateSendSignal = () => {
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result){
@@ -86,7 +72,6 @@ const updateSendSignal = () => {
 
 // Add headers if the sendSignal to true
 const addHeaders = (details) => {
-  updateDomains();
   updateSendSignal();
   console.log("are headers added: " + sendSignal);
   if (sendSignal) {
@@ -102,7 +87,6 @@ const addHeaders = (details) => {
 
 // Add dom signal if sendSignal to true
 const addDomSignal = (details) => {
-  updateDomains();
   updateSendSignal();
   console.log("is dom signal set: " + sendSignal);
   if (sendSignal) {
