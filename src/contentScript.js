@@ -99,6 +99,7 @@ overlayDiv.innerHTML = `
                 align: center;
                 width: 100%">
                 <input value="Empty" id="apply-all" type="checkbox" style="
+<<<<<<< HEAD
                     color-scheme: light !important;
                     float: unset;
                     height: unset;
@@ -106,6 +107,13 @@ overlayDiv.innerHTML = `
                     position: unset !important;
                     display:inline-flex;
                     color: unset !important;
+=======
+                    float: unset;
+                    height: unset;
+                    opacity: unset;
+                    position: unset;
+                    display:inline-flex;
+>>>>>>> e9d815c (popup with apply-all above tracking preference buttons (issue #32))
                     width:unset;
                     -webkit-appearance:checkbox;
                     align-self: center;
