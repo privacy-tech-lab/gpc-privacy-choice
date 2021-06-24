@@ -47,42 +47,10 @@ overlayDiv.innerHTML = `
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
                     padding-bottom:3px;
+                    margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
                         This website is sharing your personal information for advertising purposes.
-            </div>
-            <div style="
-                display:inline;
-                align-tems: center;
-                align: center;
-                width: 100%">
-                <input value="Empty" id="apply-all" type="checkbox" style="
-                    float: unset;
-                    height: unset;
-                    opacity: unset;
-                    position: unset;
-                    display:inline-flex;
-                    width:unset;
-                    -webkit-appearance:checkbox;
-                    align-self: center;
-                    margin:unset;">
-                <label for="apply-all" style="
-                    margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
-                    display: inline-flex;
-                    color:black !important;
-                    font-size:16px;
-                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
-                    font-weight: 300;
-                    margin-bottom:10px;
-                    margin-left: 5px;
-                    font-family: unset;
-                    position:unset;
-                    padding:unset;
-                    text-transform:unset;
-                    top:unset;">
-                        Apply to all websites you visit
-                </label>
             </div>
             <div style="
                 padding: unset;
@@ -125,6 +93,39 @@ overlayDiv.innerHTML = `
                             Don't Allow
                     </div>
             <div/>
+            <div style="
+                display:inline;
+                align-tems: center;
+                align: center;
+                width: 100%">
+                <input value="Empty" id="apply-all" type="checkbox" style="
+                    float: unset;
+                    height: unset;
+                    opacity: unset;
+                    position: unset;
+                    display:inline-flex;
+                    width:unset;
+                    -webkit-appearance:checkbox;
+                    align-self: center;
+                    margin:unset;">
+                <label for="apply-all" style="
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    display: inline-flex;
+                    color:black !important;
+                    font-size:16px;
+                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                    font-weight: 300;
+                    margin-bottom:10px;
+                    margin-left: 5px;
+                    font-family: unset;
+                    position:unset;
+                    padding:unset;
+                    text-transform:unset;
+                    top:unset;">
+                        Apply to all websites you visit
+                </label>
+            </div>
         </div> 
     `
 
