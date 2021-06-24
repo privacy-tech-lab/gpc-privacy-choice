@@ -121,7 +121,7 @@ overlayDiv.innerHTML = `
                     margin-bottom:10px;
                     margin-left: 5px;
                     font-family: unset;
-                    position:unset;
+                    position:unset !important;
                     padding:unset;
                     text-transform:unset;
                     top:unset;">
