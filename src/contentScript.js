@@ -22,6 +22,7 @@ overlayDiv.style.display = "none";
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //adding class used to hide pseudo elements
 =======
 >>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
@@ -38,6 +39,8 @@ overlayDiv.style.display = "none";
 =======
 //adding class used to hide pseudo elements
 >>>>>>> 824da87 (refactored and added comments to new code)
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 imbedStyle.innerHTML=`
     .hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
 // adding HTML to the modal
@@ -181,6 +184,7 @@ body.addEventListener('mouseover', event => {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //add class that hides pseudo elements to apply-all button
 document.getElementById('apply-all').classList.add('hide_pseudo');
 =======
@@ -201,6 +205,8 @@ document.getElementById('apply-all').classList.add('hide_pseudo');
 //add class that hides pseudo elements to apply-all button
 document.getElementById('apply-all').classList.add('hide_pseudo');
 >>>>>>> 824da87 (refactored and added comments to new code)
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
@@ -258,7 +264,10 @@ function styleOverlay() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 =======
 >>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 =======
@@ -270,6 +279,7 @@ function styleOverlay() {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 =======
 >>>>>>> 824da87 (refactored and added comments to new code)
@@ -281,6 +291,8 @@ function styleOverlay() {
 >>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
 =======
 >>>>>>> 824da87 (refactored and added comments to new code)
+=======
+>>>>>>> 586007f (got rid of pseudo elements attatched to checkbox #39)
   contentContainer.style.textAlign = 'center';   
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
