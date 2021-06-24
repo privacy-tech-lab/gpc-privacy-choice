@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
-
+const head=document.querySelector('head');
+const imbedStyle=document.createElement('style');
 
 // adding css styles to the modal
 overlayDiv.style.position = 'fixed';
@@ -15,6 +16,8 @@ overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
 
+imbedStyle.innerHTML=`
+    .hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
 // adding HTML to the modal
 overlayDiv.innerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
@@ -135,6 +138,7 @@ overlayDiv.innerHTML = `
     `
 
 // add overlayDiv to the DOM
+head.appendChild(imbedStyle);
 body.appendChild(overlayDiv);
 
 // buttons change color when the cursor hovers over them
@@ -148,6 +152,7 @@ body.addEventListener('mouseover', event => {
     }
 }
 )
+
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
@@ -199,7 +204,11 @@ body.addEventListener('click', event => {
 // function used to add extra style the modal
 function styleOverlay() {
   const contentContainer = document.querySelector('#privacy-res-popup-container');
-  
+
+  document.getElementById('apply-all').classList.add('hide_pseudo');
+
+ 
+
   contentContainer.style.textAlign = 'center';   
   contentContainer.style.marginTop = '27vh'; 
   contentContainer.style.backgroundColor = 'white'; 
