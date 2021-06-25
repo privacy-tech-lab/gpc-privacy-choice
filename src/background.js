@@ -30,6 +30,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
           currentHostname = response.hostName;
       });
     })
+    updateDomain();
   }
 });
 
@@ -70,10 +71,21 @@ const updateSendSignal = () => {
   })
 }
 
+// Update the domains of the domains list in the local stroage
+const updateDomain = () => {
+  chrome.storage.local.get(["ENABLED", "DOMAINS", "DOMAINLIST_ENABLED"], function (result){
+    if (!result.DOMAINLIST_ENABLED){
+      let domains = result.DOMAINS;
+      let value = result.ENABLED;
+      domains[currentHostname] = value;
+      chrome.storage.local.set({DOMAINS: domains});
+    }
+  })
+}
+
 // Add headers if the sendSignal to true
 const addHeaders = (details) => {
   updateSendSignal();
-  console.log("are headers added: " + sendSignal);
   if (sendSignal) {
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
@@ -88,7 +100,6 @@ const addHeaders = (details) => {
 // Add dom signal if sendSignal to true
 const addDomSignal = (details) => {
   updateSendSignal();
-  console.log("is dom signal set: " + sendSignal);
   if (sendSignal) {
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 

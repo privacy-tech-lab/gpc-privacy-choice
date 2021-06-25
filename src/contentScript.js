@@ -173,12 +173,22 @@ body.addEventListener('click', event => {
             // situation 3: enable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+            chrome.storage.local.get(["DOMAINS"], function (result) {
+                new_domains = result.DOMAINS;
+                new_domains[currentDomain] = true;
+                chrome.storage.local.set({ DOMAINS: new_domains });
+            })
         }
         else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === true) { 
             // situation 4: disable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
             chrome.runtime.sendMessage({message: "DISABLE_ALL"});
+            chrome.storage.local.get(["DOMAINS"], function (result) {
+                new_domains = result.DOMAINS;
+                new_domains[currentDomain] = false;
+                chrome.storage.local.set({ DOMAINS: new_domains });
+            })
         }
     
 })
