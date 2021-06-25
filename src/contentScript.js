@@ -149,9 +149,18 @@ body.addEventListener('mouseover', event => {
     let button_preb = event.target;
     if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
         button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
-        setTimeout( () => {
-            button_preb.style.backgroundColor = 'rgb(51, 153, 255)';
-        }, 500); 
+    }
+}
+)
+
+//otherwise, buttons remain the normal color
+body.addEventListener('mouseover', event => {
+    let cursor_spot = event.target;
+    let but1 = document.getElementById('allow-btn');
+    let but2 = document.getElementById('dont-allow-btn');
+    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
+        but1.style.backgroundColor = 'rgb(51, 153, 255)';
+        but2.style.backgroundColor = 'rgb(51, 153, 255)';
     }
 }
 )
