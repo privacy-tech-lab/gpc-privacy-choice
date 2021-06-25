@@ -28,3 +28,7 @@ OptMeowt uses the following third party libraries. We thank the developers.
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [Switch Animation by Aaron Iker](https://codepen.io/aaroniker/pen/oaQdQZ)
 - [uikit](https://github.com/uikit/uikit)
+
+<p align="center">
+  <img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo">
+<p>
