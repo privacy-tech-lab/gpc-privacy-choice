@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
-
+const head=document.querySelector('head');
+const imbedStyle=document.createElement('style');
 
 // adding css styles to the modal
 overlayDiv.style.position = 'fixed';
@@ -15,6 +16,11 @@ overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
 
+
+
+//adding class used to hide pseudo elements
+imbedStyle.innerHTML=`
+    .hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
 // adding HTML to the modal
 overlayDiv.innerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
@@ -99,8 +105,11 @@ overlayDiv.innerHTML = `
                 align: center;
                 width: 100%">
                 <input value="Empty" id="apply-all" type="checkbox" style="
+                    content: none !important;
                     color-scheme: light !important;
                     float: unset;
+                    cursor:pointer;
+                    pointer-events: unset !important;
                     height: unset;
                     opacity: unset;
                     position: unset !important;
@@ -110,7 +119,7 @@ overlayDiv.innerHTML = `
                     -webkit-appearance:checkbox;
                     align-self: center;
                     margin:unset;">
-                <label for="apply-all" style="
+                <div for="apply-all" style="
                     margin-block-start: 0.5em;
                     margin-block-end: 0.5em;
                     display: inline-flex;
@@ -126,12 +135,13 @@ overlayDiv.innerHTML = `
                     text-transform:unset;
                     top:unset;">
                         Apply to all websites you visit
-                </label>
+                </div>
             </div>
         </div> 
     `
 
 // add overlayDiv to the DOM
+head.appendChild(imbedStyle);
 body.appendChild(overlayDiv);
 
 // buttons change color when the cursor hovers over them
@@ -139,12 +149,24 @@ body.addEventListener('mouseover', event => {
     let button_preb = event.target;
     if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
         button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
-        setTimeout( () => {
-            button_preb.style.backgroundColor = 'rgb(51, 153, 255)';
-        }, 500); 
     }
 }
 )
+
+//otherwise, buttons remain the normal color
+body.addEventListener('mouseover', event => {
+    let cursor_spot = event.target;
+    let but1 = document.getElementById('allow-btn');
+    let but2 = document.getElementById('dont-allow-btn');
+    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
+        but1.style.backgroundColor = 'rgb(51, 153, 255)';
+        but2.style.backgroundColor = 'rgb(51, 153, 255)';
+    }
+}
+)
+//add class that hides pseudo elements to apply-all button
+document.getElementById('apply-all').classList.add('hide_pseudo');
+
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
@@ -195,6 +217,7 @@ body.addEventListener('click', event => {
 
 // function used to add extra style the modal
 function styleOverlay() {
+  
   const contentContainer = document.querySelector('#privacy-res-popup-container');
   
   contentContainer.style.textAlign = 'center';   
