@@ -271,17 +271,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     asyncFunctionWithAwait(request, sender, sendResponse);
 })
 
-function applyAllToPastDomains(enable_bool){
-    chrome.storage.local.get(["DOMAINS"], function (d) {
-        let domains = d.DOMAINS;
-        for (domain in domains){
-            domains[domain]=enable_bool;
-        }
-        chrome.storage.local.set({DOMAINS: domains});
-    }
-    )
-}
-
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
