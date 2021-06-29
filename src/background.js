@@ -63,10 +63,6 @@ const disable = () => {
  const updateSendSignal = () => {
   chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS", "ENABLED"], function (result){
     let domains = result.DOMAINS;
-    console.log(result.DOMAINLIST_ENABLED)
-    console.log(currentHostname)
-    console.log(domains)
-    console.log(domains[currentHostname])
     if(result.ENABLED){
       if (result.DOMAINLIST_ENABLED){
         if (!(domains[currentHostname])===true)sendSignal = false;
@@ -82,7 +78,6 @@ const updateDomain = () => {
     if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
       let domains = result.DOMAINS;
       let value = result.ENABLED;
-      console.log(value)
       domains[currentHostname] = value;
       chrome.storage.local.set({DOMAINS: domains});
     }
