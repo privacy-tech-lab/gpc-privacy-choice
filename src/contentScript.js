@@ -200,7 +200,6 @@ body.addEventListener('click', event => {
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
             chrome.storage.local.set({APPLY_ALL: true});
-            applyAllToPastDomains(true);
             chrome.storage.local.get(["DOMAINS"], function (result) {
                 new_domains = result.DOMAINS;
                 for (let d in new_domains){
@@ -215,7 +214,6 @@ body.addEventListener('click', event => {
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
             chrome.storage.local.set({APPLY_ALL: true});
-            applyAllToPastDomains(false);
             chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
                 new_domains = result.DOMAINS;
                 for (let d in new_domains){
