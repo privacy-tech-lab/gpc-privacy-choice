@@ -1,3 +1,9 @@
+/*
+OptMeowt-Research is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
+
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
 const head=document.querySelector('head');
@@ -15,8 +21,6 @@ overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
 overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
-
-
 
 //adding class used to hide pseudo elements
 imbedStyle.innerHTML=`
@@ -199,6 +203,9 @@ body.addEventListener('click', event => {
             applyAllToPastDomains(true);
             chrome.storage.local.get(["DOMAINS"], function (result) {
                 new_domains = result.DOMAINS;
+                for (let d in new_domains){
+                    new_domains[d] = true;
+                }
                 new_domains[currentDomain] = true;
                 chrome.storage.local.set({ DOMAINS: new_domains });
             })
@@ -211,6 +218,9 @@ body.addEventListener('click', event => {
             applyAllToPastDomains(false);
             chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
                 new_domains = result.DOMAINS;
+                for (let d in new_domains){
+                    new_domains[d] = false;
+                }
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.storage.local.set({ ENABLED: false });
