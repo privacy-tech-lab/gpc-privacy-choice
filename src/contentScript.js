@@ -1,3 +1,9 @@
+/*
+OptMeowt-Research is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
+
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
 const head=document.querySelector('head');
@@ -15,8 +21,6 @@ overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
 overlayDiv.style.zIndex = '999999999999999';
 overlayDiv.style.textAlign = '-webkit-center';
 overlayDiv.style.display = "none";
-
-
 
 //adding class used to hide pseudo elements
 imbedStyle.innerHTML=`
@@ -195,8 +199,12 @@ body.addEventListener('click', event => {
             // situation 3: enable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+            chrome.storage.local.set({APPLY_ALL: true});
             chrome.storage.local.get(["DOMAINS"], function (result) {
                 new_domains = result.DOMAINS;
+                for (let d in new_domains){
+                    new_domains[d] = true;
+                }
                 new_domains[currentDomain] = true;
                 chrome.storage.local.set({ DOMAINS: new_domains });
             })
@@ -205,11 +213,15 @@ body.addEventListener('click', event => {
             // situation 4: disable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.runtime.sendMessage({message: "DISABLE_ALL"});
-            chrome.storage.local.get(["DOMAINS"], function (result) {
+            chrome.storage.local.set({APPLY_ALL: true});
+            chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
                 new_domains = result.DOMAINS;
+                for (let d in new_domains){
+                    new_domains[d] = false;
+                }
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
+                chrome.storage.local.set({ ENABLED: false });
             })
         }
     
@@ -262,12 +274,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
-chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
-    if (result.DOMAINLIST_ENABLED == true) {
+chrome.storage.local.get(["APPLY_ALL"], function (result) {
+    console.log("apply bool" + result.APPLY_ALL)
+    if (!result.APPLY_ALL) {
 
         chrome.storage.local.get(["DOMAINS"], function (d) {
             let domains = d.DOMAINS;
-
             // keeping this temporarily for debugging purpose
             // console.log("the domains look like this right now:")
             // for (let d in domains){
@@ -275,7 +287,9 @@ chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
             // }
 
             let currentDomain = window.location.hostname
+            
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
+            
         })
     }  
 });
