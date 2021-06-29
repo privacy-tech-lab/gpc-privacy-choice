@@ -1,5 +1,3 @@
 import { mainView }from './views/main-view/main-view.js'
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    mainView()
-  })
+document.addEventListener('DOMContentLoaded', (event) => {mainView()})
