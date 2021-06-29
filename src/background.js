@@ -8,6 +8,7 @@ let currentHostname = undefined;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({ENABLED: true});
+  chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   chrome.storage.local.get(["ENABLED"], function (result) {
@@ -27,7 +28,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
       chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
-          currentHostname = response.hostName;
+          if(response) currentHostname = response.hostName;
       });
     })
     updateDomain();
@@ -59,33 +60,40 @@ const disable = () => {
 }
 
 // Update the sendSignal boolean for the current page
-const updateSendSignal = () => {
-  chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS"], function (result){
+ const updateSendSignal = () => {
+  chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS", "ENABLED"], function (result){
     let domains = result.DOMAINS;
-    sendSignal = true;
-    if (result.DOMAINLIST_ENABLED){
-      if (!(domains[currentHostname] === true)) {
-        sendSignal = false;
-      }
+    console.log(result.DOMAINLIST_ENABLED)
+    console.log(currentHostname)
+    console.log(domains)
+    console.log(domains[currentHostname])
+    if(result.ENABLED){
+      if (result.DOMAINLIST_ENABLED){
+        if (!(domains[currentHostname])===true)sendSignal = false;
+        else sendSignal = true;
+      }else sendSignal = true;
     }
   })
 }
 
 // Update the domains of the domains list in the local stroage
 const updateDomain = () => {
-  chrome.storage.local.get(["ENABLED", "DOMAINS", "DOMAINLIST_ENABLED"], function (result){
-    if (!result.DOMAINLIST_ENABLED){
+  chrome.storage.local.get(["ENABLED", "DOMAINS", "APPLY_ALL"], function (result){
+    if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
       let domains = result.DOMAINS;
       let value = result.ENABLED;
+      console.log(value)
       domains[currentHostname] = value;
       chrome.storage.local.set({DOMAINS: domains});
     }
   })
 }
 
+
 // Add headers if the sendSignal to true
 const addHeaders = (details) => {
   updateSendSignal();
+  console.log("sent signal" + sendSignal +currentHostname);
   if (sendSignal) {
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
@@ -109,7 +117,7 @@ const addDomSignal = (details) => {
           contentType === 'application/json' ||
           contentType === 'text/xml' ||
           contentType === 'text/json' ||
-          contentType === 'text/rss+xml' ||
+          contentType === 'text/rss+xml' || 
           contentType === 'application/rss+xml'
       ) return
     } catch (e) {}

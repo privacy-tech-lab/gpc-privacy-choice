@@ -195,6 +195,8 @@ body.addEventListener('click', event => {
             // situation 3: enable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+            chrome.storage.local.set({APPLY_ALL: true});
+            applyAllToPastDomains(true);
             chrome.storage.local.get(["DOMAINS"], function (result) {
                 new_domains = result.DOMAINS;
                 new_domains[currentDomain] = true;
@@ -205,11 +207,13 @@ body.addEventListener('click', event => {
             // situation 4: disable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.runtime.sendMessage({message: "DISABLE_ALL"});
-            chrome.storage.local.get(["DOMAINS"], function (result) {
+            chrome.storage.local.set({APPLY_ALL: true});
+            applyAllToPastDomains(false);
+            chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
                 new_domains = result.DOMAINS;
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
+                chrome.storage.local.set({ ENABLED: false });
             })
         }
     
@@ -259,15 +263,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     asyncFunctionWithAwait(request, sender, sendResponse);
 })
 
+function applyAllToPastDomains(enable_bool){
+    chrome.storage.local.get(["DOMAINS"], function (d) {
+        let domains = d.DOMAINS;
+        for (domain in domains){
+            domains[domain]=enable_bool;
+        }
+        chrome.storage.local.set({DOMAINS: domains});
+    }
+    )
+}
+
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
-chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
-    if (result.DOMAINLIST_ENABLED == true) {
+chrome.storage.local.get(["APPLY_ALL"], function (result) {
+    console.log("apply bool" + result.APPLY_ALL)
+    if (!result.APPLY_ALL) {
 
         chrome.storage.local.get(["DOMAINS"], function (d) {
             let domains = d.DOMAINS;
-
             // keeping this temporarily for debugging purpose
             // console.log("the domains look like this right now:")
             // for (let d in domains){
@@ -275,7 +290,9 @@ chrome.storage.local.get(["DOMAINLIST_ENABLED"], function (result) {
             // }
 
             let currentDomain = window.location.hostname
+            
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
+            
         })
     }  
 });
