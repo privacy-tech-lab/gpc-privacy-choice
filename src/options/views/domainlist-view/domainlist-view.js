@@ -33,6 +33,135 @@ function createToggleListeners() {
   });
 }
 
+//Creates the buttons and information on default/apply-all setting
+function createDeafultSettingInfo(){
+  var turn_off_apply_all_button =
+  `  <button
+        id="apply-all-off-btn"
+        class="uk-badge button blue-buttons"
+        type="button">
+        turn off universal settings
+      </button>
+      and instead customize your privacy preference for each new domain
+      that you visit.
+
+  `
+  var dont_allow_all_button =
+  `
+  <button
+    id="dont-allow-all-btn"
+    class="uk-badge button blue-buttons"
+    type="button"
+    style="margin-right: -2px;">
+    send do not send signals to all domains
+  </button>
+  `
+  var allow_all_button =
+  `
+  <button
+    id="allow-all-btn"
+    class="uk-badge button blue-buttons"
+    type="button"
+    style="margin-right: -2px;">
+    allow all domains to track and sell 
+    your information
+  </button>
+  `
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
+    let apply_all_bool = result.APPLY_ALL;
+    if(apply_all_bool){
+      if(result.ENABLED){
+        var defaultSettingInfo =
+        `
+        <div class="important-text">
+        You have opted to send do not sell signals to all domains.
+        </div>
+        If you would like to change this setting, , but maintain a universal setting, you can choose to
+        ${allow_all_button}. 
+        Alternatively, you can 
+        ${turn_off_apply_all_button}
+        <br/>
+        <br/>
+        You can opt out of sending the signal
+        to an individual domain by turning off the domain's switch in the domain list below.
+        `
+      }
+      else{
+        var defaultSettingInfo = `
+        <div class="important-text"> You have opted to allow all domains to track and sell 
+        your information. </div>
+        If you would like to change this setting, but maintain a universal setting, you can choose to
+        ${dont_allow_all_button}.
+         Alternatively, you can 
+        ${turn_off_apply_all_button}
+        <br/>
+        <br/>
+        You can opt out of allowing an individual domain to
+        track and sell your information by 
+        turning on the domain's switch in the domain list below.
+        `  
+      }
+    }else{
+      var defaultSettingInfo = `
+      <div class="important-text"> When you visit a new domain you will be asked
+       to choose your privacy preference for that domain. </div>
+        If you would like to apply a universal preference to all domains
+        that you visit you can choose to
+        ${dont_allow_all_button}&nbsp;or ${allow_all_button}.
+        <br/>
+        <br/>
+        You can also change the privacy prefernce made for
+        an individual domain by 
+        toggling the domain's switch in the domain list below.
+        `
+
+    }
+    
+    document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+    addButtonListeners();
+})
+}
+
+function addButtonListeners(){
+//add button listeners
+document.addEventListener('click', event => {
+  if (event.target.id=='allow-all-btn'){
+      chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+          var new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = false;
+          }
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          chrome.storage.local.set({ ENABLED: false });
+          location.reload()
+      })
+}
+  if (event.target.id=='dont-allow-all-btn'){
+  chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.get(["DOMAINS"], function (result) {
+          var new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = true;
+          }
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          location.reload()
+      })
+}
+  if(event.target.id=='apply-all-off-btn'){
+    chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+    chrome.storage.local.set({APPLY_ALL: false});
+    chrome.storage.local.set({ ENABLED: true });
+    location.reload()
+}
+});}
+
+
+
+
+
 // Delete buttons for each domain
 function deleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",
@@ -144,5 +273,6 @@ export async function domainlistView(scaffoldTemplate) {
     document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
 
     buildList();
+    createDeafultSettingInfo();
     eventListeners();
 }
