@@ -9,6 +9,26 @@ styles.css
 ================================================================================
 styles.css is the main css page for OptMeowt's options page
 */
+.blue-buttons:focus {
+  color: #2f5597 !important;
+}
+
+.blue-buttons {
+  margin-right: 0px;
+  margin-left: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-right: 5px;
+  padding-left: 5px;
+  background-color: white;
+  border: 1px solid #2f5597;
+  color: #2f5597;
+}
+
+.important-text {
+  color: rgb(117 5 72 / 77%);
+  display: inline;
+}
 
 /*
 Colors
@@ -162,7 +182,7 @@ input[type="radio"]:hover:not(:checked) {
 
 .button:hover {
   background-color: #df3131 !important;
-  border: 1px solid #df3131 !important;
+  border: 1px solid #df3131;
   transition: all 0.3s ease;
   color: #fff !important;
 }
@@ -292,4 +312,10 @@ https://codepen.io/aaroniker/pen/oaQdQZ
 }
 .switch-smaller input + span:active {
   transform: scale(0.65);
+}
+
+.blue-buttons:hover {
+  color: white !important;
+  background-color: #2f5597 !important;
+  border: 1px solid #2f5597 !important;
 }
