@@ -74,7 +74,7 @@ function createDeafultSettingInfo(){
         var defaultSettingInfo =
         `
         <div class="important-text">
-        You have opted to send do not sell signals to all domains.
+        You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
         </div>
         If you would like to change this setting, , but maintain a universal setting, you can choose to
         ${allow_all_button}. 
@@ -89,7 +89,7 @@ function createDeafultSettingInfo(){
       else{
         var defaultSettingInfo = `
         <div class="important-text"> You have opted to allow all domains to track and sell 
-        your information. </div>
+        your information, unless otherwise stated in the domain list. </div>
         If you would like to change this setting, but maintain a universal setting, you can choose to
         ${dont_allow_all_button}.
          Alternatively, you can 
@@ -121,9 +121,8 @@ function createDeafultSettingInfo(){
     addButtonListeners();
 })
 }
-
+//add button listeners for default/apply-all setting buttons
 function addButtonListeners(){
-//add button listeners
 document.addEventListener('click', event => {
   if (event.target.id=='allow-all-btn'){
       chrome.storage.local.set({DOMAINLIST_ENABLED: false});
@@ -158,8 +157,54 @@ document.addEventListener('click', event => {
 }
 });}
 
+//create buttons to manage entire domainlist at once
+function CreateDomainlistManagerButtons(){
+  var toggle_domainlist_on =
+    `  <button
+          id="toggle_all_on"
+          class="uk-badge button blue-buttons"
+          type="button">
+          Toggle All On
+        </button>
+        `
+  var toggle_domainlist_off =
+  `  <button
+        id="toggle_all_off"
+        class="uk-badge blue-buttons button"
+        type="button">
+        Toggle All Off
+      </button>
+      `
+  var delete_all =
+  `  <button
+        id="delete_all_domainlist"
+        style="
+            margin-right: 17px;
+            margin-left: 5px;
+            margin-top: auto;
+            margin-bottom: auto;
+            padding-right: 5px;
+            padding-left: 5px;
+            background-color: white;
+            border: 1px solid #e06d62;
+            color: #e06d62;
+            float: right;
+          "
+        class="uk-badge button"
+        type="button">
+        Delete All
+      </button>
+      `
 
+  var manger_btns=
+  `
+  ${toggle_domainlist_on}
+  ${toggle_domainlist_off}
+  ${delete_all}
+  `
 
+  document.getElementById('domainlist-manager-btns').innerHTML = manger_btns;
+}
 
 
 // Delete buttons for each domain
@@ -274,5 +319,6 @@ export async function domainlistView(scaffoldTemplate) {
 
     buildList();
     createDeafultSettingInfo();
+    CreateDomainlistManagerButtons();
     eventListeners();
 }
