@@ -118,7 +118,6 @@ function createDeafultSettingInfo(){
     }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
-    addButtonListeners();
 })
 }
 //add button listeners for default/apply-all setting buttons
@@ -155,7 +154,38 @@ document.addEventListener('click', event => {
     chrome.storage.local.set({ ENABLED: true });
     location.reload()
 }
-});}
+  if(event.target.id=='toggle_all_on'){
+    chrome.storage.local.get(["DOMAINS"], function (result) {
+      var new_domains = result.DOMAINS;
+      for (let d in new_domains){
+          new_domains[d] = true;
+      }
+      chrome.storage.local.set({ DOMAINS: new_domains });
+      location.reload()
+  })
+}
+  if(event.target.id=='toggle_all_off'){
+    chrome.storage.local.get(["DOMAINS"], function (result) {
+      var new_domains = result.DOMAINS;
+      for (let d in new_domains){
+          new_domains[d] = false;
+      }
+      chrome.storage.local.set({ DOMAINS: new_domains });
+      location.reload()
+  })
+  }
+
+  if(event.target.id=='delete_all_domainlist'){
+      let delete_prompt = `Are you sure you would like to permanently delete all domain from the Domain List?`
+      let success_prompt = `Successfully deleted all domains from the Domain List.
+        NOTE: Domains will be automatically added back to the list when the domain is requested again.`
+      if (confirm(delete_prompt)) {
+        chrome.storage.local.set({ DOMAINS: {} });
+      }
+      location.reload()
+      alert(success_prompt)
+    }
+;})}
 
 //create buttons to manage entire domainlist at once
 function CreateDomainlistManagerButtons(){
@@ -321,4 +351,5 @@ export async function domainlistView(scaffoldTemplate) {
     createDeafultSettingInfo();
     CreateDomainlistManagerButtons();
     eventListeners();
+    addButtonListeners();
 }
