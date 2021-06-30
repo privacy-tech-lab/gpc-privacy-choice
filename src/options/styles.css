@@ -9,12 +9,10 @@ styles.css
 ================================================================================
 styles.css is the main css page for OptMeowt's options page
 */
-
-.blue-buttons:hover {
-  color: white !important;
-  background-color: #2f5597 !important;
-  border: 1px solid #2f5597 !important;
+.blue-buttons:focus {
+  color: #2f5597 !important;
 }
+
 .blue-buttons {
   margin-right: 0px;
   margin-left: 0px;

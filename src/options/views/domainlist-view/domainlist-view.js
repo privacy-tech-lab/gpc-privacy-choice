@@ -20,7 +20,9 @@ function addEventListeners() {
             }
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: false });
-            location.reload()
+            createList();
+            createDeafultSettingInfo();
+            addToggleListeners();
         })
   }
     if (event.target.id=='dont-allow-all-btn'){
@@ -32,14 +34,17 @@ function addEventListeners() {
                 new_domains[d] = true;
             }
             chrome.storage.local.set({ DOMAINS: new_domains });
-            location.reload()
+            chrome.storage.local.set({ ENABLED: true });
+            createList();
+            createDeafultSettingInfo();
+            addToggleListeners();
         })
   }
     if(event.target.id=='apply-all-off-btn'){
       chrome.storage.local.set({DOMAINLIST_ENABLED: true});
       chrome.storage.local.set({APPLY_ALL: false});
       chrome.storage.local.set({ ENABLED: true });
-      location.reload()
+      createDeafultSettingInfo();
   }
     if(event.target.id=='toggle_all_on'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -48,7 +53,8 @@ function addEventListeners() {
             new_domains[d] = true;
         }
         chrome.storage.local.set({ DOMAINS: new_domains });
-        location.reload()
+        createList();
+        addToggleListeners();
     })
   }
     if(event.target.id=='toggle_all_off'){
@@ -58,7 +64,8 @@ function addEventListeners() {
             new_domains[d] = false;
         }
         chrome.storage.local.set({ DOMAINS: new_domains });
-        location.reload()
+        createList();
+        addToggleListeners();
     })
     }
   
@@ -68,9 +75,9 @@ function addEventListeners() {
           NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.set({ DOMAINS: {} });
+          alert(success_prompt)
         }
-        location.reload()
-        alert(success_prompt)
+        createList();
       }
   ;});
   addToggleListeners();
