@@ -7,24 +7,77 @@ const headings = {
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
-function eventListeners() {
-    document.getElementById('searchbar').addEventListener('keyup', filterList )
-    createToggleListeners();
-
-    window.onscroll = function() { stickyNavbar() };
-    var nb = document.getElementById("domainlist-navbar");
-    var sb = document.getElementById("searchbar")
-    var sticky = nb.offsetTop;
-
-    // Sticky navbar
-    function stickyNavbar() {
-      if (window.pageYOffset >= sticky) nb.classList.add("sticky")
-      else nb.classList.remove("sticky")
+function addEventListeners() {
+  document.getElementById('searchbar').addEventListener('keyup', filterList);
+  document.addEventListener('click', event => {
+    if (event.target.id=='allow-all-btn'){
+        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        chrome.storage.local.set({APPLY_ALL: true});
+        chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+            var new_domains = result.DOMAINS;
+            for (let d in new_domains){
+                new_domains[d] = false;
+            }
+            chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.storage.local.set({ ENABLED: false });
+            location.reload()
+        })
+  }
+    if (event.target.id=='dont-allow-all-btn'){
+    chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        chrome.storage.local.set({APPLY_ALL: true});
+        chrome.storage.local.get(["DOMAINS"], function (result) {
+            var new_domains = result.DOMAINS;
+            for (let d in new_domains){
+                new_domains[d] = true;
+            }
+            chrome.storage.local.set({ DOMAINS: new_domains });
+            location.reload()
+        })
+  }
+    if(event.target.id=='apply-all-off-btn'){
+      chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+      chrome.storage.local.set({APPLY_ALL: false});
+      chrome.storage.local.set({ ENABLED: true });
+      location.reload()
+  }
+    if(event.target.id=='toggle_all_on'){
+      chrome.storage.local.get(["DOMAINS"], function (result) {
+        var new_domains = result.DOMAINS;
+        for (let d in new_domains){
+            new_domains[d] = true;
+        }
+        chrome.storage.local.set({ DOMAINS: new_domains });
+        location.reload()
+    })
+  }
+    if(event.target.id=='toggle_all_off'){
+      chrome.storage.local.get(["DOMAINS"], function (result) {
+        var new_domains = result.DOMAINS;
+        for (let d in new_domains){
+            new_domains[d] = false;
+        }
+        chrome.storage.local.set({ DOMAINS: new_domains });
+        location.reload()
+    })
     }
+  
+    if(event.target.id=='delete_all_domainlist'){
+        let delete_prompt = `Are you sure you would like to permanently delete all domain from the Domain List?`
+        let success_prompt = `Successfully deleted all domains from the Domain List.
+          NOTE: Domains will be automatically added back to the list when the domain is requested again.`
+        if (confirm(delete_prompt)) {
+          chrome.storage.local.set({ DOMAINS: {} });
+        }
+        location.reload()
+        alert(success_prompt)
+      }
+  ;});
+  addToggleListeners();
 }
 
 // Creates the specific Domain List toggles as well as the perm delete
-function createToggleListeners() {
+function addToggleListeners() {
   chrome.storage.local.get(["DOMAINS"], function (result) {
     for (let domain in result.DOMAINS) {
       toggleListener(domain, domain)
@@ -32,6 +85,41 @@ function createToggleListeners() {
     }
   });
 }
+
+// Delete buttons for each domain
+function deleteButtonListener (domain) {
+  document.getElementById(`delete ${domain}`).addEventListener("click",
+    (async () => {
+      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List?`
+      let success_prompt = `Successfully deleted ${domain} from the Domain List.
+NOTE: It will be automatically added back to the list when the domain is requested again.`
+      if (confirm(delete_prompt)) {
+        await permRemoveFromDomainlist(domain)
+        alert(success_prompt)
+        document.getElementById(`li ${domain}`).remove();
+      }
+  }))
+}
+
+// Filterd lists code heavily inspired by
+function filterList() {
+  let input, list, li, count
+  input = document.getElementById('searchbar').value.toLowerCase();
+  list = document.getElementById('domainlist-main')
+  li = list.getElementsByTagName('li')
+  count = li.length
+
+  for (let i = 0; i < count; i++) {
+      let d = li[i].getElementsByClassName('domain')[0];
+      let txtValue = d.innerText;
+      if (txtValue.toLowerCase().indexOf(input) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  };
+}
+
 
 //Creates the buttons and information on default/apply-all setting
 function createDeafultSettingInfo(){
@@ -120,72 +208,6 @@ function createDeafultSettingInfo(){
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
 })
 }
-//add button listeners for default/apply-all setting buttons
-function addButtonListeners(){
-document.addEventListener('click', event => {
-  if (event.target.id=='allow-all-btn'){
-      chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-      chrome.storage.local.set({APPLY_ALL: true});
-      chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-          var new_domains = result.DOMAINS;
-          for (let d in new_domains){
-              new_domains[d] = false;
-          }
-          chrome.storage.local.set({ DOMAINS: new_domains });
-          chrome.storage.local.set({ ENABLED: false });
-          location.reload()
-      })
-}
-  if (event.target.id=='dont-allow-all-btn'){
-  chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-      chrome.storage.local.set({APPLY_ALL: true});
-      chrome.storage.local.get(["DOMAINS"], function (result) {
-          var new_domains = result.DOMAINS;
-          for (let d in new_domains){
-              new_domains[d] = true;
-          }
-          chrome.storage.local.set({ DOMAINS: new_domains });
-          location.reload()
-      })
-}
-  if(event.target.id=='apply-all-off-btn'){
-    chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-    chrome.storage.local.set({APPLY_ALL: false});
-    chrome.storage.local.set({ ENABLED: true });
-    location.reload()
-}
-  if(event.target.id=='toggle_all_on'){
-    chrome.storage.local.get(["DOMAINS"], function (result) {
-      var new_domains = result.DOMAINS;
-      for (let d in new_domains){
-          new_domains[d] = true;
-      }
-      chrome.storage.local.set({ DOMAINS: new_domains });
-      location.reload()
-  })
-}
-  if(event.target.id=='toggle_all_off'){
-    chrome.storage.local.get(["DOMAINS"], function (result) {
-      var new_domains = result.DOMAINS;
-      for (let d in new_domains){
-          new_domains[d] = false;
-      }
-      chrome.storage.local.set({ DOMAINS: new_domains });
-      location.reload()
-  })
-  }
-
-  if(event.target.id=='delete_all_domainlist'){
-      let delete_prompt = `Are you sure you would like to permanently delete all domain from the Domain List?`
-      let success_prompt = `Successfully deleted all domains from the Domain List.
-        NOTE: Domains will be automatically added back to the list when the domain is requested again.`
-      if (confirm(delete_prompt)) {
-        chrome.storage.local.set({ DOMAINS: {} });
-      }
-      location.reload()
-      alert(success_prompt)
-    }
-;})}
 
 //create buttons to manage entire domainlist at once
 function CreateDomainlistManagerButtons(){
@@ -236,40 +258,6 @@ function CreateDomainlistManagerButtons(){
   document.getElementById('domainlist-manager-btns').innerHTML = manger_btns;
 }
 
-
-// Delete buttons for each domain
-function deleteButtonListener (domain) {
-  document.getElementById(`delete ${domain}`).addEventListener("click",
-    (async () => {
-      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List?`
-      let success_prompt = `Successfully deleted ${domain} from the Domain List.
-NOTE: It will be automatically added back to the list when the domain is requested again.`
-      if (confirm(delete_prompt)) {
-        await permRemoveFromDomainlist(domain)
-        alert(success_prompt)
-        document.getElementById(`li ${domain}`).remove();
-      }
-  }))
-}
-
-// Filterd lists code heavily inspired by
-function filterList() {
-  let input, list, li, count
-  input = document.getElementById('searchbar').value.toLowerCase();
-  list = document.getElementById('domainlist-main')
-  li = list.getElementsByTagName('li')
-  count = li.length
-
-  for (let i = 0; i < count; i++) {
-      let d = li[i].getElementsByClassName('domain')[0];
-      let txtValue = d.innerText;
-      if (txtValue.toLowerCase().indexOf(input) > -1) {
-      li[i].style.display = "";
-    } else {
-      li[i].style.display = "none";
-    }
-  };
-}
 
 // Builds the list of domains in the domainlist, and their respective options, to be displayed
 function buildList() {
@@ -350,6 +338,5 @@ export async function domainlistView(scaffoldTemplate) {
     buildList();
     createDeafultSettingInfo();
     CreateDomainlistManagerButtons();
-    eventListeners();
-    addButtonListeners();
+    addEventListeners();
 }
