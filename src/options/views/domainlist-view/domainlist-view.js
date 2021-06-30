@@ -120,8 +120,7 @@ function filterList() {
   };
 }
 
-
-//Creates the buttons and information on default/apply-all setting
+// Create HTML for the buttons and information on default/apply-all setting
 function createDeafultSettingInfo(){
   var turn_off_apply_all_button =
   `  <button
@@ -209,8 +208,8 @@ function createDeafultSettingInfo(){
 })
 }
 
-//create buttons to manage entire domainlist at once
-function CreateDomainlistManagerButtons(){
+// Create HTML for buttons to manage entire domainlist at once
+function createDomainlistManagerButtons(){
   var toggle_domainlist_on =
     `  <button
           id="toggle_all_on"
@@ -258,9 +257,8 @@ function CreateDomainlistManagerButtons(){
   document.getElementById('domainlist-manager-btns').innerHTML = manger_btns;
 }
 
-
-// Builds the list of domains in the domainlist, and their respective options, to be displayed
-function buildList() {
+// Create HTML for displaying the list of domains in the domainlist, and their respective options
+function createList() {
   let items = ""
   chrome.storage.local.get(["DOMAINS"], function (result) {
     for (let domain in result.DOMAINS) {
@@ -335,8 +333,8 @@ export async function domainlistView(scaffoldTemplate) {
     document.getElementById('content').innerHTML = body.innerHTML
     document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
 
-    buildList();
     createDeafultSettingInfo();
-    CreateDomainlistManagerButtons();
+    createDomainlistManagerButtons();
+    createList();
     addEventListeners();
 }
