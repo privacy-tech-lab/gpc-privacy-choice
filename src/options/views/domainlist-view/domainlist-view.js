@@ -72,6 +72,8 @@ function addEventListeners() {
             new_domains[d] = false;
         }
         chrome.storage.local.set({ DOMAINS: new_domains });
+        chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
         createList();
         addToggleListeners();
     })
