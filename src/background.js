@@ -7,7 +7,7 @@ let currentHostname = undefined;
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
-var enabledCache=false;
+var enabledCache=true;
 var domainlistCache= {};
 var domainlistEnabledCache=true;
 
@@ -46,23 +46,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message == "DISABLE_ALL") disable();
 
   //update cache from contentScript.js
-  // if (request.message== "UPDATE CACHE DOMAINLIST") domainlist=request.newDomains
-  // if (request.message== "UPDATE CACHE DOMAINLIST_ENABLED") domainlistEnabledCache=request.newDomainlistEnabled
-  // if (request.message== "UPDATE CACHE ENABLED") domainlistEnabledCache=request.newEnabled
   if (request.greeting== "UPDATE CACHE") 
     setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
-});
-
-// Send message "GET_DOMAIN" to contentscript to retrive current domain
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {          
-  if (changeInfo.status == 'complete') {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-      chrome.tabs.sendMessage(tabs[0].id, {message: "GET_DOMAIN"}, function(response) {
-          if(response) currentHostname = response.hostName;
-      });
-    })
-    updateDomain();
-  }
 });
 
 // Enable the extenstion
@@ -71,7 +56,7 @@ const enable = () => {
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      // chrome.webNavigation.onCommitted.addListener(addDomSignal, {urls: ["<all_urls>"]});
+      chrome.webRequest.onBeforeRequest.addListener(updateSendSignalandDomain, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
@@ -92,23 +77,31 @@ const disable = () => {
 }
 
 // Update the sendSignal boolean for the current page
- const updateSendSignal = () => {
-  // chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS", "ENABLED"], function (result){
-    // let domains = result.DOMAINS;
-    let domains = domainlistCache
-    // if(result.ENABLED){
-      if(enabledCache){
-      // if (result.DOMAINLIST_ENABLED){
-        if(domainlistEnabledCache){
-        if (!(domains[currentHostname])===true)sendSignal = false;
+function updateSendSignalandDomain(){
+
+  //update current domain
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    var url = tabs[0].url
+    var url_object = new URL(url)
+    var domain=url_object.hostname
+    currentHostname = domain;
+    });
+
+  //update send signal for the current domain
+  console.log(currentHostname ,enabledCache, domainlistEnabledCache, domainlistCache)
+    if(enabledCache){
+      if(domainlistEnabledCache){
+        if (!(domainlistCache[currentHostname])===true)sendSignal = false;
         else sendSignal = true;
       }else sendSignal = true;
-    }
-  // })
+    }else sendSignal = false;
+
+
+  updateDomainList()
 }
 
 // Update the domains of the domains list in the local stroage
-const updateDomain = () => {
+function updateDomainList(){
   chrome.storage.local.get(["ENABLED", "DOMAINS", "APPLY_ALL"], function (result){
     if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
       let domains = result.DOMAINS;
@@ -121,10 +114,12 @@ const updateDomain = () => {
 }
 
 
+
 // Add headers if the sendSignal to true
-const addHeaders = (details) => {
-  updateSendSignal();
-  console.log("sent signal" + sendSignal +currentHostname);
+function addHeaders (details)  {
+
+  updateSendSignalandDomain()
+  console.log("sent headers" + sendSignal +currentHostname);
   if (sendSignal) {
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
@@ -137,8 +132,9 @@ const addHeaders = (details) => {
 };
 
 // Add dom signal if sendSignal to true
-const addDomSignal = (details) => {
-  updateSendSignal();
+function addDomSignal (details)  {
+  updateSendSignalandDomain();
+  console.log("sent DOM" + sendSignal +currentHostname);
   if (sendSignal) {
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 

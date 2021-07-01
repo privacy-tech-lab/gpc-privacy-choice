@@ -268,17 +268,6 @@ function removeOverlay(){
     overlayDiv.style.display = 'none';
 }
 
-const asyncFunctionWithAwait = async (request, sender, sendResponse) => {
-    if (request.message == "GET_DOMAIN"){
-        sendResponse({hostName: window.location.hostname});
-        return true
-    }
-}
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    asyncFunctionWithAwait(request, sender, sendResponse);
-})
-
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
