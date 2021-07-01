@@ -7,16 +7,9 @@ let currentHostname = undefined;
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
-var enabledCache=true;
-var domainlistCache= {};
-var domainlistEnabledCache=true;
-
-// Sets cache value to locally stored values after opening chrome
-chrome.storage.local.get(["DOMAINLIST", "ENABLED", 'DOMAINLIST_ENABLED'], function (result){
-  enabledCache=result.ENABLED;
-  domainlistCache=result.DOMAINLIST;
-  domainlistEnabledCache=result.DOMAINLIST_ENABLED;
-})
+let enabledCache=true;
+let domainlistCache= {};
+let domainlistEnabledCache=true;
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(function (object) {
@@ -27,27 +20,19 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
 });
 
-// function used to set the locally stored values in the cache upon change
-function setCache(enabled='dontSet', domainlist='dontSet', domainlistEnabled='dontSet'){
-  if(enabled!='dontSet'){
-    enabledCache=enabled;
-  }
-  if(domainlist!='dontSet'){
-    domainlistCache=domainlist;
-  }
-  if(domainlistEnabled!='dontSet'){
-    domainlistEnabledCache=domainlistEnabled;
-  }
-}
+// Sets cache value to locally stored values after chrome booting up
+chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED'], function (result){
+  enabledCache=result.ENABLED;
+  domainlistCache=result.DOMAINS;
+  domainlistEnabledCache=result.DOMAINLIST_ENABLED;
+})
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
-
   //update cache from contentScript.js
-  if (request.greeting== "UPDATE CACHE") 
-    setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
+  if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
 });
 
 // Enable the extenstion
@@ -76,26 +61,31 @@ const disable = () => {
   sendSignal = false;
 }
 
+// function used to set the locally stored values in the cache upon change
+function setCache(enabled='dontSet', domainlist='dontSet', domainlistEnabled='dontSet'){
+  if(enabled!='dontSet') enabledCache=enabled;
+  if(domainlist!='dontSet') domainlistCache=domainlist;
+  if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
+}
+
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
-  //update current domain
+  // update current domain
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    var url = tabs[0].url
-    var url_object = new URL(url)
-    var domain=url_object.hostname
+    let url = tabs[0].url
+    let url_object = new URL(url)
+    let domain=url_object.hostname
     currentHostname = domain;
-    });
+  });
 
-  //update send signal for the current domain
-  console.log(currentHostname ,enabledCache, domainlistEnabledCache, domainlistCache)
-    if(enabledCache){
-      if(domainlistEnabledCache){
-        if (!(domainlistCache[currentHostname])===true)sendSignal = false;
-        else sendSignal = true;
-      }else sendSignal = true;
-    }else sendSignal = false;
-
+  // update send signal for the current domain
+  if(enabledCache){
+    if(domainlistEnabledCache){
+      if (!(domainlistCache[currentHostname])===true) sendSignal = false;
+      else sendSignal = true;
+    }else sendSignal = true;
+  }else sendSignal = false;
 
   updateDomainList()
 }
@@ -112,7 +102,6 @@ function updateDomainList(){
     }
   })
 }
-
 
 
 // Add headers if the sendSignal to true
