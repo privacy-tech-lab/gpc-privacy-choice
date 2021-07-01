@@ -86,13 +86,13 @@ function addEventListeners() {
         if (confirm(delete_prompt)) {
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: {} , newDomainlistEnabled: 'dontSet' })
           alert(success_prompt)
         }
         createList();
+        addToggleListeners();
       }
   ;});
-  addToggleListeners();
 }
 
 // Creates the specific Domain List toggles as well as the perm delete

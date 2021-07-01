@@ -8,7 +8,7 @@ let currentHostname = undefined;
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
 let enabledCache=true;
-let domainlistCache= {};
+let domainsCache= {};
 let domainlistEnabledCache=true;
 
 // Set the initial configuration of the extension
@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
 // Sets cache value to locally stored values after chrome booting up
 chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED'], function (result){
   enabledCache=result.ENABLED;
-  domainlistCache=result.DOMAINS;
+  domainsCache=result.DOMAINS;
   domainlistEnabledCache=result.DOMAINLIST_ENABLED;
 })
 
@@ -82,7 +82,7 @@ function updateSendSignalandDomain(){
   // update send signal for the current domain
   if(enabledCache){
     if(domainlistEnabledCache){
-      if (!(domainlistCache[currentHostname])===true) sendSignal = false;
+      if (!(domainsCache[currentHostname])===true) sendSignal = false;
       else sendSignal = true;
     }else sendSignal = true;
   }else sendSignal = false;
@@ -98,7 +98,7 @@ function updateDomainList(){
       let value = result.ENABLED;
       domains[currentHostname] = value;
       chrome.storage.local.set({DOMAINS: domains});
-      setCache(domainlist=domains)
+      setCache(domains=domains)    
     }
   })
 }
