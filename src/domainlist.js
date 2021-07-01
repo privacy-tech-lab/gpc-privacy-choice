@@ -60,7 +60,7 @@ export async function toggleListener(elementId, domain) {
       if (result.DOMAINS[domain]==true) removeFromDomainlist(domain);
       else addToDomainlist(domain);
     chrome.runtime.sendMessage
-              ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: 'dontSet' })
+              ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
     })
   })
 }
