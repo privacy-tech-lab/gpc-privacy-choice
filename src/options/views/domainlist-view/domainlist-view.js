@@ -167,6 +167,7 @@ function createDeafultSettingInfo(){
     send do not send signals to all domains
   </button>
   `
+
   let allow_all_button =
   `
   <button
@@ -180,6 +181,7 @@ function createDeafultSettingInfo(){
   `
   chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
+
     let defaultSettingInfo;
     if(apply_all_bool){
       if(result.ENABLED){
@@ -199,6 +201,7 @@ function createDeafultSettingInfo(){
         `
       }
       else{
+
         defaultSettingInfo = `
         <div class="important-text"> You have opted to allow all domains to track and sell 
         your information, unless otherwise stated in the domain list. </div>
@@ -226,6 +229,7 @@ function createDeafultSettingInfo(){
         an individual domain by 
         toggling the domain's switch in the domain list below.
         `
+
     }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
@@ -270,6 +274,7 @@ function createDomainlistManagerButtons(){
         Delete All
       </button>
       `
+
 
   let manger_btns=
   `
