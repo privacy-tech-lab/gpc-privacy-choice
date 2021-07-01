@@ -183,6 +183,8 @@ body.addEventListener('click', event => {
             new_domains = result.DOMAINS;
             new_domains[currentDomain] = true;
             chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true })
         })
     }
         else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === false) { 
@@ -193,6 +195,8 @@ body.addEventListener('click', event => {
             new_domains = result.DOMAINS;
             new_domains[currentDomain] = false;
             chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.runtime.sendMessage
+                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true})
         })
         }
         else if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === true) { 
@@ -207,6 +211,8 @@ body.addEventListener('click', event => {
                 }
                 new_domains[currentDomain] = true;
                 chrome.storage.local.set({ DOMAINS: new_domains });
+                chrome.runtime.sendMessage
+                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false})
             })
         }
         else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === true) { 
@@ -222,6 +228,8 @@ body.addEventListener('click', event => {
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.storage.local.set({ ENABLED: false });
+                chrome.runtime.sendMessage
+                    ({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false})
             })
         }
     
@@ -298,3 +306,4 @@ chrome.storage.local.get(["APPLY_ALL"], function (result) {
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
     console.log(response.farewell);
 });
+
