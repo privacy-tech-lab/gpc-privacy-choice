@@ -93,15 +93,18 @@ const disable = () => {
 
 // Update the sendSignal boolean for the current page
  const updateSendSignal = () => {
-  chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS", "ENABLED"], function (result){
-    let domains = result.DOMAINS;
-    if(result.ENABLED){
-      if (result.DOMAINLIST_ENABLED){
+  // chrome.storage.local.get(["DOMAINLIST_ENABLED", "DOMAINS", "ENABLED"], function (result){
+    // let domains = result.DOMAINS;
+    let domains = domainlistCache
+    // if(result.ENABLED){
+      if(enabledCache){
+      // if (result.DOMAINLIST_ENABLED){
+        if(domainlistEnabledCache){
         if (!(domains[currentHostname])===true)sendSignal = false;
         else sendSignal = true;
       }else sendSignal = true;
     }
-  })
+  // })
 }
 
 // Update the domains of the domains list in the local stroage

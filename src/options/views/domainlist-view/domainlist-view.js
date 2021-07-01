@@ -20,6 +20,11 @@ function addEventListeners() {
             }
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: false });
+            chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", 
+                newEnabled:false , 
+                newDomains: new_domains , 
+                newDomainlistEnabled: false })
             createList();
             createDeafultSettingInfo();
             addToggleListeners();
@@ -33,6 +38,11 @@ function addEventListeners() {
             for (let d in new_domains){
                 new_domains[d] = true;
             }
+            chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", 
+                newEnabled:true , 
+                newDomains: new_domains , 
+                newDomainlistEnabled: false })
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: true });
             createList();
@@ -44,6 +54,11 @@ function addEventListeners() {
       chrome.storage.local.set({DOMAINLIST_ENABLED: true});
       chrome.storage.local.set({APPLY_ALL: false});
       chrome.storage.local.set({ ENABLED: true });
+      chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", 
+                newEnabled:true , 
+                newDomains: 'dontSet' , 
+                newDomainlistEnabled: true })
       createDeafultSettingInfo();
   }
     if(event.target.id=='toggle_all_on'){
@@ -52,6 +67,11 @@ function addEventListeners() {
         for (let d in new_domains){
             new_domains[d] = true;
         }
+        chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", 
+                newEnabled: 'dontSet', 
+                newDomains: new_domains , 
+                newDomainlistEnabled: 'dontSet' })
         chrome.storage.local.set({ DOMAINS: new_domains });
         createList();
         addToggleListeners();
@@ -75,6 +95,11 @@ function addEventListeners() {
           NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.set({ DOMAINS: {} });
+          chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", 
+                newEnabled: 'dontSet', 
+                newDomains: new_domains , 
+                newDomainlistEnabled: 'dontSet' })
           alert(success_prompt)
         }
         createList();
