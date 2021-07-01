@@ -1,3 +1,7 @@
+// OptMeowt-Research is licensed under the MIT License
+// Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+// privacy-tech-lab, https://privacytechlab.org/
+
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, toggleListener, permRemoveFromDomainlist } from "../../../domainlist.js";
 
@@ -14,7 +18,7 @@ function addEventListeners() {
         chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-            var new_domains = result.DOMAINS;
+            let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = false;
             }
@@ -31,7 +35,7 @@ function addEventListeners() {
     chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
-            var new_domains = result.DOMAINS;
+            let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = true;
             }
@@ -54,7 +58,7 @@ function addEventListeners() {
   }
     if(event.target.id=='toggle_all_on'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
-        var new_domains = result.DOMAINS;
+        let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = true;
         }
@@ -67,7 +71,7 @@ function addEventListeners() {
   }
     if(event.target.id=='toggle_all_off'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
-        var new_domains = result.DOMAINS;
+        let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = false;
         }
@@ -93,6 +97,7 @@ function addEventListeners() {
         addToggleListeners();
       }
   ;});
+  addToggleListeners();
 }
 
 // Creates the specific Domain List toggles as well as the perm delete
@@ -141,7 +146,7 @@ function filterList() {
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDeafultSettingInfo(){
-  var turn_off_apply_all_button =
+  let turn_off_apply_all_button =
   `  <button
         id="apply-all-off-btn"
         class="uk-badge button blue-buttons"
@@ -152,7 +157,7 @@ function createDeafultSettingInfo(){
       that you visit.
 
   `
-  var dont_allow_all_button =
+  let dont_allow_all_button =
   `
   <button
     id="dont-allow-all-btn"
@@ -162,7 +167,7 @@ function createDeafultSettingInfo(){
     send do not send signals to all domains
   </button>
   `
-  var allow_all_button =
+  let allow_all_button =
   `
   <button
     id="allow-all-btn"
@@ -175,9 +180,10 @@ function createDeafultSettingInfo(){
   `
   chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
+    let defaultSettingInfo;
     if(apply_all_bool){
       if(result.ENABLED){
-        var defaultSettingInfo =
+        defaultSettingInfo =
         `
         <div class="important-text">
         You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
@@ -193,7 +199,7 @@ function createDeafultSettingInfo(){
         `
       }
       else{
-        var defaultSettingInfo = `
+        defaultSettingInfo = `
         <div class="important-text"> You have opted to allow all domains to track and sell 
         your information, unless otherwise stated in the domain list. </div>
         If you would like to change this setting, but maintain a universal setting, you can choose to
@@ -208,7 +214,7 @@ function createDeafultSettingInfo(){
         `  
       }
     }else{
-      var defaultSettingInfo = `
+      defaultSettingInfo = `
       <div class="important-text"> When you visit a new domain you will be asked
        to choose your privacy preference for that domain. </div>
         If you would like to apply a universal preference to all domains
@@ -220,7 +226,6 @@ function createDeafultSettingInfo(){
         an individual domain by 
         toggling the domain's switch in the domain list below.
         `
-
     }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
@@ -229,7 +234,7 @@ function createDeafultSettingInfo(){
 
 // Create HTML for buttons to manage entire domainlist at once
 function createDomainlistManagerButtons(){
-  var toggle_domainlist_on =
+  let toggle_domainlist_on =
     `  <button
           id="toggle_all_on"
           class="uk-badge button blue-buttons"
@@ -237,7 +242,7 @@ function createDomainlistManagerButtons(){
           Toggle All On
         </button>
         `
-  var toggle_domainlist_off =
+  let toggle_domainlist_off =
   `  <button
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
@@ -245,7 +250,7 @@ function createDomainlistManagerButtons(){
         Toggle All Off
       </button>
       `
-  var delete_all =
+  let delete_all =
   `  <button
         id="delete_all_domainlist"
         style="
@@ -266,7 +271,7 @@ function createDomainlistManagerButtons(){
       </button>
       `
 
-  var manger_btns=
+  let manger_btns=
   `
   ${toggle_domainlist_on}
   ${toggle_domainlist_off}

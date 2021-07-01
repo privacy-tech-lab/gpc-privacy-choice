@@ -62,9 +62,9 @@ const disable = () => {
 }
 
 // function used to set the locally stored values in the cache upon change
-function setCache(enabled='dontSet', domainlist='dontSet', domainlistEnabled='dontSet'){
+function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
-  if(domainlist!='dontSet') domainlistCache=domainlist;
+  if(domains!='dontSet') domainsCache=domains;
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
 }
 
