@@ -354,6 +354,15 @@ function createList() {
   });
 }
 
+function createWalkThroughTour() {
+  let modal = UIkit.modal("#welcome-modal");
+  modal.show();
+
+  document.getElementById("modal-button-1").onclick = function () {
+    modal.hide();
+  }
+}
+
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {
     const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
@@ -365,5 +374,6 @@ export async function domainlistView(scaffoldTemplate) {
     createDeafultSettingInfo();
     createDomainlistManagerButtons();
     createList();
+    createWalkThroughTour();
     addEventListeners();
 }
