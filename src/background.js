@@ -18,6 +18,8 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
+  chrome.runtime.openOptionsPage(() => {
+  });
 });
 
 // Sets cache value to locally stored values after chrome booting up
