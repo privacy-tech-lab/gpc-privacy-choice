@@ -287,7 +287,7 @@ function displayPopup(){
     let currentDomainPerm=
     `
     <div>
-    You have chosen to allow this domain to track and sell your data.
+    Given your privacy preferences, the current domain is allowed to track and sell your data.
     </div>
     `
 
@@ -375,27 +375,40 @@ function removeOverlay(){
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
-chrome.storage.local.get(["APPLY_ALL"], function (result) {
+chrome.storage.local.get(["APPLY_ALL", "DOMAINS"], function (result) {
     console.log("apply bool" + result.APPLY_ALL)
+    let domains = result.DOMAINS;
+    let currentDomain = window.location.hostname;
     if (!result.APPLY_ALL) {
 
-        chrome.storage.local.get(["DOMAINS"], function (d) {
-            let domains = d.DOMAINS;
             // keeping this temporarily for debugging purpose
             // console.log("the domains look like this right now:")
             // for (let d in domains){
             //     console.log(d + ": " + domains[d])
             // }
-
-            let currentDomain = window.location.hostname
             
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
-            //if permission is already selected display active notice popup
-            else displayPopup()
             
-        })
-    }  
+        }
+    //if permission is already selected display active notice popup
+    else if (domains[currentDomain] === undefined || domains[currentDomain] == null){
+        displayPopup();
+        updateDomainList();
+    } 
 });
+
+function updateDomainList(){
+    chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
+    let currentHostname = window.location.hostname;
+      if (result.DOMAINS[currentHostname]===undefined){
+        let domains = result.DOMAINS;
+        let value = result.ENABLED;
+        domains[currentHostname] = value;
+        chrome.storage.local.set({DOMAINS: domains});
+        chrome.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet"})
+      }
+    })
+  }
 
 // starter code for interaction between the button and the background.js
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {

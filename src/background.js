@@ -87,21 +87,21 @@ function updateSendSignalandDomain(){
     }else sendSignal = true;
   }else sendSignal = false;
 
-  updateDomainList()
+  // updateDomainList()
 }
 
 // Update the domains of the domains list in the local stroage
-function updateDomainList(){
-  chrome.storage.local.get(["ENABLED", "DOMAINS", "APPLY_ALL"], function (result){
-    if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
-      let domains = result.DOMAINS;
-      let value = result.ENABLED;
-      domains[currentHostname] = value;
-      chrome.storage.local.set({DOMAINS: domains});
-      setCache(domains=domains)    
-    }
-  })
-}
+// function updateDomainList(){
+//   chrome.storage.local.get(["ENABLED", "DOMAINS", "APPLY_ALL"], function (result){
+//     if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
+//       let domains = result.DOMAINS;
+//       let value = result.ENABLED;
+//       domains[currentHostname] = value;
+//       chrome.storage.local.set({DOMAINS: domains});
+//       setCache(domains=domains)    
+//     }
+//   })
+// }
 
 
 // Add headers if the sendSignal to true
