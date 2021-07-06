@@ -4,10 +4,12 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
+
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
 const head=document.querySelector('head');
 const imbedStyle=document.createElement('style');
+const popupDiv = document.createElement('div');
 
 // adding css styles to the modal
 overlayDiv.style.position = 'fixed';
@@ -151,7 +153,7 @@ body.appendChild(overlayDiv);
 // buttons change color when the cursor hovers over them
 body.addEventListener('mouseover', event => {
     let button_preb = event.target;
-    if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+    if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn' || button_preb.id === 'dont-allow-btn-D') {
         button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
     }
 }
@@ -162,9 +164,11 @@ body.addEventListener('mouseover', event => {
     let cursor_spot = event.target;
     let but1 = document.getElementById('allow-btn');
     let but2 = document.getElementById('dont-allow-btn');
-    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
+    let but3 = document.getElementById('dont-allow-btn-D');
+    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'allow-btn-D' ) {
         but1.style.backgroundColor = 'rgb(51, 153, 255)';
         but2.style.backgroundColor = 'rgb(51, 153, 255)';
+        but3.style.backgroundColor = 'rgb(51, 153, 255)';
     }
 }
 )
@@ -232,8 +236,107 @@ body.addEventListener('click', event => {
                     ({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false})
             })
         }
+        else if(event.target.id === 'rbe_open_options'){
+            chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
+        }
     
 })
+
+function displayPopup(){
+     
+
+    let count = 10;
+
+
+    let changeButton =
+    `
+    <div
+            type="button" style="
+                font-size:12px;
+                border:none;
+                background-color:rgb(51, 153, 255);
+                color:white;
+                padding:0.5em;
+                border-radius:3.5px;
+                font-weight:300;
+                width: fit-content;
+                display:inline;
+                margin:3px;
+                font-family: unset;
+                cursor:pointer;">
+        Okay
+      </div>
+    <div
+        id="dont-allow-btn-D"
+        type="button" style="
+        font-size:12px;
+        border:none;
+        background-color:rgb(51, 153, 255);
+        color:white;
+        padding:0.5em;
+        border-radius:3.5px;
+        font-weight:300;
+        width: fit-content;
+        display:inline;
+        margin:3px;
+        font-family: unset;
+        cursor:pointer;">
+        Don't Allow Tracking and Selling For This Domain
+      </div>
+    `
+    let currentDomainPerm=
+    `
+    <div>
+    You have chosen to allow this domain to track and sell your data.
+    </div>
+    `
+
+    popupDiv.innerHTML=
+    `
+    <div style="
+        bottom:30px;
+        left:5px;
+        position: fixed;
+        z-index:99999999999;
+        background: white;
+        width: 400px;
+        height:fit-content;
+        border: solid rgba(51, 153, 255, 1);
+        ">
+        ${currentDomainPerm}
+        <div>
+        ${changeButton}
+        <div id="rbe_open_options" style="
+            cursor:pointer;
+            color: rgba(51, 153, 255, 1);
+            text-decoration: underline; ">
+        click here to open ad tracking preferences
+        </div>
+        </div>
+    <div style="display:inline;">
+        Notice will automatically dissappear in
+        <div style="display:inline;" id="rbePopupTimer"></div> seconds.
+    </div>
+    </div>
+
+    `
+
+    body.appendChild(popupDiv)
+
+
+
+    timer();
+
+    function timer() {
+        document.getElementById("rbePopupTimer").innerText = count;
+        count = count - 1;
+        if(count==-1){
+            removeOverlay();
+            return;
+        }
+        oneSecond = setTimeout(timer, 1000);
+    }
+}
 
 // function used to add extra style the modal
 function styleOverlay() {
@@ -266,6 +369,7 @@ function displayOverlay() {
 // function used to remove the modal
 function removeOverlay(){
     overlayDiv.style.display = 'none';
+    popupDiv.style.display = 'none';
 }
 
 // Logic for the banner pop up: 
@@ -286,6 +390,8 @@ chrome.storage.local.get(["APPLY_ALL"], function (result) {
             let currentDomain = window.location.hostname
             
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
+            //if permission is already selected display active notice popup
+            else displayPopup()
             
         })
     }  
