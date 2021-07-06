@@ -248,7 +248,7 @@ body.addEventListener('click', event => {
 //show notice of current tracking and selling preference
 function displayPopup(){
      
-    let count = 10;
+    let count = 15;
 
     chrome.storage.local.get(["ENABLED"], function (result) {
         dontAllowBool=result.ENABLED;
@@ -263,7 +263,7 @@ function displayPopup(){
             <div
             id="allow-btn"
             type="button" style="
-            font-size:12px;
+            font-size:14px;
             border:none;
             background-color:rgb(51, 153, 255);
             color:white;
@@ -280,7 +280,7 @@ function displayPopup(){
         `
         currentDomainPerm=
             `
-            <div>
+            <div style="text-align:center; margin-bottom:3px;">
             Given your privacy preferences, the current domain is not allowed to track and sell your data.
             </div>
         `
@@ -292,7 +292,7 @@ function displayPopup(){
             <div
             id="dont-allow-btn"
             type="button" style="
-            font-size:12px;
+            font-size:14px;
             border:none;
             background-color:rgb(51, 153, 255);
             color:white;
@@ -320,7 +320,7 @@ function displayPopup(){
     `
     <div    id="rbe-okay-btn"
             type="button" style="
-                font-size:12px;
+                font-size:14px;
                 border:none;
                 background-color:rgb(51, 153, 255);
                 color:white;
@@ -340,18 +340,28 @@ function displayPopup(){
     popupDiv.innerHTML=
     `
     <div style="
+        align-items: center;
+        font-family: Arial;
+        font-size:14px;
+        text-align: center;
+        padding: 1em;
+        border-radius:10px;
         bottom:30px;
         left:5px;
         position: fixed;
         z-index:99999999999;
         background: white;
-        width: 400px;
+        width: 450px;
+
         height:fit-content;
         border: solid rgba(51, 153, 255, 1);
         ">
         ${currentDomainPerm}
         <div>
+        <div style="margin-bottom: 5px;
+        margin-top: 5px;">
         ${buttons}
+        </div>
         <div id="rbe_open_options" style="
             cursor:pointer;
             color: rgba(51, 153, 255, 1);
@@ -376,10 +386,10 @@ function displayPopup(){
     function timer() {
         document.getElementById("rbePopupTimer").innerText = count;
         count = count - 1;
-        if(count==-1){
-            removeOverlay();
-            return;
-        }
+        // if(count==-1){
+        //     removeOverlay();
+        //     return;
+        // }
         oneSecond = setTimeout(timer, 1000);
     }
 })}
