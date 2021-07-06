@@ -146,14 +146,11 @@ overlayDiv.innerHTML = `
         </div> 
     `
 
-// add overlayDiv to the DOM
-head.appendChild(imbedStyle);
-body.appendChild(overlayDiv);
 
 // buttons change color when the cursor hovers over them
 body.addEventListener('mouseover', event => {
     let button_preb = event.target;
-    if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn' || button_preb.id === 'dont-allow-btn-D') {
+    if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
         button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
     }
 }
@@ -164,22 +161,26 @@ body.addEventListener('mouseover', event => {
     let cursor_spot = event.target;
     let but1 = document.getElementById('allow-btn');
     let but2 = document.getElementById('dont-allow-btn');
-    let but3 = document.getElementById('dont-allow-btn-D');
-    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'allow-btn-D' ) {
-        but1.style.backgroundColor = 'rgb(51, 153, 255)';
-        but2.style.backgroundColor = 'rgb(51, 153, 255)';
-        but3.style.backgroundColor = 'rgb(51, 153, 255)';
+    let but3 = document.getElementById('rbe-okay-btn');
+    if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'rbe-okay-btn' ) {
+        if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
+        if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+        if (but3) but3.style.backgroundColor = 'rgb(51, 153, 255)';
     }
 }
 )
-//add class that hides pseudo elements to apply-all button
-document.getElementById('apply-all').classList.add('hide_pseudo');
+
 
 
 // add event listener to close the modal
 body.addEventListener('click', event => {
     let currentDomain = window.location.hostname;
-    if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === false) { 
+    let applyAllBool
+    if(document.getElementById("apply-all")){
+        applyAllBool = document.getElementById("apply-all").checked
+    }
+    else applyAllBool=false;
+    if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
         // situation 1: enable GPC for the current domain
         removeOverlay();
         chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -191,7 +192,7 @@ body.addEventListener('click', event => {
                 ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true })
         })
     }
-        else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === false) { 
+        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
             // situation 2: disable GPC for the current domain
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -203,7 +204,7 @@ body.addEventListener('click', event => {
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true})
         })
         }
-        else if(event.target.id === 'dont-allow-btn' && document.getElementById("apply-all").checked === true) { 
+        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
             // situation 3: enable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
@@ -219,7 +220,7 @@ body.addEventListener('click', event => {
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false})
             })
         }
-        else if(event.target.id === 'allow-btn' && document.getElementById("apply-all").checked === true) { 
+        else if(event.target.id === 'allow-btn' && applyAllBool) { 
             // situation 4: disable GPC for all future domains
             removeOverlay();
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
@@ -232,25 +233,92 @@ body.addEventListener('click', event => {
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.storage.local.set({ ENABLED: false });
-                chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false})
+                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false});
             })
         }
         else if(event.target.id === 'rbe_open_options'){
             chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
         }
+        else if(event.target.id === 'rbe-okay-btn'){
+            removeOverlay()
+        }
     
 })
 
+//show notice of current tracking and selling preference
 function displayPopup(){
      
-
     let count = 10;
 
+    chrome.storage.local.get(["ENABLED"], function (result) {
+        dontAllowBool=result.ENABLED;
+    
 
-    let changeButton =
+    let changeButton;
+    let currentDomainPerm;
+
+    if(dontAllowBool){
+        changeButton=
+            `
+            <div
+            id="allow-btn"
+            type="button" style="
+            font-size:12px;
+            border:none;
+            background-color:rgb(51, 153, 255);
+            color:white;
+            padding:0.5em;
+            border-radius:3.5px;
+            font-weight:300;
+            width: fit-content;
+            display:inline;
+            margin:3px;
+            font-family: unset;
+            cursor:pointer;">
+            Allow Tracking and Selling For This Domain
+        </div>
+        `
+        currentDomainPerm=
+            `
+            <div>
+            Given your privacy preferences, the current domain is not allowed to track and sell your data.
+            </div>
+        `
+
+    }
+    else{
+        changeButton=
+            `
+            <div
+            id="dont-allow-btn"
+            type="button" style="
+            font-size:12px;
+            border:none;
+            background-color:rgb(51, 153, 255);
+            color:white;
+            padding:0.5em;
+            border-radius:3.5px;
+            font-weight:300;
+            width: fit-content;
+            display:inline;
+            margin:3px;
+            font-family: unset;
+            cursor:pointer;">
+            Don't Allow Tracking and Selling For This Domain
+        </div>
+            `
+        currentDomainPerm=
+            `
+            <div>
+            Given your privacy preferences, the current domain is allowed to track and sell your data.
+            </div>
+        `
+    }
+        
+
+    let buttons =
     `
-    <div
+    <div    id="rbe-okay-btn"
             type="button" style="
                 font-size:12px;
                 border:none;
@@ -266,29 +334,7 @@ function displayPopup(){
                 cursor:pointer;">
         Okay
       </div>
-    <div
-        id="dont-allow-btn-D"
-        type="button" style="
-        font-size:12px;
-        border:none;
-        background-color:rgb(51, 153, 255);
-        color:white;
-        padding:0.5em;
-        border-radius:3.5px;
-        font-weight:300;
-        width: fit-content;
-        display:inline;
-        margin:3px;
-        font-family: unset;
-        cursor:pointer;">
-        Don't Allow Tracking and Selling For This Domain
-      </div>
-    `
-    let currentDomainPerm=
-    `
-    <div>
-    Given your privacy preferences, the current domain is allowed to track and sell your data.
-    </div>
+      ${changeButton}
     `
 
     popupDiv.innerHTML=
@@ -305,7 +351,7 @@ function displayPopup(){
         ">
         ${currentDomainPerm}
         <div>
-        ${changeButton}
+        ${buttons}
         <div id="rbe_open_options" style="
             cursor:pointer;
             color: rgba(51, 153, 255, 1);
@@ -336,7 +382,7 @@ function displayPopup(){
         }
         oneSecond = setTimeout(timer, 1000);
     }
-}
+})}
 
 // function used to add extra style the modal
 function styleOverlay() {
@@ -362,14 +408,19 @@ function styleOverlay() {
 
 // function used to show the modal
 function displayOverlay() {
+    //add Overlay to the DOM
+    head.appendChild(imbedStyle);
+    body.appendChild(overlayDiv);
     styleOverlay();
+    //add class that hides pseudo elements to apply-all button
+    document.getElementById('apply-all').classList.add('hide_pseudo');
     overlayDiv.style.display = 'block';
 }
 
 // function used to remove the modal
 function removeOverlay(){
-    overlayDiv.style.display = 'none';
-    popupDiv.style.display = 'none';
+    if (overlayDiv.style) overlayDiv.style.display = 'none';
+    if (popupDiv.style) popupDiv.style.display = 'none';
 }
 
 // Logic for the banner pop up: 
@@ -390,13 +441,14 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS"], function (result) {
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
             
         }
-    //if permission is already selected display active notice popup
+    //if permission is already selected and domain is being visited for first time display active notice popup
     else if (domains[currentDomain] === undefined || domains[currentDomain] == null){
         displayPopup();
         updateDomainList();
     } 
 });
 
+// Update the domains of the domains list in the domain list 
 function updateDomainList(){
     chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
     let currentHostname = window.location.hostname;
@@ -405,7 +457,7 @@ function updateDomainList(){
         let value = result.ENABLED;
         domains[currentHostname] = value;
         chrome.storage.local.set({DOMAINS: domains});
-        chrome.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet"})
+        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet"})
       }
     })
   }

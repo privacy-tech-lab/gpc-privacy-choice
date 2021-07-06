@@ -35,6 +35,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
   //update cache from contentScript.js
+  if (request.greeting == "OPEN OPTIONS") openOptions();
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
 });
 
@@ -71,6 +72,12 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
 }
 
+function openOptions(){
+  chrome.tabs.create({
+    url: '../options/options.html',
+    active: true
+  })
+}
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
@@ -90,21 +97,7 @@ function updateSendSignalandDomain(){
     }else sendSignal = true;
   }else sendSignal = false;
 
-  // updateDomainList()
 }
-
-// Update the domains of the domains list in the local stroage
-// function updateDomainList(){
-//   chrome.storage.local.get(["ENABLED", "DOMAINS", "APPLY_ALL"], function (result){
-//     if (result.APPLY_ALL && result.DOMAINS[currentHostname]===undefined){
-//       let domains = result.DOMAINS;
-//       let value = result.ENABLED;
-//       domains[currentHostname] = value;
-//       chrome.storage.local.set({DOMAINS: domains});
-//       setCache(domains=domains)    
-//     }
-//   })
-// }
 
 
 // Add headers if the sendSignal to true
