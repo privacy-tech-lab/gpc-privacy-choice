@@ -248,7 +248,7 @@ body.addEventListener('click', event => {
 //show notice of current tracking and selling preference
 function displayPopup(){
      
-    let count = 15;
+    let count = 10;
 
     chrome.storage.local.get(["ENABLED"], function (result) {
         dontAllowBool=result.ENABLED;
@@ -386,10 +386,10 @@ function displayPopup(){
     function timer() {
         document.getElementById("rbePopupTimer").innerText = count;
         count = count - 1;
-        // if(count==-1){
-        //     removeOverlay();
-        //     return;
-        // }
+        if(count==-1){
+            removeOverlay();
+            return;
+        }
         oneSecond = setTimeout(timer, 1000);
     }
 })}
