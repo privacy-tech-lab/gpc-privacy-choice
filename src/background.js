@@ -1,5 +1,20 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
+//browser extension's Firebase configuration, connects to Firebase project
+const firebaseConfig = {
+  apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
+  authDomain: "privacy-choice-research.firebaseapp.com",
+  projectId: "privacy-choice-research",
+  storageBucket: "privacy-choice-research.appspot.com",
+  messagingSenderId: "23402940855",
+  appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
+  measurementId: "G-L6EWBVR01J"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore()
+
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
