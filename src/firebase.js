@@ -100,7 +100,7 @@ function getHistoryEntryID(){
 // Get the browser version
 // Chrome broswer usually is in the format of Chrome: "Chrome/81.0.4044.138 Safari/537.36" in UserAgent
 function getBrowser(){
-    let browser = "Chrome_"; 
+    let browser = "Chrome/"; 
     let version;
     let ua = navigator.userAgent;
     if (!ua.includes('Chrome/')){
@@ -117,8 +117,20 @@ function getBrowserEngine(){
 }
 
 // Get the operating system of the user device
+// Used the navigator platform as user OS
 function getOS(){
-    return null
+    let OSName = "Unknown";
+    if (window.navigator.userAgent.indexOf("Windows NT 10.0")!= -1) OSName="Windows 10";
+    if (window.navigator.userAgent.indexOf("Windows NT 6.3") != -1) OSName="Windows 8.1";
+    if (window.navigator.userAgent.indexOf("Windows NT 6.2") != -1) OSName="Windows 8";
+    if (window.navigator.userAgent.indexOf("Windows NT 6.1") != -1) OSName="Windows 7";
+    if (window.navigator.userAgent.indexOf("Windows NT 6.0") != -1) OSName="Windows Vista";
+    if (window.navigator.userAgent.indexOf("Windows NT 5.1") != -1) OSName="Windows XP";
+    if (window.navigator.userAgent.indexOf("Windows NT 5.0") != -1) OSName="Windows 2000";
+    if (window.navigator.userAgent.indexOf("Mac")            != -1) OSName="Mac/iOS";
+    if (window.navigator.userAgent.indexOf("X11")            != -1) OSName="UNIX";
+    if (window.navigator.userAgent.indexOf("Linux")          != -1) OSName="Linux";
+    return OSName;
 }
 
 // Get the plugins on the user's browser [will this change?]
