@@ -1,4 +1,3 @@
-
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
     apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
@@ -8,7 +7,7 @@ const firebaseConfig = {
     messagingSenderId: "23402940855",
     appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
     measurementId: "G-L6EWBVR01J"
-    };
+};
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -100,7 +99,7 @@ function getHistoryEntryID(){
 
 // Get the browser version
 function getBrowser(){
-    return null
+    return null;
 }
 
 // Get the browser engine version
@@ -113,18 +112,28 @@ function getOS(){
     return null
 }
 
-// Get the plugins on the user's browser
+// Get the plugins on the user's browser [will this change?]
 function getPlugins(){
-    return null;
+    let pluginArray = navigator.plugins;
+    let plugins = [];
+    for (let i in pluginArray){
+        if (typeof pluginArray[i] == 'object'){
+            plugins.push(pluginArray[i].name);
+        }
+    }
+    console.log("plugins are: " + plugins);
+    return plugins;
 }
 
 // Get the language setting of the user's browser
 function getLanguage(){
-    return null;
+    return navigator.language;
 }
 
 // Get the time zone of the user
 function getTimeZone(){
+    // let timeZone = new Date().toTimeString().slice(9);
+    // return timeZone;
     return null;
 }
 
