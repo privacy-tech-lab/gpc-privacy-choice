@@ -1,30 +1,19 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-//browser extension's Firebase configuration, connects to Firebase project
-const firebaseConfig = {
-  apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
-  authDomain: "privacy-choice-research.firebaseapp.com",
-  projectId: "privacy-choice-research",
-  storageBucket: "privacy-choice-research.appspot.com",
-  messagingSenderId: "23402940855",
-  appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
-  measurementId: "G-L6EWBVR01J"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const db=firebase.firestore()
+import {createUser, addHistory} from "./firebase.js"
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
-let currentHostname = undefined;
+var currentHostname = null;
+
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
 let enabledCache=true;
 let domainsCache= {};
 let domainlistEnabledCache=true;
+
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(function (object) {
@@ -33,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
+  createUser();
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -46,6 +36,11 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED'], function 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
+  if (request.greeting == "NEW PAGE"){
+    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
+      addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID)
+    })
+  }
   //update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
 });
@@ -76,6 +71,7 @@ const disable = () => {
   sendSignal = false;
 }
 
+
 // function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
@@ -88,9 +84,9 @@ function updateSendSignalandDomain(){
 
   // update current domain
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    let url = tabs[0].url
-    let url_object = new URL(url)
-    let domain=url_object.hostname
+    let url = tabs[0].url;
+    let url_object = new URL(url);
+    let domain=url_object.hostname;
     currentHostname = domain;
   });
 
@@ -103,6 +99,8 @@ function updateSendSignalandDomain(){
   }else sendSignal = false;
 
   updateDomainList()
+
+  sendSignal;
 }
 
 // Update the domains of the domains list in the local stroage
