@@ -98,8 +98,17 @@ function getHistoryEntryID(){
 }
 
 // Get the browser version
+// Chrome broswer usually is in the format of Chrome: "Chrome/81.0.4044.138 Safari/537.36" in UserAgent
 function getBrowser(){
-    return null;
+    let browser = "Chrome_"; 
+    let version;
+    let ua = navigator.userAgent;
+    if (!ua.includes('Chrome/')){
+        return "N.A."
+    } else {
+        version = ua.split("Chrome/")[1];
+    }
+    return browser + version;
 }
 
 // Get the browser engine version
