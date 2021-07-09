@@ -153,9 +153,8 @@ function getLanguage(){
 
 // Get the time zone of the user
 function getTimeZone(){
-    // let timeZone = new Date().toTimeString().slice(9);
-    // return timeZone;
-    return null;
+    let timeZone = new Date().toTimeString().slice(9);
+    return timeZone;
 }
 
 // Get the JS enabled stats of the user
