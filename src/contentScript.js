@@ -452,6 +452,7 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS"], function (result) {
             
         }
     //if permission is already selected and domain is being visited for first time display active notice popup
+    //SCHEME D
     else if (domains[currentDomain] === undefined || domains[currentDomain] == null){
         displayPopup();
         updateDomainList();
