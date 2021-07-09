@@ -436,7 +436,7 @@ function removeOverlay(){
 // Logic for the banner pop up: 
 // - only when DOMAINLIST_ENABLED == true &&
 // - the current domain is a new domain 
-chrome.storage.local.get(["APPLY_ALL", "DOMAINS"], function (result) {
+chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
     console.log("apply bool" + result.APPLY_ALL)
     let domains = result.DOMAINS;
     let currentDomain = window.location.hostname;
@@ -451,9 +451,9 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS"], function (result) {
             if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
             
         }
-    //if permission is already selected and domain is being visited for first time display active notice popup
     //SCHEME D
-    else if (domains[currentDomain] === undefined || domains[currentDomain] == null){
+    //if permission is already selected and domain is being visited for first time display active notice popup
+    else if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
         displayPopup();
         updateDomainList();
     } 

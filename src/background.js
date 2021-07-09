@@ -23,9 +23,15 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  chrome.runtime.openOptionsPage(() => {
-  });
-  createUser();
+  createUser().then(
+    chrome.storage.local.get(["UI_SCHEME"], function(result){
+      //SCHEME B
+      if(result.UI_SCHEME==2){
+        chrome.runtime.openOptionsPage(() => {
+        })
+      }
+    })
+  );
 });
 
 // Sets cache value to locally stored values after chrome booting up

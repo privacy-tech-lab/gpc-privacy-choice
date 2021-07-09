@@ -180,5 +180,7 @@ function getDomainList(){
 
 // Get the scheme that the user is currently presented it
 function getUIscheme(){
-    return currentUserID%5;
+    let UIScheme=currentUserID%5;
+    chrome.storage.local.set({"UI_SCHEME": UIScheme})
+    return UIScheme;
 }
