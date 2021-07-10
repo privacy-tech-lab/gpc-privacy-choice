@@ -45,16 +45,16 @@ export async function createUser(){
         "plugins": getPlugins(),
         "language": getLanguage(),
         "Time Zone": getTimeZone(),
-        "JS Enabled": getJSEnabled(),
-        "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
-        "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
+        // "JS Enabled": getJSEnabled(),
+        // "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
+        // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
         "Domain List": [],
         "UI Scheme": getUIscheme()
     })
 }
 
 // Add user entries into the Firebase
-export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID){
+export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled){
     let db = firebase.firestore();
     let docID;
     let date = new Date()
@@ -70,7 +70,8 @@ export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID){
                 "Referer": null,
                 "Current Site":  site,
                 "GPC Current Site Status": GPC,
-                "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
+                "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
+                "JS Enabled": jsEnabled
         })
     })
 }

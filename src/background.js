@@ -37,9 +37,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
   if (request.greeting == "NEW PAGE"){
-    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
-      addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID)
-    })
+    chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
+      let jsEnable = details.setting; 
+      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
+        addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID, details.setting, jsEnable);
+      })
+    });
   }
   //update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
