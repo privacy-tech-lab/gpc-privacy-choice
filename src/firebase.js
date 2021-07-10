@@ -39,16 +39,16 @@ export async function createUser(){
 
     db.collection("users").add({
         "User ID": currentUserID,
-        browser: getBrowser(),
+        "browser": getBrowser(),
         "Browser Engine": getBrowserEngine(),
-        OS: getOS(),
-        plugins: getPlugins(),
-        language: getLanguage(),
+        "OS": getOS(),
+        "plugins": getPlugins(),
+        "language": getLanguage(),
         "Time Zone": getTimeZone(),
         "JS Enabled": getJSEnabled(),
         "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
         "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
-        "Domain List": getDomainList(),
+        "Domain List": [],
         "UI Scheme": getUIscheme()
     })
 }
@@ -58,19 +58,13 @@ export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID){
     let db = firebase.firestore();
     let docID;
     let date = new Date()
-    console.log(currentUserID)
-    console.log(db.collection("users").where("User ID", "==", currentUserID))
     db.collection("users").where("User ID", "==", currentUserID).get()
-        .then((docArray)=>{docArray.forEach((doc)=>{
-                docID = doc.id
-                console.log(docID)
-            })
-        })
+        .then((docArray)=>{docArray.forEach((doc)=>{docID = doc.id;})})
         .then(()=>{
             db.collection("users").doc(docID).collection("Browser History").add({
                 "User ID": currentUserID,
-                date: date.toLocaleDateString(),
-                time: date.toLocaleTimeString(),
+                "date": date.toLocaleDateString(),
+                "time": date.toLocaleTimeString(),
                 "Browsing History Entry ID": getHistoryEntryID(),
                 "Tab ID": getTabID(),
                 "Referer": null,
@@ -79,6 +73,16 @@ export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID){
                 "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
         })
     })
+}
+
+// Add new domains to the domain list field of the user document
+export function updateDomains(domainsList){
+    let db = firebase.firestore();
+    let docID;
+    db.collection("users")
+        .where("User ID", "==", currentUserID).get()
+        .then((docArray)=>{docArray.forEach((doc)=>{docID = doc.id;})})
+        .then(()=>{db.collection("users").doc(docID).update({"Domain List": domainsList})})
 }
 
 // Get GPC Global Status
@@ -142,7 +146,6 @@ function getPlugins(){
             plugins.push(pluginArray[i].name);
         }
     }
-    console.log("plugins are: " + plugins);
     return plugins;
 }
 
@@ -172,12 +175,9 @@ function getThirdPartyCookiesEnabled(){
     return null;
 }
 
-// Get the domain list from the user browser local storage
-function getDomainList(){
-    return null;
-}
-
 // Get the scheme that the user is currently presented it
 function getUIscheme(){
-    return currentUserID%5;
+    let UIScheme=currentUserID%5;
+    chrome.storage.local.set({"UI_SCHEME": UIScheme})
+    return UIScheme;
 }

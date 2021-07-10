@@ -1,6 +1,6 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-import {createUser, addHistory} from "./firebase.js"
+import {createUser, addHistory, updateDomains} from "./firebase.js"
 
 // Initializers
 let sendSignal = false;
@@ -75,7 +75,10 @@ const disable = () => {
 // function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
-  if(domains!='dontSet') domainsCache=domains;
+  if(domains!='dontSet') {
+    domainsCache=domains;
+    updateDomains(Object.keys(domains));
+  }
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
 }
 
@@ -121,7 +124,7 @@ function updateDomainList(){
 function addHeaders (details)  {
 
   updateSendSignalandDomain()
-  console.log("sent headers" + sendSignal +currentHostname);
+  // console.log("sent headers" + sendSignal +currentHostname);
   if (sendSignal) {
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
@@ -136,7 +139,7 @@ function addHeaders (details)  {
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   updateSendSignalandDomain();
-  console.log("sent DOM" + sendSignal +currentHostname);
+  // console.log("sent DOM" + sendSignal +currentHostname);
   if (sendSignal) {
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 
