@@ -10,7 +10,8 @@
     "storage",
     "activeTab",
     "cookies",
-    "tabs"
+    "tabs",
+    "contentSettings"
   ],
   "browser_action": {
     "default_title": "OptMeowt-R",
