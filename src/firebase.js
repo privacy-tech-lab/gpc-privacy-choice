@@ -45,8 +45,7 @@ export async function createUser(){
         "plugins": getPlugins(),
         "language": getLanguage(),
         "Time Zone": getTimeZone(),
-        // "JS Enabled": getJSEnabled(),
-        // "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
+        "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
         // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
         "Domain List": [],
         "UI Scheme": getUIscheme()
@@ -54,7 +53,7 @@ export async function createUser(){
 }
 
 // Add user entries into the Firebase
-export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled){
+export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled, tabId){
     let db = firebase.firestore();
     let docID;
     let date = new Date()
@@ -66,7 +65,7 @@ export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, 
                 "date": date.toLocaleDateString(),
                 "time": date.toLocaleTimeString(),
                 "Browsing History Entry ID": getHistoryEntryID(),
-                "Tab ID": getTabID(),
+                "Tab ID": tabId,
                 "Referer": null,
                 "Current Site":  site,
                 "GPC Current Site Status": GPC,
@@ -161,17 +160,13 @@ function getTimeZone(){
     return timeZone;
 }
 
-// Get the JS enabled stats of the user
-function getJSEnabled(){
-    return null;
-}
-
 // Get the FirstPartyCookiesEnabled status of the user
 function getFirstPartyCookiesEnabled(){
-    return null;
+    return navigator.cookieEnabled;
 }
 
 // Get the ThirdPartyCookiesEnabled status of the user
+// Not sure about the API
 function getThirdPartyCookiesEnabled(){
     return null;
 }

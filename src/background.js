@@ -5,7 +5,8 @@ import {createUser, addHistory, updateDomains} from "./firebase.js"
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
-var currentHostname = null;
+let currentHostname = null;
+let tabId;
 
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
@@ -46,11 +47,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
   if (request.greeting == "NEW PAGE"){
+    let jsEnabled = null;
+    let tabId = null;
     chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
-      let jsEnable = details.setting; 
-      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
-        addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID, details.setting, jsEnable);
-      })
+      jsEnabled = details.setting; 
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs)=>{
+        tabId = tabs[0].id;
+        chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
+          addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID, jsEnabled, tabId);
+        })
+      });
     });
   }
   //update cache from contentScript.js
