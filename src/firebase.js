@@ -39,11 +39,13 @@ export async function createUser(){
 
     db.collection("users").add({
         "User ID": currentUserID,
-        "browser": getBrowser(),
+        "User Agent": navigator.userAgent,
+        "DNT": navigator.doNotTrack,
+        "Browser": getBrowser(),
         "Browser Engine": getBrowserEngine(),
         "OS": getOS(),
-        "plugins": getPlugins(),
-        "language": getLanguage(),
+        "Plugins": getPlugins(),
+        "Language": getLanguage(),
         "Time Zone": getTimeZone(),
         "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
         // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
@@ -62,9 +64,8 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
         .then(()=>{
             db.collection("users").doc(docID).collection("Browser History").add({
                 "User ID": currentUserID,
-                "date": date.toLocaleDateString(),
-                "time": date.toLocaleTimeString(),
-                "Browsing History Entry ID": getHistoryEntryID(),
+                "Date": date.toLocaleDateString(),
+                "Time": date.toLocaleTimeString(),
                 "Tab ID": tabId,
                 "Referer": referrer,
                 "Current Site":  site,
@@ -93,11 +94,6 @@ function getGPCGlobalStatus(applyALLBool, enabledBool){
 
 // Get the current tab ID
 function getTabID(){
-    return null
-}
-
-// 
-function getHistoryEntryID(){
     return null
 }
 
