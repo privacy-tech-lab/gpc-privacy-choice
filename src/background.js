@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       chrome.tabs.query({active: true, currentWindow: true}, (tabs)=>{
         tabId = tabs[0].id;
         chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_ID"], function(result){
-          addHistory(request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID, jsEnabled, tabId);
+          addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_ID, jsEnabled, tabId);
         })
       });
     });

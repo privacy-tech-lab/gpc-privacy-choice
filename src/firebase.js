@@ -53,7 +53,7 @@ export async function createUser(){
 }
 
 // Add user entries into the Firebase
-export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled, tabId){
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled, tabId){
     let db = firebase.firestore();
     let docID;
     let date = new Date()
@@ -66,7 +66,7 @@ export function addHistory(site, GPC, applyALLBool, enabledBool, currentUserID, 
                 "time": date.toLocaleTimeString(),
                 "Browsing History Entry ID": getHistoryEntryID(),
                 "Tab ID": tabId,
-                "Referer": null,
+                "Referer": referrer,
                 "Current Site":  site,
                 "GPC Current Site Status": GPC,
                 "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
