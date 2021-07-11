@@ -52,6 +52,7 @@ export async function createUser(){
         "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
         // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
         "Local Storage Enabled": getLocalStorageEnabled(),
+        "Session Storage Enabled": getSessionStorageEnabled(),
         "Domain List": [],
         "UI Scheme": getUIscheme()
     })
@@ -196,6 +197,17 @@ function getLocalStorageEnabled(){
     try {
         localStorage.setItem(test, test);
         localStorage.removeItem(test);
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+
+function getSessionStorageEnabled(){
+    let test = 'test';
+    try {
+        sessionStorage.setItem(test, test);
+        sessionStorage.removeItem(test);
         return true;
     } catch(e) {
         return false;
