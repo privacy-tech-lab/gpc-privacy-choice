@@ -19,6 +19,7 @@ export async function createUser(){
     let db=firebase.firestore();
     //get largest user ID being used
     let largestUserID;
+
     await db.collection("largestUserID").doc("largestID").get().then((doc)=>{
         if(doc.exists){
             largestUserID=doc.data().id
@@ -37,12 +38,18 @@ export async function createUser(){
         }
     })
 
-    let userIP = await getIP()
+    let userIP = await getIP();
+    let crd = await getLocation();
+    let longitude = crd.longitude ? crd.longitude : "unknown longitude";
+    let latitude = crd.latitude ? crd.latitude : "unknown latitude";
+
     db.collection("users").add({
         "User ID": currentUserID,
         "User Agent": navigator.userAgent,
         "DNT": navigator.doNotTrack,
         "IP Address": userIP,
+        "Latitude": latitude, 
+        "Longitude": longitude,
         "Browser": getBrowser(),
         "Browser Engine": getBrowserEngine(),
         "OS": getOS(),
@@ -188,6 +195,7 @@ async function getIP() {
     return ip;
 }
 
+// helper function for getting user IP 
 function text(url) {
     return fetch(url).then(res => res.text());
 }
@@ -212,4 +220,22 @@ function getSessionStorageEnabled(){
     } catch(e) {
         return false;
     }
+}
+
+// Get the user's location
+async function getLocation(){
+    let crd = "unknown";
+    await requestLocation()
+        .then(pos => crd = pos.coords)
+        .catch(err => console.log(err))
+    return crd;
+}
+
+// helper function for getting user location
+function requestLocation(){
+    return new Promise(function(resolve, reject) {
+            navigator.geolocation.getCurrentPosition(
+                pos => { resolve(pos); }, 
+                err => { reject (err); });
+    });
 }
