@@ -11,7 +11,8 @@
     "activeTab",
     "cookies",
     "tabs",
-    "contentSettings"
+    "contentSettings",
+    "geolocation"
   ],
   "browser_action": {
     "default_title": "OptMeowt-R",
