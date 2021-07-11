@@ -45,8 +45,8 @@ export async function createUser(){
 
     db.collection("users").add({
         "User ID": currentUserID,
-        "User Agent": navigator.userAgent,
-        "DNT": navigator.doNotTrack,
+        "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
+        "DNT": navigator.doNotTrack ? navigator.userAgent : "undefined",
         "IP Address": userIP,
         "Latitude": latitude, 
         "Longitude": longitude,
@@ -101,11 +101,6 @@ export function updateDomains(domainsList){
 function getGPCGlobalStatus(applyALLBool, enabledBool){
     if(applyALLBool) return enabledBool;
     else return "unset"
-}
-
-// Get the current tab ID
-function getTabID(){
-    return null
 }
 
 // Get the browser version
@@ -189,17 +184,18 @@ function getUIscheme(){
 async function getIP() {
     let ip = "unknown";
     let ipRegex = /[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
-    await text('https://www.cloudflare.com/cdn-cgi/trace').then(data => {
+    await fetchIP('https://www.cloudflare.com/cdn-cgi/trace').then(data => {
         ip = data.match(ipRegex)[0];
     });
     return ip;
 }
 
 // helper function for getting user IP 
-function text(url) {
+function fetchIP(url) {
     return fetch(url).then(res => res.text());
 }
 
+// Get the user's local storage enable status
 function getLocalStorageEnabled(){
     let test = 'test';
     try {
@@ -211,6 +207,7 @@ function getLocalStorageEnabled(){
     }
 }
 
+// Get the user's session storage enable status
 function getSessionStorageEnabled(){
     let test = 'test';
     try {
