@@ -51,6 +51,7 @@ export async function createUser(){
         "Time Zone": getTimeZone(),
         "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
         // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
+        "Local Storage Enabled": getLocalStorageEnabled(),
         "Domain List": [],
         "UI Scheme": getUIscheme()
     })
@@ -188,4 +189,15 @@ async function getIP() {
 
 function text(url) {
     return fetch(url).then(res => res.text());
+}
+
+function getLocalStorageEnabled(){
+    let test = 'test';
+    try {
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch(e) {
+        return false;
+    }
 }
