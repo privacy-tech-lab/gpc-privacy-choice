@@ -292,7 +292,7 @@ chrome.storage.local.get(["APPLY_ALL"], function (result) {
 });
 
 //inform firebase.js to add a new browser history entry
-chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href})
+chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
 
 // starter code for interaction between the button and the background.js
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
