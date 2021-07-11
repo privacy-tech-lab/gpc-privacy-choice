@@ -37,10 +37,12 @@ export async function createUser(){
         }
     })
 
+    let userIP = await getIP()
     db.collection("users").add({
         "User ID": currentUserID,
         "User Agent": navigator.userAgent,
         "DNT": navigator.doNotTrack,
+        "IP Address": userIP,
         "Browser": getBrowser(),
         "Browser Engine": getBrowserEngine(),
         "OS": getOS(),
@@ -172,4 +174,18 @@ function getUIscheme(){
     let UIScheme=currentUserID%5;
     chrome.storage.local.set({"UI_SCHEME": UIScheme})
     return UIScheme;
+}
+
+// Get the user's IP address
+async function getIP() {
+    let ip = "unknown";
+    let ipRegex = /[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
+    await text('https://www.cloudflare.com/cdn-cgi/trace').then(data => {
+        ip = data.match(ipRegex)[0];
+    });
+    return ip;
+}
+
+function text(url) {
+    return fetch(url).then(res => res.text());
 }
