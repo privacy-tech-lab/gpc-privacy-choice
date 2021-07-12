@@ -189,7 +189,8 @@ body.addEventListener('click', event => {
             new_domains[currentDomain] = true;
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , origin: "Banner", prevSetting: "N/A" , newSetting: event.target.id, applyAll: applyAllBool })
         })
     }
         else if(event.target.id === 'allow-btn' && !applyAllBool) { 
@@ -202,7 +203,8 @@ body.addEventListener('click', event => {
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.runtime.sendMessage
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
-        })
+            });
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , origin: "Banner", prevSetting: "N/A" , newSetting: event.target.id, applyAll: applyAllBool })
         }
         else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
             // situation 3: enable GPC for all future domains
@@ -218,7 +220,8 @@ body.addEventListener('click', event => {
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.runtime.sendMessage
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true })
-            })
+            });
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , origin: "Banner", prevSetting: "N/A" , newSetting: event.target.id, applyAll: applyAllBool })
         }
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
             // situation 4: disable GPC for all future domains
@@ -234,7 +237,8 @@ body.addEventListener('click', event => {
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.storage.local.set({ ENABLED: false });
                 chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
-            })
+            });
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, origin: "Banner", prevSetting: "N/A" , newSetting: event.target.id, applyAll: applyAllBool})
         }
         else if(event.target.id === 'rbe_open_options'){
             chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
@@ -242,7 +246,6 @@ body.addEventListener('click', event => {
         else if(event.target.id === 'rbe-okay-btn'){
             removeOverlay()
         }
-    
 })
 
 //show notice of current tracking and selling preference

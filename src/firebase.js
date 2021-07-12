@@ -71,6 +71,22 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     })
 }
 
+// Add user entries into the Firebase
+export function addDomainInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
+    let db = firebase.firestore();
+    let date = new Date()
+    db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
+        "User ID": currentUserID,
+        "Date": date.toLocaleDateString(),
+        "Time": date.toLocaleTimeString(),
+        "Domain": domain,
+        "Origin": origin,
+        "Previous Setting": prevSetting,
+        "New Setting": newSetting,
+        "Apply All": applyAll
+    })
+}
+
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
     let db = firebase.firestore();
