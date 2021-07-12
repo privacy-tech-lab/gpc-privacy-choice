@@ -354,6 +354,19 @@ function createList() {
   });
 }
 
+function createWalkThroughTour() {
+  chrome.storage.local.get(["FIRST_INSTALLED"], function (result){
+    if (result.FIRST_INSTALLED){
+      let modal = UIkit.modal("#welcome-modal");
+      modal.show();
+      document.getElementById("modal-button").onclick = function () {
+        modal.hide();
+      }
+    }
+  });
+  chrome.storage.local.set({FIRST_INSTALLED: false});
+}
+
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {
     const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
@@ -365,5 +378,6 @@ export async function domainlistView(scaffoldTemplate) {
     createDeafultSettingInfo();
     createDomainlistManagerButtons();
     createList();
+    createWalkThroughTour();
     addEventListeners();
 }

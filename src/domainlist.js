@@ -15,7 +15,7 @@ export async function addToDomainlist(domainKey) {
     new_domains[domainKey] = true;
     chrome.storage.local.set({ DOMAINS: new_domains });
     chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet', newApplyAll: 'dontSet'  })
   });
 }
 
@@ -27,7 +27,7 @@ export async function removeFromDomainlist(domainKey) {
     new_domains[domainKey] = false;
     chrome.storage.local.set({ DOMAINS: new_domains });
     chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet', newApplyAll: 'dontSet'  })
   });
 }
 
@@ -39,7 +39,7 @@ export async function permRemoveFromDomainlist(domainKey) {
     delete new_domains[domainKey]
     chrome.storage.local.set({ DOMAINS: new_domains });
     chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: 'dontSet', newApplyAll: 'dontSet'  })
   });
 }
 
@@ -60,7 +60,7 @@ export async function toggleListener(elementId, domain) {
       if (result.DOMAINS[domain]==true) removeFromDomainlist(domain);
       else addToDomainlist(domain);
     chrome.runtime.sendMessage
-              ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+              ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
     })
   })
 }

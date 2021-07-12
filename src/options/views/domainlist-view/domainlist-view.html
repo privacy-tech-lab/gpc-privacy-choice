@@ -6,6 +6,21 @@ privacy-tech-lab, https://privacytechlab.org/
 
 <template id="domainlist-view">
   <div class="uk-width-3-4" style="margin-top: 0px;">
+    <div id="welcome-modal" uk-modal>
+      <div class="uk-modal-dialog">
+          <button class="uk-modal-close-default" type="button" uk-close></button>
+          <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+              <img src="../../../assets/face-icons/icon64-face-circle.png" alt="" style="margin: 0px;">
+              <h2 class="uk-align-center text-color-darker">Welcome to Google-GPC browser!</h2>
+          </div>
+          <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+             This is the domain list page where you can change your settings on GPC status~
+          </div>
+          <div class="uk-modal-footer">
+            <button id="modal-button" class="text-color uk-button uk-button-default uk-align-right" style="margin: 0px 10px;">GOT YOU</button>
+          </div>
+      </div>
+    </div>
     <!-- Search Form -->
     <div class="domainlist-navbar" id="domainlist-navbar">
       <p id='current-apply-all-setting' 
