@@ -14,6 +14,7 @@ let tabId;
 let enabledCache=true;
 let domainsCache= {};
 let domainlistEnabledCache=true;
+let applyAllCache=false;
 
 
 // Set the initial configuration of the extension
@@ -36,10 +37,11 @@ chrome.runtime.onInstalled.addListener(function (object) {
 });
 
 // Sets cache value to locally stored values after chrome booting up
-chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED'], function (result){
+chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL'], function (result){
   enabledCache=result.ENABLED;
   domainsCache=result.DOMAINS;
   domainlistEnabledCache=result.DOMAINLIST_ENABLED;
+  applyAllCache=result.APPLY_ALL;
 })
 
 // Listener for runtime messages
@@ -61,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   //update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") openOptions();
-  if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled)
+  if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll)
 });
 
 // Enable the extenstion
@@ -92,13 +94,14 @@ const disable = () => {
 
 
 // function used to set the locally stored values in the cache upon change
-function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet'){
+function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet', applyAll='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
   if(domains!='dontSet') {
     domainsCache=domains;
     updateDomains(Object.keys(domains));
   }
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
+  if(applyAll!='dontSet') applyAllCache=applyAll;
 }
 
 function openOptions(){
@@ -119,12 +122,13 @@ function updateSendSignalandDomain(){
   });
 
   // update send signal for the current domain
-  if(enabledCache){
-    if(domainlistEnabledCache){
-      if (!(domainsCache[currentHostname])===true) sendSignal = false;
-      else sendSignal = true;
-    }else sendSignal = true;
-  }else sendSignal = false;
+  if(domainlistEnabledCache){
+    if (!(domainsCache[currentHostname]===undefined)) sendSignal=domainsCache[currentHostname]
+    else{
+      if (applyAllCache) sendSignal=enabledCache
+      else sendSignal=false
+    }
+  }else sendSignal=enabledCache
 
 }
 

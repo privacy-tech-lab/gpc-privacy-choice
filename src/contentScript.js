@@ -189,7 +189,7 @@ body.addEventListener('click', event => {
             new_domains[currentDomain] = true;
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true })
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
         })
     }
         else if(event.target.id === 'allow-btn' && !applyAllBool) { 
@@ -201,7 +201,7 @@ body.addEventListener('click', event => {
             new_domains[currentDomain] = false;
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true})
+                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
         })
         }
         else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
@@ -217,7 +217,7 @@ body.addEventListener('click', event => {
                 new_domains[currentDomain] = true;
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false})
+                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true })
             })
         }
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
@@ -233,7 +233,7 @@ body.addEventListener('click', event => {
                 new_domains[currentDomain] = false;
                 chrome.storage.local.set({ DOMAINS: new_domains });
                 chrome.storage.local.set({ ENABLED: false });
-                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false});
+                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
             })
         }
         else if(event.target.id === 'rbe_open_options'){
@@ -468,7 +468,7 @@ function updateDomainList(){
         let value = result.ENABLED;
         domains[currentHostname] = value;
         chrome.storage.local.set({DOMAINS: domains});
-        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet"})
+        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
       }
     })
   }
