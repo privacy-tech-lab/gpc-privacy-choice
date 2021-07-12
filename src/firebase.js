@@ -17,26 +17,13 @@ let currentUserID;
 // Function used to create a user in the database
 export async function createUser(){
     let db=firebase.firestore();
-    //get largest user ID being used
-    let largestUserID;
+    let usersCollectionLength;
 
-    await db.collection("largestUserID").doc("largestID").get().then((doc)=>{
-        if(doc.exists){
-            largestUserID=doc.data().id
-            currentUserID=largestUserID+1
-            chrome.storage.local.set({"USER_ID":currentUserID })
-            db.collection("largestUserID").doc("largestID").set({
-                id: currentUserID
-            })
-        }
-        else{
-            currentUserID=1;
-            chrome.storage.local.set({"USER_ID":currentUserID })
-            db.collection("largestUserID").doc("largestID").set({
-                id: 1
-            })
-        }
-    })
+    await db.collection("users").get()
+        .then(querySnapshot => { 
+            usersCollectionLength= querySnapshot.docs.length
+            currentUserID=usersCollectionLength+1
+        })
 
     let userIP = await getIP();
     let crd = await getLocation();
@@ -62,39 +49,42 @@ export async function createUser(){
         "Session Storage Enabled": getSessionStorageEnabled(),
         "Domain List": [],
         "UI Scheme": getUIscheme()
-    })
+    }).then(
+        setCurrentUserDocID(db)
+    )
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserID, jsEnabled, tabId){
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
     let db = firebase.firestore();
-    let docID;
     let date = new Date()
-    db.collection("users").where("User ID", "==", currentUserID).get()
-        .then((docArray)=>{docArray.forEach((doc)=>{docID = doc.id;})})
-        .then(()=>{
-            db.collection("users").doc(docID).collection("Browser History").add({
-                "User ID": currentUserID,
-                "Date": date.toLocaleDateString(),
-                "Time": date.toLocaleTimeString(),
-                "Tab ID": tabId,
-                "Referer": referrer,
-                "Current Site":  site,
-                "GPC Current Site Status": GPC,
-                "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
-                "JS Enabled": jsEnabled
-        })
+    db.collection("users").doc(currentUserDocID).collection("Browser History").add({
+        "User ID": currentUserID,
+        "Date": date.toLocaleDateString(),
+        "Time": date.toLocaleTimeString(),
+        "Tab ID": tabId,
+        "Referer": referrer,
+        "Current Site":  site,
+        "GPC Current Site Status": GPC,
+        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
+        "JS Enabled": jsEnabled
     })
 }
 
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
     let db = firebase.firestore();
-    let docID;
-    db.collection("users")
-        .where("User ID", "==", currentUserID).get()
-        .then((docArray)=>{docArray.forEach((doc)=>{docID = doc.id;})})
-        .then(()=>{db.collection("users").doc(docID).update({"Domain List": domainsList})})
+    chrome.storage.local.get(["USER_DOC_ID"], function(result){
+        db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+    })
+}
+
+//puts the ID for the current user's doc in local storage
+function setCurrentUserDocID(db) {
+    db.collection("users").where("User ID", "==", currentUserID).get()
+        .then((docArray)=>{docArray.forEach((doc)=>{
+            (chrome.storage.local.set({"USER_DOC_ID": doc.id}))})
+        })
 }
 
 // Get GPC Global Status
