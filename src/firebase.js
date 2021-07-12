@@ -93,18 +93,19 @@ function getGPCGlobalStatus(applyALLBool, enabledBool){
     else return "unset"
 }
 
-// Get the browser version
-// Chrome broswer usually is in the format of Chrome: "Chrome/81.0.4044.138 Safari/537.36" in UserAgent
-function getBrowser(){
-    let browser = "Chrome/"; 
-    let version;
+// Get the Browser
+function getBrowser() {
+    let browser = 'unknown';
     let ua = navigator.userAgent;
-    if (!ua.includes('Chrome/')){
-        return "N.A."
-    } else {
-        version = ua.split("Chrome/")[1];
+    if (window.chrome) {
+        if ((ua.indexOf("Opera") || ua.indexOf('OPR')) != -1) browser = 'Opera';
+        else if (ua.indexOf("Edge") != -1) browser = 'Edge';
+        else if (ua.indexOf("Chrome") != -1) {
+            browser = 'Chrome';
+            if (navigator.brave != undefined) browser = 'Brave';
+        }
     }
-    return browser + version;
+    return browser;
 }
 
 // Get the browser engine version
