@@ -6,7 +6,6 @@ import {createUser, addHistory, updateDomains} from "./firebase.js"
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
-let tabId;
 
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
@@ -27,10 +26,13 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
-      //SCHEME B
+      //SCHEME B: automatically open up the pop up page + provide a tour
       if(result.UI_SCHEME==2){
         chrome.runtime.openOptionsPage(() => {
         })
+      } else {
+        // Other schemes: disable the tour setting
+        chrome.storage.local.set({FIRST_INSTALLED: false});
       }
     })
   );
@@ -109,6 +111,7 @@ function openOptions(){
     active: true
   })
 }
+
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
