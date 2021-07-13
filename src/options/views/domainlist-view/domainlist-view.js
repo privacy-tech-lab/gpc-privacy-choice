@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, toggleListener, permRemoveFromDomainlist } from "../../../domainlist.js";
+import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff, toAllOn, toAllOff} from "../../../domainlist.js";
 
 const headings = {
     title: 'Domain List',
@@ -15,26 +15,28 @@ function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
     if (event.target.id=='allow-all-btn'){
-        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-        chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+            toAllOff(result.DOMAINS);
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = false;
             }
+            chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+            chrome.storage.local.set({APPLY_ALL: true});
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: false });
             chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:false , newDomains: new_domains , newDomainlistEnabled: false })
-            createList();
+              createList();
             createDeafultSettingInfo();
             addToggleListeners();
-        })
+          })
   }
     if (event.target.id=='dont-allow-all-btn'){
     chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
+            toAllOn(result.DOMAINS);
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = true;
@@ -58,6 +60,7 @@ function addEventListeners() {
   }
     if(event.target.id=='toggle_all_on'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
+        toAllOn(result.DOMAINS);
         let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = true;
@@ -71,6 +74,7 @@ function addEventListeners() {
   }
     if(event.target.id=='toggle_all_off'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
+        toAllOff(result.DOMAINS);
         let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = false;

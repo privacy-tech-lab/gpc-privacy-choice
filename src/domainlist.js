@@ -43,6 +43,40 @@ export async function permRemoveFromDomainlist(domainKey) {
   });
 }
 
+// Returns true if all domains are toggled on, false otherwise
+export function allOn(domains) {
+    for (let d in domains) {
+      if (domains[d] === false) return false;
+    };
+  return true
+}
+
+// Returns true if all domains are toggled off, false otherwise
+export function allOff(domains) {
+    for (let d in domains) {
+      if (domains[d] === true) return false;
+    };
+  return true
+}
+
+export async function toAllOff(domains) {
+  if (allOn(domains) === false) {
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", applyAll: true })
+  }
+  else {
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", applyAll: true })
+  }
+}
+
+export async function toAllOn(domains) {
+  if (allOff(domains) === false) {
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", applyAll: true })
+  }
+  else {
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", applyAll: true })
+  }
+}
+
 // Generates the HTML that will build the domainlist switch for a given domain in the domainlist
 export function buildToggle(domain, bool) {
   let toggle;
@@ -57,8 +91,14 @@ export async function toggleListener(elementId, domain) {
   document.getElementById(elementId).addEventListener("click", () => {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
     chrome.storage.local.get(["DOMAINS"], function (result) {
-      if (result.DOMAINS[domain]==true) removeFromDomainlist(domain);
-      else addToDomainlist(domain);
+      if (result.DOMAINS[domain]==true) {
+        removeFromDomainlist(domain);
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, origin: "Options page", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", applyAll: false })
+      }
+      else {
+        addToDomainlist(domain);
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain , origin: "Options page", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", applyAll: false })
+      }
     chrome.runtime.sendMessage
               ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
     })
