@@ -59,20 +59,22 @@ export function allOff(domains) {
   return true
 }
 
+//Sends message depending on whether the previous setting was customized or not (whilst turning off all the toggles)
 export async function toAllOff(domains) {
-  if (allOn(domains) === false) {
+  if (allOn(domains) === false && allOff(domains) !== true) {
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", applyAll: true })
   }
-  else {
+  if (allOn(domains) === true) {
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", applyAll: true })
   }
 }
 
+//Sends message depending on whether the previous setting was customized or not (whilst turning on all toggles)
 export async function toAllOn(domains) {
-  if (allOff(domains) === false) {
+  if (allOff(domains) === false && allOn(domains) !== true) {
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", applyAll: true })
   }
-  else {
+  if (allOff(domains) === true) {
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains in list" , origin: "Options page", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", applyAll: true })
   }
 }

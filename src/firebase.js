@@ -71,8 +71,8 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     })
 }
 
-// Add user entries into the Firebase
-export function addDomainInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
+// Adds user's Setting Interaction History
+export function addSettingInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
