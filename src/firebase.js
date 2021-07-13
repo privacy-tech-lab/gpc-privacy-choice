@@ -75,8 +75,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 export function addDomainInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
     let db = firebase.firestore();
     let date = new Date()
-    db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
-        "User ID": currentUserID,
+    db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
         "Date": date.toLocaleDateString(),
         "Time": date.toLocaleTimeString(),
         "Domain": domain,
