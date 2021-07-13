@@ -1,14 +1,16 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
+
 import {createUser, addHistory, updateDomains, addThirdPartyRequests} from "./firebase.js"
 
 chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
+
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
-let tabId;
+
 
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
@@ -29,10 +31,14 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
-      //SCHEME B
+
+      //SCHEME B: automatically open up the pop up page + provide a tour
       if(result.UI_SCHEME==2){
         chrome.runtime.openOptionsPage(() => {
         })
+      } else {
+        // Other schemes: disable the tour setting
+        chrome.storage.local.set({FIRST_INSTALLED: false});
       }
     })
   );
@@ -103,6 +109,13 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
   }
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
   if(applyAll!='dontSet') applyAllCache=applyAll;
+}
+
+function openOptions(){
+  chrome.tabs.create({
+    url: '../options/options.html',
+    active: true
+  })
 }
 
 function openOptions(){
