@@ -118,12 +118,6 @@ function openOptions(){
   })
 }
 
-function openOptions(){
-  chrome.tabs.create({
-    url: '../options/options.html',
-    active: true
-  })
-}
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
