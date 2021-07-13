@@ -4,7 +4,6 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-
 const body = document.querySelector('body');
 const overlayDiv = document.createElement('div');
 const head=document.querySelector('head');
@@ -242,7 +241,41 @@ body.addEventListener('click', event => {
     
 })
 
-//show notice of current tracking and selling preference
+// logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain 
+chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
+    console.log("apply bool" + result.APPLY_ALL)
+    let domains = result.DOMAINS;
+    let currentDomain = getDomain(window.location.href);
+    if (!result.APPLY_ALL) {
+
+            // keeping this temporarily for debugging purpose
+            // console.log("the domains look like this right now:")
+            // for (let d in domains){
+            //     console.log(d + ": " + domains[d])
+            // }
+            
+            if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
+            
+        }
+    //SCHEME D
+    //if permission is already selected and domain is being visited for first time display active notice popup
+    else{
+        if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
+            displayPopup();
+        }
+        updateDomainList();
+    }
+});
+
+// inform firebase.js to add a new browser history entry
+chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
+
+// starter code for interaction between the button and the background.js
+chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
+    console.log(response.farewell);
+});
+
+// function used to show notice of current tracking and selling preference
 function displayPopup(){
      
     let count = 10;
@@ -430,64 +463,14 @@ function removeOverlay(){
     if (popupDiv.style) popupDiv.style.display = 'none';
 }
 
-// Logic for the banner pop up: 
-// - only when DOMAINLIST_ENABLED == true &&
-// - the current domain is a new domain 
-chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
-    console.log("apply bool" + result.APPLY_ALL)
-    let domains = result.DOMAINS;
-    let currentDomain = getDomain(window.location.href);
-    if (!result.APPLY_ALL) {
-
-            // keeping this temporarily for debugging purpose
-            // console.log("the domains look like this right now:")
-            // for (let d in domains){
-            //     console.log(d + ": " + domains[d])
-            // }
-            
-            if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
-            
-        }
-    //SCHEME D
-    //if permission is already selected and domain is being visited for first time display active notice popup
-    else{
-        if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
-            displayPopup();
-        }
-        updateDomainList();
-    }
-});
-
-// Update the domains of the domains list in the domain list 
-function updateDomainList(){
-    chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
-    let currentDomain = getDomain(window.location.href);
-      if (result.DOMAINS[currentDomain]===undefined){
-        let domains = result.DOMAINS;
-        let value = result.ENABLED;
-        domains[currentDomain] = value;
-        chrome.storage.local.set({DOMAINS: domains});
-        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
-      }
-    })
-  }
-
-//inform firebase.js to add a new browser history entry
-chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
-
-// starter code for interaction between the button and the background.js
-chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
-    console.log(response.farewell);
-});
-
-// get the hostname from the current url
+// function used to get the hostname from the current url
 function getHostName(url) {
     let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
     if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
     else return null;
 }
 
-// get the top level domain for the current url
+// function used to get the top level domain for the current url
 function getDomain(url) {
     let hostName = getHostName(url);
     let domain = hostName;
@@ -503,4 +486,18 @@ function getDomain(url) {
     }
     
     return domain;
+}
+
+// function used to update the domains of the domains list in the domain list 
+function updateDomainList(){
+    chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
+    let currentDomain = getDomain(window.location.href);
+      if (result.DOMAINS[currentDomain]===undefined){
+        let domains = result.DOMAINS;
+        let value = result.ENABLED;
+        domains[currentDomain] = value;
+        chrome.storage.local.set({DOMAINS: domains});
+        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
+      }
+    })
 }
