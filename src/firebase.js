@@ -1,13 +1,13 @@
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
-        apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
-        authDomain: "privacy-choice-research.firebaseapp.com",
-        projectId: "privacy-choice-research",
-        storageBucket: "privacy-choice-research.appspot.com",
-        messagingSenderId: "23402940855",
-        appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
-        measurementId: "G-L6EWBVR01J"
-      };
+    apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
+    authDomain: "privacy-choice-research.firebaseapp.com",
+    projectId: "privacy-choice-research",
+    storageBucket: "privacy-choice-research.appspot.com",
+    messagingSenderId: "23402940855",
+    appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
+    measurementId: "G-L6EWBVR01J"
+};
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -84,6 +84,7 @@ export function updateDomains(domainsList){
     })
 }
 
+
 export function addThirdPartyRequests(details){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
         let date = new Date()
@@ -120,6 +121,7 @@ export function addThirdPartyRequests(details){
     });
 }
 
+
 //puts the ID for the current user's doc in local storage
 function setCurrentUserDocID(db) {
     db.collection("users").where("User ID", "==", currentUserID).get()
@@ -134,18 +136,19 @@ function getGPCGlobalStatus(applyALLBool, enabledBool){
     else return "unset"
 }
 
-// Get the browser version
-// Chrome broswer usually is in the format of Chrome: "Chrome/81.0.4044.138 Safari/537.36" in UserAgent
-function getBrowser(){
-    let browser = "Chrome/"; 
-    let version;
+// Get the Browser
+function getBrowser() {
+    let browser = 'unknown';
     let ua = navigator.userAgent;
-    if (!ua.includes('Chrome/')){
-        return "N.A."
-    } else {
-        version = ua.split("Chrome/")[1];
+    if (window.chrome) {
+        if ((ua.indexOf("Opera") || ua.indexOf('OPR')) != -1) browser = 'Opera';
+        else if (ua.indexOf("Edge") != -1) browser = 'Edge';
+        else if (ua.indexOf("Chrome") != -1) {
+            browser = 'Chrome';
+            if (navigator.brave != undefined) browser = 'Brave';
+        }
     }
-    return browser + version;
+    return browser;
 }
 
 // Get the browser engine version
