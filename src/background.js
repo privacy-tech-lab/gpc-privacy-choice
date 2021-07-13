@@ -1,6 +1,8 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-import {createUser, addHistory, updateDomains} from "./firebase.js"
+import {createUser, addHistory, updateDomains, addThirdPartyRequests} from "./firebase.js"
+
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Initializers
 let sendSignal = false;
@@ -72,7 +74,6 @@ const enable = () => {
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      chrome.webRequest.onBeforeRequest.addListener(updateSendSignalandDomain, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
