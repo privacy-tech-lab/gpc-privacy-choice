@@ -14,6 +14,8 @@ firebase.initializeApp(firebaseConfig);
 
 let currentUserID;
 
+let earlyRequests;
+
 // Function used to create a user in the database
 export async function createUser(){
     let db=firebase.firestore();
@@ -100,6 +102,7 @@ export function addThirdPartyRequests(details){
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
                 .where("TabID",'==', details.tabId).where("Hostname",'==', currentHostname).orderBy("timestamp", "desc").limit(1)
                             .get().then((docArray)=>{
+                                    console.log(docArray)
                                     docArray.forEach((doc)=>{
                                         console.log(doc.id)
                                         db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
