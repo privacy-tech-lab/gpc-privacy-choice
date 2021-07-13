@@ -289,8 +289,10 @@ function createDomainlistManagerButtons(){
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
 function createList() {
   let items = ""
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    for (let domain in result.DOMAINS) {
+  chrome.storage.local.get(["DOMAINS"], function (result) { 
+    console.log("Hello from domainlist-view: " + Object.values(Object.keys(result.DOMAINS)));
+    for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
+      console.log("building for " + domain);
       items +=
             `
       <li id="li ${domain}">
