@@ -146,7 +146,6 @@ overlayDiv.innerHTML = `
         </div> 
     `
 
-
 // buttons change color when the cursor hovers over them
 body.addEventListener('mouseover', event => {
     let button_preb = event.target;
@@ -170,11 +169,9 @@ body.addEventListener('mouseover', event => {
 }
 )
 
-
-
 // add event listener to close the modal
 body.addEventListener('click', event => {
-    let currentDomain = window.location.hostname;
+    let currentDomain = getDomain(window.location.href);
     let applyAllBool
     if(document.getElementById("apply-all")){
         applyAllBool = document.getElementById("apply-all").checked
@@ -439,7 +436,7 @@ function removeOverlay(){
 chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
     console.log("apply bool" + result.APPLY_ALL)
     let domains = result.DOMAINS;
-    let currentDomain = window.location.hostname;
+    let currentDomain = getDomain(window.location.href);
     if (!result.APPLY_ALL) {
 
             // keeping this temporarily for debugging purpose
@@ -464,11 +461,11 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
 // Update the domains of the domains list in the domain list 
 function updateDomainList(){
     chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
-    let currentHostname = window.location.hostname;
-      if (result.DOMAINS[currentHostname]===undefined){
+    let currentDomain = getDomain(window.location.href);
+      if (result.DOMAINS[currentDomain]===undefined){
         let domains = result.DOMAINS;
         let value = result.ENABLED;
-        domains[currentHostname] = value;
+        domains[currentDomain] = value;
         chrome.storage.local.set({DOMAINS: domains});
         chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
       }
@@ -483,3 +480,27 @@ chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {
     console.log(response.farewell);
 });
 
+// get the hostname from the current url
+function getHostName(url) {
+    let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
+    else return null;
+}
+
+// get the top level domain for the current url
+function getDomain(url) {
+    let hostName = getHostName(url);
+    let domain = hostName;
+    
+    if (hostName != null) {
+        let parts = hostName.split('.').reverse();
+        if (parts != null && parts.length > 1) {
+            domain = parts[1] + '.' + parts[0];
+            if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
+              domain = parts[2] + '.' + domain;
+            }
+        }
+    }
+    
+    return domain;
+}
