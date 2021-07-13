@@ -63,8 +63,6 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     if(url===undefined) hostname=null
     else hostname = url.hostname
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "Date": date.toLocaleDateString(),
-        "Time": date.toLocaleTimeString(),
         "timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
