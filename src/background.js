@@ -1,11 +1,16 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-import {createUser, addHistory, updateDomains} from "./firebase.js"
+
+import {createUser, addHistory, updateDomains, addThirdPartyRequests} from "./firebase.js"
+
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
+
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
+
 
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
@@ -26,6 +31,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
+
       //SCHEME B: automatically open up the pop up page + provide a tour
       if(result.UI_SCHEME==2){
         chrome.runtime.openOptionsPage(() => {
