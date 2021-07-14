@@ -460,10 +460,12 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
         }
     //SCHEME D
     //if permission is already selected and domain is being visited for first time display active notice popup
-    else if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
-        displayPopup();
+    else{
+        if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
+            displayPopup();
+        }
         updateDomainList();
-    } 
+    }
 });
 
 // Update the domains of the domains list in the domain list 
@@ -481,7 +483,7 @@ function updateDomainList(){
   }
 
 //inform firebase.js to add a new browser history entry
-chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
+// chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
 
 // starter code for interaction between the button and the background.js
 chrome.runtime.sendMessage({greeting: "ENABLE"}, function(response) {

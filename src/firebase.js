@@ -58,11 +58,10 @@ export async function createUser(){
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
     let db = firebase.firestore();
     let date = new Date()
+    let url = new URL(site)
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "User ID": currentUserID,
-        "Date": date.toLocaleDateString(),
-        "Time": date.toLocaleTimeString(),
-        "Tab ID": tabId,
+        "timestamp": firebase.firestore.Timestamp.fromDate(date),
+        "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
         "GPC Current Site Status": GPC,
@@ -94,6 +93,42 @@ export function updateDomains(domainsList){
     })
 }
 
+export function addThirdPartyRequests(details){
+    chrome.tabs.get(details.tabId, (tab)=>{
+        var tabId=tab.id
+        let url = tab.url;
+        let url_object = new URL(url);
+        let domain=url_object.hostname;
+        let date = new Date()
+        let db = firebase.firestore();
+        let request_url_object = new URL(details.url)
+        let initiator_object = new URL(details.initiator)
+        let url_host = request_url_object.hostname
+        let initiator_host =initiator_object.hostname
+        console.log(domain)
+        if(initiator_host!=url_host && initiator_host!=domain && url_host!="firestore.googleapis.com"){
+            chrome.storage.local.get(["USER_DOC_ID"], function(result){
+                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
+                .where("TabID",'==', tabId).orderBy("timestamp", "desc").limit(1)
+                .get().then((docArray)=>{
+                        docArray.forEach((doc)=>{
+                            console.log(doc.id)
+                            db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                            doc(doc.id).collection("Third Party Requests").add({
+                                "type": details.type,
+                                "url": details.url,
+                                "requestHeaders": details.requestHeaders,
+                                "initiator": details.initiator,
+                                "frameID": details.frameId,
+                                "timestamp": firebase.firestore.Timestamp.fromDate(date)
+                            })
+                        })
+                })
+            })
+        }
+    })
+}
+
 //puts the ID for the current user's doc in local storage
 function setCurrentUserDocID(db) {
     db.collection("users").where("User ID", "==", currentUserID).get()
@@ -108,18 +143,19 @@ function getGPCGlobalStatus(applyALLBool, enabledBool){
     else return "unset"
 }
 
-// Get the browser version
-// Chrome broswer usually is in the format of Chrome: "Chrome/81.0.4044.138 Safari/537.36" in UserAgent
-function getBrowser(){
-    let browser = "Chrome/"; 
-    let version;
+// Get the Browser
+function getBrowser() {
+    let browser = 'unknown';
     let ua = navigator.userAgent;
-    if (!ua.includes('Chrome/')){
-        return "N.A."
-    } else {
-        version = ua.split("Chrome/")[1];
+    if (window.chrome) {
+        if ((ua.indexOf("Opera") || ua.indexOf('OPR')) != -1) browser = 'Opera';
+        else if (ua.indexOf("Edge") != -1) browser = 'Edge';
+        else if (ua.indexOf("Chrome") != -1) {
+            browser = 'Chrome';
+            if (navigator.brave != undefined) browser = 'Brave';
+        }
     }
-    return browser + version;
+    return browser;
 }
 
 // Get the browser engine version

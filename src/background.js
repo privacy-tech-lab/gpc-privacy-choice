@@ -1,13 +1,13 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-import {createUser, addHistory, updateDomains, addSettingInteractionHistory} from "./firebase.js"
+import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
+
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
-let tabId;
-
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
@@ -27,10 +27,14 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
-      //SCHEME B
+
+      //SCHEME B: automatically open up the pop up page + provide a tour
       if(result.UI_SCHEME==2){
         chrome.runtime.openOptionsPage(() => {
         })
+      } else {
+        // Other schemes: disable the tour setting
+        chrome.storage.local.set({FIRST_INSTALLED: false});
       }
     })
   );
@@ -70,6 +74,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addSettingInteractionHistory(request.domain, result.USER_DOC_ID, request.origin, request.prevSetting, request.newSetting, request.applyAll);
     })
   }
+
 });
 
 // Enable the extenstion
@@ -78,7 +83,6 @@ const enable = () => {
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      chrome.webRequest.onBeforeRequest.addListener(updateSendSignalandDomain, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]});
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
