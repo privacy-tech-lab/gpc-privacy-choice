@@ -57,7 +57,7 @@ export async function createUser(){
 // Add user entries into the Firebase
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
     let db = firebase.firestore();
-    let date = new Date()
+    let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browsing History").add({
         "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
@@ -72,10 +72,9 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
     let db = firebase.firestore();
-    let date = new Date()
+    let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Date": date.toLocaleDateString(),
-        "Time": date.toLocaleTimeString(),
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "Domain": domain,
         "Origin": origin,
         "Previous Setting": prevSetting,
