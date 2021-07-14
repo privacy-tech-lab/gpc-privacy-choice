@@ -93,6 +93,7 @@ export function updateDomains(domainsList){
     })
 }
 
+// Add third party requests
 export function addThirdPartyRequests(details){
     function getHostName(url) {
         let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
@@ -149,7 +150,7 @@ export function addThirdPartyRequests(details){
     })
 }
 
-//puts the ID for the current user's doc in local storage
+// puts the ID for the current user's doc in local storage
 function setCurrentUserDocID(db) {
     db.collection("users").where("User ID", "==", currentUserID).get()
         .then((docArray)=>{docArray.forEach((doc)=>{
