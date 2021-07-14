@@ -58,12 +58,11 @@ export async function createUser(){
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
     let db = firebase.firestore();
     let date = new Date()
-    let url = new URL(site)
-    db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "timestamp": firebase.firestore.Timestamp.fromDate(date),
+    db.collection("users").doc(currentUserDocID).collection("Browsing History").add({
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
-        "Current Site":  site,
+        "Current Site": site,
         "GPC Current Site Status": GPC,
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
         "JS Enabled": jsEnabled
