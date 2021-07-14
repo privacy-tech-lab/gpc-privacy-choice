@@ -93,12 +93,14 @@ export function updateDomains(domainsList){
     })
 }
 
+// Add third party requests to browsing history document
 export function addThirdPartyRequests(details){
     function getHostName(url) {
         let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
         if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
         else return null;
     }
+
     function getDomain(url) {
         let hostName = getHostName(url);
         let domain = hostName;
@@ -114,8 +116,9 @@ export function addThirdPartyRequests(details){
         }
         return domain;
     }
+
     chrome.tabs.get(details.tabId, (tab)=>{
-        var tabId=tab.id
+        let tabId=tab.id
         let url = tab.url;
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
