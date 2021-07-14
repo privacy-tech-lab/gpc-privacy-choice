@@ -61,15 +61,11 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     let db = firebase.firestore();
     let date = new Date()
     let url = new URL(site)
-    let hostname;
-    if(url===undefined) hostname=null
-    else hostname = url.hostname
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
-        "Hostname":hostname,
         "GPC Current Site Status": GPC,
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
         "JS Enabled": jsEnabled
@@ -84,41 +80,40 @@ export function updateDomains(domainsList){
     })
 }
 
-
 export function addThirdPartyRequests(details){
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    chrome.tabs.get(details.tabId, (tab)=>{
+        var tabId=tab.id
+        let url = tab.url;
+        let url_object = new URL(url);
+        let domain=url_object.hostname;
         let date = new Date()
-        let currentHostname;
-        let url = tabs[0].url;
-        let hostname_url_object = new URL(url);
-        if (hostname_url_object===undefined)currentHostname=null
-        else currentHostname=hostname_url_object.hostname;
         let db = firebase.firestore();
         let request_url_object = new URL(details.url)
         let initiator_object = new URL(details.initiator)
-        let url_host = request_url_object.host
-        let initiator_host =initiator_object.host
-        if(initiator_host!=url_host && url_host!="firestore.googleapis.com"){
+        let url_host = request_url_object.hostname
+        let initiator_host =initiator_object.hostname
+        console.log(domain)
+        if(initiator_host!=url_host && initiator_host!=domain && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                .where("TabID",'==', details.tabId).where("Hostname",'==', currentHostname).orderBy("timestamp", "desc").limit(1)
-                            .get().then((docArray)=>{
-                                    console.log(docArray)
-                                    docArray.forEach((doc)=>{
-                                        console.log(doc.id)
-                                        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                                        doc(doc.id).collection("Third Party Requests").add({
-                                            "url": details.url,
-                                            "requestHeaders": details.requestHeaders,
-                                            "initiator": details.initiator,
-                                            "frameID": details.frameId,
-                                            "timestamp": firebase.firestore.Timestamp.fromDate(date)
-                                        })
-                                    })
-                                })
+                .where("TabID",'==', tabId).orderBy("timestamp", "desc").limit(1)
+                .get().then((docArray)=>{
+                        docArray.forEach((doc)=>{
+                            console.log(doc.id)
+                            db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                            doc(doc.id).collection("Third Party Requests").add({
+                                "type": details.type,
+                                "url": details.url,
+                                "requestHeaders": details.requestHeaders,
+                                "initiator": details.initiator,
+                                "frameID": details.frameId,
+                                "timestamp": firebase.firestore.Timestamp.fromDate(date)
+                            })
+                        })
+                })
             })
         }
-    });
+    })
 }
 
 
