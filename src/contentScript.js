@@ -274,10 +274,6 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     }
 });
 
-// inform firebase.js to add a new browser history entry
-chrome.runtime.sendMessage({greeting:"NEW PAGE", site: window.location.href, referrer: document.referrer})
-
-
 // function used to show notice of current tracking and selling preference
 function displayPopup(){
      
