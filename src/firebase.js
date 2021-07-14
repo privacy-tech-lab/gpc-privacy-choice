@@ -94,17 +94,37 @@ export function updateDomains(domainsList){
 }
 
 export function addThirdPartyRequests(details){
+    function getHostName(url) {
+        let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
+        else return null;
+    }
+    function getDomain(url) {
+        let hostName = getHostName(url);
+        let domain = hostName;
+        
+        if (hostName != null) {
+            let parts = hostName.split('.').reverse();
+            if (parts != null && parts.length > 1) {
+                domain = parts[1] + '.' + parts[0];
+                if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
+                  domain = parts[2] + '.' + domain;
+                }
+            }
+        }
+        return domain;
+    }
     chrome.tabs.get(details.tabId, (tab)=>{
         var tabId=tab.id
         let url = tab.url;
         let url_object = new URL(url);
-        let domain=url_object.hostname;
+        let domain=getDomain(url_object.href)
         let date = new Date()
         let db = firebase.firestore();
         let request_url_object = new URL(details.url)
         let initiator_object = new URL(details.initiator)
-        let url_host = request_url_object.hostname
-        let initiator_host =initiator_object.hostname
+        let url_host = getDomain(request_url_object.href)
+        let initiator_host = getDomain(initiator_object.href)
         console.log(domain)
         if(initiator_host!=url_host && initiator_host!=domain && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
