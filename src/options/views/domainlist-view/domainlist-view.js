@@ -168,7 +168,7 @@ function createDefaultSettingInfo(){
     class="uk-badge button blue-buttons"
     type="button"
     style="margin-right: -2px;">
-    send do not send signals to all domains
+    send do not sell signals to all domains
   </button>
   `
 
