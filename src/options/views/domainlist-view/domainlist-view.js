@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, toggleListener, permRemoveFromDomainlist } from "../../../domainlist.js";
+import { buildToggle, toggleListener, permRemoveFromDomainlist, toAllOn, toAllOff} from "../../../domainlist.js";
 
 const headings = {
     title: 'Domain List',
@@ -15,26 +15,28 @@ function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
     if (event.target.id=='allow-all-btn'){
-        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-        chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+            toAllOff(result.DOMAINS);
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = false;
             }
+            chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+            chrome.storage.local.set({APPLY_ALL: true});
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: false });
             chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:false , newDomains: new_domains , newDomainlistEnabled: false })
-            createList();
-            createDeafultSettingInfo();
+              createList();
+            createDefaultSettingInfo();
             addToggleListeners();
-        })
+          })
   }
     if (event.target.id=='dont-allow-all-btn'){
     chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
+            toAllOn(result.DOMAINS);
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
                 new_domains[d] = true;
@@ -44,7 +46,7 @@ function addEventListeners() {
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: true });
             createList();
-            createDeafultSettingInfo();
+            createDefaultSettingInfo();
             addToggleListeners();
         })
   }
@@ -54,10 +56,11 @@ function addEventListeners() {
       chrome.storage.local.set({ ENABLED: true });
       chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
-      createDeafultSettingInfo();
+      createDefaultSettingInfo();
   }
     if(event.target.id=='toggle_all_on'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
+        toAllOn(result.DOMAINS);
         let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = true;
@@ -71,6 +74,7 @@ function addEventListeners() {
   }
     if(event.target.id=='toggle_all_off'){
       chrome.storage.local.get(["DOMAINS"], function (result) {
+        toAllOff(result.DOMAINS);
         let new_domains = result.DOMAINS;
         for (let d in new_domains){
             new_domains[d] = false;
@@ -125,7 +129,7 @@ NOTE: It will be automatically added back to the list when the domain is request
   }))
 }
 
-// Filterd lists code heavily inspired by
+// Filtered lists code heavily inspired by
 function filterList() {
   let input, list, li, count
   input = document.getElementById('searchbar').value.toLowerCase();
@@ -145,7 +149,7 @@ function filterList() {
 }
 
 // Create HTML for the buttons and information on default/apply-all setting
-function createDeafultSettingInfo(){
+function createDefaultSettingInfo(){
   let turn_off_apply_all_button =
   `  <button
         id="apply-all-off-btn"
@@ -225,7 +229,7 @@ function createDeafultSettingInfo(){
         ${dont_allow_all_button}&nbsp;or ${allow_all_button}.
         <br/>
         <br/>
-        You can also change the privacy prefernce made for
+        You can also change the privacy preference made for
         an individual domain by 
         toggling the domain's switch in the domain list below.
         `
@@ -375,7 +379,7 @@ export async function domainlistView(scaffoldTemplate) {
     document.getElementById('content').innerHTML = body.innerHTML
     document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
 
-    createDeafultSettingInfo();
+    createDefaultSettingInfo();
     createDomainlistManagerButtons();
     createList();
     createWalkThroughTour();

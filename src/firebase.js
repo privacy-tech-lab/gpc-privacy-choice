@@ -14,8 +14,6 @@ firebase.initializeApp(firebaseConfig);
 
 let currentUserID;
 
-let earlyRequests;
-
 // Function used to create a user in the database
 export async function createUser(){
     let db=firebase.firestore();
@@ -72,6 +70,21 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     })
 }
 
+// Adds user's Setting Interaction History
+export function addSettingInteractionHistory(domain, currentUserDocID, origin, prevSetting, newSetting, applyAll){
+    let db = firebase.firestore();
+    let date = new Date()
+    db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
+        "Date": date.toLocaleDateString(),
+        "Time": date.toLocaleTimeString(),
+        "Domain": domain,
+        "Origin": origin,
+        "Previous Setting": prevSetting,
+        "New Setting": newSetting,
+        "Apply All": applyAll
+    })
+}
+
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
     let db = firebase.firestore();
@@ -115,7 +128,6 @@ export function addThirdPartyRequests(details){
         }
     })
 }
-
 
 //puts the ID for the current user's doc in local storage
 function setCurrentUserDocID(db) {

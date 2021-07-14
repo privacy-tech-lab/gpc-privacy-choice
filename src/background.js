@@ -1,17 +1,13 @@
 // background.js is the main background script handling OptMeowt's main opt-out functionality
 
-
-import {createUser, addHistory, updateDomains, addThirdPartyRequests} from "./firebase.js"
+import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
-
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
-
-
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
 // Make sure these are always in sync!
@@ -71,7 +67,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   //update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") openOptions();
-  if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll)
+  if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
+  //updates Setting Interaction History from contentScript.js and domainlist-view.js
+  if (request.greeting == "INTERACTION") {
+    chrome.storage.local.get( "USER_DOC_ID", function(result){
+      addSettingInteractionHistory(request.domain, result.USER_DOC_ID, request.origin, request.prevSetting, request.newSetting, request.applyAll);
+    })
+  }
+
 });
 
 // Enable the extenstion
@@ -117,7 +120,6 @@ function openOptions(){
     active: true
   })
 }
-
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
