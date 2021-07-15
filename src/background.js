@@ -24,18 +24,11 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
-  enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
-
-      //SCHEME B: automatically open up the pop up page + provide a tour
-      if(result.UI_SCHEME==2){
-        chrome.runtime.openOptionsPage(() => {
-        })
-      } else {
-        // Other schemes: disable the tour setting
-        chrome.storage.local.set({FIRST_INSTALLED: false});
-      }
+      if(result.UI_SCHEME==2){ chrome.runtime.openOptionsPage(() => {})
+      } else {chrome.storage.local.set({FIRST_INSTALLED: false});}
+      enable();
     })
   );
 });
