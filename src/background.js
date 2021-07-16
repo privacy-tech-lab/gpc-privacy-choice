@@ -71,7 +71,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //updates Setting Interaction History from contentScript.js and domainlist-view.js
   if (request.greeting == "INTERACTION") {
     chrome.storage.local.get( "USER_DOC_ID", function(result){
-      addSettingInteractionHistory(request.domain, result.USER_DOC_ID, request.origin, request.prevSetting, request.newSetting, request.applyAll);
+      addSettingInteractionHistory(request.domain, request.location, result.USER_DOC_ID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
     })
   }
 
