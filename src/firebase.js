@@ -30,6 +30,8 @@ export async function createUser(){
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
 
+    console.log("creating user");
+
     db.collection("users").add({
         "User ID": currentUserID,
         "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
@@ -51,11 +53,30 @@ export async function createUser(){
         "UI Scheme": getUIscheme()
     }).then(
         setCurrentUserDocID(db)
+    ).then(
+        chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+            if (request.greeting == "NEW PAGE"){
+                let jsEnabled = null;
+                let tabId = null;
+                chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
+                  jsEnabled = details.setting; 
+                  chrome.tabs.query({active: true, currentWindow: true}, (tabs)=>{
+                    tabId = tabs[0].id;
+                    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "DOMAINS", "DOMAINLIST_ENABLED"], function(result){
+                      console.log(" calling adding history", result.USER_DOC_ID, request.site)
+                      addHistory(request.referrer, request.site, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, jsEnabled, tabId, result.DOMAINLIST_ENABLED, result.DOMAINS);
+                    })
+                  });
+                });
+              }
+        })
+    
     )
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
+export function addHistory(referrer, site, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId, domainlistEnabledBool, domains){
+    console.log("adding history", currentUserDocID, site)
     let db = firebase.firestore();
     let date = new Date()
     let url = new URL(site)
@@ -64,7 +85,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
-        "GPC Current Site Status": GPC,
+        "GPC Current Site Status": getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains),
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
         "JS Enabled": jsEnabled
     })
@@ -180,6 +201,21 @@ function getBrowser() {
     }
     return browser;
 }
+
+
+//Get the GPC preference for a current site
+function getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains){
+    if(domainlistEnabledBool){
+        if (!domains[currentHostname]===undefined) GPC=domains[currentHostname]
+        else{
+          if (applyALLBool) GPC=enabledBool
+          else GPC=false
+        }
+      }else GPC=enabledBool
+      return GPC
+
+}
+
 
 // Get the browser engine version
 function getBrowserEngine(){

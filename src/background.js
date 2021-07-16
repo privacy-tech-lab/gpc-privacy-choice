@@ -28,9 +28,9 @@ chrome.runtime.onInstalled.addListener(function (object) {
     chrome.storage.local.get(["UI_SCHEME"], function(result){
       if(result.UI_SCHEME==2){ chrome.runtime.openOptionsPage(() => {})
       } else {chrome.storage.local.set({FIRST_INSTALLED: false});}
-      enable();
     })
   );
+  enable();
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -45,19 +45,6 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
   if (request.message == "DISABLE_ALL") disable();
-  if (request.greeting == "NEW PAGE"){
-    let jsEnabled = null;
-    let tabId = null;
-    chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
-      jsEnabled = details.setting; 
-      chrome.tabs.query({active: true, currentWindow: true}, (tabs)=>{
-        tabId = tabs[0].id;
-        chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
-          addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, jsEnabled, tabId);
-        })
-      });
-    });
-  }
   //update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") openOptions();
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
