@@ -183,3 +183,11 @@ function addDomSignal (details)  {
     });
   }
 }
+
+// Set the ORIGIN_SITE property in local storage for option page
+chrome.browserAction.onClicked.addListener(function(tab) {
+  let url = tab.url;
+  chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
+    chrome.runtime.openOptionsPage(() => {});
+  });
+});
