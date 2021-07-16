@@ -15,8 +15,7 @@
     "geolocation"
   ],
   "browser_action": {
-    "default_title": "OptMeowt-R",
-    "default_popup": "popup/popup.html"
+    "default_title": "OptMeowt-R"
   },
   "content_scripts": [
     {
