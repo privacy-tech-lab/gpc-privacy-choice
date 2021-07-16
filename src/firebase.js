@@ -75,8 +75,10 @@ export function addSettingInteractionHistory(domain, location, currentUserDocID,
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Date": date.toLocaleDateString(),
-        "Time": date.toLocaleTimeString(),
+        "Date and Time": {
+            "Date": date.toLocaleDateString(),
+            "Time": date.toLocaleTimeString()
+        },
         "Domain": domain,
         "Location of Interaction": location,
         "Origin": origin,
