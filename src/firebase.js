@@ -85,7 +85,7 @@ export function addHistory(referrer, site, applyALLBool, enabledBool, currentUse
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
-        "GPC Current Site Status": getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains),
+        "GPC Current Site Status": getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains, site),
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
         "JS Enabled": jsEnabled
     })
@@ -204,7 +204,30 @@ function getBrowser() {
 
 
 //Get the GPC preference for a current site
-function getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains){
+function getGPC(applyALLBool, enabledBool, domainlistEnabledBool, domains, site){
+    function getHostName(url) {
+        let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
+        else return null;
+    }
+
+    function getDomain(url) {
+        let hostName = getHostName(url);
+        let domain = hostName;
+        
+        if (hostName != null) {
+            let parts = hostName.split('.').reverse();
+            if (parts != null && parts.length > 1) {
+                domain = parts[1] + '.' + parts[0];
+                if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
+                  domain = parts[2] + '.' + domain;
+                }
+            }
+        }
+        return domain;
+    }
+    let currentHostname=getDomain(site)
+    let GPC;
     if(domainlistEnabledBool){
         if (!domains[currentHostname]===undefined) GPC=domains[currentHostname]
         else{
