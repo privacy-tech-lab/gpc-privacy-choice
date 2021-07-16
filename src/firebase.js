@@ -71,7 +71,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 }
 
 // Adds user's Setting Interaction History
-export function addSettingInteractionHistory(domain, location, currentUserDocID, origin, setting, prevSetting, newSetting, universalSetting){
+export function addSettingInteractionHistory(domain, location, currentUserDocID, setting, prevSetting, newSetting, universalSetting){
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
@@ -80,8 +80,6 @@ export function addSettingInteractionHistory(domain, location, currentUserDocID,
             "Time": date.toLocaleTimeString()
         },
         "Domain": domain,
-        "Location of Interaction": location,
-        "Origin": origin,
         "Recorded Change": {
             "a) Title": setting,
             "b) Interaction": {

@@ -187,7 +187,7 @@ body.addEventListener('click', event => {
             chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
             // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, origin: "Banner", setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: false})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: false})
         })
     }
         else if(event.target.id === 'allow-btn' && !applyAllBool) { 
@@ -202,7 +202,7 @@ body.addEventListener('click', event => {
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
             });
             // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, origin: "Banner", setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: false})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: false})
         }
         else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
             // situation 3: enable GPC for all future domains
@@ -220,7 +220,7 @@ body.addEventListener('click', event => {
                     ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true })
             });
             // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All", location: currentDomain, origin: "Banner", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: true})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", location: currentDomain, setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: true})
         }
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
             // situation 4: disable GPC for all future domains
@@ -238,7 +238,7 @@ body.addEventListener('click', event => {
                 chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
             });
             // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All", location: currentDomain, origin: "Banner", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: true})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", location: currentDomain, setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: true})
         }
         else if(event.target.id === 'rbe_open_options'){
             chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
