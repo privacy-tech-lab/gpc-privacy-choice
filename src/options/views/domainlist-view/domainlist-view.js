@@ -10,6 +10,14 @@ const headings = {
     subtitle: "Toggle which domains you would like to receive Do Not Sell signals"
 }
 
+
+// let originUrl; 
+// chrome.storage.local.get(["ORIGIN_SITE"], function(result){
+//   originUrl = result.ORIGIN_SITE;
+//   console.log("FROM where did you come here:  " + originUrl);
+// });
+
+
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
@@ -294,9 +302,7 @@ function createDomainlistManagerButtons(){
 function createList() {
   let items = ""
   chrome.storage.local.get(["DOMAINS"], function (result) { 
-    console.log("Hello from domainlist-view: " + Object.values(Object.keys(result.DOMAINS)));
     for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
-      console.log("building for " + domain);
       items +=
             `
       <li id="li ${domain}">
