@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
   }
   // update cache from contentScript.js
-  if (request.greeting == "OPEN OPTIONS") openOptions();
+  if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   //updates Setting Interaction History from contentScript.js and domainlist-view.js
   if (request.greeting == "INTERACTION") {
@@ -117,13 +117,6 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
   }
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
   if(applyAll!='dontSet') applyAllCache=applyAll;
-}
-
-function openOptions(){
-  chrome.tabs.create({
-    url: '../options/options.html',
-    active: true
-  })
 }
 
 // Update the sendSignal boolean for the current page
