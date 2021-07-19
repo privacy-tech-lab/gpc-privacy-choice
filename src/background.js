@@ -1,21 +1,23 @@
-// background.js is the main background script handling OptMeowt's main opt-out functionality
-
+/*
+OptMeowt-Research is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
 import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
-
-chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
 
-// Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access
-// Make sure these are always in sync!
+// Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
 let domainsCache= {};
 let domainlistEnabledCache=true;
 let applyAllCache=false;
 
+// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(function (object) {
@@ -27,14 +29,9 @@ chrome.runtime.onInstalled.addListener(function (object) {
   enable();
   createUser().then(
     chrome.storage.local.get(["UI_SCHEME"], function(result){
-
-      //SCHEME B: automatically open up the pop up page + provide a tour
-      if(result.UI_SCHEME==2){chrome.runtime.openOptionsPage(() => {
-        })
-      } else {
-        // Other schemes: disable the tour setting
-        chrome.storage.local.set({FIRST_INSTALLED: false});
-      }
+      // direct the user to options page when in scheme 2
+      if(result.UI_SCHEME==2) chrome.runtime.openOptionsPage(() => {})
+      else chrome.storage.local.set({FIRST_INSTALLED: false});
     })
   );
 });
@@ -49,8 +46,9 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.greeting == "ENABLE") sendResponse({farewell: "goodbye"});
+  // disable the extension if get message DISABLE_ALL
   if (request.message == "DISABLE_ALL") disable();
+  // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     let jsEnabled = null;
     let tabId = null;
@@ -64,7 +62,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       });
     });
   }
-  //update cache from contentScript.js
+  // update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") openOptions();
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   //updates Setting Interaction History from contentScript.js and domainlist-view.js
@@ -145,15 +143,12 @@ function updateSendSignalandDomain(){
       if (applyAllCache) sendSignal=enabledCache
       else sendSignal=false
     }
-  }else sendSignal=enabledCache
-
+  } else sendSignal = enabledCache
 }
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
-
   updateSendSignalandDomain()
-  // console.log("sent headers" + sendSignal +currentHostname);
   if (sendSignal) {
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
@@ -168,7 +163,6 @@ function addHeaders (details)  {
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   updateSendSignalandDomain();
-  // console.log("sent DOM" + sendSignal +currentHostname);
   if (sendSignal) {
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 
@@ -211,6 +205,5 @@ function getDomain(url) {
           }
       }
   }
-  
   return domain;
 }
