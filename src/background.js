@@ -70,11 +70,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   //updates Setting Interaction History from contentScript.js and domainlist-view.js
   if (request.greeting == "INTERACTION") {
-    chrome.storage.local.get( "USER_DOC_ID", function(result){
-      addSettingInteractionHistory(request.domain, request.location, result.USER_DOC_ID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
+    chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
+      let userDocID = result.USER_DOC_ID;
+      let originSite = result.ORIGIN_SITE;
+      addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
     })
   }
+});
 
+// Set the ORIGIN_SITE property in local storage as current site url for option page
+chrome.browserAction.onClicked.addListener(function(tab) {
+  let url = tab.url;
+  chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
+    chrome.runtime.openOptionsPage(() => {});
+  });
 });
 
 // Enable the extenstion
@@ -102,7 +111,6 @@ const disable = () => {
   sendSignal = false;
 }
 
-
 // function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet', applyAll='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
@@ -120,6 +128,7 @@ function openOptions(){
     active: true
   })
 }
+
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
 
@@ -141,7 +150,6 @@ function updateSendSignalandDomain(){
   }else sendSignal=enabledCache
 
 }
-
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {

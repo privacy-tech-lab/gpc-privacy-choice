@@ -187,65 +187,74 @@ body.addEventListener('click', event => {
             chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
             // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: false})
+            chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: false})
+            });       
         })
     }
-        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
-            // situation 2: disable GPC for the current domain
-            removeOverlay();
-            chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-            chrome.storage.local.get(["DOMAINS"], function (result) {
+    else if(event.target.id === 'allow-btn' && !applyAllBool) { 
+        // situation 2: disable GPC for the current domain
+        removeOverlay();
+        chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+        chrome.storage.local.get(["DOMAINS"], function (result) {
+        new_domains = result.DOMAINS;
+        new_domains[currentDomain] = false;
+        chrome.storage.local.set({ DOMAINS: new_domains });
+        chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
+        });
+        // Sends data to Setting Interaction History
+        chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: false})
+        })
+        
+    }
+    else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
+        // situation 3: enable GPC for all future domains
+        removeOverlay();
+        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        chrome.storage.local.set({APPLY_ALL: true});
+        chrome.storage.local.get(["DOMAINS"], function (result) {
             new_domains = result.DOMAINS;
-            new_domains[currentDomain] = false;
+            for (let d in new_domains){
+                new_domains[d] = true;
+            }
+            new_domains[currentDomain] = true;
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
-            });
-            // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain , location: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: false})
-        }
-        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
-            // situation 3: enable GPC for all future domains
-            removeOverlay();
-            chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.storage.local.set({APPLY_ALL: true});
-            chrome.storage.local.get(["DOMAINS"], function (result) {
-                new_domains = result.DOMAINS;
-                for (let d in new_domains){
-                    new_domains[d] = true;
-                }
-                new_domains[currentDomain] = true;
-                chrome.storage.local.set({ DOMAINS: new_domains });
-                chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true })
-            });
-            // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", location: currentDomain, setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: true})
-        }
-        else if(event.target.id === 'allow-btn' && applyAllBool) { 
-            // situation 4: disable GPC for all future domains
-            removeOverlay();
-            chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.storage.local.set({APPLY_ALL: true});
-            chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-                new_domains = result.DOMAINS;
-                for (let d in new_domains){
-                    new_domains[d] = false;
-                }
-                new_domains[currentDomain] = false;
-                chrome.storage.local.set({ DOMAINS: new_domains });
-                chrome.storage.local.set({ ENABLED: false });
-                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
-            });
-            // Sends data to Setting Interaction History
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", location: currentDomain, setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: true})
-        }
-        else if(event.target.id === 'rbe_open_options'){
-            chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
-        }
-        else if(event.target.id === 'rbe-okay-btn'){
-            removeOverlay()
-        }
+                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true })
+        });
+        // Sends data to Setting Interaction History
+        chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: true})
+        })
+    }
+    else if(event.target.id === 'allow-btn' && applyAllBool) { 
+        // situation 4: disable GPC for all future domains
+        removeOverlay();
+        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+        chrome.storage.local.set({APPLY_ALL: true});
+        chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+            new_domains = result.DOMAINS;
+            for (let d in new_domains){
+                new_domains[d] = false;
+            }
+            new_domains[currentDomain] = false;
+            chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.storage.local.set({ ENABLED: false });
+            chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
+        });
+        // Sends data to Setting Interaction History
+        chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: true})
+        })    
+    }
+    else if(event.target.id === 'rbe_open_options'){
+        chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
+    }
+    else if(event.target.id === 'rbe-okay-btn'){
+        removeOverlay()
+    }
 })
 
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain 
