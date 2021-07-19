@@ -29,8 +29,7 @@ chrome.runtime.onInstalled.addListener(function (object) {
     chrome.storage.local.get(["UI_SCHEME"], function(result){
 
       //SCHEME B: automatically open up the pop up page + provide a tour
-      if(result.UI_SCHEME==2){
-        chrome.runtime.openOptionsPage(() => {
+      if(result.UI_SCHEME==2){chrome.runtime.openOptionsPage(() => {
         })
       } else {
         // Other schemes: disable the tour setting
@@ -135,8 +134,7 @@ function updateSendSignalandDomain(){
   // update current domain
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     let url = tabs[0].url;
-    let url_object = new URL(url);
-    let domain=url_object.hostname;
+    let domain = getDomain(url);
     currentHostname = domain;
   });
 
@@ -190,4 +188,29 @@ function addDomSignal (details)  {
       runAt: "document_start",
     });
   }
+}
+
+// function used to get the hostname from the current url
+function getHostName(url) {
+  let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+  if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
+  else return null;
+}
+
+// function used to get the top level domain for the current url
+function getDomain(url) {
+  let hostName = getHostName(url);
+  let domain = hostName;
+  
+  if (hostName != null) {
+      let parts = hostName.split('.').reverse();
+      if (parts != null && parts.length > 1) {
+          domain = parts[1] + '.' + parts[0];
+          if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
+            domain = parts[2] + '.' + domain;
+          }
+      }
+  }
+  
+  return domain;
 }
