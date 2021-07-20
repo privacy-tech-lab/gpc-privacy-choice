@@ -23,6 +23,7 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({ENABLED: true});
   chrome.storage.local.set({APPLY_ALL: false});
+  chrome.storage.local.set({UV_SETTING: "Off"});
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
