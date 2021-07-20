@@ -325,28 +325,37 @@ function requestLocation(){
     });
 }
 
-//add ad click entry to database
+//add ad interaction entry to database
 function addAd(adEvent){
     console.log(adEvent)
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-                    db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                    .where("TabID",'==', adEvent.tabId).orderBy("timestamp", "desc").limit(1)
-                    .get().then((docArray)=>{
-                            docArray.forEach((doc)=>{
-                                console.log(doc.id)
-                                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                                doc(doc.id).collection("Ad Interactions").add({
-                                    "adTabId": adEvent.targetTabId,
-                                    timestamp: adEvent.timestamp
-                                })
-                                .then(adEvent.removeAdEvent)
-})
-})
-})
+        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
+        .where("TabID",'==', adEvent.tabId).orderBy("timestamp", "desc").limit(1)
+        .get().then((docArray)=>{
+            docArray.forEach((doc)=>{
+                console.log(doc.id)
+                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                doc(doc.id).collection("Ad Interactions").add({
+                    adTabId: adEvent.targetTabId,
+                    timestamp: adEvent.timestamp,
+                    adSource: adEvent.adSource,
+                    "Initial Navigation to": adEvent.redirectionTo
+                })
+                .then((adDoc)=>{
+                    console.log(adEvent.targetTabId)
+                    chrome.tabs.get(adEvent.targetTabId, (tab)=>{
+                        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                        doc(doc.id).collection("Ad Interactions").doc(adDoc.id).update({"Ad Link": tab.url})})
+                    adEvent.removeAdEvent()
+                })
+            })
+        })
+    })
 }
 
 let liveAdEvents={}
 
+//class for objects holding information on a potential ad interaction
 class AdEvent {
     constructor(originTabId, targetTabId) {
       let date=new Date()
@@ -357,42 +366,41 @@ class AdEvent {
       liveAdEvents[targetTabId]=this
     }
     removeAdEvent(){
-        key=this.originTabId
-        delete liveAdEvents.key
+        delete liveAdEvents[this.tabId]
         delete this
     }
   }
-
-let adBool=false;
 
 //listen for user opening a potential ad in a new tab 
 chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
     let tabId=details.sourceTabId
     let targetTabID=details.tabId
     new AdEvent(tabId, targetTabID)
-    console.log(details.sourceFrameId, details.sourceTabId, details.url)
     let frameID=details.sourceFrameId;
     console.log(liveAdEvents[targetTabID])
     chrome.webNavigation.getFrame(
-        {tabId: details.sourceTabId, processId: details.souceProcessId, frameId: details.sourceFrameId},
-        function(frame){
-            console.log(frame);
+    {tabId: details.sourceTabId, processId: details.souceProcessId, frameId: details.sourceFrameId},
+    function(frame){
+        console.log(frame);
         let origin = getDomain(frame.url)
+        liveAdEvents[targetTabID].adSource=origin
         let initialLoad=getDomain(details.url)
-    if(true){
-    // if(origin!=initialLoad){
+        liveAdEvents[targetTabID].redirectionTo=initialLoad
         if(adDomains.includes(origin) || adDomains.includes(initialLoad)){
-            console.log("3rd party ad click", origin, initialLoad, frame, details)
+            console.log(origin, initialLoad)
             liveAdEvents[targetTabID].adBool=true;
         }
         else{
-        chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
-            console.log(response);
-            if(response[1]=='IFRAME' || response[0]) liveAdEvents[targetTabID].adBool=true;
-        });
-            console.log("ad", origin, initialLoad, frame, details)
+            chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
+                console.log(response);
+                // if(response[1]=='IFRAME' || response[0]) liveAdEvents[targetTabID].adBool=true;
+                if(response[1]=='IFRAME') liveAdEvents[targetTabID].adBool=true;
+            });
         }
-    }})})
+        
+    })
+
+})
 
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
@@ -405,29 +413,5 @@ chrome.webNavigation.onCommitted.addListener((e)=>{
         if(liveAdEvents[e.tabId].adBool===true) addAd(liveAdEvents[e.tabId])
     }
     delete liveAdEvents[e.tabId]
-    adBool=false
 })
 
-    // chrome.storage.local.get(["USER_DOC_ID"], function(result){
-    //     db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-    //     .where("TabID",'==', tabId).orderBy("timestamp", "desc").limit(1)
-    //     .get().then((docArray)=>{
-    //         docArray.forEach((doc)=>{
-    //             console.log(doc)
-    //             db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-    //             doc(doc.id).collection("Third Party Requests").
-    //             get().then((framesDocArray)=>{
-    //                 console.log(frameID)
-    //                 console.log(framesDocArray)
-    //                 if(framesDocArray.docs.length>0){
-    //                     console.log("3rd party ad",details.sourceFrameId, details.sourceTabId, details.url)
-    //                     }else (console.log("not 3rd party"))
-    //                 })
-
-    // })
-    // })
-    // }
-    // );} else console.log("not ad", e, details)
-// })})
-  //document.activeElement.text.includes("Ad")
-  //document.activeElement.textContent.includes("Ad·")
