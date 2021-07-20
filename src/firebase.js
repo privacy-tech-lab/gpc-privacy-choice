@@ -19,22 +19,22 @@ let db=firebase.firestore();
 
 // Function used to create a user in the database
 export async function createUser(){
-    let db=firebase.firestore();
+    let db = firebase.firestore();
     let usersCollectionLength;
-
-    await db.collection("users").get()
-        .then(querySnapshot => { 
-            usersCollectionLength= querySnapshot.docs.length
-            currentUserID=usersCollectionLength+1
-        })
-
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
+    let date = new Date();
+    
+    // generate unique user document and storage the id into local storage
+    const userDocument = db.collection("users").doc();    
+    chrome.storage.local.set({"USER_DOC_ID": userDocument.id});
+    
+    await db.collection("users").get().then(querySnapshot => usersCollectionLength = querySnapshot.docs.length)
 
-    db.collection("users").add({
-        "User ID": currentUserID,
+    // create the uers in the database
+    db.collection("users").doc(userDocument.id).set({
         "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
         "DNT": navigator.doNotTrack ? navigator.userAgent : "undefined",
         "IP Address": userIP,
@@ -51,10 +51,9 @@ export async function createUser(){
         "Local Storage Enabled": getLocalStorageEnabled(),
         "Session Storage Enabled": getSessionStorageEnabled(),
         "Domain List": [],
-        "UI Scheme": getUIscheme()
-    }).then(
-        setCurrentUserDocID(db)
-    )
+        "UI Scheme" : getUIscheme(usersCollectionLength), 
+        "Timestamp" : firebase.firestore.Timestamp.fromDate(date) 
+    })
 }
 
 // Add user entries into the Firebase
@@ -177,14 +176,6 @@ export function addThirdPartyRequests(details){
     })
 }
 
-//puts the ID for the current user's doc in local storage
-function setCurrentUserDocID(db) {
-    db.collection("users").where("User ID", "==", currentUserID).get()
-        .then((docArray)=>{docArray.forEach((doc)=>{
-            (chrome.storage.local.set({"USER_DOC_ID": doc.id}))})
-        })
-}
-
 // Get GPC Global Status
 function getGPCGlobalStatus(applyALLBool, enabledBool){
     if(applyALLBool) return enabledBool;
@@ -263,10 +254,10 @@ function getThirdPartyCookiesEnabled(){
 }
 
 // Get the scheme that the user is currently presented it
-function getUIscheme(){
-    let UIScheme=currentUserID%5;
-    chrome.storage.local.set({"UI_SCHEME": UIScheme})
-    return UIScheme;
+function getUIscheme(usersCollectionLength){
+    let schemeNumber = usersCollectionLength % 5;
+    chrome.storage.local.set({"UI_SCHEME": schemeNumber})
+    return schemeNumber;
 }
 
 // Get the user's IP address
