@@ -2,7 +2,7 @@
   
  This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
 
-## Installation
+## Installation of Browser Extension
   
   Follow the instructions below in order to download this browser extension.
 1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/privacy-choice-browser-extension.git` into your terminal.
@@ -43,9 +43,11 @@ The privacy choice extensions uses the following third party libraries. We thank
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [uikit](https://github.com/uikit/uikit)
 
+## Installation of Firebase Server
+
 ## Data Collection
 
-The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the Privacy Choice Browser Extension using Firebase. Different aspects of the data we will be collecting are shown below.
+First and foremost, this browser extension functions as a research project. The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the Privacy Choice Browser Extension using Firebase. Different aspects of the data we will be collecting are shown below.
 
 <img width="1260" alt="Screen Shot 2021-07-19 at 4 34 52 PM" src="https://user-images.githubusercontent.com/54873610/126223709-038c28e1-0cbd-4cf2-b9d9-04058f184d3a.png">
 
@@ -78,17 +80,37 @@ As seen above, the setting change was applied to the specific domain `netflix.co
 
 <img width="344" alt="Screen Shot 2021-07-19 at 4 46 14 PM" src="https://user-images.githubusercontent.com/54873610/126225837-85fe5c53-ff1a-4eff-b651-457e6f996455.png">
 
-The setting change has been applied to `All existing and future domains` and was done through a banner decision. The setting was changed from `unset` to `Don't Allow Tracking` and, as hinted at by the previous fields, the universal setting is now `On` since the user decided to apply to all domains.
+The setting change has been applied to `All existing and future domains` and was done through a banner decision. The setting was changed from `unset` to `Don't allow tracking` and, as hinted at by the previous fields, the universal setting is now `On` since the user decided to apply to all domains.
 
 #### Individually toggling a domain on/off
 
+<img width="310" alt="Screen Shot 2021-07-20 at 9 13 31 AM" src="https://user-images.githubusercontent.com/54873610/126330284-8b87aa49-37e3-400d-b10a-6648dab575ab.png">
+
+The setting change is only applied to the individual domain shown, and was done through the options page. This is indicated by the `Origin Site` field being a URL, which means the user went from that site _to_ the options page. The setting was changed from `Allow tracking` to `Don't allow tracking` and the universal setting is false since the user does not have a generalized decision about future domains.
+
 #### Applying to all
+
+<img width="559" alt="Screen Shot 2021-07-20 at 9 20 16 AM" src="https://user-images.githubusercontent.com/54873610/126331222-efa99859-64a5-4a9e-8bcc-72790a81a5c8.png">
+
+The setting was applied to `All existing and future domains`. It was done through the options page, which the user opened directly after visiting the shown URL. The change altered the user's preferences from a `personalized domain list` (AKA they individually chose who to allow and not to allow) to the more general `Don't allow tracking`. The universal setting is set to `true`, which means that there is currently a setting in place that will be applied to all future domains. As this specific change was applied to future domains, we know that this setting is `Don't allow tracking`.
 
 #### Turning off universal setting
 
+<img width="552" alt="Screen Shot 2021-07-20 at 9 41 06 AM" src="https://user-images.githubusercontent.com/54873610/126334507-5bc80f3d-d2d9-4e93-b876-5ae4af0af787.png">
+
+The setting has been applied to `All future domains`, and the user came to the options page from the shown URL. The setting change was concerning the universal setting, which was previously `On` but is now `Off`. As it is now `Off`, the `Universal Setting` field now reads false.
+
 #### Deleting a single domain
 
+<img width="556" alt="Screen Shot 2021-07-20 at 10 04 11 AM" src="https://user-images.githubusercontent.com/54873610/126337882-45fc0e55-73cb-4cf8-a4d4-0def18e64f3e.png">
+
+The setting is applied to an individual domain, and the user came to the options page from the given URL. The setting changed was a deletion, so simply, the given domain was deleted off of the domain list. There is no `universal setting` in place.
+
 #### Deleting all domains
+
+<img width="562" alt="Screen Shot 2021-07-20 at 10 06 56 AM" src="https://user-images.githubusercontent.com/54873610/126338299-53ababec-4ce2-4a69-ad0a-b0c343d50644.png">
+
+Setting is applied to `All existing domains`, and as usual, the user came to the options page from the given URL. As the setting changed is `Delete domain`, this means that all existing domains (AKA the current domain list) have been deleted. There is no current `universal setting` in place.
 
 <p align="center">
   <img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo">
