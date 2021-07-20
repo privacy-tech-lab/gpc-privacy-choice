@@ -1,12 +1,11 @@
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
-    apiKey: "AIzaSyDDaReuI_p2gS2e-4j6B_JdFk4Lf1gkN88",
-    authDomain: "privacy-choice-research.firebaseapp.com",
-    projectId: "privacy-choice-research",
-    storageBucket: "privacy-choice-research.appspot.com",
-    messagingSenderId: "23402940855",
-    appId: "1:23402940855:web:1ee3c7bc69ffdb51b04032",
-    measurementId: "G-L6EWBVR01J"
+    apiKey: "AIzaSyAhhtuwr4YOK_F0ZkULkKkFpyMC_5ZIaT4",
+    authDomain: "gpc-privacy-choice.firebaseapp.com",
+    projectId: "gpc-privacy-choice",
+    storageBucket: "gpc-privacy-choice.appspot.com",
+    messagingSenderId: "784749626516",
+    appId: "1:784749626516:web:2c5a847289caab81d36081"
 };
 
 // Initialize Firebase
