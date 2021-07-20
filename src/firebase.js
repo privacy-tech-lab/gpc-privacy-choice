@@ -402,6 +402,8 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
 
 })
 
+//listen for when navigation occurs (in case new tab isn't opened)
+//filter out navigations that weren't via link 
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
     if(e.transitionType=='link'){
