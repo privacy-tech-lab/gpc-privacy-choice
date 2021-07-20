@@ -14,13 +14,10 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-let currentUserID;
-let db=firebase.firestore();
-
 // Function used to create a user in the database
 export async function createUser(){
     let db = firebase.firestore();
-    let schemeNumber;
+    let usersCollectionLength;
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
