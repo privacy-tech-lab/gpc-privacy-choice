@@ -114,7 +114,7 @@ function addEventListeners() {
           NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.get(["APPLY_ALL"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: None , newSetting: None, universalSetting: result.APPLY_ALL})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.APPLY_ALL})
           })
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
@@ -147,7 +147,7 @@ function deleteButtonListener (domain) {
 NOTE: It will be automatically added back to the list when the domain is requested again.`
       if (confirm(delete_prompt)) {
         chrome.storage.local.get(["APPLY_ALL"], function (result) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: None , newSetting: None, universalSetting: result.APPLY_ALL})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.APPLY_ALL})
         })
         await permRemoveFromDomainlist(domain)
         alert(success_prompt)
