@@ -188,7 +188,7 @@ body.addEventListener('click', event => {
                 ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
             // Sends data to Setting Interaction History
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: false})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off"})
             });       
         })
     }
@@ -205,13 +205,14 @@ body.addEventListener('click', event => {
         });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: false})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off"})
         })
         
     }
     else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
         // situation 3: enable GPC for all future domains
         removeOverlay();
+        chrome.storage.local.set({UV_SETTING: "Don't allow all"});
         chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -226,12 +227,13 @@ body.addEventListener('click', event => {
         });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: true})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
         })
     }
     else if(event.target.id === 'allow-btn' && applyAllBool) { 
         // situation 4: disable GPC for all future domains
         removeOverlay();
+        chrome.storage.local.set({UV_SETTING: "Allow all"});
         chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
@@ -246,7 +248,7 @@ body.addEventListener('click', event => {
         });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: true})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all"})
         })    
     }
     else if(event.target.id === 'rbe_open_options'){

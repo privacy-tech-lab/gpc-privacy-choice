@@ -59,7 +59,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     let date = new Date()
     let url = new URL(site)
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "timestamp": firebase.firestore.Timestamp.fromDate(date),
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
@@ -74,10 +74,7 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Date and Time": {
-            "Date": date.toLocaleDateString(),
-            "Time": date.toLocaleTimeString()
-        },
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "Domain": domain,
         "Recorded Change": {
             "a) Title": setting,
