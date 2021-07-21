@@ -20,7 +20,7 @@ let applyAllCache=false;
 chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Set the initial configuration of the extension
-chrome.runtime.onInstalled.addListener(function (object) {
+chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({ENABLED: true});
   chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({UV_SETTING: "Off"});
@@ -28,13 +28,24 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  createUser().then(
-    chrome.storage.local.get(["UI_SCHEME"], function(result){
-      // direct the user to options page when in scheme 2
-      if(result.UI_SCHEME==2) chrome.runtime.openOptionsPage(() => {})
-      else chrome.storage.local.set({FIRST_INSTALLED: false});
-    })
-  );
+  // this will make it blocking until the new user is created
+  await createUser(); 
+  chrome.storage.local.get(["UI_SCHEME"], function(result){
+    let scheme = result.UI_SCHEME; 
+    console.log("current scheme is: " + scheme);
+    if (scheme == 1){
+      // this scheme will be the core scheme, nothing should happen here with the current implementation
+    } else if (scheme == 2){
+      // this scheme will show the user a questionnaire at the beginning of implementation
+      openQuestoinnairePage();
+    } else if (scheme == 3){
+      // this scheme is not implemented at the moment, behaving exactly like the first scheme
+    } else {
+      // this scheme is not implemented at the moment, behaving exactly like the first scheme 
+    }
+    // chrome.runtime.openOptionsPage(() => {})
+    chrome.storage.local.set({FIRST_INSTALLED: false});
+  })
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -200,4 +211,11 @@ function getDomain(url) {
       }
   }
   return domain;
+}
+
+function openQuestoinnairePage(){
+  chrome.tabs.create({
+    url: 'questionnaire.html',
+    active: true
+  });
 }
