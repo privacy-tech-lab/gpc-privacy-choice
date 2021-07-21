@@ -342,6 +342,7 @@ function addAd(adEvent){
                     adTabId: adEvent.targetTabId,
                     timestamp: adEvent.timestamp,
                     adSource: adEvent.adSource,
+                    adFrameId: adEvent.adFrameId,
                     "Initial Navigation to": adEvent.redirectionTo,
                     "Evidence of Ad Interaction":adEvent.reasoning
                 })
@@ -365,6 +366,8 @@ class AdEvent {
       let date=new Date()
       this.tabId=originTabId
       this.targetTabId=targetTabId
+      this.adFrameId=null;
+      this.reasoning=null;
       this.adBool=false;
       this.timestamp= firebase.firestore.Timestamp.fromDate(date)
       liveAdEvents[targetTabId]=this
@@ -380,26 +383,23 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
     let tabId=details.sourceTabId
     let targetTabID=details.tabId
     new AdEvent(tabId, targetTabID)
-    let frameID=details.sourceFrameId;
-    console.log(liveAdEvents[targetTabID])
+    liveAdEvents[targetTabID].adFrameId=details.sourceFrameId;
     chrome.webNavigation.getFrame(
     {tabId: details.sourceTabId, processId: details.souceProcessId, frameId: details.sourceFrameId},
     function(frame){
-        console.log(frame);
         let origin = getDomain(frame.url)
         liveAdEvents[targetTabID].adSource=origin
         let initialLoad=getDomain(details.url)
         liveAdEvents[targetTabID].redirectionTo=initialLoad
         if(adDomains.includes(origin) || adDomains.includes(initialLoad)){
-            console.log(origin, initialLoad)
             liveAdEvents[targetTabID].adBool=true;
-            liveAdEvents[targetTabID].reasoining="navigation via ad network (highest confidence)"
+            liveAdEvents[targetTabID].reasoning="navigation via ad network (highest confidence)"
         }
         else{
             chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
                 console.log(response);
                 if(response=='IFRAME') liveAdEvents[targetTabID].adBool=true;
-                liveAdEvents[targetTabID].reasoining="linked from iFrame";
+                liveAdEvents[targetTabID].reasoning="linked from iFrame";
             });
         }
         
@@ -413,10 +413,6 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
     if(e.transitionType=='link'){
-        console.log(e)
-        console.log(liveAdEvents[e.tabId].adBool)
-        console.log(liveAdEvents)
-        console.log(e.tabId)
         console.log(liveAdEvents[e.tabId])
         if(liveAdEvents[e.tabId].adBool===true) addAd(liveAdEvents[e.tabId])
     }
