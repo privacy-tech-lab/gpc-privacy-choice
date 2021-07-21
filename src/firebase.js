@@ -63,7 +63,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     let date = new Date()
     let url = new URL(site)
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "Timestamp": firebase.firestore.timestamp.fromDate(date),
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
@@ -78,7 +78,7 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Timestamp": firebase.firestore.timestamp.fromDate(date),
+        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "Domain": domain,
         "Recorded Change": {
             "a) Title": setting,
@@ -367,7 +367,7 @@ class AdEvent {
       this.adFrameId=null;
       this.reasoning=null;
       this.adBool=false;
-      this.timestamp= firebase.firestore.timestamp.fromDate(date)
+      this.timestamp= firebase.firestore.Timestamp.fromDate(date)
       liveAdEvents[targetTabId]=this
     }
     removeAdEvent(){
