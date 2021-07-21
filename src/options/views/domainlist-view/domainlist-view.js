@@ -16,10 +16,10 @@ function addEventListeners() {
   document.addEventListener('click', event => {
     if (event.target.id=='allow-all-btn'){
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-            if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
+            if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
               chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all"})
             }
-            if (allOn(result.DOMAINS) === true) {
+            else if (allOn(result.DOMAINS) === true) {
               chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: "Allow all"})
             }
             else {
@@ -45,10 +45,10 @@ function addEventListeners() {
       chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
-            if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
+            if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
               chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
             }
-            if (allOff(result.DOMAINS) === true) {
+            else if (allOff(result.DOMAINS) === true) {
               chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
             }
             else {
