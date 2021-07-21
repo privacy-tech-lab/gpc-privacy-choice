@@ -342,7 +342,8 @@ function addAd(adEvent){
                     adTabId: adEvent.targetTabId,
                     timestamp: adEvent.timestamp,
                     adSource: adEvent.adSource,
-                    "Initial Navigation to": adEvent.redirectionTo
+                    "Initial Navigation to": adEvent.redirectionTo,
+                    "Evidence of Ad Interaction":adEvent.reasoning
                 })
                 .then((adDoc)=>{
                     console.log(adEvent.targetTabId)
@@ -392,12 +393,13 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
         if(adDomains.includes(origin) || adDomains.includes(initialLoad)){
             console.log(origin, initialLoad)
             liveAdEvents[targetTabID].adBool=true;
+            liveAdEvents[targetTabID].reasoining="navigation via ad network (highest confidence)"
         }
         else{
             chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
                 console.log(response);
-                // if(response[1]=='IFRAME' || response[0]) liveAdEvents[targetTabID].adBool=true;
-                if(response[1]=='IFRAME') liveAdEvents[targetTabID].adBool=true;
+                if(response=='IFRAME') liveAdEvents[targetTabID].adBool=true;
+                liveAdEvents[targetTabID].reasoining="linked from iFrame";
             });
         }
         
@@ -405,8 +407,9 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
 
 })
 
-//listen for when navigation occurs (in case new tab isn't opened)
-//filter out navigations that weren't via link 
+//listen for when navigation occurs 
+//in case ads are not pop ups (open new tabs) this code would need to be fleshed out
+//filter out navigations that did not occur via link 
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
     if(e.transitionType=='link'){
