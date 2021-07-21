@@ -10,6 +10,7 @@ const firebaseConfig = {
     appId: "1:784749626516:web:2c5a847289caab81d36081"
 };
 
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -62,7 +63,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
     let date = new Date()
     let url = new URL(site)
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+        "Timestamp": firebase.firestore.timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
@@ -77,7 +78,7 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
     let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+        "Timestamp": firebase.firestore.timestamp.fromDate(date),
         "Domain": domain,
         "Recorded Change": {
             "a) Title": setting,
@@ -155,7 +156,7 @@ export function addThirdPartyRequests(details){
         if(isAdNetwork(initiator_host) && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                .where("TabID",'==', tabId).orderBy("timestamp", "desc").limit(1)
+                .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
                 .get().then((docArray)=>{
                         docArray.forEach((doc)=>{
                             console.log(doc.id)
@@ -167,7 +168,7 @@ export function addThirdPartyRequests(details){
                                 "requestHeaders": details.requestHeaders,
                                 "initiator": details.initiator,
                                 "frameID": details.frameId,
-                                "timestamp": firebase.firestore.Timestamp.fromDate(date)
+                                "Timestamp": firebase.firestore.Timestamp.fromDate(date)
                             })
                         })
                 })
@@ -330,14 +331,14 @@ function addAd(adEvent){
     console.log(adEvent)
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
         db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-        .where("TabID",'==', adEvent.tabId).orderBy("timestamp", "desc").limit(1)
+        .where("TabID",'==', adEvent.tabId).orderBy("Timestamp", "desc").limit(1)
         .get().then((docArray)=>{
             docArray.forEach((doc)=>{
                 console.log(doc.id)
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                 doc(doc.id).collection("Ad Interactions").add({
                     adTabId: adEvent.targetTabId,
-                    timestamp: adEvent.timestamp,
+                    Timestamp: adEvent.timestamp,
                     adSource: adEvent.adSource,
                     adFrameId: adEvent.adFrameId,
                     "Initial Navigation to": adEvent.redirectionTo,
@@ -366,7 +367,7 @@ class AdEvent {
       this.adFrameId=null;
       this.reasoning=null;
       this.adBool=false;
-      this.timestamp= firebase.firestore.Timestamp.fromDate(date)
+      this.timestamp= firebase.firestore.timestamp.fromDate(date)
       liveAdEvents[targetTabId]=this
     }
     removeAdEvent(){
