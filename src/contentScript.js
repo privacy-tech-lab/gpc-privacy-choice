@@ -512,11 +512,11 @@ function updateDomainList(){
     })
 }
 
+//send information to background regarding a potential ad interaction
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.greeting == "GET HTML TAG"){
-        const regex = /\W[Aa]d\W/
-        sendResponse([regex.test(document.activeElement.outerHTML),document.activeElement.tagName]);
+        sendResponse(document.activeElement.tagName);
     }
 }
   );
