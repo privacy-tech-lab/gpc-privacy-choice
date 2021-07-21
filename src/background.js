@@ -37,9 +37,10 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       // this scheme will be the core scheme, nothing should happen here with the current implementation
     } else if (scheme == 2){
       // this scheme will show the user a questionnaire at the beginning of implementation
-      openQuestoinnairePage();
+      openPage("questionnaire.html");
     } else if (scheme == 3){
-      // this scheme is not implemented at the moment, behaving exactly like the first scheme
+      // this scheme will show the user a profile page which they would identify themselves with
+      openPage("profile.html");
     } else {
       // this scheme is not implemented at the moment, behaving exactly like the first scheme 
     }
@@ -213,9 +214,9 @@ function getDomain(url) {
   return domain;
 }
 
-function openQuestoinnairePage(){
+function openPage(url){
   chrome.tabs.create({
-    url: 'questionnaire.html',
+    url: url,
     active: true
   });
 }
