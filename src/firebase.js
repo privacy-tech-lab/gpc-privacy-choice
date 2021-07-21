@@ -20,11 +20,13 @@ export async function createUser(){
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
     let date = new Date();
+
+    // might potentially switch to random generated number from 1 - 4
     await db.collection("users").get().then(querySnapshot => schemeNumber = (querySnapshot.docs.length % 4) + 1);
+
     // generate unique user document and storage the id into local storage
     const userDocument = db.collection("users").doc(); 
     chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
-        // create the uers in the database
         db.collection("users").doc(userDocument.id).set({
             "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
             "DNT": navigator.doNotTrack ? navigator.userAgent : "undefined",
