@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>The User Response Questionnaire Scheme</h1>
+<html>
+  <head>
+    <title>User Questionnaire</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../libs-css/uikit.min.css" />
+    <link rel="stylesheet" href="../libs-css/animate.compat.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="../libs-js/uikit.min.js"></script>
+    <script src="../libs-js/uikit-icons.min.js"></script>
+    <script src="../libs-js/mustache.js"></script>
+    <script src="../libs-js/popper.js"></script>
+    <script src="../libs-js/tippy-bundle.umd.min.js"></script>
+    <script type="module" src="options.js"></script>
+  </head>
+  <body>
+    <!-- <h1>The User Response Questionnaire Scheme</h1>
     <p> Users are given a questionnaire at the point of installation of our extension asking direct questions
         (eg., whether they are fine with targeted ads, ...) We will run an algorithm based on the user's choice to generalize the user's choice and automatically apply it to future sites visited a challenge I can see here is to explain fairly complicated concepts to average web users (e.g., what are targeted ads, who gets their data, ...) in just a few sentences. As with S2, there may be also a challenge of identifying the features in the sites based on which the algorithm makes its decision (e.g., that a site has targeted ads)
     </p>
@@ -19,5 +27,67 @@
         <li>Question 3</li>
         <li>Question 4</li>
     </ul>
-</body>
+    <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m">
+        <h3 class="uk-card-title">Default</h3>
+        <p>Lorem ipsum <a href="#">dolor</a> sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div> -->
+    <div class="uk-section">
+        <div class="uk-container">
+            <h2 class="uk-h1 uk-text-center">Questionnaire</h2>
+            <p class="uk-text-center">You can choose here from which categories you would like to send GPC signals to</p>
+            <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Advertising</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: code; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Content</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: settings; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Analytics</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Fingerprinting</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: code; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Social</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline">
+                        <a class="uk-position-cover" href="#"></a>
+                        <span uk-icon="icon: settings; ratio: 4"></span>
+                        <h3 class="uk-card-title uk-margin">Crypomining</h3>
+                        <p>Lorem ipsum dolor sit amet, conse adipiscing elit. Prae eget massatar vitae.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
 </html>
