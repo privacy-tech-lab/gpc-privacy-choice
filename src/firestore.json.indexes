@@ -9,8 +9,8 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "timestamp",
-          "order": "ASCENDING"
+          "fieldPath": "Timestamp",
+          "order": "DESCENDING"
         }
       ]
     }

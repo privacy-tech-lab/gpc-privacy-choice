@@ -1,3 +1,5 @@
+import { addToDomainlist } from "./domainlist.js";
+
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
     apiKey: "AIzaSyAhhtuwr4YOK_F0ZkULkKkFpyMC_5ZIaT4",
@@ -8,10 +10,12 @@ const firebaseConfig = {
     appId: "1:784749626516:web:2c5a847289caab81d36081"
 };
 
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 let currentUserID;
+let db=firebase.firestore();
 
 // Function used to create a user in the database
 export async function createUser(){
@@ -96,29 +100,47 @@ export function updateDomains(domainsList){
     })
 }
 
-// Add third party requests to browsing history document
-export function addThirdPartyRequests(details){
-    function getHostName(url) {
-        let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
-        else return null;
-    }
 
-    function getDomain(url) {
-        let hostName = getHostName(url);
-        let domain = hostName;
-        
-        if (hostName != null) {
-            let parts = hostName.split('.').reverse();
-            if (parts != null && parts.length > 1) {
-                domain = parts[1] + '.' + parts[0];
-                if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
-                  domain = parts[2] + '.' + domain;
-                }
+//put list of ad metwork domains into array
+var adDomains;
+const adDomainsFile= chrome.runtime.getURL("./adDomains.txt")
+var xmlreq = new XMLHttpRequest()
+xmlreq.open("GET", adDomainsFile, false) 
+xmlreq.send()
+adDomains = xmlreq.responseText.split("\n")
+
+//check if domain is in list of ad networks
+function isAdNetwork(domain){
+    return adDomains.includes(domain)
+
+}
+
+
+function getHostName(url) {
+    let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
+    else return null;
+}
+
+function getDomain(url) {
+    let hostName = getHostName(url);
+    let domain = hostName;
+    
+    if (hostName != null) {
+        let parts = hostName.split('.').reverse();
+        if (parts != null && parts.length > 1) {
+            domain = parts[1] + '.' + parts[0];
+            if (hostName.toLowerCase().indexOf('.co.uk') != -1 && parts.length > 2) {
+              domain = parts[2] + '.' + domain;
             }
         }
-        return domain;
     }
+    return domain;
+}
+
+
+// Add third party requests to browsing history document
+export function addThirdPartyRequests(details){
 
     chrome.tabs.get(details.tabId, (tab)=>{
         let tabId=tab.id
@@ -131,22 +153,22 @@ export function addThirdPartyRequests(details){
         let initiator_object = new URL(details.initiator)
         let url_host = getDomain(request_url_object.href)
         let initiator_host = getDomain(initiator_object.href)
-        console.log(domain)
-        if(initiator_host!=url_host && initiator_host!=domain && url_host!="firestore.googleapis.com"){
+        if(isAdNetwork(initiator_host) && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                .where("TabID",'==', tabId).orderBy("timestamp", "desc").limit(1)
+                .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
                 .get().then((docArray)=>{
                         docArray.forEach((doc)=>{
                             console.log(doc.id)
                             db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                             doc(doc.id).collection("Third Party Requests").add({
+                                "ad network": initiator_host,
                                 "type": details.type,
                                 "url": details.url,
                                 "requestHeaders": details.requestHeaders,
                                 "initiator": details.initiator,
                                 "frameID": details.frameId,
-                                "timestamp": firebase.firestore.Timestamp.fromDate(date)
+                                "Timestamp": firebase.firestore.Timestamp.fromDate(date)
                             })
                         })
                 })
@@ -303,3 +325,95 @@ function requestLocation(){
                 err => { reject (err); });
     });
 }
+
+//add ad interaction entry to database
+function addAd(adEvent){
+    console.log(adEvent)
+    chrome.storage.local.get(["USER_DOC_ID"], function(result){
+        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
+        .where("TabID",'==', adEvent.tabId).orderBy("Timestamp", "desc").limit(1)
+        .get().then((docArray)=>{
+            docArray.forEach((doc)=>{
+                console.log(doc.id)
+                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                doc(doc.id).collection("Ad Interactions").add({
+                    adTabId: adEvent.targetTabId,
+                    Timestamp: adEvent.timestamp,
+                    adSource: adEvent.adSource,
+                    adFrameId: adEvent.adFrameId,
+                    "Initial Navigation to": adEvent.redirectionTo,
+                    "Evidence of Ad Interaction":adEvent.reasoning
+                })
+                .then((adDoc)=>{
+                    console.log(adEvent.targetTabId)
+                    chrome.tabs.get(adEvent.targetTabId, (tab)=>{
+                        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                        doc(doc.id).collection("Ad Interactions").doc(adDoc.id).update({"Ad Link": tab.url})})
+                    adEvent.removeAdEvent()
+                })
+            })
+        })
+    })
+}
+
+let liveAdEvents={}
+
+//class for objects holding information on a potential ad interaction
+class AdEvent {
+    constructor(originTabId, targetTabId) {
+      let date=new Date()
+      this.tabId=originTabId
+      this.targetTabId=targetTabId
+      this.adFrameId=null;
+      this.reasoning=null;
+      this.adBool=false;
+      this.timestamp= firebase.firestore.Timestamp.fromDate(date)
+      liveAdEvents[targetTabId]=this
+    }
+    removeAdEvent(){
+        delete liveAdEvents[this.tabId]
+        delete this
+    }
+  }
+
+//listen for user opening a potential ad in a new tab 
+chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
+    let tabId=details.sourceTabId
+    let targetTabID=details.tabId
+    new AdEvent(tabId, targetTabID)
+    liveAdEvents[targetTabID].adFrameId=details.sourceFrameId;
+    chrome.webNavigation.getFrame(
+    {tabId: details.sourceTabId, processId: details.souceProcessId, frameId: details.sourceFrameId},
+    function(frame){
+        let origin = getDomain(frame.url)
+        liveAdEvents[targetTabID].adSource=origin
+        let initialLoad=getDomain(details.url)
+        liveAdEvents[targetTabID].redirectionTo=initialLoad
+        if(adDomains.includes(origin) || adDomains.includes(initialLoad)){
+            liveAdEvents[targetTabID].adBool=true;
+            liveAdEvents[targetTabID].reasoning="navigation via ad network (highest confidence)"
+        }
+        else{
+            chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
+                console.log(response);
+                if(response=='IFRAME') liveAdEvents[targetTabID].adBool=true;
+                liveAdEvents[targetTabID].reasoning="linked from iFrame";
+            });
+        }
+        
+    })
+
+})
+
+//listen for when navigation occurs 
+//in case ads are not pop ups (open new tabs) this code would need to be fleshed out
+//filter out navigations that did not occur via link 
+chrome.webNavigation.onCommitted.addListener((e)=>{
+    if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
+    if(e.transitionType=='link'){
+        console.log(liveAdEvents[e.tabId])
+        if(liveAdEvents[e.tabId].adBool===true) addAd(liveAdEvents[e.tabId])
+    }
+    delete liveAdEvents[e.tabId]
+})
+
