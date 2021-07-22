@@ -3,6 +3,7 @@ OptMeowt-Research is licensed under the MIT License
 Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
+
 import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
@@ -20,7 +21,7 @@ let applyAllCache=false;
 chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Set the initial configuration of the extension
-chrome.runtime.onInstalled.addListener(function (object) {
+chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({ENABLED: true});
   chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({UV_SETTING: "Off"});
@@ -28,13 +29,25 @@ chrome.runtime.onInstalled.addListener(function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  createUser().then(
-    chrome.storage.local.get(["UI_SCHEME"], function(result){
-      // direct the user to options page when in scheme 2
-      if(result.UI_SCHEME==2) chrome.runtime.openOptionsPage(() => {})
-      else chrome.storage.local.set({FIRST_INSTALLED: false});
-    })
-  );
+  // this will make it blocking until the new user is created
+  await createUser(); 
+  chrome.storage.local.get(["UI_SCHEME"], function(result){
+    let scheme = result.UI_SCHEME; 
+    console.log("current scheme is: " + scheme);
+    if (scheme == 1){
+      // this scheme will be the core scheme, nothing should happen here with the current implementation
+    } else if (scheme == 2){
+      // this scheme will show the user a questionnaire at the beginning of implementation
+      openPage("questionnaire.html");
+    } else if (scheme == 3){
+      // this scheme will show the user a profile page which they would identify themselves with
+      openPage("profile.html");
+    } else {
+      // this scheme is not implemented at the moment, behaving exactly like the first scheme 
+    }
+    // chrome.runtime.openOptionsPage(() => {})
+    chrome.storage.local.set({FIRST_INSTALLED: false});
+  })
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -52,7 +65,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     let jsEnabled = null;
-    let tabId = null;
     chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
       jsEnabled = details.setting; 
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
@@ -106,7 +118,7 @@ const disable = () => {
   sendSignal = false;
 }
 
-// function used to set the locally stored values in the cache upon change
+// Function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet', applyAll='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
   if(domains!='dontSet') {
@@ -175,14 +187,14 @@ function addDomSignal (details)  {
   }
 }
 
-// function used to get the hostname from the current url
+// Function used to get the hostname from the current url
 function getHostName(url) {
   let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
   if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
   else return null;
 }
 
-// function used to get the top level domain for the current url
+// Function used to get the top level domain for the current url
 function getDomain(url) {
   let hostName = getHostName(url);
   let domain = hostName;
@@ -197,4 +209,12 @@ function getDomain(url) {
       }
   }
   return domain;
+}
+
+// Open the relevant page based on the schemes
+function openPage(url){
+  chrome.tabs.create({
+    url: url,
+    active: true
+  });
 }
