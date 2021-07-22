@@ -3,6 +3,7 @@ OptMeowt-Research is licensed under the MIT License
 Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
+
 import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
@@ -64,7 +65,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     let jsEnabled = null;
-    let tabId = null;
     chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
       jsEnabled = details.setting; 
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
@@ -118,7 +118,7 @@ const disable = () => {
   sendSignal = false;
 }
 
-// function used to set the locally stored values in the cache upon change
+// Function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet', applyAll='dontSet'){
   if(enabled!='dontSet') enabledCache=enabled;
   if(domains!='dontSet') {
@@ -187,14 +187,14 @@ function addDomSignal (details)  {
   }
 }
 
-// function used to get the hostname from the current url
+// Function used to get the hostname from the current url
 function getHostName(url) {
   let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
   if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
   else return null;
 }
 
-// function used to get the top level domain for the current url
+// Function used to get the top level domain for the current url
 function getDomain(url) {
   let hostName = getHostName(url);
   let domain = hostName;
@@ -211,6 +211,7 @@ function getDomain(url) {
   return domain;
 }
 
+// Open the relevant page based on the schemes
 function openPage(url){
   chrome.tabs.create({
     url: url,
