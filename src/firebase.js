@@ -10,14 +10,14 @@ const firebaseConfig = {
     appId: "1:784749626516:web:2c5a847289caab81d36081"
 };
 
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+let db = firebase.firestore();
+
 // Function used to create a user in the database
 export async function createUser(){
-    let db = firebase.firestore();
-    let usersCollectionLength;
+    let schemeNumber;
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
@@ -53,7 +53,6 @@ export async function createUser(){
 
 // Add user entries into the Firebase
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
-    let db = firebase.firestore();
     let date = new Date()
     let url = new URL(site)
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
@@ -69,7 +68,6 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, orginSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting){
-    let db = firebase.firestore();
     let date = new Date()
     db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
         "Timestamp": firebase.firestore.Timestamp.fromDate(date),
@@ -88,34 +86,32 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
 
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
-    let db = firebase.firestore();
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
         db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
     })
 }
 
-
-//put list of ad metwork domains into array
-var adDomains;
+// Put list of ad metwork domains into array
+let adDomains;
 const adDomainsFile= chrome.runtime.getURL("./adDomains.txt")
-var xmlreq = new XMLHttpRequest()
+let xmlreq = new XMLHttpRequest()
 xmlreq.open("GET", adDomainsFile, false) 
 xmlreq.send()
 adDomains = xmlreq.responseText.split("\n")
 
-//check if domain is in list of ad networks
+// Check if domain is in list of ad networks
 function isAdNetwork(domain){
     return adDomains.includes(domain)
-
 }
 
-
+// Auxiliary function for getDomain function
 function getHostName(url) {
     let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
     if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) return match[2];
     else return null;
 }
 
+// Get the top level domain from the url
 function getDomain(url) {
     let hostName = getHostName(url);
     let domain = hostName;
@@ -132,7 +128,6 @@ function getDomain(url) {
     return domain;
 }
 
-
 // Add third party requests to browsing history document
 export function addThirdPartyRequests(details){
 
@@ -142,7 +137,6 @@ export function addThirdPartyRequests(details){
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
         let date = new Date()
-        let db = firebase.firestore();
         let request_url_object = new URL(details.url)
         let initiator_object = new URL(details.initiator)
         let url_host = getDomain(request_url_object.href)
@@ -198,7 +192,6 @@ function getBrowserEngine(){
 }
 
 // Get the operating system of the user device
-// Used the navigator platform as user OS
 function getOS(){
     let OSName = "Unknown";
     if (window.navigator.userAgent.indexOf("Windows NT 10.0")!= -1) OSName="Windows 10";
@@ -258,7 +251,7 @@ async function getIP() {
     return ip;
 }
 
-// helper function for getting user IP 
+// Helper function for getting user IP 
 function fetchIP(url) {
     return fetch(url).then(res => res.text());
 }
@@ -296,7 +289,7 @@ async function getLocation(){
     return crd;
 }
 
-// helper function for getting user location
+// Helper function for getting user location
 function requestLocation(){
     return new Promise(function(resolve, reject) {
             navigator.geolocation.getCurrentPosition(
@@ -305,7 +298,7 @@ function requestLocation(){
     });
 }
 
-//add ad interaction entry to database
+// Add ad interaction entry to database
 function addAd(adEvent){
     console.log(adEvent)
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
@@ -337,7 +330,7 @@ function addAd(adEvent){
 
 let liveAdEvents={}
 
-//class for objects holding information on a potential ad interaction
+// Class for objects holding information on a potential ad interaction
 class AdEvent {
     constructor(originTabId, targetTabId) {
       let date=new Date()
@@ -355,7 +348,7 @@ class AdEvent {
     }
   }
 
-//listen for user opening a potential ad in a new tab 
+// Listen for user opening a potential ad in a new tab 
 chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
     let tabId=details.sourceTabId
     let targetTabID=details.tabId
@@ -384,9 +377,9 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
 
 })
 
-//listen for when navigation occurs 
-//in case ads are not pop ups (open new tabs) this code would need to be fleshed out
-//filter out navigations that did not occur via link 
+// Listen for when navigation occurs 
+// in case ads are not pop ups (open new tabs) this code would need to be fleshed out
+// filter out navigations that did not occur via link 
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
     if(e.transitionType=='link'){
@@ -395,4 +388,3 @@ chrome.webNavigation.onCommitted.addListener((e)=>{
     }
     delete liveAdEvents[e.tabId]
 })
-
