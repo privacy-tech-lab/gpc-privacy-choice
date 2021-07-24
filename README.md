@@ -1,3 +1,15 @@
+<p align="center">
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub" src="https://img.shields.io/github/license/privacy-tech-lab/privacy-choice-browser-extension">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/privacy-tech-lab/privacy-choice-browser-extension?style=social">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/privacy-tech-lab/privacy-choice-browser-extension?style=social">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/privacy-choice-browser-extension?style=social">
+</p>
+
 # Privacy Choice Browser Extension
   
  This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
@@ -113,5 +125,5 @@ The setting is applied to an individual domain, and the user came to the options
 Setting is applied to `All existing domains`, and as usual, the user came to the options page from the given URL. As the setting changed is `Delete domain`, this means that all existing domains (AKA the current domain list) have been deleted. There is no current `universal setting` in place.
 
 <p align="center">
-  <img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo">
+  <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"><a>
 <p>
