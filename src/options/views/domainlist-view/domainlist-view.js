@@ -187,7 +187,7 @@ function createDefaultSettingInfo(){
         id="apply-all-off-btn"
         class="uk-badge button blue-buttons"
         type="button">
-        turn off apply all setting
+        Turn Off Apply All Setting
       </button>
   `
   let dont_allow_all_button =
@@ -197,7 +197,7 @@ function createDefaultSettingInfo(){
     class="uk-badge button blue-buttons"
     type="button"
     style="margin-right: -2px;">
-    Don't allow all domains to track/sell
+    Don't Allow Any Domain to Track and Sell
   </button>
   `
 
@@ -208,8 +208,7 @@ function createDefaultSettingInfo(){
     class="uk-badge button blue-buttons"
     type="button"
     style="margin-right: -2px;">
-    Allow all domains to track/sell
-    your information
+    Allow All Domains to Track and Sell
   </button>
   `
   chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
@@ -223,17 +222,14 @@ function createDefaultSettingInfo(){
         <div class="important-text">
         You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
         </div>
+        You can opt out of sending the signal
+        to an individual domain by turning off the domain's switch in the domain list below or apply a
+        different setting to all current and future domains.
         <br/>
         <br/>
         ${allow_all_button}
         <br/>
         ${turn_off_apply_all_button}
-        <br/>
-        <br/>
-        You can opt out of sending the signal
-        to an individual domain by turning off the domain's switch in the domain list below.
-        <br/>
-        <br/>
         `
       }
       else{
@@ -241,36 +237,31 @@ function createDefaultSettingInfo(){
         defaultSettingInfo = `
         <div class="important-text"> You have opted to allow all domains to track and sell 
         your information, unless otherwise stated in the domain list. </div>
+        You can opt out of allowing an individual domain to
+        track and sell your information by 
+        turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
+        domains.
         <br/>
         <br/>
         ${dont_allow_all_button}
         <br/>
         ${turn_off_apply_all_button}
-        <br/>
-        <br/>
-        You can opt out of allowing an individual domain to
-        track and sell your information by 
-        turning on the domain's switch in the domain list below.
-        <br/>
-        <br/>
         `  
       }
     }else{
       defaultSettingInfo = `
       <div class="important-text"> When you visit a new domain you will be asked
        to choose your privacy preference for that domain. </div>
-        <br/>
-        <br/>
-        ${dont_allow_all_button}
-        <br/>
-        ${allow_all_button}
-        <br/>
-        <br/>
-        You can also change the privacy preference made for
-        an individual domain by 
-        toggling the domain's switch in the domain list below.
-        <br/>
-        `
+      You can change the privacy preference made for
+      an individual domain by 
+      toggling the domain's switch in the domain list below or you can choose a setting to apply to all
+      current and future domains.
+      <br/>
+      <br/>
+      ${dont_allow_all_button}
+      <br/>
+      ${allow_all_button}
+      `
 
     }
     
