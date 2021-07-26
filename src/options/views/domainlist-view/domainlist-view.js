@@ -183,33 +183,42 @@ function filterList() {
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
   let turn_off_apply_all_button =
-  `  <button
-        id="apply-all-off-btn"
-        class="uk-badge button blue-buttons"
-        type="button">
-        Turn Off Apply All Setting
-      </button>
+  `
+  <button
+      uk-tooltip="title: You will be asked to choose your privacy preference for each new domain that you visit.;
+        pos: right"
+      id="apply-all-off-btn"
+      class="uk-badge button blue-buttons"
+      type="button">
+      Turn Off Apply All Setting
+    </button>
+
   `
   let dont_allow_all_button =
   `
-  <button
-    id="dont-allow-all-btn"
-    class="uk-badge button blue-buttons"
-    type="button"
-    style="margin-right: -2px;">
-    Don't Allow Any Domain to Track and Sell
-  </button>
+    <button
+      uk-tooltip="title: All future domains that you visit will be asked not to track and sell your information. All current domains in the domain list will also be toggled to not allow tracking and selling of your information.;
+        pos: right"
+      id="dont-allow-all-btn"
+      class="uk-badge button blue-buttons"
+      type="button"
+      style="margin-right: -2px;">
+      Don't Allow Any Domain to Track and Sell
+    </button>
   `
 
   let allow_all_button =
   `
-  <button
-    id="allow-all-btn"
-    class="uk-badge button blue-buttons"
-    type="button"
-    style="margin-right: -2px;">
-    Allow All Domains to Track and Sell
-  </button>
+    <button
+      uk-tooltip="title: All future domains that you visit will be permitted to track and sell your information. All current domains in the domain list will also be toggled to allow tracking and selling of your information.;
+        pos: right"
+      id="allow-all-btn"
+      class="uk-badge button blue-buttons"
+      type="button"
+      style="margin-right: -2px;">
+      Allow All Domains to Track and Sell
+    </button>
+  </div>
   `
   chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
