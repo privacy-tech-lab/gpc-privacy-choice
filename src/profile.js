@@ -17,3 +17,11 @@ profilesList.forEach(item => {
         }
     })
 })
+
+
+// Storage the user's profile in the local storage for future reference, close the tab
+document.querySelector('.submit-choice').onclick = (e) => {
+    chrome.storage.local.set({USER_PROFILE: userProfile}, function(){
+        window.close();
+    });
+}
