@@ -17,7 +17,7 @@ document.querySelectorAll('.choice').forEach(item => {
 
 // Storage the user's choice in the local storage for future reference, close the tab
 document.querySelector('.submit-choice').onclick = (e) => {
-    chrome.storage.local.set({USER_CHOICES: userChoices}, function(){
+    chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, function(){
         window.close();
     });
 }
