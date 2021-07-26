@@ -197,7 +197,7 @@ function createDefaultSettingInfo(){
   let dont_allow_all_button =
   `
     <button
-      uk-tooltip="title: All future domains that you visit will be asked not to track and sell your information. All current domains in the domain list will also be toggled to not allow tracking and selling of your information.;
+      uk-tooltip="title: All domains (new and old) that you visit will recieve Do Not Sell signals. This will toggle on the setting of all domains in your domain list.;
         pos: right"
       id="dont-allow-all-btn"
       class="uk-badge button blue-buttons"
@@ -210,7 +210,7 @@ function createDefaultSettingInfo(){
   let allow_all_button =
   `
     <button
-      uk-tooltip="title: All future domains that you visit will be permitted to track and sell your information. All current domains in the domain list will also be toggled to allow tracking and selling of your information.;
+      uk-tooltip="title: All domains (new and old) that you visit will be permitted to track and sell your information. This will toggle off the setting of all domains in your domain list.;
         pos: right"
       id="allow-all-btn"
       class="uk-badge button blue-buttons"
