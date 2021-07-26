@@ -197,7 +197,7 @@ function createDefaultSettingInfo(){
     class="uk-badge button blue-buttons"
     type="button"
     style="margin-right: -2px;">
-    send do not sell signals to all existing and future domains
+    Don't allow all domains to track/sell
   </button>
   `
 
@@ -208,7 +208,7 @@ function createDefaultSettingInfo(){
     class="uk-badge button blue-buttons"
     type="button"
     style="margin-right: -2px;">
-    allow all existing and future domains to track and sell 
+    Allow all domains to track/sell
     your information
   </button>
   `
@@ -225,13 +225,14 @@ function createDefaultSettingInfo(){
         </div>
         <br/>
         <br/>
-        You can opt out of sending the signal
-        to an individual domain by turning off the domain's switch in the domain list below.
-        <br/>
-        <br/>
         ${allow_all_button}
         <br/>
         ${turn_off_apply_all_button}
+        <br/>
+        <br/>
+        You can opt out of sending the signal
+        to an individual domain by turning off the domain's switch in the domain list below.
+        <br/>
         <br/>
         `
       }
@@ -242,14 +243,16 @@ function createDefaultSettingInfo(){
         your information, unless otherwise stated in the domain list. </div>
         <br/>
         <br/>
+        ${dont_allow_all_button}
+        <br/>
+        ${turn_off_apply_all_button}
+        <br/>
+        <br/>
         You can opt out of allowing an individual domain to
         track and sell your information by 
         turning on the domain's switch in the domain list below.
         <br/>
         <br/>
-        ${dont_allow_all_button}
-        <br/>
-        ${turn_off_apply_all_button}
         `  
       }
     }else{
@@ -258,14 +261,15 @@ function createDefaultSettingInfo(){
        to choose your privacy preference for that domain. </div>
         <br/>
         <br/>
+        ${dont_allow_all_button}
+        <br/>
+        ${allow_all_button}
+        <br/>
+        <br/>
         You can also change the privacy preference made for
         an individual domain by 
         toggling the domain's switch in the domain list below.
         <br/>
-        <br/>
-        ${dont_allow_all_button}
-        <br/>
-        ${allow_all_button}
         `
 
     }
