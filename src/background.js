@@ -28,8 +28,12 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
+  chrome.storage.local.set({MADE_DECISION: false});
   enable();
-  // this will make it blocking until the new user is created
+  chrome.tabs.create({
+    url: "index.html",
+    active: true
+  });
   await createUser(); 
   chrome.storage.local.get(["UI_SCHEME"], function(result){
     let scheme = result.UI_SCHEME; 
@@ -213,8 +217,8 @@ function getDomain(url) {
 
 // Open the relevant page based on the schemes
 function openPage(url){
-  chrome.tabs.create({
-    url: url,
-    active: true
-  });
+    chrome.tabs.create({
+      url: url,
+      active: true
+    });
 }
