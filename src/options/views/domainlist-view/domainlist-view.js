@@ -81,42 +81,50 @@ function addEventListeners() {
       createDefaultSettingInfo();
   }
     if(event.target.id=='toggle_all_on'){
-      chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-        if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
-        }
-        if (allOff(result.DOMAINS) === true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
-        }
-        let new_domains = result.DOMAINS;
-        for (let d in new_domains){
-            new_domains[d] = true;
-        }
-        chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
-        chrome.storage.local.set({ DOMAINS: new_domains });
-        createList();
-        addToggleListeners();
-    })
+      let toggleOn_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOn_prompt)) {
+        chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
+          if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
+          }
+          if (allOff(result.DOMAINS) === true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+          }
+          let new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = true;
+          }
+          chrome.runtime.sendMessage
+                  ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          createList();
+          addToggleListeners();
+      })
+    }
   }
     if(event.target.id=='toggle_all_off'){
-      chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-        if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
-        }
-        if (allOn(result.DOMAINS) === true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
-        }
-        let new_domains = result.DOMAINS;
-        for (let d in new_domains){
-            new_domains[d] = false;
-        }
-        chrome.storage.local.set({ DOMAINS: new_domains });
-        chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
-        createList();
-        addToggleListeners();
-    })
+      let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOff_prompt)) {
+        chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
+          if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+          }
+          if (allOn(result.DOMAINS) === true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+          }
+          let new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = false;
+          }
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          chrome.runtime.sendMessage
+                  ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+          createList();
+          addToggleListeners();
+      })
+    }
     }
   
     if(event.target.id=='delete_all_domainlist'){
