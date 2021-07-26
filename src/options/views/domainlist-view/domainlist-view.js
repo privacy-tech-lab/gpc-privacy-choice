@@ -148,18 +148,10 @@ function addToggleListeners() {
 
 // Delete buttons for each domain
 function deleteButtonListener (domain) {
-  document.getElementById(`delete ${domain}`).addEventListener("click",
-    (async () => {
-      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List? NOTE: It will be automatically added back to the list when the domain is requested again.`
-      if (confirm(delete_prompt)) {
-        chrome.storage.local.get(["UV_SETTING"], function (result) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
-        })
-        await permRemoveFromDomainlist(domain)
+  document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
+        permRemoveFromDomainlist(domain)
         document.getElementById(`li ${domain}`).remove();
-      }
-  }))
-}
+})}
 
 // Filtered lists code heavily inspired by
 function filterList() {
