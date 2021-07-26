@@ -33,16 +33,16 @@
 - `src/popup`: Contains the UI elements and scripts for the popup inside the extensions bar.
 - `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
 - `src/json/headers.json`: Contains the opt out HTTP header specs.
-- `src/json/firebase.json`:
-- `src/json/firestore.json.index`: Contains the opt out HTTP header specs.
+- `src/json/firebase.json`: The firebase configuration file.
+- `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the firestore databse.
 - `src/background.html`: The extension's background page. Launches all critical extension scripts and libraries.
 - `src/background.js`: This is the main script running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
-- `src/BrowserHistory.js`:
+- `src/BrowserHistory.js`: This is a content script that runs at the start of a document and sends a message to the background that a new page is being loaded.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
 - `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
-- `src/firebase.js`:
-- `src/firestore.rules`:
+- `src/firebase.js`: This is a background script that holds the functions used to add data to the firestore databse.
+- `src/firestore.rules`: This file contains the rules for reading and writting to the firebase databse.
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
 
 ## Third Party Libraries
