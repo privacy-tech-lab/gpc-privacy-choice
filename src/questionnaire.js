@@ -15,9 +15,46 @@ document.querySelectorAll('.choice').forEach(item => {
     })
 })
 
+
+// TODO: Add in form validation to ensure that the Email, User Names, Choices of Categories are Made
+// TODO: Add the user info, email and choices into the database
 // Storage the user's choice in the local storage for future reference, close the tab
 document.querySelector('.submit-choice').onclick = (e) => {
-    chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, function(){
-        window.close();
-    });
+    let userChoiceMade = false; 
+    let firstName = document.getElementById("first-name").value;
+    let lastName = document.getElementById("last-name").value;
+    let email = document.getElementById("email").value;
+
+    let warnings = document.querySelector(".form-validation");
+    if (!firstName){
+        warnings.innerHTML += 
+        `<div class="uk-alert-danger" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <p>User First Name Required</p>
+        </div>`;
+    } 
+    if (!lastName){
+        warnings.innerHTML += 
+        `<div class="uk-alert-danger" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <p>User Last Name Required</p>
+        </div>`;
+    }
+    if (!email){
+        warnings.innerHTML += 
+        `<div class="uk-alert-danger" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <p>User E-mail Required</p>
+        </div>`;
+    }  
+    
+    if (firstName && lastName && email){
+        Object.values(userChoices).forEach(userChoice => {
+            if (userChoice){userChoiceMade = true;}
+        })
+        if (!userChoiceMade){alert("You Didnt Choose Any Networks, are you sure")}
+        chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, function(){
+            window.close();
+        });
+    }
 }
