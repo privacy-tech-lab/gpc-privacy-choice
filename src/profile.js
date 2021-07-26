@@ -10,7 +10,6 @@ profilesList.forEach(item => {
         for (profile of profilesList){
             if (profile.children[0].firstElementChild.classList !== classList){
                 let card = profile.children[0];
-                console.log("card is " + card.classList);
                 card.classList.remove("uk-card-primary");
                 card.setAttribute("aria-expanded", false);
             }
