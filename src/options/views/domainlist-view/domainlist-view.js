@@ -120,9 +120,7 @@ function addEventListeners() {
     }
   
     if(event.target.id=='delete_all_domainlist'){
-        let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List?`
-        let success_prompt = `Successfully deleted all domains from the Domain List.
-          NOTE: Domains will be automatically added back to the list when the domain is requested again.`
+        let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.get(["UV_SETTING"], function (result) {
             chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
@@ -130,7 +128,6 @@ function addEventListeners() {
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: {} , newDomainlistEnabled: 'dontSet' })
-          alert(success_prompt)
         }
         createList();
         addToggleListeners();
@@ -153,15 +150,12 @@ function addToggleListeners() {
 function deleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",
     (async () => {
-      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List?`
-      let success_prompt = `Successfully deleted ${domain} from the Domain List.
-NOTE: It will be automatically added back to the list when the domain is requested again.`
+      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List? NOTE: It will be automatically added back to the list when the domain is requested again.`
       if (confirm(delete_prompt)) {
         chrome.storage.local.get(["UV_SETTING"], function (result) {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
         })
         await permRemoveFromDomainlist(domain)
-        alert(success_prompt)
         document.getElementById(`li ${domain}`).remove();
       }
   }))
