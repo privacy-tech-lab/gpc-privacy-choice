@@ -26,27 +26,13 @@ document.querySelector('.submit-choice').onclick = (e) => {
     let email = document.getElementById("email").value;
 
     let warnings = document.querySelector(".form-validation");
-    if (!firstName){
-        warnings.innerHTML += 
-        `<div class="uk-alert-danger" uk-alert>
-            <a class="uk-alert-close" uk-close></a>
-            <p>User First Name Required</p>
-        </div>`;
-    } 
-    if (!lastName){
-        warnings.innerHTML += 
-        `<div class="uk-alert-danger" uk-alert>
-            <a class="uk-alert-close" uk-close></a>
-            <p>User Last Name Required</p>
-        </div>`;
-    }
-    if (!email){
-        warnings.innerHTML += 
-        `<div class="uk-alert-danger" uk-alert>
-            <a class="uk-alert-close" uk-close></a>
-            <p>User E-mail Required</p>
-        </div>`;
-    }  
+    let html = `<div class="uk-alert-danger" uk-alert>
+                <a class="uk-alert-close" uk-close></a>`
+    if (!firstName) html += `<p class="uk-text-large">User First Name Required</p>`;
+    if (!lastName) html += `<p class="uk-text-large">User Last Name Required</p>`;
+    if (!email) html += `<p class="uk-text-large">User Email Required</p>`; 
+    html += `</div>` 
+    warnings.innerHTML = html; 
     
     if (firstName && lastName && email){
         Object.values(userChoices).forEach(userChoice => {
