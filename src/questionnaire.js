@@ -17,8 +17,7 @@ document.querySelectorAll('.choice').forEach(item => {
     })
 })
 
-
-// TODO: Add the user info, email and choices into the database
+// Submit Event Handler
 document.querySelector('.submit-choice').onclick = (e) => {
     let userChoiceMade = false; 
     let firstName = document.getElementById("first-name").value;
@@ -36,14 +35,19 @@ document.querySelector('.submit-choice').onclick = (e) => {
     html += `</div>` 
     warnings.innerHTML = html; 
     
-
     if (firstName && lastName && email && validateEmail(email)){
-        Object.values(userChoices).forEach(userChoice => {
-            if (userChoice){userChoiceMade = true;}
+        let userChoiceMade; 
+        let networks = []; 
+        Object.keys(userChoices).forEach(i => {
+            if (userChoices[i]) {
+                userChoiceMade = true;
+                networks.push(i)
+            }
         })
-        if (!userChoiceMade){alert("You Didnt Choose Any Networks, are you sure")}
+        if (!userChoiceMade){alert("You Didnt Choose Any Ad Networks to Opt out, Are you sure?")}
+        console.log(networks);
         chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
-            await userResgistration(firstName, lastName, email);
+            await userResgistration(firstName, lastName, email, networks);
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
             setTimeout(function(){
@@ -59,8 +63,11 @@ document.querySelector('.submit-choice').onclick = (e) => {
     }
 }
 
-
+// Helper function for validating emails
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
+
+// TODO: check for duplicated user emails
+// TODO: refactor the submit event handler

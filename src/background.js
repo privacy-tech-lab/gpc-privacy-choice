@@ -28,7 +28,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
-  chrome.storage.local.set({MADE_DECISION: false});
   enable();
   let userScheme = 2;
   if (userScheme == 1){

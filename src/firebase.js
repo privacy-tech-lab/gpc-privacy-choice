@@ -49,12 +49,11 @@ export async function createUser(schemeNumber){
     });
 }
 
-export async function userResgistration(firstName, lastName, email){
+export async function userResgistration(firstName, lastName, email, privaceChoice){
     let name = firstName + " " + lastName;
-    console.log("Trying to add the user information into the database")
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
         console.log("user id is: " + result.USER_DOC_ID)
-        db.collection("users").doc(result.USER_DOC_ID).update({"User Name": name, "Email": email});
+        db.collection("users").doc(result.USER_DOC_ID).update({"User Name": name, "Email": email, "Privacy Choices": privaceChoice});
     })
 }
 
