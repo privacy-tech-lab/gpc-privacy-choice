@@ -30,28 +30,19 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   chrome.storage.local.set({MADE_DECISION: false});
   enable();
-  chrome.tabs.create({
-    url: "index.html",
-    active: true
-  });
-  await createUser(); 
-  chrome.storage.local.get(["UI_SCHEME"], function(result){
-    let scheme = result.UI_SCHEME; 
-    console.log("current scheme is: " + scheme);
-    if (scheme == 1){
-      // this scheme will be the core scheme, nothing should happen here with the current implementation
-    } else if (scheme == 2){
-      // this scheme will show the user a questionnaire at the beginning of implementation
-      openPage("questionnaire.html");
-    } else if (scheme == 3){
-      // this scheme will show the user a profile page which they would identify themselves with
-      openPage("profile.html");
-    } else {
-      // this scheme is not implemented at the moment, behaving exactly like the first scheme 
-    }
-    // chrome.runtime.openOptionsPage(() => {})
-    chrome.storage.local.set({FIRST_INSTALLED: false});
-  })
+  let userScheme = 2;
+  if (userScheme == 1){
+    // this scheme will be the core scheme, nothing should happen here with the current implementation
+  } else if (userScheme == 2){
+    // this scheme will show the user a questionnaire at the beginning of implementation
+    openPage("questionnaire.html");
+  } else if (userScheme == 3){
+    // this scheme will show the user a profile page which they would identify themselves with
+    openPage("profile.html");
+  } else {
+    // this scheme is not implemented at the moment, behaving exactly like the first scheme 
+  }
+  await createUser(userScheme); 
 });
 
 // Sets cache value to locally stored values after chrome booting up
