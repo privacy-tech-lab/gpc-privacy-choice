@@ -282,7 +282,7 @@ function createDomainlistManagerButtons(){
           id="toggle_all_on"
           class="uk-badge button blue-buttons"
           type="button">
-          Toggle All On
+          Do Not Allow Tracking For All
         </button>
         `
   let toggle_domainlist_off =
@@ -290,7 +290,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Toggle All Off
+        Allow Tracking For All
       </button>
       `
   let delete_all =
@@ -315,7 +315,7 @@ function createDomainlistManagerButtons(){
       `
   let apply_to_all=
   `
-  <label><input id="apply_to_all" type="checkbox">Apply to All Future Domains</label>
+  <label><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
   `
 
 
@@ -323,8 +323,8 @@ function createDomainlistManagerButtons(){
   `
   ${toggle_domainlist_on}
   ${toggle_domainlist_off}
-  ${apply_to_all}
   ${delete_all}
+  ${apply_to_all}
   `
 
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
