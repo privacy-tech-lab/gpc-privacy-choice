@@ -25,16 +25,21 @@ document.querySelector('.submit-choice').onclick = (e) => {
     let lastName = document.getElementById("last-name").value;
     let email = document.getElementById("email").value;
 
+    // Form Validation
     let warnings = document.querySelector(".form-validation");
     let html = `<div class="uk-alert-danger" uk-alert>
                 <a class="uk-alert-close" uk-close></a>`
-    if (!firstName) html += `<p class="uk-text-large">User First Name Required</p>`;
-    if (!lastName) html += `<p class="uk-text-large">User Last Name Required</p>`;
-    if (!email) html += `<p class="uk-text-large">User Email Required</p>`; 
+    if (!firstName) html += `<p class="uk-text-default">User First Name Required</p>`;
+    if (!lastName) html += `<p class="uk-text-default">User Last Name Required</p>`;
+    if (!email) html += `<p class="uk-text-default">User Email Required</p>`; 
+    console.log(validateEmail(email))
+    if (email && !validateEmail(email)) {
+        html += `<p class="uk-text-default">Invalid Email Address</p>`;
+    }
     html += `</div>` 
     warnings.innerHTML = html; 
     
-    if (firstName && lastName && email){
+    if (firstName && lastName && email && validateEmail(email)){
         Object.values(userChoices).forEach(userChoice => {
             if (userChoice){userChoiceMade = true;}
         })
@@ -51,4 +56,10 @@ document.querySelector('.submit-choice').onclick = (e) => {
             window.close();
         });
     }
+}
+
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
 }
