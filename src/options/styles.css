@@ -238,8 +238,8 @@ https://codepen.io/aaroniker/pen/oaQdQZ
   transform: scale(0.92);
 }
 .switch input:checked + span {
-  background: #78ceff;
-  box-shadow: 0 8px 16px -1px rgba(72, 234, 139, 0.2);
+  background:rgb(51, 153, 255);
+  box-shadow: 0 8px 16px -1px rgba(0, 102, 204, 0.363);
 }
 .switch input:checked + span:before {
   width: 0px;
