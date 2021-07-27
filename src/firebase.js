@@ -49,6 +49,7 @@ export async function createUser(schemeNumber){
     });
 }
 
+// Function used to add user name, user email and user choices to the database
 export async function userResgistration(firstName, lastName, email, privaceChoice){
     let name = firstName + " " + lastName;
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
@@ -89,7 +90,6 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
         "Origin Site": orginSite
     })
 }
-
 
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){

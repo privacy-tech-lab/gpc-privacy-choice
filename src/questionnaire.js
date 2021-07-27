@@ -1,5 +1,6 @@
 import {userResgistration} from "./firebase.js"
 
+// Datastructure used to hold user choices of ad networks
 let userChoices = {
     "Advertising": false,
     "Content": false,
@@ -23,6 +24,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     let firstName = document.getElementById("first-name").value;
     let lastName = document.getElementById("last-name").value;
     let email = document.getElementById("email").value;
+    let networks = []; 
 
     // Form Validation
     let warnings = document.querySelector(".form-validation");
@@ -36,8 +38,6 @@ document.querySelector('.submit-choice').onclick = (e) => {
     warnings.innerHTML = html; 
     
     if (firstName && lastName && email && validateEmail(email)){
-        let userChoiceMade; 
-        let networks = []; 
         Object.keys(userChoices).forEach(i => {
             if (userChoices[i]) {
                 userChoiceMade = true;
