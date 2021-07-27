@@ -315,7 +315,7 @@ function createDomainlistManagerButtons(){
       `
   let apply_to_all=
   `
-  <label><input id="apply_to_all" type="checkbox">Apply To All Future Domains As Well</label>
+  <label><input id="apply_to_all" type="checkbox">Apply to All Future Domains</label>
   `
 
 
