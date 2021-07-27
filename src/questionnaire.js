@@ -54,6 +54,14 @@ document.querySelector('.submit-choice').onclick = (e) => {
         })
         if (!userChoiceMade){alert("You Didnt Choose Any Networks, are you sure")}
         chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, function(){
+            // OPTION 1: 
+            // chrome.tabs.create({
+            //     url: "index.html",
+            //     active: true
+            // });
+
+            // OPTION 2:
+            chrome.runtime.openOptionsPage();
             window.close();
         });
     }
