@@ -1,3 +1,5 @@
+import {userResgistration} from "./firebase.js"
+
 let userChoices = {
     "Advertising": false,
     "Content": false,
@@ -16,9 +18,7 @@ document.querySelectorAll('.choice').forEach(item => {
 })
 
 
-// TODO: Add in form validation to ensure that the Email, User Names, Choices of Categories are Made
 // TODO: Add the user info, email and choices into the database
-// Storage the user's choice in the local storage for future reference, close the tab
 document.querySelector('.submit-choice').onclick = (e) => {
     let userChoiceMade = false; 
     let firstName = document.getElementById("first-name").value;
@@ -32,28 +32,29 @@ document.querySelector('.submit-choice').onclick = (e) => {
     if (!firstName) html += `<p class="uk-text-default">User First Name Required</p>`;
     if (!lastName) html += `<p class="uk-text-default">User Last Name Required</p>`;
     if (!email) html += `<p class="uk-text-default">User Email Required</p>`; 
-    console.log(validateEmail(email))
-    if (email && !validateEmail(email)) {
-        html += `<p class="uk-text-default">Invalid Email Address</p>`;
-    }
+    if (email && !validateEmail(email)) html += `<p class="uk-text-default">Invalid Email Address</p>`;
     html += `</div>` 
     warnings.innerHTML = html; 
     
+
     if (firstName && lastName && email && validateEmail(email)){
         Object.values(userChoices).forEach(userChoice => {
             if (userChoice){userChoiceMade = true;}
         })
         if (!userChoiceMade){alert("You Didnt Choose Any Networks, are you sure")}
-        chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, function(){
-            // OPTION 1: 
-            // chrome.tabs.create({
-            //     url: "index.html",
-            //     active: true
-            // });
-
-            // OPTION 2:
-            chrome.runtime.openOptionsPage();
-            window.close();
+        chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
+            await userResgistration(firstName, lastName, email);
+            document.querySelector(".main").style.display = "none";
+            document.querySelector(".loading").style.display = "block";
+            setTimeout(function(){
+                document.querySelector(".loading").style.display = "none";
+                let modal = UIkit.modal("#welcome-modal");
+                modal.show();
+                document.getElementById("modal-button").onclick = function () {
+                  modal.hide();
+                  window.close();
+                } 
+            }, 2000);
         });
     }
 }

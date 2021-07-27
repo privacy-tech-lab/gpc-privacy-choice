@@ -49,6 +49,15 @@ export async function createUser(schemeNumber){
     });
 }
 
+export async function userResgistration(firstName, lastName, email){
+    let name = firstName + " " + lastName;
+    console.log("Trying to add the user information into the database")
+    chrome.storage.local.get(["USER_DOC_ID"], function(result){
+        console.log("user id is: " + result.USER_DOC_ID)
+        db.collection("users").doc(result.USER_DOC_ID).update({"User Name": name, "Email": email});
+    })
+}
+
 // Add user entries into the Firebase
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
     let date = new Date()
@@ -81,6 +90,7 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
         "Origin Site": orginSite
     })
 }
+
 
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
