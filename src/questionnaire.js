@@ -25,14 +25,13 @@ document.querySelector('.submit-choice').onclick = (e) => {
     let networks = []; 
 
     // Form Validation
-    let warnings = document.querySelector(".form-validation");
     let html = `<div class="uk-alert-danger" uk-alert>
                 <a class="uk-alert-close" uk-close></a>`
     if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
     if (prolificID && !validateID(prolificID)) html += `<p class="uk-text-default">Invalid Prolific ID</p>`;
     html += `</div>` 
-    warnings.innerHTML = html; 
     
+    //5f473753tbf20b123d695213
     if (prolificID && validateID(prolificID)){
         Object.keys(userChoices).forEach(i => {
             if (userChoices[i]) {
@@ -40,22 +39,38 @@ document.querySelector('.submit-choice').onclick = (e) => {
                 networks.push(i)
             }
         })
-        if (!userChoiceMade){alert("You Didnt Choose Any Ad Networks to Opt out, Are you sure?")}
-        chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
-            await userResgistration(prolificID, networks);
-            document.querySelector(".main").style.display = "none";
-            document.querySelector(".loading").style.display = "block";
-            setTimeout(function(){
-                document.querySelector(".loading").style.display = "none";
-                let modal = UIkit.modal("#welcome-modal");
-                modal.show();
-                document.getElementById("modal-button").onclick = function () {
-                  modal.hide();
-                  window.close();
-                } 
-            }, 2000);
-        });
+        if (!userChoiceMade){
+            let confirmationModal = UIkit.modal("#confirmation-modal");
+            confirmationModal.show();
+            document.getElementById("confirmation-modal-button").onclick = function () {
+                confirmationModal.hide();
+                submit(prolificID, networks);
+            }
+        } else {
+            submit(prolificID, networks);
+        }
+    } else {
+        let warnings = document.querySelector(".form-validation");
+        warnings.innerHTML = html; 
     }
+}
+
+
+function submit(prolificID, networks){
+    chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
+        await userResgistration(prolificID, networks);
+        document.querySelector(".main").style.display = "none";
+        document.querySelector(".loading").style.display = "block";
+        setTimeout(function(){
+            document.querySelector(".loading").style.display = "none";
+            let modal = UIkit.modal("#welcome-modal");
+            modal.show();
+            document.getElementById("welcome-modal-button").onclick = function () {
+              modal.hide();
+              window.close();
+            } 
+        }, 2000);
+    });
 }
 
 // Helper function for validating emails

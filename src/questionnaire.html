@@ -26,7 +26,24 @@
                       We have successfully initalized your privacy configurations! You personally information will not be used for ad purposes on the categories of networks that you have selected! You can also find a list of your visited domains in the domain list page to customize your settings on inidividual domains.
                     </div>
                     <div class="uk-modal-footer">
-                      <button id="modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
+                      <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-container confirmation">
+            <div id="confirmation-modal" uk-modal>
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+                        <h2 class="uk-align-center text-color-darker">You Have Not Selected Any Networks</h2>
+                    </div>
+                    <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+                      Since you have not selected any network categories, GPC signals will not be sent to any of the domains automatically. Are you sure that this is what you want?
+                    </div>
+                    <div class="uk-modal-footer">
+                        <button id="modal-button" class="uk-button uk-button-default uk-modal-close uk-align-right" style="margin: 0px 10px;">CANCEL</button>
+                        <button id="confirmation-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">YES</button>
                     </div>
                 </div>
             </div>
