@@ -18,7 +18,7 @@ document.querySelectorAll('.choice').forEach(item => {
     })
 })
 
-// Submit Event Handler
+// Add event listeners to do form validations
 document.querySelector('.submit-choice').onclick = (e) => {
     let userChoiceMade = false; 
     let prolificID = document.getElementById("prolific-id").value;
@@ -30,7 +30,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
     if (prolificID && !validateID(prolificID)) html += `<p class="uk-text-default">Invalid Prolific ID</p>`;
     html += `</div>` 
-    
+
     //5f473753tbf20b123d695213
     if (prolificID && validateID(prolificID)){
         Object.keys(userChoices).forEach(i => {
@@ -55,7 +55,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     }
 }
 
-
+// Add user information into the database
 function submit(prolificID, networks){
     chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
         await userResgistration(prolificID, networks);
@@ -73,11 +73,8 @@ function submit(prolificID, networks){
     });
 }
 
-// Helper function for validating emails
+// Helper function to validate prolific ID
 function validateID(id) {
     const re = /^([a-zA-Z0-9_-]){24,24}$/;
     return re.test(id);
 }
-
-// TODO: check for duplicated user emails
-// TODO: refactor the submit event handler
