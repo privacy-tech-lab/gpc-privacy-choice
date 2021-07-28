@@ -29,8 +29,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  let userScheme = 3;
+  let userScheme = 1;
   if (userScheme == 1){
+    openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
   } else if (userScheme == 2){
     // this scheme will show the user a questionnaire at the beginning of implementation
@@ -39,6 +40,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
     // this scheme will show the user a profile page which they would identify themselves with
     openPage("profile.html");
   } else {
+    openPage("registration.html");
     // this scheme is not implemented at the moment, behaving exactly like the first scheme 
   }
   await createUser(userScheme); 
