@@ -21,23 +21,19 @@ document.querySelectorAll('.choice').forEach(item => {
 // Submit Event Handler
 document.querySelector('.submit-choice').onclick = (e) => {
     let userChoiceMade = false; 
-    let firstName = document.getElementById("first-name").value;
-    let lastName = document.getElementById("last-name").value;
-    let email = document.getElementById("email").value;
+    let prolificID = document.getElementById("prolific-id").value;
     let networks = []; 
 
     // Form Validation
     let warnings = document.querySelector(".form-validation");
     let html = `<div class="uk-alert-danger" uk-alert>
                 <a class="uk-alert-close" uk-close></a>`
-    if (!firstName) html += `<p class="uk-text-default">User First Name Required</p>`;
-    if (!lastName) html += `<p class="uk-text-default">User Last Name Required</p>`;
-    if (!email) html += `<p class="uk-text-default">User Email Required</p>`; 
-    if (email && !validateEmail(email)) html += `<p class="uk-text-default">Invalid Email Address</p>`;
+    if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
+    if (prolificID && !validateID(prolificID)) html += `<p class="uk-text-default">Invalid Prolific ID</p>`;
     html += `</div>` 
     warnings.innerHTML = html; 
     
-    if (firstName && lastName && email && validateEmail(email)){
+    if (prolificID && validateID(prolificID)){
         Object.keys(userChoices).forEach(i => {
             if (userChoices[i]) {
                 userChoiceMade = true;
@@ -45,9 +41,8 @@ document.querySelector('.submit-choice').onclick = (e) => {
             }
         })
         if (!userChoiceMade){alert("You Didnt Choose Any Ad Networks to Opt out, Are you sure?")}
-        console.log(networks);
         chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
-            await userResgistration(firstName, lastName, email, networks);
+            await userResgistration(prolificID, networks);
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
             setTimeout(function(){
@@ -64,9 +59,9 @@ document.querySelector('.submit-choice').onclick = (e) => {
 }
 
 // Helper function for validating emails
-function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+function validateID(id) {
+    const re = /^([a-zA-Z0-9_-]){24,24}$/;
+    return re.test(id);
 }
 
 // TODO: check for duplicated user emails

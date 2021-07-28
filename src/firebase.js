@@ -50,11 +50,10 @@ export async function createUser(schemeNumber){
 }
 
 // Function used to add user name, user email and user choices to the database
-export async function userResgistration(firstName, lastName, email, privaceChoice){
-    let name = firstName + " " + lastName;
+export async function userResgistration(prolificID, privaceChoice){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
         console.log("user id is: " + result.USER_DOC_ID)
-        db.collection("users").doc(result.USER_DOC_ID).update({"User Name": name, "Email": email, "Privacy Choices": privaceChoice});
+        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID, "Privacy Choices": privaceChoice});
     })
 }
 
