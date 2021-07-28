@@ -11,10 +11,41 @@
       </head>
 <body>
     <div class="uk-section">
-        <div class="uk-container">
-            <h2 class="uk-h1 uk-text-center">Privacy Profile Survey</h2>
+        <div class="uk-container loading" style="display: none;">
+            <div class ="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your privacy configurations</div>
+        </div>
+        <div class="uk-container welcome">
+            <div id="welcome-modal" uk-modal>
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+                        <img src="./green_tick.jpg" alt="" style="margin: 0px;">
+                        <h2 class="uk-align-center text-color-darker">You are all set!</h2>
+                    </div>
+                    <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+                      We have successfully initalized your privacy configurations! You personally information will not be used for ad purposes on the categories of networks that you have selected! You can also find a list of your visited domains in the domain list page to customize your settings on inidividual domains.
+                    </div>
+                    <div class="uk-modal-footer">
+                      <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-container main">
+            <h2 class="uk-h1 uk-text-center">Welcome to the Opt Out Research</h2>
+            <p class="uk-text-default">Lorem ipsum dolor sit amet, mel ut numquam praesent voluptaria. Mea in labores deleniti reformidans, duo illud sententiae an. Quot legendos cum te. Facilisi pericula honestatis eos eu, nostrud nostrum has an. Causae accusamus intellegebat cum eu, eam mazim aeque praesent eu. Periculis adolescens disputationi cu usu.</p>
+            <hr>
+            <form>
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-legend uk-text-center">Basic Information</legend>
+                    <div class="uk-margin">
+                        <input id ="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
+                    </div>        
+                </fieldset>
+            </form>
+            <hr>
+            <h2 class="uk-legend uk-text-center">Privacy Profile Survey</h2>
             <p class="uk-text-center">Read the options below, and then choose the one that you feel most applies to you.</p>
-            <h2 class="uk-h2 uk-text-center">I consider myself to be:</h2>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
@@ -44,10 +75,14 @@
                     </div>
                 </div>
             </div>
+            <div class="form-validation uk-margin-medium-top"></div>
             <br>
             <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit My Choice</button>
         </div>
     </div>
-    <script src="profile.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-firestore.js"></script>
+    <script type="module" src="profile.js"></script>
 </body>
 </html>

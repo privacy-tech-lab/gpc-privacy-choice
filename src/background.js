@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  let userScheme = 2;
+  let userScheme = 3;
   if (userScheme == 1){
     // this scheme will be the core scheme, nothing should happen here with the current implementation
   } else if (userScheme == 2){
