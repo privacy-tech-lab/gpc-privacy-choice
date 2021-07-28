@@ -27,7 +27,8 @@ styles.css is the main css page for OptMeowt's options page
 }
 
 .important-text {
-  color: rgb(117 5 72 / 77%);
+  color: #5a647d;
+  font-weight: bold;
   display: inline;
 }
 
