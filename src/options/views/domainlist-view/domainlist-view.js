@@ -7,7 +7,7 @@ import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} f
 
 const headings = {
     title: 'Domain List',
-    subtitle: "Toggle which domains you would like to receive Do Not Sell signals"
+    subtitle: "Toggle which domains should receive Do Not Sell signals"
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
@@ -325,6 +325,7 @@ function createDomainlistManagerButtons(){
   ${toggle_domainlist_off}
   ${delete_all}
   ${apply_to_all}
+  <hr>
   `
 
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
