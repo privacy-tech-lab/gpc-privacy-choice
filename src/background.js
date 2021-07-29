@@ -29,25 +29,23 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  // this will make it blocking until the new user is created
-  await createUser(); 
-  chrome.storage.local.get(["UI_SCHEME"], function(result){
-    let scheme = result.UI_SCHEME; 
-    console.log("current scheme is: " + scheme);
-    if (scheme == 1){
-      // this scheme will be the core scheme, nothing should happen here with the current implementation
-    } else if (scheme == 2){
-      // this scheme will show the user a questionnaire at the beginning of implementation
-      openPage("questionnaire.html");
-    } else if (scheme == 3){
-      // this scheme will show the user a profile page which they would identify themselves with
-      openPage("profile.html");
-    } else {
-      // this scheme is not implemented at the moment, behaving exactly like the first scheme 
-    }
-    // chrome.runtime.openOptionsPage(() => {})
-    chrome.storage.local.set({FIRST_INSTALLED: false});
-  })
+  let min = 1; 
+  let max = 4;
+  let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
+  if (userScheme == 1){
+    openPage("registration.html");
+    // this scheme will be the core scheme, nothing should happen here with the current implementation
+  } else if (userScheme == 2){
+    // this scheme will show the user a questionnaire at the beginning of implementation
+    openPage("questionnaire.html");
+  } else if (userScheme == 3){
+    // this scheme will show the user a profile page which they would identify themselves with
+    openPage("profile.html");
+  } else {
+    openPage("registration.html");
+    // this scheme is not implemented at the moment, behaving exactly like the first scheme 
+  }
+  await createUser(userScheme); 
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -213,8 +211,8 @@ function getDomain(url) {
 
 // Open the relevant page based on the schemes
 function openPage(url){
-  chrome.tabs.create({
-    url: url,
-    active: true
-  });
+    chrome.tabs.create({
+      url: url,
+      active: true
+    });
 }

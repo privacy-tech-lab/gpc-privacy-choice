@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Registration Page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../libs-css/uikit.min.css" />
+    <link rel="stylesheet" href="../libs-css/animate.compat.css" />
+    <script src="../libs-js/uikit.min.js"></script>
+    <script src="../libs-js/mustache.js"></script>
+  </head>
+  <body>
+    <div class="uk-section">
+        <div class="uk-container loading" style="display: none;">
+            <div class ="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your registration</div>
+        </div>
+        <div class="uk-container welcome">
+            <div id="welcome-modal" uk-modal>
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+                        <img src="./green_tick.png" alt="" style="margin: 0px;">
+                        <h2 class="uk-align-center text-color-darker">You are all set!</h2>
+                    </div>
+                    <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+                      Your registration was successful!
+                    </div>
+                    <div class="uk-modal-footer">
+                      <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-container main">   
+            <h2 class="uk-h1 uk-text-center">Welcome to the Opt Out Research</h2>
+            <p class="uk-text-default">Lorem ipsum dolor sit amet, mel ut numquam praesent voluptaria. Mea in labores deleniti reformidans, duo illud sententiae an. Quot legendos cum te. Facilisi pericula honestatis eos eu, nostrud nostrum has an. Causae accusamus intellegebat cum eu, eam mazim aeque praesent eu. Periculis adolescens disputationi cu usu.</p>
+            <hr>
+            <form>
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-legend uk-text-center">Basic Information</legend>
+                    <div class="uk-margin">
+                        <input id ="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
+                    </div>        
+                </fieldset>
+            </form>
+            <div class="form-validation uk-margin-medium-top"></div>
+            <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-firestore.js"></script>
+    <script type="module" src="registration.js"></script>
+  </body>
+</html>

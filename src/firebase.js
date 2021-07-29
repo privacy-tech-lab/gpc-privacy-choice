@@ -16,14 +16,12 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
 // Function used to create a user in the database
-export async function createUser(){
-    let schemeNumber;
+export async function createUser(schemeNumber){
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
     let date = new Date();
-    await db.collection("users").get().then(querySnapshot => schemeNumber = (querySnapshot.docs.length % 4) + 1);
     // generate unique user document and storage the id into local storage
     const userDocument = db.collection("users").doc(); 
     chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
@@ -49,6 +47,14 @@ export async function createUser(){
             "Timestamp" : firebase.firestore.Timestamp.fromDate(date) 
         })
     });
+}
+
+// Function used to add user name, user email and user choices to the database
+export async function userResgistration(prolificID, privacyChoice){
+    chrome.storage.local.get(["USER_DOC_ID"], function(result){
+        console.log("user id is: " + result.USER_DOC_ID)
+        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID, "Privacy Choices": privacyChoice});
+    })
 }
 
 // Add user entries into the Firebase
