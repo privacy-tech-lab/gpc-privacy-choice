@@ -259,40 +259,24 @@ body.addEventListener('click', event => {
     }
 })
 
+// TODO: add in new logic which removes the pop up if the UI scheme is 2 or 3
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain 
 chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
-    console.log("apply bool" + result.APPLY_ALL)
     let domains = result.DOMAINS;
     let currentDomain = getDomain(window.location.href);
-    if (!result.APPLY_ALL) {
-
-            // keeping this temporarily for debugging purpose
-            // console.log("the domains look like this right now:")
-            // for (let d in domains){
-            //     console.log(d + ": " + domains[d])
-            // }
-            
-            if (domains[currentDomain] === undefined || domains[currentDomain] == null) displayOverlay();
-            
-        }
-    //SCHEME D
-    //if permission is already selected and domain is being visited for first time display active notice popup
-    else{
-        if (result.UI_SCHEME==4 && (domains[currentDomain] === undefined || domains[currentDomain] == null)){
-            displayPopup();
-        }
-        updateDomainList();
+    // only considered to show banner in scheme 1 and scheme 4
+    if (result.UI_SCHEME == 1 || result.UI_SCHEME == 4){
+        // if apply all is not selected and the user is on a new domain, display the banner
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) displayOverlay();
     }
+    updateDomainList();
 });
 
-// function used to show notice of current tracking and selling preference
+// function used to show notice of current tracking and selling preference -> not used for now
 function displayPopup(){
-     
     let count = 10;
-
     chrome.storage.local.get(["ENABLED"], function (result) {
         dontAllowBool=result.ENABLED;
-    
 
     let changeButton;
     let currentDomainPerm;

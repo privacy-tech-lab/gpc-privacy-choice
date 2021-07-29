@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   let min = 1; 
   let max = 4;
   //let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
-  let userScheme = 2;
+  let userScheme = 1;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
@@ -130,15 +130,17 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
-
   // update current domain
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     let url = tabs[0].url;
     let domain = getDomain(url);
     currentHostname = domain;
   });
+  
+  // TODO: query for the user scheme, if the user scheme is 2 or 3, if so, do a round of sendSignal update here
 
-  // update send signal for the current domain
+  // update sendSignal for the current domain
+  // TODO: potentiallly change some code below here as well to account for 2 or 3
   if(domainlistEnabledCache){
     if (!(domainsCache[currentHostname]===undefined)) sendSignal=domainsCache[currentHostname]
     else{
