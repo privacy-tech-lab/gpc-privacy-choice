@@ -7,7 +7,8 @@ let userChoices = {
     "Analytics": false, 
     "Fingerprinting": false,
     "Social": false,
-    "Cryptomining": false
+    "Cryptomining": false,
+    "All Others": false
 };
 
 // Add event listeners for toggling user choice
