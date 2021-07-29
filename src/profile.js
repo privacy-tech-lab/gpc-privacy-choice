@@ -64,6 +64,7 @@ function submit(prolificID, userProfile){
               window.close();
             } 
         }, 2000);
+        
         if (userProfile === "Extremely Privacy-Sensitive") {
             //Enable GPC for all domains
             chrome.storage.local.set({UV_SETTING: "Don't allow all"});

@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   let min = 1; 
   let max = 4;
   //let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
-  let userScheme = 3;
+  let userScheme = 2;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
