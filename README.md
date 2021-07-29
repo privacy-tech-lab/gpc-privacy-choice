@@ -54,6 +54,7 @@ The privacy choice extensions uses the following third party libraries. We thank
 - [mustache.js](https://github.com/janl/mustache.js)
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [uikit](https://github.com/uikit/uikit)
+- [disconnect-tracking-protection] (https://github.com/disconnectme/disconnect-tracking-protection)
 
 ## Installation of Firebase Server
 
