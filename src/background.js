@@ -175,7 +175,43 @@ function updateSendSignalScheme1(){
 }
 
 // TODO
-function updateSendSignalScheme2(){}
+function updateSendSignalScheme2(){
+  if ("Send GPC Signal to All Sites" in networks) {
+    sendSignal = true;
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+  }
+  else if (networks !== []) {
+    if ("Advertising" in networks) {
+      // Send GPC Signals to all sites in Advertising
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+    if ("Content" in networks) {
+      // Send GPC Signals to all sites in Content
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+    if ("Analytics" in networks) {
+      // Send GPC Signals to all sites in Analytics
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+    if ("Fingerprinting" in networks) {
+      // Send GPC Signals to all sites in Fingerprinting
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+    if ("Social" in networks) {
+      // Send GPC Signals to all sites in Social
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+    if ("Crypto-Mining" in networks) {
+     // Send GPC Signals to all sites in Crypto-Mining
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+    }
+  }
+  else {
+    sendSignal = false;
+      if (domainsCache[currentHostname] == true) sendSignal = true;
+
+  }
+}
 
 // TODO
 function updateSendSignalScheme3(){

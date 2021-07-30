@@ -7,8 +7,8 @@ let userChoices = {
     "Analytics": false, 
     "Fingerprinting": false,
     "Social": false,
-    "Cryptomining": false,
-    "All Others": false
+    "Crypto-Mining": false,
+    "Send GPC Signal to All Sites": false
 };
 
 // Add event listeners for toggling user choice
