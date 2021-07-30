@@ -259,7 +259,6 @@ body.addEventListener('click', event => {
     }
 })
 
-// TODO: add in new logic which removes the pop up if the UI scheme is 2 or 3
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain 
 chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
     let domains = result.DOMAINS;
