@@ -218,6 +218,7 @@ function updateSendSignalScheme2(){
       }
     }
   })
+}
 
 // TODO
 function updateSendSignalScheme3(){
