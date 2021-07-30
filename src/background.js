@@ -176,42 +176,48 @@ function updateSendSignalScheme1(){
 
 // TODO
 function updateSendSignalScheme2(){
-  if ("Send GPC Signal to All Sites" in networks) {
-    sendSignal = true;
+  chrome.storage.local.get(["USER_CHOICES"], function (result) {
+    //If Others is chosen, start by opting in for all then check each category and change as needed
+    if ("Others" in result.USER_CHOICES) {
+      sendSignal = true;
       if (domainsCache[currentHostname] == false) sendSignal = false;
-  }
-  else if (networks !== []) {
-    if ("Advertising" in networks) {
-      // Send GPC Signals to all sites in Advertising
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-    if ("Content" in networks) {
-      // Send GPC Signals to all sites in Content
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-    if ("Analytics" in networks) {
-      // Send GPC Signals to all sites in Analytics
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-    if ("Fingerprinting" in networks) {
-      // Send GPC Signals to all sites in Fingerprinting
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-    if ("Social" in networks) {
-      // Send GPC Signals to all sites in Social
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-    if ("Crypto-Mining" in networks) {
-     // Send GPC Signals to all sites in Crypto-Mining
-      if (domainsCache[currentHostname] == false) sendSignal = false;
-    }
-  }
-  else {
-    sendSignal = false;
-      if (domainsCache[currentHostname] == true) sendSignal = true;
+      if ("Advertising" in result.USER_CHOICES) {
 
-  }
-}
+      }
+      if ("Crypto-Mining" in result.USER_CHOICES) {
+        
+      }
+      if ("Analytics" in result.USER_CHOICES) {
+        
+      }
+      if ("Fingerprinting" in result.USER_CHOICES) {
+        
+      }
+      if ("Social" in result.USER_CHOICES) {
+        
+      }
+    }
+    else {
+          //If Others is chosen, start by opting out for all then check each category and change as needed
+      sendSignal = false;
+      if (domainsCache[currentHostname] == true) sendSignal = true;
+      if ("Advertising" in result.USER_CHOICES) {
+
+      }
+      if ("Crypto-Mining" in result.USER_CHOICES) {
+        
+      }
+      if ("Analytics" in result.USER_CHOICES) {
+        
+      }
+      if ("Fingerprinting" in result.USER_CHOICES) {
+        
+      }
+      if ("Social" in result.USER_CHOICES) {
+        
+      }
+    }
+  })
 
 // TODO
 function updateSendSignalScheme3(){
