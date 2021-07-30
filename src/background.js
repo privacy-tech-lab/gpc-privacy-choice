@@ -11,6 +11,11 @@ let sendSignal = false;
 let optout_headers = {};
 let currentHostname = null;
 
+// Fetching the networks dictionary
+let networks;
+
+console.log(typeof networks);
+
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
 let domainsCache= {};
@@ -38,10 +43,16 @@ chrome.runtime.onInstalled.addListener(async function (object) {
     // this scheme will be the core scheme, nothing should happen here with the current implementation
   } else if (userScheme == 2){
     // this scheme will show the user a questionnaire at the beginning of implementation
-    openPage("questionnaire.html");
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => networks = (JSON.parse(result))["categories"])
+      .then(openPage("questionnaire.html"));
   } else if (userScheme == 3){
     // this scheme will show the user a profile page which they would identify themselves with
-    openPage("profile.html");
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => networks = (JSON.parse(result))["categories"])
+      .then(openPage("profile.html"));
   } else {
     openPage("registration.html");
     // this scheme is not implemented at the moment, behaving exactly like the first scheme 
@@ -173,13 +184,15 @@ function updateSendSignalScheme3(){
     if (userProfile === "Extremely Privacy-Sensitive") {
       // send GPC to all domains unless the domain is in the domain list and it is set to false
       sendSignal = true;
+      if (domainsCache[currentHostname] == false) sendSignal = false;
     }
     else if (userProfile === "Not Privacy-Sensitive") {
       // do not send GPC to any domains unless the domain is in the domain list and it is set to true
       sendSignal = false;
+      if (domainsCache[currentHostname] == true) sendSignal = true;
     }
     else {
-      //TODO -> what does moderately privacy sensitive mean?
+      console.log("Opting out from the following networks now:" + Object.keys(networks));
     }
   })
 }
