@@ -13,6 +13,7 @@ let currentHostname = null;
 
 // Fetching the networks dictionary
 let networks;
+let checkList = [];
 
 console.log(typeof networks);
 
@@ -45,13 +46,24 @@ chrome.runtime.onInstalled.addListener(async function (object) {
     // this scheme will show the user a questionnaire at the beginning of implementation
     fetch("json/services.json")
       .then((response) => response.text())
-      .then((result) => networks = (JSON.parse(result))["categories"])
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+      })
       .then(openPage("questionnaire.html"));
   } else if (userScheme == 3){
     // this scheme will show the user a profile page which they would identify themselves with
     fetch("json/services.json")
       .then((response) => response.text())
-      .then((result) => networks = (JSON.parse(result))["categories"])
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+        for (let n of networks["Advertising"]){
+          for (let c of Object.values(n)){
+            for (let list of Object.values(c)){
+              checkList = checkList.concat(list);
+            }
+          }
+        }
+      })
       .then(openPage("profile.html"));
   } else {
     openPage("registration.html");
@@ -192,7 +204,12 @@ function updateSendSignalScheme3(){
       if (domainsCache[currentHostname] == true) sendSignal = true;
     }
     else {
-      console.log("Opting out from the following networks now:" + Object.keys(networks));
+      sendSignal = false;
+      if (checkList.includes(currentHostname)) {
+        console.log("Found Ads Network");
+        sendSignal = true;
+      }
+      if (domainsCache[currentHostname] == false) sendSignal = false;
     }
   })
 }
