@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   let min = 1; 
   let max = 4;
   //let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
-  let userScheme = 1;
+  let userScheme = 3;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
@@ -137,10 +137,23 @@ function updateSendSignalandDomain(){
     currentHostname = domain;
   });
   
-  // TODO: query for the user scheme, if the user scheme is 2 or 3, if so, do a round of sendSignal update here
+  // Update the sendSignal boolean based on the UI Scheme we are using
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    let userScheme = result.UI_SCHEME;
+    if (userScheme == 1){
+      updateSendSignalScheme1();
+    } else if (userScheme == 2){
+      updateSendSignalScheme2();
+    } else if (userScheme == 3){
+      updateSendSignalScheme3();
+    } else {
+      updateSendSignalScheme4();
+    }
+  })
+}
 
-  // update sendSignal for the current domain
-  // TODO: potentiallly change some code below here as well to account for 2 or 3
+// UI Scheme 1 
+function updateSendSignalScheme1(){
   if(domainlistEnabledCache){
     if (!(domainsCache[currentHostname]===undefined)) sendSignal=domainsCache[currentHostname]
     else{
@@ -149,6 +162,31 @@ function updateSendSignalandDomain(){
     }
   } else sendSignal = enabledCache
 }
+
+// TODO
+function updateSendSignalScheme2(){}
+
+// TODO
+function updateSendSignalScheme3(){
+  chrome.storage.local.get(["USER_PROFILE"], function (result) {
+    let userProfile = result.USER_PROFILE;
+    if (userProfile === "Extremely Privacy-Sensitive") {
+      // send GPC to all domains unless the domain is in the domain list and it is set to false
+      sendSignal = true;
+    }
+    else if (userProfile === "Not Privacy-Sensitive") {
+      // do not send GPC to any domains unless the domain is in the domain list and it is set to true
+      sendSignal = false;
+    }
+    else {
+      //TODO -> what does moderately privacy sensitive mean?
+    }
+  })
+}
+
+
+// TODO
+function updateSendSignalScheme4(){}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
