@@ -3,12 +3,11 @@ import {userResgistration} from "./firebase.js"
 // Datastructure used to hold user choices of ad networks
 let userChoices = {
     "Advertising": false,
-    "Content": false,
     "Analytics": false, 
     "Fingerprinting": false,
     "Social": false,
-    "Cryptomining": false,
-    "All Others": false
+    "Crypto-Mining": false,
+    "Others": false
 };
 
 // Add event listeners for toggling user choice

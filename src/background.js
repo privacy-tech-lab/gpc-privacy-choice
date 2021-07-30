@@ -38,7 +38,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   let min = 1; 
   let max = 4;
   //let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
-  let userScheme = 3;
+  let userScheme = 2;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
@@ -187,7 +187,50 @@ function updateSendSignalScheme1(){
 }
 
 // TODO
-function updateSendSignalScheme2(){}
+function updateSendSignalScheme2(){
+  chrome.storage.local.get(["USER_CHOICES"], function (result) {
+    //If Others is chosen, start by opting in for all then check each category and change as needed
+    if ("Others" in result.USER_CHOICES) {
+      sendSignal = true;
+      if (domainsCache[currentHostname] == false) sendSignal = false;
+      if ("Advertising" in result.USER_CHOICES) {
+
+      }
+      if ("Crypto-Mining" in result.USER_CHOICES) {
+        
+      }
+      if ("Analytics" in result.USER_CHOICES) {
+        
+      }
+      if ("Fingerprinting" in result.USER_CHOICES) {
+        
+      }
+      if ("Social" in result.USER_CHOICES) {
+        
+      }
+    }
+    else {
+          //If Others is chosen, start by opting out for all then check each category and change as needed
+      sendSignal = false;
+      if (domainsCache[currentHostname] == true) sendSignal = true;
+      if ("Advertising" in result.USER_CHOICES) {
+
+      }
+      if ("Crypto-Mining" in result.USER_CHOICES) {
+        
+      }
+      if ("Analytics" in result.USER_CHOICES) {
+        
+      }
+      if ("Fingerprinting" in result.USER_CHOICES) {
+        
+      }
+      if ("Social" in result.USER_CHOICES) {
+        
+      }
+    }
+  })
+}
 
 // TODO
 function updateSendSignalScheme3(){
