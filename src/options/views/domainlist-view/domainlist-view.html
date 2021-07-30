@@ -6,9 +6,23 @@ privacy-tech-lab, https://privacytechlab.org/
 
 <template id="domainlist-view">
   <div class="uk-width-3-4" style="margin-top: 0px;">
+<<<<<<< HEAD
     <!-- modal no longer needed for options page -->
     <!-- <div id="welcome-modal" uk-modal>
       <div class="uk-modal-dialog uk-margin-auto-vertical">
+=======
+    <div id="future_setting_prompt" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px;">
+        Before turning off the choice banner you must select a privacy preference to apply to future domains. Would you like to allow new domains that you visit to track and sell your information?
+        <h2 class="uk-modal-title"></h2>
+        <button class="uk-modal-close" style="font-size: 15px;" type="button">Cancel</button>
+        <button class="uk-modal-close" id="dont-allow-future-btn" type="button" style="font-size: 15px; float:right;">Don't Allow</button>
+        <button class="uk-modal-close" id="allow-future-btn" type="button" style="font-size: 15px; float:right;margin-right:4px;">Allow</button>
+      </div>
+    </div>
+    <div id="welcome-modal" uk-modal>
+      <div class="uk-modal-dialog">
+>>>>>>> b30c7f3 (added prompt to select seeting for future domains after turning off choice banner #88)
           <button class="uk-modal-close-default" type="button" uk-close></button>
           <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
               <img src="./green_tick.jpg" alt="" style="margin: 0px;">

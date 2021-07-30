@@ -80,18 +80,36 @@ function addEventListeners() {
       }
       else document.getElementById("apply_to_all").checked=false
   }
-    if(event.target.id=='apply-all-off-btn'){
-      chrome.storage.local.get(["UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
-      })
-      chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-      chrome.storage.local.set({UV_SETTING: "Off"});
-      chrome.storage.local.set({APPLY_ALL: false});
-      chrome.storage.local.set({ ENABLED: true });
-      chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+    if(event.target.id=='apply-all-switch'){
+      chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
+        if(result.APPLY_ALL){
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
+          chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+          chrome.storage.local.set({UV_SETTING: "Off"});
+          chrome.storage.local.set({APPLY_ALL: false});
+          chrome.storage.local.set({ ENABLED: true });
+          createDefaultSettingInfo();
+          chrome.runtime.sendMessage
+                    ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+        }
+      else{
+        createDefaultSettingInfo();
+        UIkit.modal("#future_setting_prompt").show()
+        createDefaultSettingInfo();
+      }
+    })}
+    if(event.target.id=='allow-future-btn'){
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({ ENABLED: false });
       createDefaultSettingInfo();
-  }
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+    }
+    if(event.target.id=='dont-allow-future-btn'){
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({ ENABLED: true });
+      createDefaultSettingInfo();
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+    }
     if(event.target.id=='toggle_all_on'&& !document.getElementById("apply_to_all")){
       let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
       NOTE: Your current preferences will be permanently lost.`
@@ -194,52 +212,37 @@ function filterList() {
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
-  let turn_off_apply_all_button =
-  `
-  <button
-      uk-tooltip="title: You will be asked to choose your privacy preference for each new domain that you visit.;
-        pos: right"
-      id="apply-all-off-btn"
-      class="uk-badge button blue-buttons"
-      type="button">
-      Turn Off Apply All Setting
-    </button>
-
-  `
-  let dont_allow_all_button =
-  `
-    <button
-      uk-tooltip="title: All domains (new and old) that you visit will recieve Do Not Sell signals. This will toggle on the setting of all domains in your domain list.;
-        pos: right"
-      id="dont-allow-all-btn"
-      class="uk-badge button blue-buttons"
-      type="button"
-      style="margin-right: -2px;">
-      Don't Allow Any Domain to Track and Sell
-    </button>
-  `
-
-  let allow_all_button =
-  `
-    <button
-      uk-tooltip="title: All domains (new and old) that you visit will be permitted to track and sell your information. This will toggle off the setting of all domains in your domain list.;
-        pos: right"
-      id="allow-all-btn"
-      class="uk-badge button blue-buttons"
-      type="button"
-      style="margin-right: -2px;">
-      Allow All Domains to Track and Sell
-    </button>
-  </div>
-  `
+  
   chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
+
+    let apply_all_switch =
+    `
+    <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
+          <div>
+            <label class="switch">
+            `
+            +
+              buildToggle('apply-all-switch', !apply_all_bool)
+            +
+            `
+              <span></span>
+            </label>
+          </div>
+          <div class="domain uk-width-expand">
+          Show the Choice Banner Every Time I Visit a New Site
+    </div>
+    </div>
+    <br>
+
+    `
 
     let defaultSettingInfo;
     if(apply_all_bool){
       if(result.ENABLED){
         defaultSettingInfo =
         `
+        ${apply_all_switch}
         <div class="important-text">
         You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
         </div>
@@ -251,6 +254,7 @@ function createDefaultSettingInfo(){
       else{
 
         defaultSettingInfo = `
+        ${apply_all_switch}
         <div class="important-text"> You have opted to allow all domains to track and sell 
         your information, unless otherwise stated in the domain list. </div>
         You can opt out of allowing an individual domain to
@@ -261,6 +265,7 @@ function createDefaultSettingInfo(){
       }
     }else{
       defaultSettingInfo = `
+      ${apply_all_switch}
       <div class="important-text"> When you visit a new domain you will be asked
        to choose your privacy preference for that domain. </div>
       You can change the privacy preference made for
