@@ -51,7 +51,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
 
 // Add user information into the database
 function submit(prolificID, userProfile){
-    if (userProfile == "Not Privacy-Sensitive"){
+    if (userProfile == "Not Privacy-Sensitive" || userProfile == "Moderately Privacy-Sensitive"){
         chrome.storage.local.set({ENABLED: false})
     }
     chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: true}, async function(){

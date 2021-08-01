@@ -58,6 +58,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
+        chrome.storage.local.set({CHECKLIST: checkList})
       })
       .then(openPage("profile.html"));
   } else {
@@ -158,7 +159,7 @@ function updateSendSignalandDomain(){
   })
 }
 
-// UI Scheme 1 
+// SCHEME 1 
 function updateSendSignalScheme1(){
   if(domainlistEnabledCache){
     if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
@@ -215,7 +216,7 @@ function updateSendSignalScheme2(){
   })
 }
 
-// TODO
+// SCHEME 3
 function updateSendSignalScheme3(){
   chrome.storage.local.get(["USER_PROFILE"], function (result) {
     let userProfile = result.USER_PROFILE;
@@ -230,12 +231,16 @@ function updateSendSignalScheme3(){
       if (domainsCache[currentDomain] == true) sendSignal = true;
     }
     else {
+      // default: do not send GPC signals to anywhere
       sendSignal = false;
+      // unless: currentDomain is in the checkList and user has not turned GPC off
       if (checkList.includes(currentDomain)) {
-        console.log("Found Ads Network");
+        if (domainsCache[currentDomain] != false){
+          sendSignal = true;
+        }
+      } else if (domainsCache[currentDomain] == true) {
         sendSignal = true;
       }
-      if (domainsCache[currentDomain] == false) sendSignal = false;
     }
   })
 }
@@ -247,20 +252,24 @@ function updateSendSignalScheme4(){}
 function addHeaders (details)  {
   updateSendSignalandDomain()
   if (sendSignal) {
+    console.log("adding GPC headers");
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
       details.requestHeaders.push({ name: s.name, value: s.value });
     }
     return { requestHeaders: details.requestHeaders };
   } else {
+    console.log("Not adding GPC headers");
     return { requestHeaders: details.requestHeaders };
   }
+
 };
 
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   updateSendSignalandDomain();
   if (sendSignal) {
+    // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 
       const contentType = document.documentElement.ownerDocument.contentType
@@ -279,6 +288,7 @@ function addDomSignal (details)  {
       runAt: "document_start",
     });
   }
+  // console.log("Not adding GPC dom signals");
 }
 
 // Function used to get the hostname from the current url

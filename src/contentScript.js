@@ -267,8 +267,10 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     if (result.UI_SCHEME == 1 || result.UI_SCHEME == 4){
         // if apply all is not selected and the user is on a new domain, display the banner
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) displayOverlay();
+    } else {
+        // this is only needed when the ui_scheme is not 1 or 4
+        updateDomainList();
     }
-    updateDomainList();
 });
 
 // function used to show notice of current tracking and selling preference -> not used for now
@@ -483,14 +485,20 @@ function getDomain(url) {
 
 // function used to update the domains of the domains list in the domain list 
 function updateDomainList(){
-    chrome.storage.local.get(["ENABLED", "DOMAINS"], function (result){
-    let currentDomain = getDomain(window.location.href);
-      if (result.DOMAINS[currentDomain]===undefined){
+    chrome.storage.local.get(["ENABLED", "DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
+        let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
         let value = result.ENABLED;
-        domains[currentDomain] = value;
-        chrome.storage.local.set({DOMAINS: domains});
-        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
+        if (!(currentDomain in domains)){
+            if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+                if (result.CHECKLIST.includes(currentDomain)) {
+                    console.log("Found networks to exclude initially");
+                    value = true;
+                }
+            }
+            domains[currentDomain] = value;
+            chrome.storage.local.set({DOMAINS: domains});
+            chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
       }
     })
 }
