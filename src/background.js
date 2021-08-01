@@ -9,13 +9,11 @@ import {createUser, addHistory, updateDomains, addSettingInteractionHistory, add
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
-let currentHostname = null;
+let currentDomain = null;
 
 // Fetching the networks dictionary
 let networks;
 let checkList = [];
-
-console.log(typeof networks);
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
@@ -32,13 +30,10 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({UV_SETTING: "Off"});
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-  chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  let min = 1; 
-  let max = 4;
-  //let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
-  let userScheme = 2;
+  //let userScheme = Math.floor(Math.random() * 4) + min;
+  let userScheme = 3;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
@@ -82,8 +77,6 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // disable the extension if get message DISABLE_ALL
-  if (request.message == "DISABLE_ALL") disable();
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     let jsEnabled = null;
@@ -94,10 +87,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       })
     });
   }
-  // update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
+  // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
-  //updates Setting Interaction History from contentScript.js and domainlist-view.js
+  // updates Setting Interaction History from contentScript.js and domainlist-view.js
   if (request.greeting == "INTERACTION") {
     chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
       let userDocID = result.USER_DOC_ID;
@@ -115,7 +108,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   });
 });
 
-// Enable the extenstion
+// Enable the extenstion with default sendSignal set to true
 const enable = () => {
   fetch("json/headers.json")
     .then((response) => response.text())
@@ -128,16 +121,6 @@ const enable = () => {
     })
     .catch((e) => console.log(`Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`));
   sendSignal = true;
-}
-
-// Disable the extension
-const disable = () => {
-  optout_headers = {};
-  chrome.webRequest.onBeforeRequest.removeListener(addDomSignal);
-  chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
-  chrome.storage.local.set({ ENABLED: false });
-  setCache(enabled=false)
-  sendSignal = false;
 }
 
 // Function used to set the locally stored values in the cache upon change
@@ -157,7 +140,7 @@ function updateSendSignalandDomain(){
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     let url = tabs[0].url;
     let domain = getDomain(url);
-    currentHostname = domain;
+    currentDomain = domain;
   });
   
   // Update the sendSignal boolean based on the UI Scheme we are using
@@ -178,7 +161,7 @@ function updateSendSignalandDomain(){
 // UI Scheme 1 
 function updateSendSignalScheme1(){
   if(domainlistEnabledCache){
-    if (!(domainsCache[currentHostname]===undefined)) sendSignal=domainsCache[currentHostname]
+    if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
     else{
       if (applyAllCache) sendSignal=enabledCache
       else sendSignal=false
@@ -192,7 +175,7 @@ function updateSendSignalScheme2(){
     //If Others is chosen, start by opting in for all then check each category and change as needed
     if ("Others" in result.USER_CHOICES) {
       sendSignal = true;
-      if (domainsCache[currentHostname] == false) sendSignal = false;
+      if (domainsCache[currentDomain] == false) sendSignal = false;
       if ("Advertising" in result.USER_CHOICES) {
 
       }
@@ -212,7 +195,7 @@ function updateSendSignalScheme2(){
     else {
           //If Others is chosen, start by opting out for all then check each category and change as needed
       sendSignal = false;
-      if (domainsCache[currentHostname] == true) sendSignal = true;
+      if (domainsCache[currentDomain] == true) sendSignal = true;
       if ("Advertising" in result.USER_CHOICES) {
 
       }
@@ -239,24 +222,23 @@ function updateSendSignalScheme3(){
     if (userProfile === "Extremely Privacy-Sensitive") {
       // send GPC to all domains unless the domain is in the domain list and it is set to false
       sendSignal = true;
-      if (domainsCache[currentHostname] == false) sendSignal = false;
+      if (domainsCache[currentDomain] == false) sendSignal = false;
     }
     else if (userProfile === "Not Privacy-Sensitive") {
       // do not send GPC to any domains unless the domain is in the domain list and it is set to true
       sendSignal = false;
-      if (domainsCache[currentHostname] == true) sendSignal = true;
+      if (domainsCache[currentDomain] == true) sendSignal = true;
     }
     else {
       sendSignal = false;
-      if (checkList.includes(currentHostname)) {
+      if (checkList.includes(currentDomain)) {
         console.log("Found Ads Network");
         sendSignal = true;
       }
-      if (domainsCache[currentHostname] == false) sendSignal = false;
+      if (domainsCache[currentDomain] == false) sendSignal = false;
     }
   })
 }
-
 
 // TODO
 function updateSendSignalScheme4(){}
