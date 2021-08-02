@@ -176,48 +176,7 @@ function updateSendSignalScheme1(){
 
 // TODO
 function updateSendSignalScheme2(){
-  chrome.storage.local.get(["USER_CHOICES"], function (result) {
-    //If Others is chosen, start by opting in for all then check each category and change as needed
-    if ("Others" in result.USER_CHOICES) {
-      sendSignal = true;
-      if (domainsCache[currentDomain] == false) sendSignal = false;
-      if ("Advertising" in result.USER_CHOICES) {
-
-      }
-      if ("Crypto-Mining" in result.USER_CHOICES) {
-        
-      }
-      if ("Analytics" in result.USER_CHOICES) {
-        
-      }
-      if ("Fingerprinting" in result.USER_CHOICES) {
-        
-      }
-      if ("Social" in result.USER_CHOICES) {
-        
-      }
-    }
-    else {
-          //If Others is chosen, start by opting out for all then check each category and change as needed
-      sendSignal = false;
-      if (domainsCache[currentDomain] == true) sendSignal = true;
-      if ("Advertising" in result.USER_CHOICES) {
-
-      }
-      if ("Crypto-Mining" in result.USER_CHOICES) {
-        
-      }
-      if ("Analytics" in result.USER_CHOICES) {
-        
-      }
-      if ("Fingerprinting" in result.USER_CHOICES) {
-        
-      }
-      if ("Social" in result.USER_CHOICES) {
-        
-      }
-    }
-  })
+  sendSignal = domainsCache[currentDomain];
 }
 
 // SCHEME 3
