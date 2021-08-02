@@ -268,8 +268,11 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
         // if apply all is not selected and the user is on a new domain, display the banner
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) displayOverlay();
     } else {
-        // this is only needed when the ui_scheme is not 1 or 4
-        updateDomainList();
+        if (result.UI_SCHEME == 2){
+            updateDomainListScheme2();
+        } else {
+            updateDomainListScheme3();
+        }
     }
 });
 
@@ -484,7 +487,7 @@ function getDomain(url) {
 }
 
 // SCHEME 3: function used to update the domains of the domains list in the domain list 
-function updateDomainList3(){
+function updateDomainListScheme3(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
@@ -510,45 +513,25 @@ function updateDomainList3(){
 }
 
 // SCHEME 2: function used to update the domains of the domains list in the domain list
-function updateDomainList2(){
+function updateDomainListScheme2(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
         let value = false;
         if (!(currentDomain in domains)){
-            if ("Others" in result.USER_CHOICES) {
-                //If "Others" is selected
-                if (result.CHECKLIST.includes(currentDomain)) {
-                    //If the checklsit includes the currentDomain
-                    console.log("Found networks to exclude initially");
-                    value = true;
-                }
-                else if (result.CHECKNOTLIST.includes(currentDomain)) {
-                    //TODO: currentDomain is in a NON-selected category
-                    value = false;
-                }
-                else {
-                    //currentDomain isn't in any category
-                    value = true;
+            if (result.CHECKLIST.includes(currentDomain)){
+                value = true;
+            } else {
+                if (result.USER_CHOICES["Others"] == true){
+                    if (!(result.CHECKNOTLIST.includes(currentDomain))){
+                        value = true;
+                    }
                 }
             }
-            else {
-                //If "Others" is not selected
-                if (result.CHECKLIST.includes(currentDomain)) {
-                    //If the checklist includes the currentDomain
-                    console.log("Found networks to exclude initially");
-                    value = true;
-                }
-                else {
-                    //checklist doesn't include the currentDomain
-                    value = false;
-                }
-
-            }
+            domains[currentDomain] = value;
+            chrome.storage.local.set({DOMAINS: domains});
+            chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
         }
-        domains[currentDomain] = value;
-        chrome.storage.local.set({DOMAINS: domains});
-        chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
     })
 }
 
