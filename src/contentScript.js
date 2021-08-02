@@ -485,12 +485,18 @@ function getDomain(url) {
 
 // function used to update the domains of the domains list in the domain list 
 function updateDomainList(){
-    chrome.storage.local.get(["ENABLED", "DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
+    chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
-        let value = result.ENABLED;
+        let value = false;
         if (!(currentDomain in domains)){
-            if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+            console.log("updating the new domains")
+            if (result.USER_CHOICES == "Extremely Privacy-Sensitive"){
+                value = true;
+            } else if (result.USER_CHOICES == "Not Privacy-Sensitive"){
+                value = false;
+            } else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+                value = false;
                 if (result.CHECKLIST.includes(currentDomain)) {
                     console.log("Found networks to exclude initially");
                     value = true;
