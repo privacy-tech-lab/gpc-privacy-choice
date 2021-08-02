@@ -51,13 +51,17 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then((response) => response.text())
       .then((result) => {
         networks = (JSON.parse(result))["categories"]
-        for (let n of networks["Advertising"]){
-          for (let c of Object.values(n)){
-            for (let list of Object.values(c)){
-              checkList = checkList.concat(list);
+        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+          console.log(category);
+          for (let n of networks[category]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                checkList = checkList.concat(list);
+              }
             }
           }
         }
+        console.log(checkList);
         chrome.storage.local.set({CHECKLIST: checkList})
       })
       .then(openPage("profile.html"));
