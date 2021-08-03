@@ -61,7 +61,7 @@ overlayDiv.innerHTML = `
                     margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
-                        This website is sharing your personal information for advertising purposes.
+                        Would you like to send do not sell signals to this domain?
             </div>
             <div style="
                 padding: unset;
@@ -86,7 +86,7 @@ overlayDiv.innerHTML = `
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                            Allow
+                            No
                     </div>
                     <div id="dont-allow-btn" style="
                         font-size:16px;
@@ -101,7 +101,7 @@ overlayDiv.innerHTML = `
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                            Don't Allow
+                           Send Signals
                     </div>
             <div/>
             <div style="
