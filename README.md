@@ -10,11 +10,11 @@
   <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/privacy-choice?style=social">
 </p>
 
-# Privacy Choice Browser Extension
+# Privacy Choice
   
  This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
 
-## Installation of Browser Extension
+## Installation of Privacy Choice
   
   Follow the instructions below in order to download this browser extension.
 
@@ -34,7 +34,7 @@
 - `src/popup`: Contains the UI elements and scripts for the popup inside the extensions bar.
 - `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
 - `src/json/headers.json`: Contains the opt out HTTP header specs.
-- `src/json/firebase.json`: The firebase configuration file.
+- `src/json/firebase.json`: The Firebase (Firestore) configuration file.
 - `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
 - `src/background.html`: The extension's background page. Launches all critical extension scripts and libraries.
 - `src/background.js`: This is the main script running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
@@ -43,7 +43,7 @@
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
 - `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
 - `src/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
-- `src/firestore.rules`: This file contains the rules for reading and writing to the firebase database.
+- `src/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
 
 ## Third Party Libraries
