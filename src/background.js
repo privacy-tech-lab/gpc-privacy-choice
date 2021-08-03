@@ -9,7 +9,12 @@ import {createUser, addHistory, updateDomains, addSettingInteractionHistory, add
 // Initializers
 let sendSignal = false;
 let optout_headers = {};
-let currentHostname = null;
+let currentDomain = null;
+
+// Fetching the networks dictionary
+let networks;
+let checkList = [];
+let advList = [];
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
@@ -26,21 +31,46 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({UV_SETTING: "Off"});
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-  chrome.storage.local.set({FIRST_INSTALLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  let min = 1; 
-  let max = 4;
-  let userScheme = Math.floor(Math.random() * (max - min + 1)) + min;
+  //let userScheme = Math.floor(Math.random() * 4) + min;
+  let userScheme = 3;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
   } else if (userScheme == 2){
     // this scheme will show the user a questionnaire at the beginning of implementation
-    openPage("questionnaire.html");
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+      })
+      .then(openPage("questionnaire.html"));
   } else if (userScheme == 3){
     // this scheme will show the user a profile page which they would identify themselves with
-    openPage("profile.html");
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+          console.log(category);
+          for (let n of networks[category]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                if (category = "Advertising") {
+                  advList = advList.concat(list);
+                }
+                checkList = checkList.concat(list);
+              }
+            }
+          }
+        }
+        console.log(checkList);
+        console.log(advList);
+        chrome.storage.local.set({CHECKLIST: checkList});
+        chrome.storage.local.set({ADVLIST: advList});
+      })
+      .then(openPage("profile.html"));
   } else {
     openPage("registration.html");
     // this scheme is not implemented at the moment, behaving exactly like the first scheme 
@@ -58,8 +88,6 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // disable the extension if get message DISABLE_ALL
-  if (request.message == "DISABLE_ALL") disable();
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     let jsEnabled = null;
@@ -70,10 +98,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       })
     });
   }
-  // update cache from contentScript.js
   if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
+  // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
-  //updates Setting Interaction History from contentScript.js and domainlist-view.js
+  // updates Setting Interaction History from contentScript.js and domainlist-view.js
   if (request.greeting == "INTERACTION") {
     chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
       let userDocID = result.USER_DOC_ID;
@@ -91,7 +119,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   });
 });
 
-// Enable the extenstion
+// Enable the extenstion with default sendSignal set to true
 const enable = () => {
   fetch("json/headers.json")
     .then((response) => response.text())
@@ -104,16 +132,6 @@ const enable = () => {
     })
     .catch((e) => console.log(`Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`));
   sendSignal = true;
-}
-
-// Disable the extension
-const disable = () => {
-  optout_headers = {};
-  chrome.webRequest.onBeforeRequest.removeListener(addDomSignal);
-  chrome.webRequest.onBeforeSendHeaders.removeListener(addHeaders);
-  chrome.storage.local.set({ ENABLED: false });
-  setCache(enabled=false)
-  sendSignal = false;
 }
 
 // Function used to set the locally stored values in the cache upon change
@@ -129,17 +147,32 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 
 // Update the sendSignal boolean for the current page
 function updateSendSignalandDomain(){
-
   // update current domain
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     let url = tabs[0].url;
     let domain = getDomain(url);
-    currentHostname = domain;
+    currentDomain = domain;
   });
+  
+  // Update the sendSignal boolean based on the UI Scheme we are using
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    let userScheme = result.UI_SCHEME;
+    if (userScheme == 1){
+      updateSendSignalScheme1();
+    } else if (userScheme == 2){
+      updateSendSignalScheme2();
+    } else if (userScheme == 3){
+      updateSendSignalScheme3();
+    } else {
+      updateSendSignalScheme4();
+    }
+  })
+}
 
-  // update send signal for the current domain
+// SCHEME 1 
+function updateSendSignalScheme1(){
   if(domainlistEnabledCache){
-    if (!(domainsCache[currentHostname]===undefined)) sendSignal=domainsCache[currentHostname]
+    if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
     else{
       if (applyAllCache) sendSignal=enabledCache
       else sendSignal=false
@@ -147,24 +180,41 @@ function updateSendSignalandDomain(){
   } else sendSignal = enabledCache
 }
 
+// SCHEME 2
+function updateSendSignalScheme2(){
+  sendSignal = domainsCache[currentDomain];
+}
+
+// SCHEME 3: To be refacetored and combined with Scheme 2
+function updateSendSignalScheme3(){
+  sendSignal = domainsCache[currentDomain];
+}
+
+// TODO
+function updateSendSignalScheme4(){}
+
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
   updateSendSignalandDomain()
   if (sendSignal) {
+    console.log("adding GPC headers");
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
       details.requestHeaders.push({ name: s.name, value: s.value });
     }
     return { requestHeaders: details.requestHeaders };
   } else {
+    console.log("Not adding GPC headers");
     return { requestHeaders: details.requestHeaders };
   }
+
 };
 
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   updateSendSignalandDomain();
   if (sendSignal) {
+    // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
     try { 
       const contentType = document.documentElement.ownerDocument.contentType
@@ -183,6 +233,7 @@ function addDomSignal (details)  {
       runAt: "document_start",
     });
   }
+  // console.log("Not adding GPC dom signals");
 }
 
 // Function used to get the hostname from the current url

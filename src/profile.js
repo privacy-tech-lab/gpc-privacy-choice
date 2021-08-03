@@ -31,7 +31,6 @@ document.querySelector('.submit-choice').onclick = (e) => {
         try {
             userProfile = document.querySelector(".uk-card-primary").children[2].innerText;
         } catch (e){
-
         }
         if (userProfile){
             chrome.storage.local.set({USER_PROFILE: userProfile}, function(){

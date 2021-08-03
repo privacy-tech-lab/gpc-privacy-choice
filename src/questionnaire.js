@@ -3,11 +3,14 @@ import {userResgistration} from "./firebase.js"
 // Datastructure used to hold user choices of ad networks
 let userChoices = {
     "Advertising": false,
-    "Content": false,
     "Analytics": false, 
-    "Fingerprinting": false,
+    "Content": false,
+    "FingerprintingInvasive": false,
+    "FingerprintingGeneral": false, 
     "Social": false,
-    "Cryptomining": false
+    "Cryptomining": false,
+    "Disconnect": false, 
+    "Others": false
 };
 
 // Add event listeners for toggling user choice
@@ -56,8 +59,41 @@ document.querySelector('.submit-choice').onclick = (e) => {
 }
 
 // Add user information into the database
-function submit(prolificID, networks){
-    chrome.storage.local.set({USER_CHOICES: userChoices, MADE_DECISION: true}, async function(){
+async function submit(prolificID, networks){
+    let checkList = [];
+    let checkNotList = [];
+
+    // Parse the networks json file based on the user's response to JSON
+    await fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+        for (let category of Object.keys(userChoices)){
+            if (userChoices[category] == true){
+                if (category != "Others"){
+                    for (let n of networks[category]){
+                        for (let c of Object.values(n)){
+                          for (let list of Object.values(c)){
+                            checkList = checkList.concat(list);
+                          }
+                        }
+                    }
+                }
+            } else {
+                if (category != "Others"){
+                    for (let n of networks[category]){
+                        for (let c of Object.values(n)){
+                          for (let list of Object.values(c)){
+                            checkNotList = checkNotList.concat(list);
+                          }
+                        }
+                    }
+                }   
+            }
+        }
+      })
+    
+    chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList, USER_CHOICES: userChoices}, async function(){
         await userResgistration(prolificID, networks);
         document.querySelector(".main").style.display = "none";
         document.querySelector(".loading").style.display = "block";

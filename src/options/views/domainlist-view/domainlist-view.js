@@ -396,18 +396,22 @@ function createList() {
   });
 }
 
-function createWalkThroughTour() {
-  chrome.storage.local.get(["FIRST_INSTALLED"], function (result){
-    if (result.FIRST_INSTALLED){
-      let modal = UIkit.modal("#welcome-modal");
-      modal.show();
-      document.getElementById("modal-button").onclick = function () {
-        modal.hide();
-      }
-    }
-  });
-  chrome.storage.local.set({FIRST_INSTALLED: false});
-}
+
+// Remove this function since it is no longer required under the new scheme organization
+// function createWalkThroughTour() {
+//   chrome.storage.local.get(["FIRST_INSTALLED"], function (result){
+//     if (result.FIRST_INSTALLED){
+//       let modal = UIkit.modal("#welcome-modal");
+//       modal.show();
+//       document.getElementById("modal-button").onclick = function () {
+//         modal.hide();
+//       }
+//     }
+//   });
+//   chrome.storage.local.set({FIRST_INSTALLED: false});
+// }
+
+
 
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {
@@ -420,6 +424,5 @@ export async function domainlistView(scaffoldTemplate) {
     createDefaultSettingInfo();
     createDomainlistManagerButtons();
     createList();
-    createWalkThroughTour();
     addEventListeners();
 }
