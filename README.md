@@ -1,13 +1,13 @@
 <p align="center">
-  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub" src="https://img.shields.io/github/license/privacy-tech-lab/privacy-choice-browser-extension">
-  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/privacy-tech-lab/privacy-choice-browser-extension?style=social">
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/privacy-tech-lab/privacy-choice-browser-extension?style=social">
-  <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/privacy-choice-browser-extension?style=social">
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub" src="https://img.shields.io/github/license/privacy-tech-lab/privacy-choice">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/privacy-tech-lab/privacy-choice?style=social">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/privacy-tech-lab/privacy-choice?style=social">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/privacy-choice?style=social">
 </p>
 
 # Privacy Choice Browser Extension
@@ -17,16 +17,17 @@
 ## Installation of Browser Extension
   
   Follow the instructions below in order to download this browser extension.
-1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/privacy-choice-browser-extension.git` into your terminal.
+
+1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/privacy-choice.git` into your terminal.
 2. The Privacy Choice Browser Extension should now be downloaded locally onto your device. Next, open a tab on Google Chrome.
 3. In the top right corner of the browser, there's an icon of a puzzle piece. Click on the icon, and then subsequently click `Manage Extensions`.
 4. You should be brought to a page that contains all of the different extensions you have downloaded to Chrome. In the top left corner, click on the button that says `Load unpacked`.
-5. Select the folder `privacy-choice-browser-extension/src` from your files.
+5. Select the folder `privacy-choice-browser/src` from your files.
 6. The extension should now be downloaded on your browser. Enjoy!
   
 ## Files and Directories in this Repo
 
-- `src/`: Contains the main contents of the privacy choice browser extension.
+- `src/`: Contains the main contents of the Privacy Choice browser extension.
 - `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
@@ -34,20 +35,20 @@
 - `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
 - `src/json/headers.json`: Contains the opt out HTTP header specs.
 - `src/json/firebase.json`: The firebase configuration file.
-- `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the firestore databse.
+- `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
 - `src/background.html`: The extension's background page. Launches all critical extension scripts and libraries.
 - `src/background.js`: This is the main script running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
 - `src/BrowserHistory.js`: This is a content script that runs at the start of a document and sends a message to the background that a new page is being loaded.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
 - `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
-- `src/firebase.js`: This is a background script that holds the functions used to add data to the firestore databse.
-- `src/firestore.rules`: This file contains the rules for reading and writting to the firebase databse.
+- `src/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
+- `src/firestore.rules`: This file contains the rules for reading and writing to the firebase database.
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
 
 ## Third Party Libraries
 
-The privacy choice extensions uses the following third party libraries. We thank the developers.
+The Privacy Choice extension uses the following third party libraries. We thank the developers.
 
 - [animate.css](https://github.com/animate-css/animate.css)
 - [FileSaver.js](https://github.com/eligrey/FileSaver.js)
@@ -60,12 +61,11 @@ The privacy choice extensions uses the following third party libraries. We thank
 
 ## Data Collection
 
-First and foremost, this browser extension functions as a research project. The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the Privacy Choice Browser Extension using Firebase. Different aspects of the data we will be collecting are shown below.
+First and foremost, this browser extension functions as a research project. The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the Privacy Choice extension using Firebase. Different aspects of the data we will be collecting are shown below.
 
 <img width="1260" alt="Screen Shot 2021-07-19 at 4 34 52 PM" src="https://user-images.githubusercontent.com/54873610/126223709-038c28e1-0cbd-4cf2-b9d9-04058f184d3a.png">
 
-
-Each user is anonymously recorded as well as assigned a User ID. We then record general pieces of information, such as what browser they use, their time zone, and what UI Scheme they've been randomly assigned. More specifically, there are two collections that will continuously be updated as users continue to use their browser and the Privacy Choice Browser Extension.
+Each user is anonymously recorded as well as assigned a User ID. We then record general pieces of information, such as what browser they use, their time zone, and what UI Scheme they've been randomly assigned. More specifically, there are two collections that will continuously be updated as users continue to use their browser and the Privacy Choice extension.
 
 ### Browser History
 
@@ -81,7 +81,7 @@ The setting interaction history records all the ways a user interacts with the b
 
 <img width="1265" alt="Screen Shot 2021-07-19 at 4 21 15 PM" src="https://user-images.githubusercontent.com/54873610/126222954-02afec37-a945-4926-89c3-1c6aa783cba7.png">
 
-Below are some basic actions a user could take relating to the Privacy Choice Browser Extension, and the corresponding entries that will be recorded in the setting interaction history.
+Below are some basic actions a user could take relating to the Privacy Choice extension, and the corresponding entries that will be recorded in the setting interaction history.
 
 #### Responding to the banner without applying to all
 
