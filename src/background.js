@@ -14,6 +14,7 @@ let currentDomain = null;
 // Fetching the networks dictionary
 let networks;
 let checkList = [];
+let advList = [];
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
@@ -61,8 +62,17 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
+        for (let n of networks["Advertising"]){
+          for (let c of Object.values(n)){
+            for (let list of Object.values(c)){
+              advList = advList.concat(list);
+            }
+          }
+        }
         console.log(checkList);
-        chrome.storage.local.set({CHECKLIST: checkList})
+        console.log(advList);
+        chrome.storage.local.set({CHECKLIST: checkList});
+        chrome.storage.local.set({ADVLIST: advList});
       })
       .then(openPage("profile.html"));
   } else {
