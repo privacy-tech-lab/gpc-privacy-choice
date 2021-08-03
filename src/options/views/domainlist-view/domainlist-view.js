@@ -6,7 +6,7 @@ import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
 
 const headings = {
-    title: 'Domain List',
+    title: 'Settings',
     subtitle: "Toggle which domains should receive Do Not Sell signals"
 }
 
