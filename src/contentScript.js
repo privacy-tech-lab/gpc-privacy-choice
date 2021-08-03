@@ -510,28 +510,28 @@ function addToDomainListScheme2(){
     })
 }
 
-
-// SCHEME 3: function used to update the domains of the domains list in the domain list 
+// SCHEME 3: add new domains to the domainlist in local storage based on the user's choice of privacy profile
 function addToDomainListScheme3(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
+        // by default, do not send GPC signals
         let value = false;
         if (!(currentDomain in domains)){
-            console.log("updating the new domains")
-            if (result.USER_CHOICES == "Extremely Privacy-Sensitive"){
-                value = true;
-            } else if (result.USER_CHOICES == "Not Privacy-Sensitive"){
+            // if user chose extremely privacy sensitive: send GPC signals
+            if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+            // if user chose not privacy sensitive: do not send GPC signals
+            else if (result.USER_CHOICES == "Not Privacy-Sensitive")  value = false;
+            // if the user chose moderately gpc signals
+            else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+                // by default, the GPC signals are not sent unless the currentDomain is the the checkList
                 value = false;
-            } else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
-                value = false;
-                if (result.CHECKLIST.includes(currentDomain)) {
-                    console.log("Found networks to exclude initially");
-                    value = true;
-                }
+                if (result.CHECKLIST.includes(currentDomain)) value = true;
             }
+            // add the currentDomain and store it in the local storage
             domains[currentDomain] = value;
             chrome.storage.local.set({DOMAINS: domains});
+            // notify background to update the cache used for look up
             chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
       }
     })

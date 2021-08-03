@@ -33,7 +33,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4) + min;
-  let userScheme = 2;
+  let userScheme = 3;
   if (userScheme == 1){
     openPage("registration.html");
     // this scheme will be the core scheme, nothing should happen here with the current implementation
@@ -174,38 +174,14 @@ function updateSendSignalScheme1(){
   } else sendSignal = enabledCache
 }
 
-// TODO
+// SCHEME 2
 function updateSendSignalScheme2(){
   sendSignal = domainsCache[currentDomain];
 }
 
-// SCHEME 3
+// SCHEME 3: To be refacetored and combined with Scheme 2
 function updateSendSignalScheme3(){
-  chrome.storage.local.get(["USER_PROFILE"], function (result) {
-    let userProfile = result.USER_PROFILE;
-    if (userProfile === "Extremely Privacy-Sensitive") {
-      // send GPC to all domains unless the domain is in the domain list and it is set to false
-      sendSignal = true;
-      if (domainsCache[currentDomain] == false) sendSignal = false;
-    }
-    else if (userProfile === "Not Privacy-Sensitive") {
-      // do not send GPC to any domains unless the domain is in the domain list and it is set to true
-      sendSignal = false;
-      if (domainsCache[currentDomain] == true) sendSignal = true;
-    }
-    else {
-      // default: do not send GPC signals to anywhere
-      sendSignal = false;
-      // unless: currentDomain is in the checkList and user has not turned GPC off
-      if (checkList.includes(currentDomain)) {
-        if (domainsCache[currentDomain] != false){
-          sendSignal = true;
-        }
-      } else if (domainsCache[currentDomain] == true) {
-        sendSignal = true;
-      }
-    }
-  })
+  sendSignal = domainsCache[currentDomain];
 }
 
 // TODO
