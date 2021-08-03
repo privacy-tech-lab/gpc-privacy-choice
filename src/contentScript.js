@@ -178,7 +178,7 @@ body.addEventListener('click', event => {
     else applyAllBool=false;
     if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
         // situation 1: enable GPC for the current domain
-        removeOverlay();
+        removeBanner();
         chrome.storage.local.set({DOMAINLIST_ENABLED: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
             new_domains = result.DOMAINS;
@@ -194,7 +194,7 @@ body.addEventListener('click', event => {
     }
     else if(event.target.id === 'allow-btn' && !applyAllBool) { 
         // situation 2: disable GPC for the current domain
-        removeOverlay();
+        removeBanner();
         chrome.storage.local.set({DOMAINLIST_ENABLED: true});
         chrome.storage.local.get(["DOMAINS"], function (result) {
         new_domains = result.DOMAINS;
@@ -211,7 +211,7 @@ body.addEventListener('click', event => {
     }
     else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
         // situation 3: enable GPC for all future domains
-        removeOverlay();
+        removeBanner();
         chrome.storage.local.set({UV_SETTING: "Don't allow all"});
         chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
@@ -232,7 +232,7 @@ body.addEventListener('click', event => {
     }
     else if(event.target.id === 'allow-btn' && applyAllBool) { 
         // situation 4: disable GPC for all future domains
-        removeOverlay();
+        removeBanner();
         chrome.storage.local.set({UV_SETTING: "Allow all"});
         chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
@@ -255,7 +255,7 @@ body.addEventListener('click', event => {
         chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
     }
     else if(event.target.id === 'rbe-okay-btn'){
-        removeOverlay()
+        removeBanner()
     }
 })
 
@@ -263,16 +263,15 @@ body.addEventListener('click', event => {
 chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
     let domains = result.DOMAINS;
     let currentDomain = getDomain(window.location.href);
-    // only considered to show banner in scheme 1 and scheme 4
+    // banner is only relevant for default scheme and autogeneralization scheme
     if (result.UI_SCHEME == 1 || result.UI_SCHEME == 4){
         // if apply all is not selected and the user is on a new domain, display the banner
-        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) displayOverlay();
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner();
     } else {
-        if (result.UI_SCHEME == 2){
-            updateDomainListScheme2();
-        } else {
-            updateDomainListScheme3();
-        }
+        // questionnaire scheme
+        if (result.UI_SCHEME == 2) addToDomainListScheme2();
+        // privacy profile scheme
+        else addToDomainListScheme3();
     }
 });
 
@@ -415,7 +414,7 @@ function displayPopup(){
         document.getElementById("rbePopupTimer").innerText = count;
         count = count - 1;
         if(count==-1){
-            removeOverlay();
+            removeBanner();
             return;
         }
         oneSecond = setTimeout(timer, 1000);
@@ -423,7 +422,7 @@ function displayPopup(){
 })}
 
 // function used to add extra style the modal
-function styleOverlay() {
+function styleBanner() {
   
   const contentContainer = document.querySelector('#privacy-res-popup-container');
   
@@ -445,18 +444,18 @@ function styleOverlay() {
 }
 
 // function used to show the modal
-function displayOverlay() {
+function showBanner() {
     //add Overlay to the DOM
     head.appendChild(imbedStyle);
     body.appendChild(overlayDiv);
-    styleOverlay();
+    styleBanner();
     //add class that hides pseudo elements to apply-all button
     document.getElementById('apply-all').classList.add('hide_pseudo');
     overlayDiv.style.display = 'block';
 }
 
 // function used to remove the modal
-function removeOverlay(){
+function removeBanner(){
     if (overlayDiv.style) overlayDiv.style.display = 'none';
     if (popupDiv.style) popupDiv.style.display = 'none';
 }
@@ -486,8 +485,34 @@ function getDomain(url) {
     return domain;
 }
 
+// SCHEME 2: add new domains to the domainlist in local storage based on the user's questionnaire response
+function addToDomainListScheme2(){
+    chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
+        let currentDomain = getDomain(window.location.href);
+        let domains = result.DOMAINS;
+        // by default, do not send GPC signals
+        let value = false;
+        if (!(currentDomain in domains)){
+            // send GPC signals if the currentDomain is in the checkList
+            if (result.CHECKLIST.includes(currentDomain)) value = true;
+            else {
+                // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
+                if ((result.USER_CHOICES["Others"] == true)){
+                    if (!(result.CHECKNOTLIST.includes(currentDomain))) value = true;
+                }
+            }
+            // add the currentDomain and store it in the local storage
+            domains[currentDomain] = value;
+            chrome.storage.local.set({DOMAINS: domains});
+            // notify background to update the cache used for look up
+            chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
+        }
+    })
+}
+
+
 // SCHEME 3: function used to update the domains of the domains list in the domain list 
-function updateDomainListScheme3(){
+function addToDomainListScheme3(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
@@ -509,29 +534,6 @@ function updateDomainListScheme3(){
             chrome.storage.local.set({DOMAINS: domains});
             chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
       }
-    })
-}
-
-// SCHEME 2: function used to update the domains of the domains list in the domain list
-function updateDomainListScheme2(){
-    chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
-        let currentDomain = getDomain(window.location.href);
-        let domains = result.DOMAINS;
-        let value = false;
-        if (!(currentDomain in domains)){
-            if (result.CHECKLIST.includes(currentDomain)){
-                value = true;
-            } else {
-                if (result.USER_CHOICES["Others"] == true){
-                    if (!(result.CHECKNOTLIST.includes(currentDomain))){
-                        value = true;
-                    }
-                }
-            }
-            domains[currentDomain] = value;
-            chrome.storage.local.set({DOMAINS: domains});
-            chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
-        }
     })
 }
 
