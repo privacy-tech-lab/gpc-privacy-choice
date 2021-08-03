@@ -241,19 +241,11 @@ function createDefaultSettingInfo(){
     if(result.UI_SCHEME==2){
       defaultSettingInfo ="UI SCHEME 2"
     }
-<<<<<<< HEAD
 
-    if(result.UI_SCHEME==2){
+    if(result.UI_SCHEME==3){
       defaultSettingInfo ="UI SCHEME 3"
     }
 
-=======
-
-    if(result.UI_SCHEME==2){
-      defaultSettingInfo ="UI SCHEME 3"
-    }
-
->>>>>>> 5f95753e49f139eb8e982e776c06dc391ee41974
     if(result.UI_SCHEME==1){
       if(apply_all_bool){
         if(result.ENABLED){
