@@ -57,15 +57,11 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           for (let n of networks[category]){
             for (let c of Object.values(n)){
               for (let list of Object.values(c)){
+                if (category = "Advertising") {
+                  advList = advList.concat(list);
+                }
                 checkList = checkList.concat(list);
               }
-            }
-          }
-        }
-        for (let n of networks["Advertising"]){
-          for (let c of Object.values(n)){
-            for (let list of Object.values(c)){
-              advList = advList.concat(list);
             }
           }
         }
