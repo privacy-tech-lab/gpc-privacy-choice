@@ -213,7 +213,7 @@ function filterList() {
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
   
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
 
     let apply_all_switch =
@@ -238,43 +238,53 @@ function createDefaultSettingInfo(){
     `
 
     let defaultSettingInfo;
-    if(apply_all_bool){
-      if(result.ENABLED){
-        defaultSettingInfo =
-        `
-        ${apply_all_switch}
-        <div class="important-text">
-        You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
-        </div>
-        You can opt out of sending the signal
-        to an individual domain by turning off the domain's switch in the domain list below or apply a
-        different setting to all current and future domains.
-        `
-      }
-      else{
+    if(result.UI_SCHEME==2){
+      defaultSettingInfo ="UI SCHEME 2"
+    }
 
+    if(result.UI_SCHEME==2){
+      defaultSettingInfo ="UI SCHEME 3"
+    }
+
+    if(result.UI_SCHEME==1){
+      if(apply_all_bool){
+        if(result.ENABLED){
+          defaultSettingInfo =
+          `
+          ${apply_all_switch}
+          <div class="important-text">
+          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
+          </div>
+          You can opt out of sending the signal
+          to an individual domain by turning off the domain's switch in the domain list below or apply a
+          different setting to all current and future domains.
+          `
+        }
+        else{
+
+          defaultSettingInfo = `
+          ${apply_all_switch}
+          <div class="important-text"> You have opted to allow all domains to track and sell 
+          your information, unless otherwise stated in the domain list. </div>
+          You can opt out of allowing an individual domain to
+          track and sell your information by 
+          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
+          domains.
+          `  
+        }
+      }else{
         defaultSettingInfo = `
         ${apply_all_switch}
-        <div class="important-text"> You have opted to allow all domains to track and sell 
-        your information, unless otherwise stated in the domain list. </div>
-        You can opt out of allowing an individual domain to
-        track and sell your information by 
-        turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
-        domains.
-        `  
-      }
-    }else{
-      defaultSettingInfo = `
-      ${apply_all_switch}
-      <div class="important-text"> When you visit a new domain you will be asked
-       to choose your privacy preference for that domain. </div>
-      You can change the privacy preference made for
-      an individual domain by 
-      toggling the domain's switch in the domain list below or you can choose a setting to apply to all
-      current and future domains.
-      `
+        <div class="important-text"> When you visit a new domain you will be asked
+        to choose your privacy preference for that domain. </div>
+        You can change the privacy preference made for
+        an individual domain by 
+        toggling the domain's switch in the domain list below or you can choose a setting to apply to all
+        current and future domains.
+        `
 
-    }
+      }
+  }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
 })
