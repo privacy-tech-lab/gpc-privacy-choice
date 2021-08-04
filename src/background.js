@@ -34,18 +34,11 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4) + min;
-  let userScheme = 3;
+  let userScheme = 2;
   if (userScheme == 1){
     openPage("registration.html");
-    // this scheme will be the core scheme, nothing should happen here with the current implementation
   } else if (userScheme == 2){
-    // this scheme will show the user a questionnaire at the beginning of implementation
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-      })
-      .then(openPage("questionnaire.html"));
+    openPage("questionnaire.html");
   } else if (userScheme == 3){
     // this scheme will show the user a profile page which they would identify themselves with
     fetch("json/services.json")
@@ -73,7 +66,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then(openPage("profile.html"));
   } else {
     openPage("registration.html");
-    // this scheme is not implemented at the moment, behaving exactly like the first scheme 
   }
   await createUser(userScheme); 
 });
@@ -146,13 +138,9 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 }
 
 // Update the sendSignal boolean for the current page
-function updateSendSignalandDomain(){
-  // update current domain
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    let url = tabs[0].url;
-    let domain = getDomain(url);
-    currentDomain = domain;
-  });
+function updateSendSignalandDomain(url){
+  currentDomain = getDomain(url);
+  // console.log("updating sendSignale for domain: " + currentDomain)
   
   // Update the sendSignal boolean based on the UI Scheme we are using
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
@@ -195,7 +183,8 @@ function updateSendSignalScheme4(){}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
-  updateSendSignalandDomain()
+  // console.log("the url is: " + details.url)
+  updateSendSignalandDomain(details.url);
   if (sendSignal) {
     console.log("adding GPC headers");
     for (let signal in optout_headers) {
