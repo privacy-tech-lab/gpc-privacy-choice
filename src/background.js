@@ -138,17 +138,14 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 }
 
 // Update the sendSignal boolean for the current page
-function updateDomainAndSendSignal(url){
-  currentDomain = getDomain(url);
-  // console.log("updating sendSignale for domain: " + currentDomain)
-  
+function updateSendSignal(){
   // Update the sendSignal boolean based on the UI Scheme we are using
   chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
     if (userScheme == 1){
       updateSendSignalScheme1();
     } else if (userScheme == 2){
-      await updateSendSignalScheme2();
+      updateSendSignalScheme2();
     } else if (userScheme == 3){
       updateSendSignalScheme3();
     } else {
@@ -195,7 +192,8 @@ function updateSendSignalScheme4(){}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
-  updateDomainAndSendSignal(details.url);
+  currentDomain = getDomain(details.url);
+  updateSendSignal();
   if (sendSignal) {
     console.log("adding GPC headers to " + currentDomain);
     for (let signal in optout_headers) {
@@ -212,7 +210,8 @@ function addHeaders (details)  {
 
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
-  updateDomainAndSendSignal();
+  currentDomain = getDomain(details.url);
+  updateSendSignal()
   if (sendSignal) {
     // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
