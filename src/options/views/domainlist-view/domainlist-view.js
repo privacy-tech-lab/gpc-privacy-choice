@@ -238,12 +238,45 @@ function createDefaultSettingInfo(){
     `
 
     let defaultSettingInfo;
+
     if(result.UI_SCHEME==2){
       defaultSettingInfo ="UI SCHEME 2"
     }
 
     if(result.UI_SCHEME==3){
-      defaultSettingInfo ="UI SCHEME 3"
+      defaultSettingInfo =
+      `
+      <div class="uk-container main">
+            <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
+            <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
+                <div class="choice">
+                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#"></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title: GPC signals will only be sent to websites that have ads.; pos: top-right">
+                        <a class="uk-position-cover second" href="#"></a>
+                        <span uk-icon="icon: code; ratio: 4"></span>
+                        <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title: GPC signals will not be sent to any websites.; pos: top-right">
+                        <a class="uk-position-cover third" href="#"></a>
+                        <span uk-icon="icon: settings; ratio: 4"></span>
+                        <span class="uk-text-middle">Not Privacy-Sensitive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+      `
     }
 
     if(result.UI_SCHEME==1){
