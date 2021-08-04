@@ -1,33 +1,33 @@
 <p align="center">
-  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub" src="https://img.shields.io/github/license/privacy-tech-lab/privacy-choice">
-  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/privacy-tech-lab/privacy-choice?style=social">
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/privacy-tech-lab/privacy-choice?style=social">
-  <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/privacy-choice?style=social">
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub" src="https://img.shields.io/github/license/privacy-tech-lab/gpc-privacy-choice">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/privacy-tech-lab/gpc-privacy-choice?style=social">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/privacy-tech-lab/gpc-privacy-choice?style=social">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/gpc-privacy-choice?style=social">
 </p>
 
-# Privacy Choice
+# GPC Privacy Choice
   
  This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
 
-## Installation of Privacy Choice
+## Installation of GPC Privacy Choice
   
   Follow the instructions below in order to download this browser extension.
 
-1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/privacy-choice.git` into your terminal.
-2. The Privacy Choice Browser Extension should now be downloaded locally onto your device. Next, open a tab on Google Chrome.
+1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git` into your terminal.
+2. The GPC Privacy Choice Browser Extension should now be downloaded locally onto your device. Next, open a tab on Google Chrome.
 3. In the top right corner of the browser, there's an icon of a puzzle piece. Click on the icon, and then subsequently click `Manage Extensions`.
 4. You should be brought to a page that contains all of the different extensions you have downloaded to Chrome. In the top left corner, click on the button that says `Load unpacked`.
-5. Select the folder `privacy-choice-browser/src` from your files.
+5. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be downloaded on your browser. Enjoy!
   
 ## Files and Directories in this Repo
 
-- `src/`: Contains the main contents of the Privacy Choice browser extension.
+- `src/`: Contains the main contents of the GPC Privacy Choice browser extension.
 - `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
@@ -48,7 +48,7 @@
 
 ## Third Party Libraries
 
-The Privacy Choice extension uses the following third party libraries. We thank the developers.
+The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
 - [animate.css](https://github.com/animate-css/animate.css)
 - [FileSaver.js](https://github.com/eligrey/FileSaver.js)
@@ -61,11 +61,11 @@ The Privacy Choice extension uses the following third party libraries. We thank 
 
 ## Data Collection
 
-First and foremost, this browser extension functions as a research project. The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the Privacy Choice extension using Firebase. Different aspects of the data we will be collecting are shown below.
+First and foremost, this browser extension functions as a research project. The purpose of this browser extension is for the observation and study of how users make choices concerning their privacy and the selling of their data to advertisers. As such, we will be collecting data on how users interact with the GPC Privacy Choice extension using Firebase. Different aspects of the data we will be collecting are shown below.
 
 <img width="1260" alt="Screen Shot 2021-07-19 at 4 34 52 PM" src="https://user-images.githubusercontent.com/54873610/126223709-038c28e1-0cbd-4cf2-b9d9-04058f184d3a.png">
 
-Each user is anonymously recorded as well as assigned a User ID. We then record general pieces of information, such as what browser they use, their time zone, and what UI Scheme they've been randomly assigned. More specifically, there are two collections that will continuously be updated as users continue to use their browser and the Privacy Choice extension.
+Each user is anonymously recorded as well as assigned a User ID. We then record general pieces of information, such as what browser they use, their time zone, and what UI Scheme they've been randomly assigned. More specifically, there are two collections that will continuously be updated as users continue to use their browser and the GPC Privacy Choice extension.
 
 ### Browser History
 
@@ -81,7 +81,7 @@ The setting interaction history records all the ways a user interacts with the b
 
 <img width="1265" alt="Screen Shot 2021-07-19 at 4 21 15 PM" src="https://user-images.githubusercontent.com/54873610/126222954-02afec37-a945-4926-89c3-1c6aa783cba7.png">
 
-Below are some basic actions a user could take relating to the Privacy Choice extension, and the corresponding entries that will be recorded in the setting interaction history.
+Below are some basic actions a user could take relating to the GPC Privacy Choice extension, and the corresponding entries that will be recorded in the setting interaction history.
 
 #### Responding to the banner without applying to all
 
