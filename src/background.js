@@ -138,17 +138,17 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 }
 
 // Update the sendSignal boolean for the current page
-function updateSendSignalandDomain(url){
+function updateDomainAndSendSignal(url){
   currentDomain = getDomain(url);
   // console.log("updating sendSignale for domain: " + currentDomain)
   
   // Update the sendSignal boolean based on the UI Scheme we are using
-  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+  chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
     if (userScheme == 1){
       updateSendSignalScheme1();
     } else if (userScheme == 2){
-      updateSendSignalScheme2();
+      await updateSendSignalScheme2();
     } else if (userScheme == 3){
       updateSendSignalScheme3();
     } else {
@@ -169,8 +169,20 @@ function updateSendSignalScheme1(){
 }
 
 // SCHEME 2
-function updateSendSignalScheme2(){
-  sendSignal = domainsCache[currentDomain];
+async function updateSendSignalScheme2(){
+  if (currentDomain in domainsCache){
+    sendSignal = domainsCache[currentDomain];
+  } else {
+    sendSignal = false;
+    await chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
+      if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
+          else {
+              if ((result.USER_CHOICES["Others"] == true)){
+                  if (!(result.CHECKNOTLIST.includes(currentDomain))) sendSignal = true;
+              }
+          }
+    })
+  }
 }
 
 // SCHEME 3: To be refacetored and combined with Scheme 2
@@ -183,17 +195,16 @@ function updateSendSignalScheme4(){}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
-  // console.log("the url is: " + details.url)
-  updateSendSignalandDomain(details.url);
+  updateDomainAndSendSignal(details.url);
   if (sendSignal) {
-    console.log("adding GPC headers");
+    console.log("adding GPC headers to " + currentDomain);
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
       details.requestHeaders.push({ name: s.name, value: s.value });
     }
     return { requestHeaders: details.requestHeaders };
   } else {
-    console.log("Not adding GPC headers");
+    console.log("not adding GPC headers to " + currentDomain);
     return { requestHeaders: details.requestHeaders };
   }
 
@@ -201,7 +212,7 @@ function addHeaders (details)  {
 
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
-  updateSendSignalandDomain();
+  updateDomainAndSendSignal();
   if (sendSignal) {
     // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
