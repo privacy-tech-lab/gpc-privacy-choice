@@ -139,18 +139,12 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 
 // Update the sendSignal boolean for the current page
 function updateSendSignal(){
-  // Update the sendSignal boolean based on the UI Scheme we are using
   chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 1){
-      updateSendSignalScheme1();
-    } else if (userScheme == 2){
-      updateSendSignalScheme2();
-    } else if (userScheme == 3){
-      updateSendSignalScheme3();
-    } else {
-      updateSendSignalScheme4();
-    }
+    if (userScheme == 1) updateSendSignalScheme1();
+    else if (userScheme == 2) updateSendSignalScheme2();
+    else if (userScheme == 3) updateSendSignalScheme3();
+    else updateSendSignalScheme4();
   })
 }
 
@@ -166,18 +160,18 @@ function updateSendSignalScheme1(){
 }
 
 // SCHEME 2
-async function updateSendSignalScheme2(){
-  if (currentDomain in domainsCache){
-    sendSignal = domainsCache[currentDomain];
-  } else {
+function updateSendSignalScheme2(){
+  if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
+  else {
     sendSignal = false;
-    await chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
-      if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
-          else {
-              if ((result.USER_CHOICES["Others"] == true)){
-                  if (!(result.CHECKNOTLIST.includes(currentDomain))) sendSignal = true;
-              }
-          }
+    chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
+      if (result.CHECKLIST.includes(currentDomain)) {
+        console.log("Found networks to exclude");
+        sendSignal = true;
+      } else {
+        if ((result.USER_CHOICES["Others"] == true)){
+          if (!(result.CHECKNOTLIST.includes(currentDomain))) sendSignal = true;}
+        }
     })
   }
 }
