@@ -6,15 +6,18 @@ import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
 
 const headings = {
-    title: 'Domain List',
-    subtitle: "Toggle which domains you would like to receive Do Not Sell signals"
+    title: 'Settings',
+    subtitle: "Toggle which domains should receive Do Not Sell signals"
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
-    if (event.target.id=='allow-all-btn'){
+    if (event.target.id=='toggle_all_off' && document.getElementById("apply_to_all").checked){
+      let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
             if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
               chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all"})
@@ -38,91 +41,124 @@ function addEventListeners() {
                 ({greeting:"UPDATE CACHE", newEnabled:false , newDomains: new_domains , newDomainlistEnabled: false })
               createList();
             createDefaultSettingInfo();
+            document.getElementById("apply_to_all").checked=false
             addToggleListeners();
           })
+        }
+    else document.getElementById("apply_to_all").checked=false
   }
-    if (event.target.id=='dont-allow-all-btn'){
-      chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-        chrome.storage.local.set({APPLY_ALL: true});
-        chrome.storage.local.get(["DOMAINS"], function (result) {
-            if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
-            }
-            else if (allOff(result.DOMAINS) === true) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
-            }
-            else {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all"})
-            }
-            let new_domains = result.DOMAINS;
-            for (let d in new_domains){
-                new_domains[d] = true;
-            }
-            chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: new_domains , newDomainlistEnabled: false })
-            chrome.storage.local.set({ DOMAINS: new_domains });
-            chrome.storage.local.set({UV_SETTING: "Don't allow all"});
-            chrome.storage.local.set({ ENABLED: true });
-            createList();
-            createDefaultSettingInfo();
-            addToggleListeners();
+    if (event.target.id=='toggle_all_on' && document.getElementById("apply_to_all")){
+      let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOn_prompt)) {
+        chrome.storage.local.set({DOMAINLIST_ENABLED: false});
+          chrome.storage.local.set({APPLY_ALL: true});
+          chrome.storage.local.get(["DOMAINS"], function (result) {
+              if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+              }
+              else if (allOff(result.DOMAINS) === true) {
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+              }
+              else {
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all"})
+              }
+              let new_domains = result.DOMAINS;
+              for (let d in new_domains){
+                  new_domains[d] = true;
+              }
+              chrome.runtime.sendMessage
+                  ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: new_domains , newDomainlistEnabled: false })
+              chrome.storage.local.set({ DOMAINS: new_domains });
+              chrome.storage.local.set({UV_SETTING: "Don't allow all"});
+              chrome.storage.local.set({ ENABLED: true });
+              createList();
+              createDefaultSettingInfo();
+              document.getElementById("apply_to_all").checked=false
+              addToggleListeners();
         })
+      }
+      else document.getElementById("apply_to_all").checked=false
   }
-    if(event.target.id=='apply-all-off-btn'){
-      chrome.storage.local.get(["UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
-      })
-      chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-      chrome.storage.local.set({UV_SETTING: "Off"});
-      chrome.storage.local.set({APPLY_ALL: false});
-      chrome.storage.local.set({ ENABLED: true });
-      chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+    if(event.target.id=='apply-all-switch'){
+      chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
+        if(result.APPLY_ALL){
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
+          chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+          chrome.storage.local.set({UV_SETTING: "Off"});
+          chrome.storage.local.set({APPLY_ALL: false});
+          chrome.storage.local.set({ ENABLED: true });
+          createDefaultSettingInfo();
+          chrome.runtime.sendMessage
+                    ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+        }
+      else{
+        createDefaultSettingInfo();
+        UIkit.modal("#future_setting_prompt").show()
+        createDefaultSettingInfo();
+      }
+    })}
+    if(event.target.id=='allow-future-btn'){
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({ ENABLED: false });
       createDefaultSettingInfo();
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+    }
+    if(event.target.id=='dont-allow-future-btn'){
+      chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({ ENABLED: true });
+      createDefaultSettingInfo();
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+    }
+    if(event.target.id=='toggle_all_on'&& !document.getElementById("apply_to_all")){
+      let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOn_prompt)) {
+        chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
+          if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
+          }
+          if (allOff(result.DOMAINS) === true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+          }
+          let new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = true;
+          }
+          chrome.runtime.sendMessage
+                  ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          createList();
+          addToggleListeners();
+      })
+    }
   }
-    if(event.target.id=='toggle_all_on'){
-      chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-        if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
-        }
-        if (allOff(result.DOMAINS) === true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
-        }
-        let new_domains = result.DOMAINS;
-        for (let d in new_domains){
-            new_domains[d] = true;
-        }
-        chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
-        chrome.storage.local.set({ DOMAINS: new_domains });
-        createList();
-        addToggleListeners();
-    })
-  }
-    if(event.target.id=='toggle_all_off'){
-      chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-        if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
-        }
-        if (allOn(result.DOMAINS) === true) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
-        }
-        let new_domains = result.DOMAINS;
-        for (let d in new_domains){
-            new_domains[d] = false;
-        }
-        chrome.storage.local.set({ DOMAINS: new_domains });
-        chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
-        createList();
-        addToggleListeners();
-    })
+    if(event.target.id=='toggle_all_off'&& !document.getElementById("apply_to_all").checked){
+      let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
+      NOTE: Your current preferences will be permanently lost.`
+      if (confirm(toggleOff_prompt)) {
+        chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
+          if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+          }
+          if (allOn(result.DOMAINS) === true) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+          }
+          let new_domains = result.DOMAINS;
+          for (let d in new_domains){
+              new_domains[d] = false;
+          }
+          chrome.storage.local.set({ DOMAINS: new_domains });
+          chrome.runtime.sendMessage
+                  ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: new_domains , newDomainlistEnabled: 'dontSet' })
+          createList();
+          addToggleListeners();
+      })
+    }
     }
   
     if(event.target.id=='delete_all_domainlist'){
-        let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List?`
-        let success_prompt = `Successfully deleted all domains from the Domain List.
-          NOTE: Domains will be automatically added back to the list when the domain is requested again.`
+        let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.get(["UV_SETTING"], function (result) {
             chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
@@ -130,7 +166,6 @@ function addEventListeners() {
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: {} , newDomainlistEnabled: 'dontSet' })
-          alert(success_prompt)
         }
         createList();
         addToggleListeners();
@@ -151,21 +186,10 @@ function addToggleListeners() {
 
 // Delete buttons for each domain
 function deleteButtonListener (domain) {
-  document.getElementById(`delete ${domain}`).addEventListener("click",
-    (async () => {
-      let delete_prompt = `Are you sure you would like to permanently delete this domain from the Domain List?`
-      let success_prompt = `Successfully deleted ${domain} from the Domain List.
-NOTE: It will be automatically added back to the list when the domain is requested again.`
-      if (confirm(delete_prompt)) {
-        chrome.storage.local.get(["UV_SETTING"], function (result) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
-        })
-        await permRemoveFromDomainlist(domain)
-        alert(success_prompt)
+  document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
+        permRemoveFromDomainlist(domain)
         document.getElementById(`li ${domain}`).remove();
-      }
-  }))
-}
+})}
 
 // Filtered lists code heavily inspired by
 function filterList() {
@@ -188,91 +212,79 @@ function filterList() {
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
-  let turn_off_apply_all_button =
-  `  <button
-        id="apply-all-off-btn"
-        class="uk-badge button blue-buttons"
-        type="button">
-        turn off universal settings
-      </button>
-      and instead customize your privacy preference for each new domain
-      that you visit.
-
-  `
-  let dont_allow_all_button =
-  `
-  <button
-    id="dont-allow-all-btn"
-    class="uk-badge button blue-buttons"
-    type="button"
-    style="margin-right: -2px;">
-    send do not sell signals to all domains
-  </button>
-  `
-
-  let allow_all_button =
-  `
-  <button
-    id="allow-all-btn"
-    class="uk-badge button blue-buttons"
-    type="button"
-    style="margin-right: -2px;">
-    allow all domains to track and sell 
-    your information
-  </button>
-  `
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED"], function (result) {
+  
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
 
+    let apply_all_switch =
+    `
+    <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
+          <div>
+            <label class="switch">
+            `
+            +
+              buildToggle('apply-all-switch', !apply_all_bool)
+            +
+            `
+              <span></span>
+            </label>
+          </div>
+          <div class="domain uk-width-expand">
+          Show the Choice Banner Every Time I Visit a New Site
+    </div>
+    </div>
+    <br>
+
+    `
+
     let defaultSettingInfo;
-    if(apply_all_bool){
-      if(result.ENABLED){
-        defaultSettingInfo =
-        `
-        <div class="important-text">
-        You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
-        </div>
-        If you would like to change this setting, , but maintain a universal setting, you can choose to
-        ${allow_all_button}. 
-        Alternatively, you can 
-        ${turn_off_apply_all_button}
-        <br/>
-        <br/>
-        You can opt out of sending the signal
-        to an individual domain by turning off the domain's switch in the domain list below.
-        `
-      }
-      else{
-
-        defaultSettingInfo = `
-        <div class="important-text"> You have opted to allow all domains to track and sell 
-        your information, unless otherwise stated in the domain list. </div>
-        If you would like to change this setting, but maintain a universal setting, you can choose to
-        ${dont_allow_all_button}.
-         Alternatively, you can 
-        ${turn_off_apply_all_button}
-        <br/>
-        <br/>
-        You can opt out of allowing an individual domain to
-        track and sell your information by 
-        turning on the domain's switch in the domain list below.
-        `  
-      }
-    }else{
-      defaultSettingInfo = `
-      <div class="important-text"> When you visit a new domain you will be asked
-       to choose your privacy preference for that domain. </div>
-        If you would like to apply a universal preference to all domains
-        that you visit you can choose to
-        ${dont_allow_all_button}&nbsp;or ${allow_all_button}.
-        <br/>
-        <br/>
-        You can also change the privacy preference made for
-        an individual domain by 
-        toggling the domain's switch in the domain list below.
-        `
-
+    if(result.UI_SCHEME==2){
+      defaultSettingInfo ="UI SCHEME 2"
     }
+
+    if(result.UI_SCHEME==3){
+      defaultSettingInfo ="UI SCHEME 3"
+    }
+
+    if(result.UI_SCHEME==1){
+      if(apply_all_bool){
+        if(result.ENABLED){
+          defaultSettingInfo =
+          `
+          ${apply_all_switch}
+          <div class="important-text">
+          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
+          </div>
+          You can opt out of sending the signal
+          to an individual domain by turning off the domain's switch in the domain list below or apply a
+          different setting to all current and future domains.
+          `
+        }
+        else{
+
+          defaultSettingInfo = `
+          ${apply_all_switch}
+          <div class="important-text"> You have opted to allow all domains to track and sell 
+          your information, unless otherwise stated in the domain list. </div>
+          You can opt out of allowing an individual domain to
+          track and sell your information by 
+          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
+          domains.
+          `  
+        }
+      }else{
+        defaultSettingInfo = `
+        ${apply_all_switch}
+        <div class="important-text"> When you visit a new domain you will be asked
+        to choose your privacy preference for that domain. </div>
+        You can change the privacy preference made for
+        an individual domain by 
+        toggling the domain's switch in the domain list below or you can choose a setting to apply to all
+        current and future domains.
+        `
+
+      }
+  }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
 })
@@ -285,7 +297,7 @@ function createDomainlistManagerButtons(){
           id="toggle_all_on"
           class="uk-badge button blue-buttons"
           type="button">
-          Toggle All On
+          Do Not Allow Tracking For All
         </button>
         `
   let toggle_domainlist_off =
@@ -293,7 +305,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Toggle All Off
+        Allow Tracking For All
       </button>
       `
   let delete_all =
@@ -316,16 +328,22 @@ function createDomainlistManagerButtons(){
         Delete All
       </button>
       `
+  let apply_to_all=
+  `
+  <label><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
+  `
 
 
-  let manger_btns=
+  let manager_btns=
   `
   ${toggle_domainlist_on}
   ${toggle_domainlist_off}
   ${delete_all}
+  ${apply_to_all}
+  <hr>
   `
 
-  document.getElementById('domainlist-manager-btns').innerHTML = manger_btns;
+  document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options

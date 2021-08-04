@@ -6,9 +6,17 @@ privacy-tech-lab, https://privacytechlab.org/
 
 <template id="domainlist-view">
   <div class="uk-width-3-4" style="margin-top: 0px;">
-    <!-- modal no longer needed for options page -->
-    <!-- <div id="welcome-modal" uk-modal>
-      <div class="uk-modal-dialog uk-margin-auto-vertical">
+    <div id="future_setting_prompt" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px;">
+        Before turning off the choice banner you must select a privacy preference to apply to future domains that you visit. Would you like to send do not sell signals to new domains that you visit?
+        <h2 class="uk-modal-title"></h2>
+        <button class="uk-modal-close" style="font-size: 15px;" type="button">Cancel</button>
+        <button class="uk-modal-close" id="dont-allow-future-btn" type="button" style="font-size: 15px; float:right;">Yes, Send Do Not Sell Signals</button>
+        <button class="uk-modal-close" id="allow-future-btn" type="button" style="font-size: 15px; float:right;margin-right:4px;">No</button>
+      </div>
+    </div>
+    <div id="welcome-modal" uk-modal>
+      <div class="uk-modal-dialog">
           <button class="uk-modal-close-default" type="button" uk-close></button>
           <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
               <img src="./green_tick.jpg" alt="" style="margin: 0px;">
@@ -21,7 +29,7 @@ privacy-tech-lab, https://privacytechlab.org/
             <button id="modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
           </div>
       </div>
-    </div> -->
+    </div> 
     <!-- Search Form -->
     <div class="domainlist-navbar" id="domainlist-navbar">
       <p id='current-apply-all-setting' 
@@ -40,7 +48,7 @@ privacy-tech-lab, https://privacytechlab.org/
               style="border-radius: 5px;"
               id="searchbar"
               type="text"
-              placeholder="Type to search for a domain" />
+              placeholder="Search for a domain" />
           </div>
         </div>
       </form>
