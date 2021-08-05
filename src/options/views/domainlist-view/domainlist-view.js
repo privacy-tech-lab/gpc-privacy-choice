@@ -418,18 +418,19 @@ function createDefaultSettingInfo(){
 
       }
   }
-    
-    document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
-    console.log(result.USER_CHOICES)
-    if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
-      document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-    if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
-      document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-    if(result.USER_CHOICES=="Not Privacy-Sensitive"){
-      document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.UI_SCHEME==3){
+      document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+      console.log(result.USER_CHOICES)
+      if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+        document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
+      if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+        document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
+      if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+        document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+    }
 })
 }
 
