@@ -170,30 +170,19 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
-    
-    let profilesList = document.querySelectorAll('.choice')
-    // Add event listeners for toggling user choice of profile
-    profilesList.forEach(item => {
-        item.addEventListener('click', event => {
-            let classList = event.target.classList;
-            for (let profile of profilesList){
-                if (profile.children[0].firstElementChild.classList !== classList){
-                    let card = profile.children[0];
-                    card.classList.remove("uk-card-primary");
-                    card.setAttribute("aria-expanded", false);
-                }
-            }
-        })
-    })
 
     if(event.target.id == 'extremely-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});    
+      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+      console.log("click listner")   
+      createDefaultSettingInfo()
     }
     if (event.target.id == 'moderately-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"});  
+      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+      createDefaultSettingInfo() 
     }
     if (event.target.id == 'not-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});    
+      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+      createDefaultSettingInfo()  
     }
 
   ;});
@@ -239,7 +228,7 @@ function filterList() {
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
   
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
 
     let apply_all_switch =
@@ -353,31 +342,32 @@ function createDefaultSettingInfo(){
     }
 
     if(result.UI_SCHEME==3){
+      
       defaultSettingInfo =
       `
       <div class="uk-container main">
             <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
-                <div class="choice" id="extremely-privacy-sensitive">
-                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                <div class="choice">
+                    <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#"></a>
+                        <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
                         <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
                     </div>
                 </div>
-                <div class="choice" id="moderately-privacy-sensitive">
-                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                <div class="choice">
+                    <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will only be sent to websites that have ads.; pos: top-right">
-                        <a class="uk-position-cover second" href="#"></a>
+                        <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive"></a>
                         <span uk-icon="icon: code; ratio: 4"></span>
                         <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
                     </div>
                 </div>
-                <div class="choice" id="not-privacy-sensitive">
-                    <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                <div class="choice">
+                    <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will not be sent to any websites.; pos: top-right">
-                        <a class="uk-position-cover third" href="#"></a>
+                        <a class="uk-position-cover third" href="#" id="not-privacy-sensitive"></a>
                         <span uk-icon="icon: settings; ratio: 4"></span>
                         <span class="uk-text-middle">Not Privacy-Sensitive</span>
                     </div>
@@ -386,6 +376,7 @@ function createDefaultSettingInfo(){
         </div>
         <hr>
       `
+
     }
 
     if(result.UI_SCHEME==1){
@@ -429,8 +420,19 @@ function createDefaultSettingInfo(){
   }
     
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+    console.log(result.USER_CHOICES)
+    if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+      document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+      document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+      document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
 })
 }
+
 
 // Create HTML for buttons to manage entire domainlist at once
 function createDomainlistManagerButtons(){
