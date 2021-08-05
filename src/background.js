@@ -7,7 +7,7 @@ privacy-tech-lab, https://privacytechlab.org/
 import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
-let sendSignal = false;
+let sendSignal = true;
 let optout_headers = {};
 let currentDomain = null;
 
@@ -120,13 +120,12 @@ const enable = () => {
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]});
+      chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]}, ["blocking"]);
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
       setCache(enabled=true)
     })
     .catch((e) => console.log(`Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`));
-  sendSignal = true;
 }
 
 // Function used to set the locally stored values in the cache upon change
