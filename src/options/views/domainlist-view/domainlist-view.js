@@ -170,6 +170,32 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
+    
+    let profilesList = document.querySelectorAll('.choice')
+    // Add event listeners for toggling user choice of profile
+    profilesList.forEach(item => {
+        item.addEventListener('click', event => {
+            let classList = event.target.classList;
+            for (let profile of profilesList){
+                if (profile.children[0].firstElementChild.classList !== classList){
+                    let card = profile.children[0];
+                    card.classList.remove("uk-card-primary");
+                    card.setAttribute("aria-expanded", false);
+                }
+            }
+        })
+    })
+
+    if(event.target.id == 'extremely-privacy-sensitive') {
+      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});    
+    }
+    if (event.target.id == 'moderately-privacy-sensitive') {
+      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"});  
+    }
+    if (event.target.id == 'not-privacy-sensitive') {
+      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});    
+    }
+
   ;});
   addToggleListeners();
 }
@@ -332,7 +358,7 @@ function createDefaultSettingInfo(){
       <div class="uk-container main">
             <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
-                <div class="choice">
+                <div class="choice" id="extremely-privacy-sensitive">
                     <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
                         <a class="uk-position-cover first" href="#"></a>
@@ -340,7 +366,7 @@ function createDefaultSettingInfo(){
                         <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" id="moderately-privacy-sensitive">
                     <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will only be sent to websites that have ads.; pos: top-right">
                         <a class="uk-position-cover second" href="#"></a>
@@ -348,7 +374,7 @@ function createDefaultSettingInfo(){
                         <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" id="not-privacy-sensitive">
                     <div class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will not be sent to any websites.; pos: top-right">
                         <a class="uk-position-cover third" href="#"></a>
