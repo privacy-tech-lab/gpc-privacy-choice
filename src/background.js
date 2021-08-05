@@ -138,8 +138,8 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 }
 
 // Update the sendSignal boolean for the current page
-function updateSendSignal(){
-  chrome.storage.local.get(["UI_SCHEME"], async function (result) {
+async function updateSendSignal(){
+  await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
     if (userScheme == 1) updateSendSignalScheme1();
     else if (userScheme == 2) updateSendSignalScheme2();
@@ -160,18 +160,15 @@ function updateSendSignalScheme1(){
 }
 
 // SCHEME 2
-function updateSendSignalScheme2(){
+async function updateSendSignalScheme2(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
-    sendSignal = false;
-    chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
-      if (result.CHECKLIST.includes(currentDomain)) {
+    await chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
+      if (result.CHECKLIST.includes(currentDomain) || 
+      (result.USER_CHOICES["Others"] == true && (!(result.CHECKNOTLIST.includes(currentDomain))))) {
         console.log("Found networks to exclude");
         sendSignal = true;
-      } else {
-        if ((result.USER_CHOICES["Others"] == true)){
-          if (!(result.CHECKNOTLIST.includes(currentDomain))) sendSignal = true;}
-        }
+      }
     })
   }
 }
@@ -199,7 +196,6 @@ function addHeaders (details)  {
     console.log("not adding GPC headers to " + currentDomain);
     return { requestHeaders: details.requestHeaders };
   }
-
 };
 
 // Add dom signal if sendSignal to true
