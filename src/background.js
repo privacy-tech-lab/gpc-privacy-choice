@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4) + min;
-  let userScheme = 2;
+  let userScheme = 3;
   if (userScheme == 1){
     openPage("registration.html");
   } else if (userScheme == 2){
@@ -45,14 +45,17 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then((response) => response.text())
       .then((result) => {
         networks = (JSON.parse(result))["categories"]
+        for (let n of networks["Advertising"]){
+          for (let c of Object.values(n)){
+            for (let list of Object.values(c)){
+              advList = advList.concat(list);
+            }
+          }
+          }
         for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-          console.log(category);
           for (let n of networks[category]){
             for (let c of Object.values(n)){
               for (let list of Object.values(c)){
-                if (category = "Advertising") {
-                  advList = advList.concat(list);
-                }
                 checkList = checkList.concat(list);
               }
             }
@@ -174,8 +177,20 @@ async function updateSendSignalScheme2(){
 }
 
 // SCHEME 3: To be refacetored and combined with Scheme 2
-function updateSendSignalScheme3(){
-  sendSignal = domainsCache[currentDomain];
+async function updateSendSignalScheme3(){
+  if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
+  else {
+    await chrome.storage.local.get(["CHECKLIST", "ADVLIST", "USER_CHOICES"], function(result){
+      if (result.USER_CHOICES == "Not Privacy-Sensitive"){
+        if (result.ADVLIST.includes(currentDomain)) sendSignal = true;
+      } else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+        if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
+      } else {
+        sendSignal = true;
+      }
+    })
+  }
+  console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
 // TODO
@@ -201,7 +216,7 @@ function addHeaders (details)  {
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   currentDomain = getDomain(details.url);
-  updateSendSignal()
+  updateSendSignal();
   if (sendSignal) {
     // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
