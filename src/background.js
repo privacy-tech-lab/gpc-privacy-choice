@@ -33,14 +33,12 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINLIST_ENABLED: true});
   chrome.storage.local.set({DOMAINS: {}});
   enable();
-  //let userScheme = Math.floor(Math.random() * 4) + min;
+  //let userScheme = Math.floor(Math.random() * 4);
   let userScheme = 3;
-  if (userScheme == 1){
-    openPage("registration.html");
-  } else if (userScheme == 2){
-    openPage("questionnaire.html");
-  } else if (userScheme == 3){
-    // this scheme will show the user a profile page which they would identify themselves with
+  if (userScheme == 1) openPage("registration.html");
+  else if (userScheme == 2) openPage("questionnaire.html");
+  else if (userScheme == 3){
+    // parse the checklist needed for updating the sendSignals based on user's choice
     fetch("json/services.json")
       .then((response) => response.text())
       .then((result) => {
@@ -51,7 +49,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
               advList = advList.concat(list);
             }
           }
-          }
+        }
         for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
           for (let n of networks[category]){
             for (let c of Object.values(n)){
@@ -61,15 +59,11 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
-        console.log(checkList);
-        console.log(advList);
         chrome.storage.local.set({CHECKLIST: checkList});
         chrome.storage.local.set({ADVLIST: advList});
       })
       .then(openPage("profile.html"));
-  } else {
-    openPage("registration.html");
-  }
+  } else openPage("registration.html");
   await createUser(userScheme); 
 });
 
@@ -123,7 +117,7 @@ const enable = () => {
       chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]}, ["blocking"]);
       chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
-      setCache(enabled=true)
+      // setCache(enabled=true)
     })
     .catch((e) => console.log(`Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`));
 }
