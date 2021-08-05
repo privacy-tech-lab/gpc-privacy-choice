@@ -240,7 +240,90 @@ function createDefaultSettingInfo(){
     let defaultSettingInfo;
 
     if(result.UI_SCHEME==2){
-      defaultSettingInfo ="UI SCHEME 2"
+      defaultSettingInfo =
+      `
+      <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: cog; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Advertising</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: settings; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Content</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: settings; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Analytics</h3>
+              </div>
+          </div>
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: cog; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Fingerprinting Invasive</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: code; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Fingerprinting General</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: cog; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Social</h3>
+              </div>
+          </div>  
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: cog; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Cryptomining</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: code; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Disconnect</h3>
+              </div>
+          </div>
+          <div class="choice">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
+                  <a class="uk-position-cover" href="#"></a>
+                  <span uk-icon="icon: cog; ratio: 4"></span>
+                  <h3 class="uk-card-title uk-margin">Others</h3>
+              </div>
+          </div>  
+      </div>
+
+
+      `
     }
 
     if(result.UI_SCHEME==3){
