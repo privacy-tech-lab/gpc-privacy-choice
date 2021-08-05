@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 3;
+  let userScheme = 2;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
@@ -160,16 +160,18 @@ async function updateSendSignalScheme2(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
     await chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
-      if (result.CHECKLIST.includes(currentDomain) || 
-      (result.USER_CHOICES["Others"] == true && (!(result.CHECKNOTLIST.includes(currentDomain))))) {
-        console.log("Found networks to exclude");
-        sendSignal = true;
+      if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
+      else{
+        if (result.USER_CHOICES["Others"] == true && (!(result.CHECKNOTLIST.includes(currentDomain)))) {
+          sendSignal = true;
+        }
       }
     })
   }
+  console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
-// SCHEME 3: To be refacetored and combined with Scheme 2
+// SCHEME 3:
 async function updateSendSignalScheme3(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
