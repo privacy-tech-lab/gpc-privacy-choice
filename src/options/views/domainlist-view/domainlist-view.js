@@ -406,7 +406,7 @@ function createDefaultSettingInfo(){
               </div>
           </div>
           <div class="choice">
-              <div id="disconnect-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="disconnect-card" class="uk-card-small uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
                   <a class="uk-position-cover" href="#" id="disconnect"></a>
                   <span uk-icon="icon: code; ratio: 4"></span>
@@ -414,7 +414,7 @@ function createDefaultSettingInfo(){
               </div>
           </div>
           <div class="choice">
-              <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="others-card" class="uk-card-small uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
                   <a class="uk-position-cover" href="#" id="others"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
@@ -605,6 +605,12 @@ function createDomainlistManagerButtons(){
   `
 
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
+
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+  if(result.UI_SCHEME==2 || result.UI_SCHEME==3)
+    document.getElementById('domainlist-manager-btns').classList.add("hide")
+  })
+
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
