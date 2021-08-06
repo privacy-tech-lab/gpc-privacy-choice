@@ -198,54 +198,63 @@ function addEventListeners() {
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'analytics') {
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'content') {
           userChoices["Content"]=!userChoices["Content"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'fingerprintinginvasive') {
           userChoices["FingerprintingInvasive"]=!userChoices["FingerprintingInvasive"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'fingerprintinggeneral') {
           userChoices["FingerprintingGeneral"]=!userChoices["FingerprintingGeneral"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'social') {
           userChoices["Social"]=!userChoices["Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'cryptomining') {
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'disconnect') {
           userChoices["Disconnect"]=!userChoices["Disconnect"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'others') {
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
       }
     })
@@ -735,6 +744,33 @@ function updatePrefScheme3() {
     // notify background to update the cache used for look up
     chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
   })
+}
+
+function updatePrefScheme2() {
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
+    console.log(result.USER_CHOICES)
+    let domains = result.DOMAINS;
+    for (let currentDomain in domains) {
+      // by default, do not send GPC signals
+      let value = false;
+      // send GPC signals if the currentDomain is in the checkList
+      if (result.CHECKLIST.includes(currentDomain)) value = true;
+      else {
+          // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
+          if ((result.USER_CHOICES["Others"] == true)){
+              if (!(result.CHECKNOTLIST.includes(currentDomain))) value = true;
+          }
+      }
+      // add the currentDomain and store it in the local storage
+      console.log(value)
+      domains[currentDomain] = value;
+      console.log(domains)
+    }
+    chrome.storage.local.set({DOMAINS: domains});
+    createList()
+    // notify background to update the cache used for look up
+    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
+})
 }
 
 // Renders the `domain list` view in the options page
