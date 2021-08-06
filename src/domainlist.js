@@ -59,33 +59,6 @@ export function allOff(domains) {
   return true
 }
 
-export function updatePrefScheme3() {
-  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "ADVLIST"], function (result){
-    let domains = result.DOMAINS;
-    for(let d in domains){
-      // by default, do not send GPC signals
-      let value = false;
-      // if user chose extremely privacy sensitive: send GPC signals
-      if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
-      // if user chose not privacy sensitive: do not send GPC signals
-      else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
-          value = false;
-          if (result.ADVLIST.includes(d)) value = true;
-      }
-      // if the user chose moderately gpc signals
-      else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
-          // by default, the GPC signals are not sent unless the currentDomain is the the checkList
-          value = false;
-          if (result.CHECKLIST.includes(d)) value = true;
-      }
-      // add the currentDomain and store it in the local storage
-      domains[d] = value;
-      console.log(domains)
-    }
-    chrome.storage.local.set({DOMAINS: domains});
-    // notify background to update the cache used for look up
-    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
-})}
 
 
 
