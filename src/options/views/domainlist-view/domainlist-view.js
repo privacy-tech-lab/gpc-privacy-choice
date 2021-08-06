@@ -171,20 +171,23 @@ function addEventListeners() {
         addToggleListeners();
       }
   
-    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "DOMAINS"], function (result) {  
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updateAllPref(result.DOMAINS)
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
-          createDefaultSettingInfo() 
+          createDefaultSettingInfo()
+          updateAllPref(result.DOMAINS)
         }
         if (event.target.id == 'not-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
-          createDefaultSettingInfo()  
+          createDefaultSettingInfo()
+          updateAllPref(result.DOMAINS)
         }
       }
       if(result.UI_SCHEME==2){
