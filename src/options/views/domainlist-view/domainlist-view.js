@@ -170,20 +170,82 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
-
-    if(event.target.id == 'extremely-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
-      console.log("click listner")   
-      createDefaultSettingInfo()
-    }
-    if (event.target.id == 'moderately-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
-      createDefaultSettingInfo() 
-    }
-    if (event.target.id == 'not-privacy-sensitive') {
-      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
-      createDefaultSettingInfo()  
-    }
+    
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
+      if(result.UI_SCHEME==3){
+        if(event.target.id == 'extremely-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'moderately-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+          createDefaultSettingInfo() 
+        }
+        if (event.target.id == 'not-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+          createDefaultSettingInfo()  
+        }
+      }
+      if(result.UI_SCHEME==2){
+        let userChoices=result.USER_CHOICES
+        console.log(userChoices)
+        if(event.target.id == 'advertising') {
+          userChoices["Advertisng"]=!userChoices["Advertisng"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'analytics') {
+          userChoices["Analytics"]=!userChoices["Analytics"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'content') {
+          userChoices["Content"]=!userChoices["Content"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'fingerprintinginvasive') {
+          userChoices["FingerprintingInvasive"]=!userChoices["FingerprintingInvasive"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'fingerprintinggeneral') {
+          userChoices["FingerprintingGeneral"]=!userChoices["FingerprintingGeneral"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'social') {
+          userChoices["Social"]=!userChoices["Social"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'cryptomining') {
+          userChoices["Cryptomining"]=!userChoices["Cryptomining"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'disconnect') {
+          userChoices["Disconnect"]=!userChoices["Disconnect"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'others') {
+          userChoices["Others"]=!userChoices["Others"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+      }
+    })
 
   ;});
   addToggleListeners();
@@ -260,25 +322,25 @@ function createDefaultSettingInfo(){
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="advertising-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="advertising"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Advertising</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="content-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="content"></a>
                   <span uk-icon="icon: settings; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Content</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="analytics-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="analytics"></a>
                   <span uk-icon="icon: settings; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Analytics</h3>
               </div>
@@ -286,25 +348,25 @@ function createDefaultSettingInfo(){
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="fingerprintinginvasive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="fingerprintinginvasive"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Fingerprinting Invasive</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="fingerprintinggerneral-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="fingerprintinggeneral"></a>
                   <span uk-icon="icon: code; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Fingerprinting General</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="social"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Social</h3>
               </div>
@@ -312,25 +374,25 @@ function createDefaultSettingInfo(){
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="cryptomining-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="cryptomining"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Cryptomining</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="disconnect-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="disconnect"></a>
                   <span uk-icon="icon: code; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Disconnect</h3>
               </div>
           </div>
           <div class="choice">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#"></a>
+                  <a class="uk-position-cover" href="#" id="others"></a>
                   <span uk-icon="icon: cog; ratio: 4"></span>
                   <h3 class="uk-card-title uk-margin">Others</h3>
               </div>
@@ -418,19 +480,49 @@ function createDefaultSettingInfo(){
 
       }
   }
-    if(result.UI_SCHEME==3){
-      document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
-      console.log(result.USER_CHOICES)
-      if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
-        document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
-      }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
-        document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
-      }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(result.USER_CHOICES=="Not Privacy-Sensitive"){
-        document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
-      }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
-    }
+
+  document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+  if(result.UI_SCHEME==3){
+    if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+      document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+      document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+      document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+  }
+  if(result.UI_SCHEME==2){
+    let userChoices=result.USER_CHOICES
+    if(userChoices['Advertsing']){
+      document.getElementById('advertising-card').classList.add('uk-card-primary')
+    }else document.getElementById('advertising-card').classList.remove("uk-card-primary");
+    if(userChoices['Analytics']){
+      document.getElementById('analytics-card').classList.add('uk-card-primary')
+    }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
+    if(userChoices['Content']){
+      document.getElementById('content-card').classList.add('uk-card-primary')
+    }else document.getElementById('content-card').classList.remove("uk-card-primary");
+    if(userChoices['FingerprintingInvasive']){
+      document.getElementById('fingerprintinginvasive-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprintinginvasive-card').classList.remove("uk-card-primary");
+    if(userChoices['FingerprintingGeneral']){
+      document.getElementById('fingerprintinggerneral-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprintinggerneral-card').classList.remove("uk-card-primary");
+    if(userChoices["Social"]){
+      document.getElementById('social-card').classList.add('uk-card-primary')
+    }else document.getElementById('social-card').classList.remove("uk-card-primary");
+    if(userChoices['Cryptomining']){
+      document.getElementById('cryptomining-card').classList.add('uk-card-primary')
+    }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
+    if(userChoices['Disconnect']){
+      document.getElementById('disconnect-card').classList.add('uk-card-primary')
+    }else document.getElementById('disconnect-card').classList.remove("uk-card-primary");
+    if(userChoices['Others']){
+      document.getElementById('others-card').classList.add('uk-card-primary')
+    }else document.getElementById('others-card').classList.remove("uk-card-primary");
+  }
 })
 }
 
