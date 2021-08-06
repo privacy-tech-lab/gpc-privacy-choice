@@ -170,7 +170,6 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
-<<<<<<< HEAD
     
     chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
       if(result.UI_SCHEME==3){
@@ -247,7 +246,6 @@ function addEventListeners() {
         }
       }
     })
-=======
 
     //TODO: set up data collection for privacy profile
     if(event.target.id == 'extremely-privacy-sensitive') {
@@ -272,7 +270,6 @@ function addEventListeners() {
       chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
       createDefaultSettingInfo()  
     }
->>>>>>> d0c4ced7ed690ee3525b733d27f3ff6a17700472
 
   ;});
   addToggleListeners();
