@@ -616,7 +616,7 @@ function createDomainlistManagerButtons(){
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
 function createList() {
   let items = ""
-  chrome.storage.local.get(["DOMAINS"], function (result) { 
+  chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) { 
     for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
       items +=
             `
@@ -676,8 +676,15 @@ function createList() {
         </div>
       </li>
             `
+
     }
     document.getElementById('domainlist-main').innerHTML = items;
+
+    for (let domain of Object.values(Object.keys(result.DOMAINS))){
+      if(result.UI_SCHEME==2 || result.UI_SCHEME==3){
+        document.getElementById(`delete ${domain}`).classList.add("hide")
+      }
+    }
   });
 }
 
