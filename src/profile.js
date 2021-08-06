@@ -65,6 +65,9 @@ function submit(prolificID, userProfile){
             } 
         }, 2000);
     });
+    chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING})
+      })
 }
 
 // Helper function to validate prolific ID

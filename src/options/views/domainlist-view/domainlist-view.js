@@ -170,6 +170,107 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
+  
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
+      if(result.UI_SCHEME==3){
+        if(event.target.id == 'extremely-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'moderately-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+          createDefaultSettingInfo() 
+        }
+        if (event.target.id == 'not-privacy-sensitive') {
+          chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+          createDefaultSettingInfo()  
+        }
+      }
+      if(result.UI_SCHEME==2){
+        let userChoices=result.USER_CHOICES
+        console.log(userChoices)
+        if(event.target.id == 'advertising') {
+          userChoices["Advertising"]=!userChoices["Advertising"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'analytics') {
+          userChoices["Analytics"]=!userChoices["Analytics"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'content') {
+          userChoices["Content"]=!userChoices["Content"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'fingerprintinginvasive') {
+          userChoices["FingerprintingInvasive"]=!userChoices["FingerprintingInvasive"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'fingerprintinggeneral') {
+          userChoices["FingerprintingGeneral"]=!userChoices["FingerprintingGeneral"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if(event.target.id == 'social') {
+          userChoices["Social"]=!userChoices["Social"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'cryptomining') {
+          userChoices["Cryptomining"]=!userChoices["Cryptomining"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'disconnect') {
+          userChoices["Disconnect"]=!userChoices["Disconnect"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+        if (event.target.id == 'others') {
+          userChoices["Others"]=!userChoices["Others"]
+          chrome.storage.local.set({USER_CHOICES: userChoices});
+          console.log("click listner")   
+          createDefaultSettingInfo()
+        }
+      }
+    })
+
+    //TODO: set up data collection for privacy profile
+    if(event.target.id == 'extremely-privacy-sensitive') {
+      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING})
+      })
+      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+      console.log("click listner")   
+      createDefaultSettingInfo()
+    }
+    if (event.target.id == 'moderately-privacy-sensitive') {
+      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING})
+      })
+      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+      createDefaultSettingInfo() 
+    }
+    if (event.target.id == 'not-privacy-sensitive') {
+      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy-Sensitive", universalSetting: result.UV_SETTING})
+      })
+      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+      createDefaultSettingInfo()  
+    }
+
   ;});
   addToggleListeners();
 }
@@ -213,7 +314,7 @@ function filterList() {
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
   
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
 
     let apply_all_switch =
@@ -238,12 +339,130 @@ function createDefaultSettingInfo(){
     `
 
     let defaultSettingInfo;
+
     if(result.UI_SCHEME==2){
-      defaultSettingInfo ="UI SCHEME 2"
+      defaultSettingInfo =
+      `
+      <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice">
+          <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+          uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+              <a class="uk-position-cover first" href="#" id="advertising" checked></a>
+              <span uk-icon="icon: cog; ratio: 4"></span>
+              <span class="uk-text-middle">Advertising</span>
+          </div>
+          </div>
+          <div class="choice">
+            <div id='content-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="content" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Content</span>
+            </div>
+            </div>
+          <div class="choice">
+            <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="analytics" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Analytics</span>
+            </div>
+        </div>
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+      <div class="choice">
+            <div id='fingerprintinginvasive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="fingerprintinginvasive" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Fingerprinting Invasive</span>
+            </div>
+        </div>
+          <div class="choice">
+                    <div id='fingerprintinggerneral-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="fingerprintinggeneral" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Fingerprinting General</span>
+                    </div>
+                </div>
+          <div class="choice">
+                    <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="social" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Social</span>
+                    </div>
+                </div>
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice">
+            <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Cryptomining</span>
+                  </div>
+            </div>
+          <div class="choice">
+                    <div id='disconnect-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="disconnect" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Disconnect</span>
+                    </div>
+                </div>
+          <div class="choice">
+                    <div id='other-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="other" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Other</span>
+                    </div>
+                </div>
+      </div>
+
+
+      `
     }
 
     if(result.UI_SCHEME==3){
-      defaultSettingInfo ="UI SCHEME 3"
+      
+      defaultSettingInfo =
+      `
+      <div class="uk-container main">
+            <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
+            <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
+                <div class="choice">
+                    <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title: GPC signals will only be sent to websites that have ads.; pos: top-right">
+                        <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive"></a>
+                        <span uk-icon="icon: code; ratio: 4"></span>
+                        <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
+                    </div>
+                </div>
+                <div class="choice">
+                    <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title: GPC signals will not be sent to any websites.; pos: top-right">
+                        <a class="uk-position-cover third" href="#" id="not-privacy-sensitive"></a>
+                        <span uk-icon="icon: settings; ratio: 4"></span>
+                        <span class="uk-text-middle">Not Privacy-Sensitive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+      `
+
     }
 
     if(result.UI_SCHEME==1){
@@ -285,10 +504,52 @@ function createDefaultSettingInfo(){
 
       }
   }
-    
-    document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+
+  document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+  if(result.UI_SCHEME==3){
+    if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+      document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+      document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
+    if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+      document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+    }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+  }
+  if(result.UI_SCHEME==2){
+    let userChoices=result.USER_CHOICES
+    if(userChoices['Advertising']){
+      document.getElementById('advertising-card').classList.add('uk-card-primary')
+    }else document.getElementById('advertising-card').classList.remove("uk-card-primary");
+    if(userChoices['Analytics']){
+      document.getElementById('analytics-card').classList.add('uk-card-primary')
+    }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
+    if(userChoices['Content']){
+      document.getElementById('content-card').classList.add('uk-card-primary')
+    }else document.getElementById('content-card').classList.remove("uk-card-primary");
+    if(userChoices['FingerprintingInvasive']){
+      document.getElementById('fingerprintinginvasive-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprintinginvasive-card').classList.remove("uk-card-primary");
+    if(userChoices['FingerprintingGeneral']){
+      document.getElementById('fingerprintinggerneral-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprintinggerneral-card').classList.remove("uk-card-primary");
+    if(userChoices["Social"]){
+      document.getElementById('social-card').classList.add('uk-card-primary')
+    }else document.getElementById('social-card').classList.remove("uk-card-primary");
+    if(userChoices['Cryptomining']){
+      document.getElementById('cryptomining-card').classList.add('uk-card-primary')
+    }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
+    if(userChoices['Disconnect']){
+      document.getElementById('disconnect-card').classList.add('uk-card-primary')
+    }else document.getElementById('disconnect-card').classList.remove("uk-card-primary");
+    if(userChoices['Others']){
+      document.getElementById('others-card').classList.add('uk-card-primary')
+    }else document.getElementById('others-card').classList.remove("uk-card-primary");
+  }
 })
 }
+
 
 // Create HTML for buttons to manage entire domainlist at once
 function createDomainlistManagerButtons(){
@@ -344,12 +605,18 @@ function createDomainlistManagerButtons(){
   `
 
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
+
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+  if(result.UI_SCHEME==2 || result.UI_SCHEME==3)
+    document.getElementById('domainlist-manager-btns').classList.add("hide")
+  })
+
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
 function createList() {
   let items = ""
-  chrome.storage.local.get(["DOMAINS"], function (result) { 
+  chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) { 
     for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
       items +=
             `
@@ -409,8 +676,15 @@ function createList() {
         </div>
       </li>
             `
+
     }
     document.getElementById('domainlist-main').innerHTML = items;
+
+    for (let domain of Object.values(Object.keys(result.DOMAINS))){
+      if(result.UI_SCHEME==2 || result.UI_SCHEME==3){
+        document.getElementById(`delete ${domain}`).classList.add("hide")
+      }
+    }
   });
 }
 

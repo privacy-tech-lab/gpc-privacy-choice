@@ -239,7 +239,7 @@ https://codepen.io/aaroniker/pen/oaQdQZ
   transform: scale(0.92);
 }
 .switch input:checked + span {
-  background:rgb(51, 153, 255);
+  background: rgb(51, 153, 255);
   box-shadow: 0 8px 16px -1px rgba(0, 102, 204, 0.363);
 }
 .switch input:checked + span:before {
@@ -320,4 +320,9 @@ https://codepen.io/aaroniker/pen/oaQdQZ
   color: white !important;
   background-color: #2f5597 !important;
   border: 1px solid #2f5597 !important;
+}
+
+.hide {
+  visibility: hidden;
+  height: 0px;
 }
