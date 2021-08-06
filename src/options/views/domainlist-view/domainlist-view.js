@@ -170,7 +170,7 @@ function addEventListeners() {
         createList();
         addToggleListeners();
       }
-    
+  
     chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
@@ -191,7 +191,7 @@ function addEventListeners() {
         let userChoices=result.USER_CHOICES
         console.log(userChoices)
         if(event.target.id == 'advertising') {
-          userChoices["Advertisng"]=!userChoices["Advertisng"]
+          userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
@@ -519,7 +519,7 @@ function createDefaultSettingInfo(){
   }
   if(result.UI_SCHEME==2){
     let userChoices=result.USER_CHOICES
-    if(userChoices['Advertsing']){
+    if(userChoices['Advertising']){
       document.getElementById('advertising-card').classList.add('uk-card-primary')
     }else document.getElementById('advertising-card').classList.remove("uk-card-primary");
     if(userChoices['Analytics']){
