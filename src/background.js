@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 3;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
