@@ -168,7 +168,7 @@ async function updateSendSignalScheme2(){
       }
     })
   }
-  console.log("updated signal for " + currentDomain + " is " + sendSignal);
+  // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
 // SCHEME 3:
@@ -185,7 +185,7 @@ async function updateSendSignalScheme3(){
       }
     })
   }
-  console.log("updated signal for " + currentDomain + " is " + sendSignal);
+  // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
 // TODO
@@ -196,14 +196,14 @@ function addHeaders (details)  {
   currentDomain = getDomain(details.url);
   updateSendSignal();
   if (sendSignal) {
-    console.log("adding GPC headers to " + currentDomain);
+    // console.log("adding GPC headers to " + currentDomain);
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
       details.requestHeaders.push({ name: s.name, value: s.value });
     }
     return { requestHeaders: details.requestHeaders };
   } else {
-    console.log("not adding GPC headers to " + currentDomain);
+    // console.log("not adding GPC headers to " + currentDomain);
     return { requestHeaders: details.requestHeaders };
   }
 };
