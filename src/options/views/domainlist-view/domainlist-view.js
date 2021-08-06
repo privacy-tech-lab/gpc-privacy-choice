@@ -344,7 +344,7 @@ function createDefaultSettingInfo(){
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-          uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+          uk-tooltip="title: ; pos: top-right">
               <a class="uk-position-cover first" href="#" id="advertising" checked></a>
               <span uk-icon="icon: cog; ratio: 4"></span>
               <span class="uk-text-middle">Advertising</span>
@@ -352,7 +352,7 @@ function createDefaultSettingInfo(){
           </div>
           <div class="choice">
             <div id='content-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+            uk-tooltip="title: ; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="content" checked></a>
                 <span uk-icon="icon: cog; ratio: 4"></span>
                 <span class="uk-text-middle">Content</span>
@@ -360,7 +360,7 @@ function createDefaultSettingInfo(){
             </div>
           <div class="choice">
             <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+            uk-tooltip="title:; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="analytics" checked></a>
                 <span uk-icon="icon: cog; ratio: 4"></span>
                 <span class="uk-text-middle">Analytics</span>
@@ -370,7 +370,7 @@ function createDefaultSettingInfo(){
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
       <div class="choice">
             <div id='fingerprintinginvasive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+            uk-tooltip="title:; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="fingerprintinginvasive" checked></a>
                 <span uk-icon="icon: cog; ratio: 4"></span>
                 <span class="uk-text-middle">Fingerprinting Invasive</span>
@@ -378,7 +378,7 @@ function createDefaultSettingInfo(){
         </div>
           <div class="choice">
                     <div id='fingerprintinggerneral-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                    uk-tooltip="title: ; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="fingerprintinggeneral" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
                         <span class="uk-text-middle">Fingerprinting General</span>
@@ -386,7 +386,7 @@ function createDefaultSettingInfo(){
                 </div>
           <div class="choice">
                     <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                    uk-tooltip="title:; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="social" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
                         <span class="uk-text-middle">Social</span>
@@ -396,7 +396,7 @@ function createDefaultSettingInfo(){
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
             <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+            uk-tooltip="title: ; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
                 <span uk-icon="icon: cog; ratio: 4"></span>
                 <span class="uk-text-middle">Cryptomining</span>
@@ -404,18 +404,18 @@ function createDefaultSettingInfo(){
             </div>
           <div class="choice">
                     <div id='disconnect-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                    uk-tooltip="title: ; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="disconnect" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
                         <span class="uk-text-middle">Disconnect</span>
                     </div>
                 </div>
           <div class="choice">
-                    <div id='other-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="other" checked></a>
+                    <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: ; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="others" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Other</span>
+                        <span class="uk-text-middle">Others</span>
                     </div>
                 </div>
       </div>
@@ -731,19 +731,57 @@ function updatePrefScheme3() {
   })
 }
 
-function updatePrefScheme2() {
-  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
+
+async function updatePrefScheme2() {
+
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], async function (result){
+
+    let checkList = [];
+    let checkNotList = [];
+    let userChoices=result.USER_CHOICES
+    // Parse the networks json file based on the user's response to JSON
+    await fetch("/json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        let networks = (JSON.parse(result))["categories"]
+        for (let category of Object.keys(userChoices)){
+            if (userChoices[category] == true){
+                if (category != "Others"){
+                    for (let n of networks[category]){
+                        for (let c of Object.values(n)){
+                          for (let list of Object.values(c)){
+                            checkList = checkList.concat(list);
+                          }
+                        }
+                    }
+                }
+            } else {
+                if (category != "Others"){
+                    for (let n of networks[category]){
+                        for (let c of Object.values(n)){
+                          for (let list of Object.values(c)){
+                            checkNotList = checkNotList.concat(list);
+                          }
+                        }
+                    }
+                }   
+            }
+        }
+      })
+    
+    chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList})
+
     console.log(result.USER_CHOICES)
     let domains = result.DOMAINS;
     for (let currentDomain in domains) {
       // by default, do not send GPC signals
       let value = false;
       // send GPC signals if the currentDomain is in the checkList
-      if (result.CHECKLIST.includes(currentDomain)) value = true;
+      if (checkList.includes(currentDomain)) value = true;
       else {
           // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
           if ((result.USER_CHOICES["Others"] == true)){
-              if (!(result.CHECKNOTLIST.includes(currentDomain))) value = true;
+              if (!(checkNotList.includes(currentDomain))) value = true;
           }
       }
       // add the currentDomain and store it in the local storage
