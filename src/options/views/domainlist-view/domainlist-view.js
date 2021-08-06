@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
+import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff, updatePrefScheme3} from "../../../domainlist.js";
 
 const headings = {
     title: 'Settings',
@@ -703,7 +703,12 @@ function createList() {
 //   chrome.storage.local.set({FIRST_INSTALLED: false});
 // }
 
-
+function updateAllPref(domainList) {
+  for (domain in domainList) {
+    updatePrefScheme3(domain);
+  }
+  createList();
+}
 
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {

@@ -59,6 +59,33 @@ export function allOff(domains) {
   return true
 }
 
+export function updatePrefScheme3(currentDomain) {
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "ADVLIST"], function (result){
+    let domains = result.DOMAINS;
+    // by default, do not send GPC signals
+    let value = false;
+    // if user chose extremely privacy sensitive: send GPC signals
+    if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+    // if user chose not privacy sensitive: do not send GPC signals
+    else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
+        value = false;
+        if (result.ADVLIST.includes(currentDomain)) value = true;
+    }
+    // if the user chose moderately gpc signals
+    else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+        // by default, the GPC signals are not sent unless the currentDomain is the the checkList
+        value = false;
+        if (result.CHECKLIST.includes(currentDomain)) value = true;
+    }
+    // add the currentDomain and store it in the local storage
+    domains[currentDomain] = value;
+    chrome.storage.local.set({DOMAINS: domains});
+    // notify background to update the cache used for look up
+    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
+})}
+
+
+
 // Generates the HTML that will build the domainlist switch for a given domain in the domainlist
 export function buildToggle(domain, bool) {
   let toggle;
