@@ -177,17 +177,17 @@ function addEventListeners() {
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
           createDefaultSettingInfo()
-          updateAllPref(result.DOMAINS)
+          updatePrefScheme3(result.DOMAINS)
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
-          updateAllPref(result.DOMAINS)
+          updateAllPrefScheme3(result.DOMAINS)
         }
         if (event.target.id == 'not-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
-          updateAllPref(result.DOMAINS)
+          updateAllPrefScheme3(result.DOMAINS)
         }
       }
       if(result.UI_SCHEME==2){
@@ -706,9 +706,6 @@ export function createList() {
 //   chrome.storage.local.set({FIRST_INSTALLED: false});
 // }
 
-function updateAllPref(domainList) {
-  updatePrefScheme3()
-}
 
 function updatePrefScheme3() {
   chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "ADVLIST"], function (result){
