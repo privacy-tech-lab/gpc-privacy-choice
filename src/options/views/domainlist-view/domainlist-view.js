@@ -346,81 +346,81 @@ function createDefaultSettingInfo(){
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
-              <div id="advertising-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="advertising"></a>
-                  <span uk-icon="icon: cog; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Advertising</h3>
-              </div>
+          <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+          uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+              <a class="uk-position-cover first" href="#" id="advertising" checked></a>
+              <span uk-icon="icon: cog; ratio: 4"></span>
+              <span class="uk-text-middle">Advertising</span>
+          </div>
           </div>
           <div class="choice">
-              <div id="content-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="content"></a>
-                  <span uk-icon="icon: settings; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Content</h3>
-              </div>
-          </div>
+            <div id='content-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="content" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Content</span>
+            </div>
+            </div>
           <div class="choice">
-              <div id="analytics-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="analytics"></a>
-                  <span uk-icon="icon: settings; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Analytics</h3>
-              </div>
-          </div>
+            <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="analytics" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Analytics</span>
+            </div>
+        </div>
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+      <div class="choice">
+            <div id='fingerprintinginvasive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="fingerprintinginvasive" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Fingerprinting Invasive</span>
+            </div>
+        </div>
+          <div class="choice">
+                    <div id='fingerprintinggerneral-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="fingerprintinggeneral" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Fingerprinting General</span>
+                    </div>
+                </div>
+          <div class="choice">
+                    <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="social" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Social</span>
+                    </div>
+                </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
-              <div id="fingerprintinginvasive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="fingerprintinginvasive"></a>
-                  <span uk-icon="icon: cog; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Fingerprinting Invasive</h3>
-              </div>
-          </div>
+            <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
+                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span class="uk-text-middle">Cryptomining</span>
+                  </div>
+            </div>
           <div class="choice">
-              <div id="fingerprintinggerneral-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="fingerprintinggeneral"></a>
-                  <span uk-icon="icon: code; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Fingerprinting General</h3>
-              </div>
-          </div>
+                    <div id='disconnect-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="disconnect" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Disconnect</span>
+                    </div>
+                </div>
           <div class="choice">
-              <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="social"></a>
-                  <span uk-icon="icon: cog; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Social</h3>
-              </div>
-          </div>  
-      </div>
-      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice">
-              <div id="cryptomining-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="cryptomining"></a>
-                  <span uk-icon="icon: cog; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Cryptomining</h3>
-              </div>
-          </div>
-          <div class="choice">
-              <div id="disconnect-card" class="uk-card-small uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="disconnect"></a>
-                  <span uk-icon="icon: code; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Disconnect</h3>
-              </div>
-          </div>
-          <div class="choice">
-              <div id="others-card" class="uk-card-small uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.; pos: top-right">
-                  <a class="uk-position-cover" href="#" id="others"></a>
-                  <span uk-icon="icon: cog; ratio: 4"></span>
-                  <h3 class="uk-card-title uk-margin">Others</h3>
-              </div>
-          </div>  
+                    <div id='other-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="other" checked></a>
+                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span class="uk-text-middle">Other</span>
+                    </div>
+                </div>
       </div>
 
 
