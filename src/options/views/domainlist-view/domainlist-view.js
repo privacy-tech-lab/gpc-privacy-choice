@@ -182,12 +182,12 @@ function addEventListeners() {
         if (event.target.id == 'moderately-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
-          updateAllPrefScheme3(result.DOMAINS)
+          updatePrefScheme3(result.DOMAINS)
         }
         if (event.target.id == 'not-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
-          updateAllPrefScheme3(result.DOMAINS)
+          updatePrefScheme3(result.DOMAINS)
         }
       }
       if(result.UI_SCHEME==2){
