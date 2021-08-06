@@ -177,17 +177,17 @@ function addEventListeners() {
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
           createDefaultSettingInfo()
-          updatePrefScheme3(result.DOMAINS)
+          updatePrefScheme3()
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
-          updatePrefScheme3(result.DOMAINS)
+          updatePrefScheme3()
         }
         if (event.target.id == 'not-privacy-sensitive') {
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
-          updatePrefScheme3(result.DOMAINS)
+          updatePrefScheme3()
         }
       }
       if(result.UI_SCHEME==2){
