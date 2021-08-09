@@ -64,25 +64,43 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       })
       .then(openPage("profile.html"));
   } else {
-    let checkList = {"Advertising":[], "Analytics":[], "FingerprintingInvasive":[], "FingerprintingGeneral":[], "Cryptomining":[]}
-    let gpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
-    let nonGpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
     fetch("json/services.json")
       .then((response) => response.text())
-      .then((result) =>{
-        networks = (JSON.parse(result))["categories"];
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
         for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
           for (let n of networks[category]){
             for (let c of Object.values(n)){
               for (let list of Object.values(c)){
-                checkList[category] = checkList[category].concat(list);
+                checkList = checkList.concat(list);
               }
             }
           }
         }
-        chrome.storage.local.set({TOTAL_REQUEST: 0, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest, CHECKLIST: checkList});
+        console.log(checkList);
+        chrome.storage.local.set({CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0});
       })
-      .then(openPage("registration.html"));
+      .then(openPage("registration.html"))
+
+    // let checkList = {"Advertising":[], "Analytics":[], "FingerprintingInvasive":[], "FingerprintingGeneral":[], "Cryptomining":[]}
+    // let gpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
+    // let nonGpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
+    // fetch("json/services.json")
+    //   .then((response) => response.text())
+    //   .then((result) =>{
+    //     networks = (JSON.parse(result))["categories"];
+    //     for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+    //       for (let n of networks[category]){
+    //         for (let c of Object.values(n)){
+    //           for (let list of Object.values(c)){
+    //             checkList[category] = checkList[category].concat(list);
+    //           }
+    //         }
+    //       }
+    //     }
+    //     chrome.storage.local.set({TOTAL_REQUEST: 0, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest, CHECKLIST: checkList});
+    //   })
+    //   .then(openPage("registration.html"));
   } 
   await createUser(userScheme); 
 });

@@ -263,10 +263,28 @@ body.addEventListener('click', event => {
 chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
     let domains = result.DOMAINS;
     let currentDomain = getDomain(window.location.href);
-    // banner is only relevant for default scheme and autogeneralization scheme
-    if (result.UI_SCHEME == 1 || result.UI_SCHEME == 4){
-        // if apply all is not selected and the user is on a new domain, display the banner
+    if (result.UI_SCHEME == 1){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner();
+    } else if (result.UI_SCHEME == 4){
+        let random = Math.floor(Math.random() * 3);
+        if (random == 1 && !(currentDomain in domains)) {
+            showBanner();
+        } else {
+            chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result){
+                let currentDomain = getDomain(window.location.href);
+                let domains = result.DOMAINS;
+                let value = false;
+                if (!(currentDomain in domains)){
+                    console.log("Not in the domain list")
+                    console.log(result.CHECKLIST);
+                    if (result.CHECKLIST.includes(currentDomain)) value = true;
+                    domains[currentDomain] = value;
+                    console.log(domains);
+                    chrome.storage.local.set({DOMAINS: domains});
+                    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'});
+                }
+            })
+        }
     } else {
         // questionnaire scheme
         if (result.UI_SCHEME == 2) addToDomainListScheme2();
@@ -541,12 +559,12 @@ function addToDomainListScheme3(){
 }
 
 
-chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST"], function (result){
-    console.log("The local storage looks like the following: ")
-    console.log(result.TOTAL_REQUEST);
-    console.log(result.GPC_REQUEST);
-    console.log(result.NON_GPC_REQUEST);
-})
+// chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST"], function (result){
+//     console.log("The local storage looks like the following: ")
+//     console.log(result.TOTAL_REQUEST);
+//     console.log(result.GPC_REQUEST);
+//     console.log(result.NON_GPC_REQUEST);
+// })
 
 
 //send information to background regarding the source  of a potential ad interaction
