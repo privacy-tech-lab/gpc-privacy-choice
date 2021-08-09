@@ -180,12 +180,14 @@ body.addEventListener('click', event => {
         // situation 1: enable GPC for the current domain
         removeBanner();
         chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-        chrome.storage.local.get(["DOMAINS"], function (result) {
+        chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER"], function (result) {
             new_domains = result.DOMAINS;
             new_domains[currentDomain] = true;
-            chrome.storage.local.set({ DOMAINS: new_domains });
-            chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
+            sendSignalBanner = result.SEND_SIGNAL_BANNER; 
+            console.log("sendSignalBanner: " + sendSignalBanner);
+            if (sendSignalBanner !== undefined) chrome.storage.local.set({ DOMAINS: new_domains, SEND_SIGNAL_BANNER: sendSignalBanner+1});
+            else chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
             // Sends data to Setting Interaction History
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
                 chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off"})
@@ -196,12 +198,13 @@ body.addEventListener('click', event => {
         // situation 2: disable GPC for the current domain
         removeBanner();
         chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-        chrome.storage.local.get(["DOMAINS"], function (result) {
-        new_domains = result.DOMAINS;
-        new_domains[currentDomain] = false;
-        chrome.storage.local.set({ DOMAINS: new_domains });
-        chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
+        chrome.storage.local.get(["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"], function (result) {
+            new_domains = result.DOMAINS;
+            new_domains[currentDomain] = false;
+            notSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
+            if (notSendSignalBanner !== undefined) chrome.storage.local.set({ DOMAINS: new_domains, DO_NOT_SEND_SIGNAL_BANNER: notSendSignalBanner+1});
+            else chrome.storage.local.set({ DOMAINS: new_domains });
+            chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
         });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
@@ -566,6 +569,12 @@ function addToDomainListScheme3(){
 //     console.log(result.NON_GPC_REQUEST);
 // })
 
+
+chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
+    console.log("The local storage looks like the following: ")
+    console.log("number of no tracking banner:" + result.SEND_SIGNAL_BANNER);
+    console.log("number of tracking banner: " + result.DO_NOT_SEND_SIGNAL_BANNER);
+})
 
 //send information to background regarding the source  of a potential ad interaction
 chrome.runtime.onMessage.addListener(
