@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 4;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
@@ -63,7 +63,27 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         chrome.storage.local.set({ADVLIST: advList});
       })
       .then(openPage("profile.html"));
-  } else openPage("registration.html");
+  } else {
+    let checkList = {"Advertising":[], "Analytics":[], "FingerprintingInvasive":[], "FingerprintingGeneral":[], "Cryptomining":[]}
+    let gpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
+    let nonGpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) =>{
+        networks = (JSON.parse(result))["categories"];
+        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+          for (let n of networks[category]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                checkList[category] = checkList[category].concat(list);
+              }
+            }
+          }
+        }
+        chrome.storage.local.set({TOTAL_REQUEST: 0, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest, CHECKLIST: checkList});
+      })
+      .then(openPage("registration.html"));
+  } 
   await createUser(userScheme); 
 });
 
@@ -188,8 +208,31 @@ async function updateSendSignalScheme3(){
   // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
-// TODO
-function updateSendSignalScheme4(){}
+// SCHEME 4:
+async function updateSendSignalScheme4(){
+  if(domainlistEnabledCache){
+    if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
+    else{
+      if (applyAllCache) sendSignal=enabledCache
+      else sendSignal=false
+    }
+  } else sendSignal = enabledCache
+
+  await chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST", "CHECKLIST"], function (result){
+    let totalRequest = result.TOTAL_REQUEST;
+    let gpcRequest = result.GPC_REQUEST;
+    let nonGpcRequest = result.NON_GPC_REQUEST;
+    let checkList = result.CHECKLIST;
+    for (let category of Object.keys(checkList)){
+      if (checkList[category].includes(currentDomain)){
+        if (sendSignal){gpcRequest[category] = gpcRequest[category]+1}
+        else {nonGpcRequest[category] = nonGpcRequest[category]+1}
+      }
+    }
+    totalRequest += 1;
+    chrome.storage.local.set({TOTAL_REQUEST: totalRequest, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest});
+  })
+}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {

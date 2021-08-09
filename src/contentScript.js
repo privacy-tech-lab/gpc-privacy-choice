@@ -540,6 +540,15 @@ function addToDomainListScheme3(){
     })
 }
 
+
+chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST"], function (result){
+    console.log("The local storage looks like the following: ")
+    console.log(result.TOTAL_REQUEST);
+    console.log(result.GPC_REQUEST);
+    console.log(result.NON_GPC_REQUEST);
+})
+
+
 //send information to background regarding the source  of a potential ad interaction
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
