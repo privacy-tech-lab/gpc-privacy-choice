@@ -4,12 +4,9 @@ import {userResgistration} from "./firebase.js"
 let userChoices = {
     "Advertising": false,
     "Analytics": false, 
-    "Content": false,
-    "FingerprintingInvasive": false,
-    "FingerprintingGeneral": false, 
+    "Fingerprinting": false,
     "Social": false,
     "Cryptomining": false,
-    "Disconnect": false, 
     "Others": false
 };
 
@@ -71,21 +68,47 @@ async function submit(prolificID, networks){
         for (let category of Object.keys(userChoices)){
             if (userChoices[category] == true){
                 if (category != "Others"){
-                    for (let n of networks[category]){
-                        for (let c of Object.values(n)){
-                          for (let list of Object.values(c)){
-                            checkList = checkList.concat(list);
-                          }
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]) {
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                    checkList = checkList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                            for (let list of Object.values(c)){
+                                checkList = checkList.concat(list);
+                            }
+                            }
                         }
                     }
                 }
             } else {
                 if (category != "Others"){
-                    for (let n of networks[category]){
-                        for (let c of Object.values(n)){
-                          for (let list of Object.values(c)){
-                            checkNotList = checkNotList.concat(list);
-                          }
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]){
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                        checkNotList = checkNotList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                                for (let list of Object.values(c)){
+                                    checkNotList = checkNotList.concat(list);
+                                }
+                            }
                         }
                     }
                 }   

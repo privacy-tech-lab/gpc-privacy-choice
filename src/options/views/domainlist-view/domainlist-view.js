@@ -216,22 +216,8 @@ function addEventListeners() {
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
-        if(event.target.id == 'content') {
-          userChoices["Content"]=!userChoices["Content"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
-          updatePrefScheme2()
-        }
-        if (event.target.id == 'fingerprintinginvasive') {
-          userChoices["FingerprintingInvasive"]=!userChoices["FingerprintingInvasive"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
-          updatePrefScheme2()
-        }
-        if(event.target.id == 'fingerprintinggeneral') {
-          userChoices["FingerprintingGeneral"]=!userChoices["FingerprintingGeneral"]
+        if(event.target.id == 'fingerprinting') {
+          userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
@@ -246,13 +232,6 @@ function addEventListeners() {
         }
         if (event.target.id == 'cryptomining') {
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
-          updatePrefScheme2()
-        }
-        if (event.target.id == 'disconnect') {
-          userChoices["Disconnect"]=!userChoices["Disconnect"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
@@ -342,22 +321,14 @@ function createDefaultSettingInfo(){
       `
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice">
+        <div class="choice">
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
           uk-tooltip="title: ; pos: top-right">
               <a class="uk-position-cover first" href="#" id="advertising" checked></a>
               <span uk-icon="icon: cog; ratio: 4"></span>
               <span class="uk-text-middle">Advertising</span>
           </div>
-          </div>
-          <div class="choice">
-            <div id='content-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: ; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="content" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Content</span>
-            </div>
-            </div>
+        </div>
           <div class="choice">
             <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:; pos: top-right">
@@ -366,22 +337,22 @@ function createDefaultSettingInfo(){
                 <span class="uk-text-middle">Analytics</span>
             </div>
         </div>
+        <div class="choice">
+        <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+        uk-tooltip="title: ; pos: top-right">
+            <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
+            <span uk-icon="icon: cog; ratio: 4"></span>
+            <span class="uk-text-middle">Cryptomining</span>
+              </div>
+        </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-      <div class="choice">
-            <div id='fingerprintinginvasive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="fingerprintinginvasive" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Fingerprinting Invasive</span>
-            </div>
-        </div>
           <div class="choice">
-                    <div id='fingerprintinggerneral-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: ; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="fingerprintinggeneral" checked></a>
+                        <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Fingerprinting General</span>
+                        <span class="uk-text-middle">Fingerprinting</span>
                     </div>
                 </div>
           <div class="choice">
@@ -392,34 +363,15 @@ function createDefaultSettingInfo(){
                         <span class="uk-text-middle">Social</span>
                     </div>
                 </div>
-      </div>
-      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice">
-            <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: ; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Cryptomining</span>
-                  </div>
+                <div class="choice">
+                <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                uk-tooltip="title: ; pos: top-right">
+                    <a class="uk-position-cover first" href="#" id="others" checked></a>
+                    <span uk-icon="icon: cog; ratio: 4"></span>
+                    <span class="uk-text-middle">Others</span>
+                </div>
             </div>
-          <div class="choice">
-                    <div id='disconnect-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: ; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="disconnect" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Disconnect</span>
-                    </div>
-                </div>
-          <div class="choice">
-                    <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: ; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="others" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Others</span>
-                    </div>
-                </div>
       </div>
-
 
       `
     }
@@ -522,24 +474,15 @@ function createDefaultSettingInfo(){
     if(userChoices['Analytics']){
       document.getElementById('analytics-card').classList.add('uk-card-primary')
     }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
-    if(userChoices['Content']){
-      document.getElementById('content-card').classList.add('uk-card-primary')
-    }else document.getElementById('content-card').classList.remove("uk-card-primary");
-    if(userChoices['FingerprintingInvasive']){
-      document.getElementById('fingerprintinginvasive-card').classList.add('uk-card-primary')
-    }else document.getElementById('fingerprintinginvasive-card').classList.remove("uk-card-primary");
-    if(userChoices['FingerprintingGeneral']){
-      document.getElementById('fingerprintinggerneral-card').classList.add('uk-card-primary')
-    }else document.getElementById('fingerprintinggerneral-card').classList.remove("uk-card-primary");
+    if(userChoices['Fingerprinting']){
+      document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
     if(userChoices["Social"]){
       document.getElementById('social-card').classList.add('uk-card-primary')
     }else document.getElementById('social-card').classList.remove("uk-card-primary");
     if(userChoices['Cryptomining']){
       document.getElementById('cryptomining-card').classList.add('uk-card-primary')
     }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
-    if(userChoices['Disconnect']){
-      document.getElementById('disconnect-card').classList.add('uk-card-primary')
-    }else document.getElementById('disconnect-card').classList.remove("uk-card-primary");
     if(userChoices['Others']){
       document.getElementById('others-card').classList.add('uk-card-primary')
     }else document.getElementById('others-card').classList.remove("uk-card-primary");
@@ -740,28 +683,54 @@ async function updatePrefScheme2() {
     let checkNotList = [];
     let userChoices=result.USER_CHOICES
     // Parse the networks json file based on the user's response to JSON
-    await fetch("/json/services.json")
+    await fetch("json/services.json")
       .then((response) => response.text())
       .then((result) => {
-        let networks = (JSON.parse(result))["categories"]
+        networks = (JSON.parse(result))["categories"]
         for (let category of Object.keys(userChoices)){
             if (userChoices[category] == true){
                 if (category != "Others"){
-                    for (let n of networks[category]){
-                        for (let c of Object.values(n)){
-                          for (let list of Object.values(c)){
-                            checkList = checkList.concat(list);
-                          }
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]) {
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                    checkList = checkList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                            for (let list of Object.values(c)){
+                                checkList = checkList.concat(list);
+                            }
+                            }
                         }
                     }
                 }
             } else {
                 if (category != "Others"){
-                    for (let n of networks[category]){
-                        for (let c of Object.values(n)){
-                          for (let list of Object.values(c)){
-                            checkNotList = checkNotList.concat(list);
-                          }
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]){
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                        checkNotList = checkNotList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                                for (let list of Object.values(c)){
+                                    checkNotList = checkNotList.concat(list);
+                                }
+                            }
                         }
                     }
                 }   
