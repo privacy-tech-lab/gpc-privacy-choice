@@ -269,7 +269,8 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     if (result.UI_SCHEME == 1){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner();
     } else if (result.UI_SCHEME == 4){
-        let random = Math.floor(Math.random() * 3);
+        // let random = Math.floor(Math.random() * 3);
+        let random = 1;
         if (random == 1 && !(currentDomain in domains)) {
             showBanner();
         } else {
@@ -561,15 +562,6 @@ function addToDomainListScheme3(){
     })
 }
 
-
-// chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST"], function (result){
-//     console.log("The local storage looks like the following: ")
-//     console.log(result.TOTAL_REQUEST);
-//     console.log(result.GPC_REQUEST);
-//     console.log(result.NON_GPC_REQUEST);
-// })
-
-
 chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
     console.log("The local storage looks like the following: ")
     console.log("number of no tracking banner:" + result.SEND_SIGNAL_BANNER);
@@ -584,3 +576,16 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
+    let sendSignalBanner = result.SEND_SIGNAL_BANNER;
+    let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
+    if (sendSignalBanner + doNotSendSignalBanner == 5){
+        let userProfile = "Not Privacy-Sensitive"
+        chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
+        // chrome.runtime.openOptionsPage(() => {
+        //     let message = "We have finished learning you privacy choices! Your user privacy profile is: " + userProfile + "However, feel free to customize your personal choices here."
+        //     alert(message);
+        // })
+    }
+})
