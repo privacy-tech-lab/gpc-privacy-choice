@@ -135,6 +135,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
     })
   }
+  if (request.greeting == "LEARNING COMPLETED"){
+    chrome.runtime.openOptionsPage();
+  }
 });
 
 // Set the ORIGIN_SITE property in local storage as current site url for option page

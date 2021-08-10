@@ -583,9 +583,6 @@ chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], fu
     if (sendSignalBanner + doNotSendSignalBanner == 5){
         let userProfile = "Not Privacy-Sensitive"
         chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
-        // chrome.runtime.openOptionsPage(() => {
-        //     let message = "We have finished learning you privacy choices! Your user privacy profile is: " + userProfile + "However, feel free to customize your personal choices here."
-        //     alert(message);
-        // })
+        chrome.runtime.sendMessage({greeting:"LEARNING COMPLETED"})
     }
 })
