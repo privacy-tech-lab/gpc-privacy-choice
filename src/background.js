@@ -138,7 +138,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
-    chrome.runtime.openOptionsPage();
+    chrome.storage.local.set({"SHOW_LEARNING_OUTCOME": true}, function(){
+      chrome.runtime.openOptionsPage();
+    })
   }
 });
 

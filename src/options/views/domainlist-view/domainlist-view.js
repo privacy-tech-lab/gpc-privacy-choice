@@ -803,4 +803,13 @@ export async function domainlistView(scaffoldTemplate) {
     createDomainlistManagerButtons();
     createList();
     addEventListeners();
+    chrome.storage.local.get(["SHOW_LEARNING_OUTCOME"], function(result){
+      if (result.SHOW_LEARNING_OUTCOME == true){
+        let modal = UIkit.modal("#welcome-modal");
+        modal.show();
+        document.getElementById("welcome-modal-button").onclick = function () {modal.hide();} 
+        chrome.storage.local.set({"SHOW_LEARNING_OUTCOME": false});
+      }
+    })
+    
 }
