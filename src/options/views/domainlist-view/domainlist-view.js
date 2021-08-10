@@ -224,7 +224,7 @@ function addEventListeners() {
           updatePrefScheme2()
         }
         if(event.target.id == 'social') {
-          userChoices["Social"]=!userChoices["Social"]
+          userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
@@ -360,7 +360,7 @@ function createDefaultSettingInfo(){
                     uk-tooltip="title:; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="social" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Social</span>
+                        <span class="uk-text-middle">Content & Social</span>
                     </div>
                 </div>
                 <div class="choice">
@@ -477,7 +477,7 @@ function createDefaultSettingInfo(){
     if(userChoices['Fingerprinting']){
       document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
     }else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
-    if(userChoices["Social"]){
+    if(userChoices["Content & Social"]){
       document.getElementById('social-card').classList.add('uk-card-primary')
     }else document.getElementById('social-card').classList.remove("uk-card-primary");
     if(userChoices['Cryptomining']){
@@ -704,6 +704,17 @@ async function updatePrefScheme2() {
                             }
                         }
                     }
+                    else if (category === "Content & Social") {
+                      for (let cat of ["Content", "Social", "Disconnect"]) {
+                          for (let n of networks[cat]) {
+                              for (let c of Object.values(n)){
+                                  for (let list of Object.values(c)){
+                                  checkList = checkList.concat(list);
+                                  }
+                              }
+                          }
+                      }
+                    }
                     else {
                         for (let n of networks[category]){
                             for (let c of Object.values(n)){
@@ -726,6 +737,17 @@ async function updatePrefScheme2() {
                                 }
                             }
                         }
+                    }
+                    else if (category === "Content & Social") {
+                      for (let cat of ["Content", "Social", "Disconnect"]) {
+                          for (let n of networks[cat]) {
+                              for (let c of Object.values(n)){
+                                  for (let list of Object.values(c)){
+                                  checkNotList = checkNotList.concat(list);
+                                  }
+                              }
+                          }
+                      }
                     }
                     else {
                         for (let n of networks[category]){

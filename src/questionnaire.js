@@ -5,7 +5,7 @@ let userChoices = {
     "Advertising": false,
     "Analytics": false, 
     "Fingerprinting": false,
-    "Social": false,
+    "Content & Social": false,
     "Cryptomining": false,
     "Others": false
 };
@@ -79,6 +79,17 @@ async function submit(prolificID, networks){
                             }
                         }
                     }
+                    else if (category === "Content & Social") {
+                        for (let cat of ["Content", "Social", "Disconnect"]) {
+                            for (let n of networks[cat]) {
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                    checkList = checkList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     else {
                         for (let n of networks[category]){
                             for (let c of Object.values(n)){
@@ -97,6 +108,17 @@ async function submit(prolificID, networks){
                                 for (let c of Object.values(n)){
                                     for (let list of Object.values(c)){
                                         checkNotList = checkNotList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (category === "Content & Social") {
+                        for (let cat of ["Content", "Social", "Disconnect"]) {
+                            for (let n of networks[cat]) {
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                    checkNotList = checkNotList.concat(list);
                                     }
                                 }
                             }
