@@ -719,9 +719,9 @@ export async function domainlistView(scaffoldTemplate) {
     addEventListeners();
     chrome.storage.local.get(["SHOW_LEARNING_OUTCOME"], function(result){
       if (result.SHOW_LEARNING_OUTCOME == true){
-        let modal = UIkit.modal("#welcome-modal");
+        let modal = UIkit.modal("#learning-finish-modal");
         modal.show();
-        document.getElementById("welcome-modal-button").onclick = function () {modal.hide();} 
+        document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
         chrome.storage.local.set({"SHOW_LEARNING_OUTCOME": false});
       }
     })
