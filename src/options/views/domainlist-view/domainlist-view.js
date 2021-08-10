@@ -645,7 +645,7 @@ export function createList() {
 
 
 function updatePrefScheme3() {
-  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "ADVLIST"], function (result){
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"], function (result){
     let domains = result.DOMAINS;
     for(let d in domains){
       // by default, do not send GPC signals
@@ -655,7 +655,7 @@ function updatePrefScheme3() {
       // if user chose not privacy sensitive: do not send GPC signals
       else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
           value = false;
-          if (result.ADVLIST.includes(d)) value = true;
+          if (result.NPSLIST.includes(d)) value = true;
       }
       // if the user chose moderately gpc signals
       else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
