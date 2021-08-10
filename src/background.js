@@ -79,7 +79,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
-        console.log(checkList);
         chrome.storage.local.set({CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0});
       })
       .then(openPage("registration.html"))
@@ -238,19 +237,12 @@ async function updateSendSignalScheme4(){
     }
   } else sendSignal = enabledCache
 
-  await chrome.storage.local.get(["TOTAL_REQUEST","GPC_REQUEST", "NON_GPC_REQUEST", "CHECKLIST"], function (result){
-    let totalRequest = result.TOTAL_REQUEST;
-    let gpcRequest = result.GPC_REQUEST;
-    let nonGpcRequest = result.NON_GPC_REQUEST;
-    let checkList = result.CHECKLIST;
-    for (let category of Object.keys(checkList)){
-      if (checkList[category].includes(currentDomain)){
-        if (sendSignal){gpcRequest[category] = gpcRequest[category]+1}
-        else {nonGpcRequest[category] = nonGpcRequest[category]+1}
-      }
+  await chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
+    let sendSignalBanner = result.SEND_SIGNAL_BANNER;
+    let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
+    if (sendSignalBanner + doNotSendSignalBanner == 5){
+      chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: "Not Privacy-Sensitive"});
     }
-    totalRequest += 1;
-    chrome.storage.local.set({TOTAL_REQUEST: totalRequest, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest});
   })
 }
 
