@@ -682,11 +682,14 @@ async function updatePrefScheme2() {
     let checkList = [];
     let checkNotList = [];
     let userChoices=result.USER_CHOICES
+    console.log("listener " + checkList)
+    console.log("listener " + checkNotList)
     // Parse the networks json file based on the user's response to JSON
-    await fetch("json/services.json")
+    await fetch("../../json/services.json")
       .then((response) => response.text())
       .then((result) => {
-        networks = (JSON.parse(result))["categories"]
+        console.log("building the list")
+        let networks = (JSON.parse(result))["categories"]
         for (let category of Object.keys(userChoices)){
             if (userChoices[category] == true){
                 if (category != "Others"){
@@ -737,7 +740,8 @@ async function updatePrefScheme2() {
             }
         }
       })
-    
+    console.log("listener " + checkList)
+    console.log("listener " + checkNotList)
     chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList})
 
     console.log(result.USER_CHOICES)
