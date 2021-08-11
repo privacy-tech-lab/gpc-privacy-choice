@@ -73,7 +73,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         for (let n of networks["Advertising"]){
           for (let c of Object.values(n)){
             for (let list of Object.values(c)){
-              advList = advList.concat(list);
+              npsList = npsList.concat(list);
             }
           }
         }
@@ -86,7 +86,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
-        chrome.storage.local.set({ADVLIST: advList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
+        chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
       })
       .then(openPage("registration.html"))
   } 
