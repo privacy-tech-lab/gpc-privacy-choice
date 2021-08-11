@@ -14,7 +14,7 @@ let currentDomain = null;
 // Fetching the networks dictionary
 let networks;
 let checkList = [];
-let advList = [];
+let npsList = [];
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
 let enabledCache=true;
@@ -43,10 +43,12 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then((response) => response.text())
       .then((result) => {
         networks = (JSON.parse(result))["categories"]
-        for (let n of networks["Advertising"]){
-          for (let c of Object.values(n)){
-            for (let list of Object.values(c)){
-              advList = advList.concat(list);
+        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+          for (let n of networks[cat]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                npsList = npsList.concat(list);
+              }
             }
           }
         }
@@ -60,7 +62,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           }
         }
         chrome.storage.local.set({CHECKLIST: checkList});
-        chrome.storage.local.set({ADVLIST: advList});
+        chrome.storage.local.set({NPSLIST: npsList});
       })
       .then(openPage("profile.html"));
   } else openPage("registration.html");
@@ -175,9 +177,9 @@ async function updateSendSignalScheme2(){
 async function updateSendSignalScheme3(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
-    await chrome.storage.local.get(["CHECKLIST", "ADVLIST", "USER_CHOICES"], function(result){
+    await chrome.storage.local.get(["CHECKLIST", "NPSLIST", "USER_CHOICES"], function(result){
       if (result.USER_CHOICES == "Not Privacy-Sensitive"){
-        if (result.ADVLIST.includes(currentDomain)) sendSignal = true;
+        if (result.NPSLIST.includes(currentDomain)) sendSignal = true;
       } else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
         if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
       } else {

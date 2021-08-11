@@ -59,6 +59,9 @@ export function allOff(domains) {
   return true
 }
 
+
+
+
 // Generates the HTML that will build the domainlist switch for a given domain in the domainlist
 export function buildToggle(domain, bool) {
   let toggle;

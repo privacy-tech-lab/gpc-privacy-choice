@@ -171,20 +171,32 @@ function addEventListeners() {
         addToggleListeners();
       }
   
-    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "DOMAINS"], function (result) {  
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING})
+          })
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme3()
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING})
+          })
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
-          createDefaultSettingInfo() 
+          createDefaultSettingInfo()
+          updatePrefScheme3()
         }
         if (event.target.id == 'not-privacy-sensitive') {
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", universalSetting: result.UV_SETTING})
+          })
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
-          createDefaultSettingInfo()  
+          createDefaultSettingInfo()
+          updatePrefScheme3()
         }
       }
       if(result.UI_SCHEME==2){
@@ -195,81 +207,45 @@ function addEventListeners() {
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'analytics') {
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
-        if(event.target.id == 'content') {
-          userChoices["Content"]=!userChoices["Content"]
+        if(event.target.id == 'fingerprinting') {
+          userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
-        }
-        if (event.target.id == 'fingerprintinginvasive') {
-          userChoices["FingerprintingInvasive"]=!userChoices["FingerprintingInvasive"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
-        }
-        if(event.target.id == 'fingerprintinggeneral') {
-          userChoices["FingerprintingGeneral"]=!userChoices["FingerprintingGeneral"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if(event.target.id == 'social') {
-          userChoices["Social"]=!userChoices["Social"]
+          userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'cryptomining') {
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
-        }
-        if (event.target.id == 'disconnect') {
-          userChoices["Disconnect"]=!userChoices["Disconnect"]
-          chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
-          createDefaultSettingInfo()
+          updatePrefScheme2()
         }
         if (event.target.id == 'others') {
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
           console.log("click listner")   
           createDefaultSettingInfo()
+          updatePrefScheme2()
         }
       }
     })
-
-    //TODO: set up data collection for privacy profile
-    if(event.target.id == 'extremely-privacy-sensitive') {
-      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING})
-      })
-      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
-      console.log("click listner")   
-      createDefaultSettingInfo()
-    }
-    if (event.target.id == 'moderately-privacy-sensitive') {
-      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING})
-      })
-      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
-      createDefaultSettingInfo() 
-    }
-    if (event.target.id == 'not-privacy-sensitive') {
-      chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy-Sensitive", universalSetting: result.UV_SETTING})
-      })
-      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
-      createDefaultSettingInfo()  
-    }
 
   ;});
   addToggleListeners();
@@ -345,84 +321,57 @@ function createDefaultSettingInfo(){
       `
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice">
+        <div class="choice">
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-          uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+          uk-tooltip="title: ; pos: top-right">
               <a class="uk-position-cover first" href="#" id="advertising" checked></a>
               <span uk-icon="icon: cog; ratio: 4"></span>
               <span class="uk-text-middle">Advertising</span>
           </div>
-          </div>
-          <div class="choice">
-            <div id='content-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="content" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Content</span>
-            </div>
-            </div>
+        </div>
           <div class="choice">
             <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+            uk-tooltip="title:; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="analytics" checked></a>
                 <span uk-icon="icon: cog; ratio: 4"></span>
                 <span class="uk-text-middle">Analytics</span>
             </div>
         </div>
+        <div class="choice">
+        <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+        uk-tooltip="title:; pos: top-right">
+            <a class="uk-position-cover first" href="#" id="social" checked></a>
+            <span uk-icon="icon: cog; ratio: 4"></span>
+            <span class="uk-text-middle">Content & Social</span>
+        </div>
+        </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
       <div class="choice">
-            <div id='fingerprintinginvasive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="fingerprintinginvasive" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Fingerprinting Invasive</span>
-            </div>
+        <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+        uk-tooltip="title: ; pos: top-right">
+            <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
+            <span uk-icon="icon: cog; ratio: 4"></span>
+            <span class="uk-text-middle">Cryptomining</span>
+              </div>
         </div>
           <div class="choice">
-                    <div id='fingerprintinggerneral-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="fingerprintinggeneral" checked></a>
+                    <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: ; pos: top-right">
+                        <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Fingerprinting General</span>
+                        <span class="uk-text-middle">Fingerprinting</span>
                     </div>
                 </div>
-          <div class="choice">
-                    <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="social" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Social</span>
-                    </div>
+                <div class="choice">
+                <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                uk-tooltip="title: ; pos: top-right">
+                    <a class="uk-position-cover first" href="#" id="others" checked></a>
+                    <span uk-icon="icon: cog; ratio: 4"></span>
+                    <span class="uk-text-middle">Others</span>
                 </div>
-      </div>
-      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice">
-            <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
-                <span class="uk-text-middle">Cryptomining</span>
-                  </div>
             </div>
-          <div class="choice">
-                    <div id='disconnect-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="disconnect" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Disconnect</span>
-                    </div>
-                </div>
-          <div class="choice">
-                    <div id='other-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="other" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Other</span>
-                    </div>
-                </div>
       </div>
-
 
       `
     }
@@ -525,24 +474,15 @@ function createDefaultSettingInfo(){
     if(userChoices['Analytics']){
       document.getElementById('analytics-card').classList.add('uk-card-primary')
     }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
-    if(userChoices['Content']){
-      document.getElementById('content-card').classList.add('uk-card-primary')
-    }else document.getElementById('content-card').classList.remove("uk-card-primary");
-    if(userChoices['FingerprintingInvasive']){
-      document.getElementById('fingerprintinginvasive-card').classList.add('uk-card-primary')
-    }else document.getElementById('fingerprintinginvasive-card').classList.remove("uk-card-primary");
-    if(userChoices['FingerprintingGeneral']){
-      document.getElementById('fingerprintinggerneral-card').classList.add('uk-card-primary')
-    }else document.getElementById('fingerprintinggerneral-card').classList.remove("uk-card-primary");
-    if(userChoices["Social"]){
+    if(userChoices['Fingerprinting']){
+      document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
+    }else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
+    if(userChoices["Content & Social"]){
       document.getElementById('social-card').classList.add('uk-card-primary')
     }else document.getElementById('social-card').classList.remove("uk-card-primary");
     if(userChoices['Cryptomining']){
       document.getElementById('cryptomining-card').classList.add('uk-card-primary')
     }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
-    if(userChoices['Disconnect']){
-      document.getElementById('disconnect-card').classList.add('uk-card-primary')
-    }else document.getElementById('disconnect-card').classList.remove("uk-card-primary");
     if(userChoices['Others']){
       document.getElementById('others-card').classList.add('uk-card-primary')
     }else document.getElementById('others-card').classList.remove("uk-card-primary");
@@ -614,7 +554,7 @@ function createDomainlistManagerButtons(){
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
-function createList() {
+export function createList() {
   let items = ""
   chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) { 
     for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
@@ -704,6 +644,152 @@ function createList() {
 // }
 
 
+function updatePrefScheme3() {
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"], function (result){
+    let domains = result.DOMAINS;
+    for(let d in domains){
+      // by default, do not send GPC signals
+      let value = false;
+      // if user chose extremely privacy sensitive: send GPC signals
+      if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+      // if user chose not privacy sensitive: do not send GPC signals
+      else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
+          value = false;
+          if (result.NPSLIST.includes(d)) value = true;
+      }
+      // if the user chose moderately gpc signals
+      else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+          // by default, the GPC signals are not sent unless the currentDomain is the the checkList
+          value = false;
+          if (result.CHECKLIST.includes(d)) value = true;
+      }
+      // add the currentDomain and store it in the local storage
+      domains[d] = value;
+      console.log(domains)
+    }
+    chrome.storage.local.set({DOMAINS: domains});
+    createList()
+    // notify background to update the cache used for look up
+    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
+  })
+}
+
+
+async function updatePrefScheme2() {
+
+  chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], async function (result){
+
+    let checkList = [];
+    let checkNotList = [];
+    let userChoices=result.USER_CHOICES
+    console.log("listener " + checkList)
+    console.log("listener " + checkNotList)
+    // Parse the networks json file based on the user's response to JSON
+    await fetch("../../json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        console.log("building the list")
+        let networks = (JSON.parse(result))["categories"]
+        for (let category of Object.keys(userChoices)){
+            if (userChoices[category] == true){
+                if (category != "Others"){
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]) {
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                    checkList = checkList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (category === "Content & Social") {
+                      for (let cat of ["Content", "Social", "Disconnect"]) {
+                          for (let n of networks[cat]) {
+                              for (let c of Object.values(n)){
+                                  for (let list of Object.values(c)){
+                                  checkList = checkList.concat(list);
+                                  }
+                              }
+                          }
+                      }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                            for (let list of Object.values(c)){
+                                checkList = checkList.concat(list);
+                            }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (category != "Others"){
+                    if (category === "Fingerprinting") {
+                        for (let cat of ["FingerprintingGeneral", "FingerprintingInvasive"]) {
+                            for (let n of networks[cat]){
+                                for (let c of Object.values(n)){
+                                    for (let list of Object.values(c)){
+                                        checkNotList = checkNotList.concat(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (category === "Content & Social") {
+                      for (let cat of ["Content", "Social", "Disconnect"]) {
+                          for (let n of networks[cat]) {
+                              for (let c of Object.values(n)){
+                                  for (let list of Object.values(c)){
+                                  checkNotList = checkNotList.concat(list);
+                                  }
+                              }
+                          }
+                      }
+                    }
+                    else {
+                        for (let n of networks[category]){
+                            for (let c of Object.values(n)){
+                                for (let list of Object.values(c)){
+                                    checkNotList = checkNotList.concat(list);
+                                }
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+      })
+    console.log("listener " + checkList)
+    console.log("listener " + checkNotList)
+    chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList})
+
+    console.log(result.USER_CHOICES)
+    let domains = result.DOMAINS;
+    for (let currentDomain in domains) {
+      // by default, do not send GPC signals
+      let value = false;
+      // send GPC signals if the currentDomain is in the checkList
+      if (checkList.includes(currentDomain)) value = true;
+      else {
+          // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
+          if ((result.USER_CHOICES["Others"] == true)){
+              if (!(checkNotList.includes(currentDomain))) value = true;
+          }
+      }
+      // add the currentDomain and store it in the local storage
+      console.log(value)
+      domains[currentDomain] = value;
+      console.log(domains)
+    }
+    chrome.storage.local.set({DOMAINS: domains});
+    createList()
+    // notify background to update the cache used for look up
+    chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
+})
+}
 
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate) {

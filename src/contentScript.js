@@ -512,7 +512,7 @@ function addToDomainListScheme2(){
 
 // SCHEME 3: add new domains to the domainlist in local storage based on the user's choice of privacy profile
 function addToDomainListScheme3(){
-    chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "ADVLIST"], function (result){
+    chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
         // by default, do not send GPC signals
@@ -523,7 +523,7 @@ function addToDomainListScheme3(){
             // if user chose not privacy sensitive: do not send GPC signals
             else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
                 value = false;
-                if (result.ADVLIST.includes(currentDomain)) value = true;
+                if (result.NPSLIST.includes(currentDomain)) value = true;
             }
             // if the user chose moderately gpc signals
             else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
