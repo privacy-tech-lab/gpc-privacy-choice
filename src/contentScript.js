@@ -5,29 +5,16 @@ privacy-tech-lab, https://privacytechlab.org/
 */
 
 const body = document.querySelector('body');
-const overlayDiv = document.createElement('div');
+const banner = document.createElement('div');
+const bannerNoApplyAll = document.createElement('div');
 const head=document.querySelector('head');
 const imbedStyle=document.createElement('style');
 const popupDiv = document.createElement('div');
 
-// adding css styles to the modal
-overlayDiv.style.position = 'fixed';
-overlayDiv.style.width = '100%';
-overlayDiv.style.height = '100%';
-overlayDiv.style.top = '0';
-overlayDiv.style.left = '0';
-overlayDiv.style.right = '0';
-overlayDiv.style.bottom = '0';
-overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-overlayDiv.style.zIndex = '999999999999999';
-overlayDiv.style.textAlign = '-webkit-center';
-overlayDiv.style.display = "none";
-
 //adding class used to hide pseudo elements
-imbedStyle.innerHTML=`
-    .hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
-// adding HTML to the modal
-overlayDiv.innerHTML = `
+imbedStyle.innerHTML=`.hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
+
+banner.innerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
             <div style="
                 line-height: 1.5;
@@ -143,8 +130,87 @@ overlayDiv.innerHTML = `
                 </div>
             </div>
         </div> 
-    `
+`
 
+bannerNoApplyAll.innerHTML = `
+    <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
+        <div style="
+            line-height: 1.5;
+            font-family:unset !important;
+            font-size: unset !important;
+            color: unset !important;">
+            Your Privacy Choice
+        </div>
+        <hr style="
+                height: .01px; 
+                padding:0;
+                margin:0px 0px;
+                display: block;
+                unicode-bidi: isolate;
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                line-height: 1px;
+                border: 0;
+                border-top: 1px solid !important;
+                color:black;
+                font-weight:300;">
+        <div style="
+                margin-block-start: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                font-weight:300;
+                padding-bottom:3px;
+                margin-bottom: 7px;
+                color: black;">
+                    You have a right to make your privacy choice under the law.
+                    Would you like to send do not sell signals to this domain?
+        </div>
+        <div style="
+            padding: unset;
+            margin-top: 7px;
+            width: 10px;
+            display: inline;
+            width: unset;
+            font-family:unset !important;
+            font-size: unset !important;
+            color: unset !important;">
+                <div id="allow-btn" style="
+                    font-size:16px;
+                    border:none;
+                    background-color:
+                    rgb(51, 153, 255);
+                    color:white;
+                    padding:0.5em;
+                    border-radius:3.5px;
+                    font-weight:300;
+                    width: fit-content;
+                    display:inline;
+                    margin:3px;
+                    font-family: unset;
+                    cursor:pointer;">
+                        No
+                </div>
+                <div id="dont-allow-btn" style="
+                    font-size:16px;
+                    border:none;
+                    background-color:rgb(51, 153, 255);
+                    color:white;
+                    padding:0.5em;
+                    border-radius:3.5px;
+                    font-weight:300;
+                    width: fit-content;
+                    display:inline;
+                    margin:3px;
+                    font-family: unset;
+                    cursor:pointer;">
+                       Send Signals
+                </div>
+        <div/>
+    </div> 
+`
 // buttons change color when the cursor hovers over them
 body.addEventListener('mouseover', event => {
     let button_preb = event.target;
@@ -267,12 +333,12 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     let domains = result.DOMAINS;
     let currentDomain = getDomain(window.location.href);
     if (result.UI_SCHEME == 1){
-        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner();
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true);
     } else if (result.UI_SCHEME == 4){
         // let random = Math.floor(Math.random() * 3);
         let random = 1;
         if (random == 1 && !(currentDomain in domains)) {
-            showBanner();
+            showBanner(false);
         } else {
             chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result){
                 let currentDomain = getDomain(window.location.href);
@@ -297,188 +363,87 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     }
 });
 
-// function used to show notice of current tracking and selling preference -> not used for now
-function displayPopup(){
-    let count = 10;
-    chrome.storage.local.get(["ENABLED"], function (result) {
-        dontAllowBool=result.ENABLED;
-
-    let changeButton;
-    let currentDomainPerm;
-
-    if(dontAllowBool){
-        changeButton=
-            `
-            <div
-            id="allow-btn"
-            type="button" style="
-            font-size:14px;
-            border:none;
-            background-color:rgb(51, 153, 255);
-            color:white;
-            padding:0.5em;
-            border-radius:3.5px;
-            font-weight:300;
-            width: fit-content;
-            display:inline;
-            margin:3px;
-            font-family: unset;
-            cursor:pointer;">
-            Allow Tracking and Selling For This Domain
-        </div>
-        `
-        currentDomainPerm=
-            `
-            <div style="text-align:center; margin-bottom:3px;">
-            Given your privacy preferences, the current domain is not allowed to track and sell your data.
-            </div>
-        `
-
-    }
-    else{
-        changeButton=
-            `
-            <div
-            id="dont-allow-btn"
-            type="button" style="
-            font-size:14px;
-            border:none;
-            background-color:rgb(51, 153, 255);
-            color:white;
-            padding:0.5em;
-            border-radius:3.5px;
-            font-weight:300;
-            width: fit-content;
-            display:inline;
-            margin:3px;
-            font-family: unset;
-            cursor:pointer;">
-            Don't Allow Tracking and Selling For This Domain
-        </div>
-            `
-        currentDomainPerm=
-            `
-            <div>
-            Given your privacy preferences, the current domain is allowed to track and sell your data.
-            </div>
-        `
-    }
-        
-
-    let buttons =
-    `
-    <div    id="rbe-okay-btn"
-            type="button" style="
-                font-size:14px;
-                border:none;
-                background-color:rgb(51, 153, 255);
-                color:white;
-                padding:0.5em;
-                border-radius:3.5px;
-                font-weight:300;
-                width: fit-content;
-                display:inline;
-                margin:3px;
-                font-family: unset;
-                cursor:pointer;">
-        Okay
-      </div>
-      ${changeButton}
-    `
-
-    popupDiv.innerHTML=
-    `
-    <div style="
-        align-items: center;
-        font-family: Arial;
-        font-size:14px;
-        text-align: center;
-        padding: 1em;
-        border-radius:10px;
-        bottom:30px;
-        left:5px;
-        position: fixed;
-        z-index:99999999999;
-        background: white;
-        width: 450px;
-
-        height:fit-content;
-        border: solid rgba(51, 153, 255, 1);
-        ">
-        ${currentDomainPerm}
-        <div>
-        <div style="margin-bottom: 5px;
-        margin-top: 5px;">
-        ${buttons}
-        </div>
-        <div id="rbe_open_options" style="
-            cursor:pointer;
-            color: rgba(51, 153, 255, 1);
-            text-decoration: underline; ">
-        click here to open ad tracking preferences
-        </div>
-        </div>
-    <div style="display:inline;">
-        Notice will automatically dissappear in
-        <div style="display:inline;" id="rbePopupTimer"></div> seconds.
-    </div>
-    </div>
-
-    `
-
-    body.appendChild(popupDiv)
-
-
-
-    timer();
-
-    function timer() {
-        document.getElementById("rbePopupTimer").innerText = count;
-        count = count - 1;
-        if(count==-1){
-            removeBanner();
-            return;
-        }
-        oneSecond = setTimeout(timer, 1000);
-    }
-})}
 
 // function used to add extra style the modal
 function styleBanner() {
-  
-  const contentContainer = document.querySelector('#privacy-res-popup-container');
-  
-  contentContainer.style.textAlign = 'center';   
-  contentContainer.style.marginTop = '27vh'; 
-  contentContainer.style.backgroundColor = 'white'; 
-  contentContainer.style.padding = '1em';
-  contentContainer.style.width = '250px';
-  contentContainer.style.height = 'max-content';
-  contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
-  contentContainer.style.color = 'Black';
-  contentContainer.style.borderRadius = '10px';
-  contentContainer.style.fontFamily='Arial';
-  contentContainer.style.fontSize='20px';
-  contentContainer.style.lineSpacing='1px';
-  contentContainer.style.boxSizing='unset';
-  contentContainer.style.letterSpacing='0';
+    const contentContainer = document.querySelector('#privacy-res-popup-container');
+    contentContainer.style.textAlign = 'center';   
+    contentContainer.style.marginTop = '27vh'; 
+    contentContainer.style.backgroundColor = 'white'; 
+    contentContainer.style.padding = '1em';
+    contentContainer.style.width = '250px';
+    contentContainer.style.height = 'max-content';
+    contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
+    contentContainer.style.color = 'Black';
+    contentContainer.style.borderRadius = '10px';
+    contentContainer.style.fontFamily='Arial';
+    contentContainer.style.fontSize='20px';
+    contentContainer.style.lineSpacing='1px';
+    contentContainer.style.boxSizing='unset';
+    contentContainer.style.letterSpacing='0';
+    // adding css styles to the modal
+    banner.style.position = 'fixed';
+    banner.style.width = '100%';
+    banner.style.height = '100%';
+    banner.style.top = '0';
+    banner.style.left = '0';
+    banner.style.right = '0';
+    banner.style.bottom = '0';
+    banner.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    banner.style.zIndex = '999999999999999';
+    banner.style.textAlign = '-webkit-center';
+    banner.style.display = "none";
+}
 
+function styleBannerNotApplyAll() {
+    const contentContainer = document.querySelector('#privacy-res-popup-container');
+    contentContainer.style.textAlign = 'center';   
+    contentContainer.style.marginTop = '27vh'; 
+    contentContainer.style.backgroundColor = 'white'; 
+    contentContainer.style.padding = '1em';
+    contentContainer.style.width = '250px';
+    contentContainer.style.height = 'max-content';
+    contentContainer.style.border = 'solid rgba(51, 153, 255, 1)';
+    contentContainer.style.color = 'Black';
+    contentContainer.style.borderRadius = '10px';
+    contentContainer.style.fontFamily='Arial';
+    contentContainer.style.fontSize='20px';
+    contentContainer.style.lineSpacing='1px';
+    contentContainer.style.boxSizing='unset';
+    contentContainer.style.letterSpacing='0';
+    // adding css styles to the modal
+    bannerNoApplyAll.style.position = 'fixed';
+    bannerNoApplyAll.style.width = '100%';
+    bannerNoApplyAll.style.height = '100%';
+    bannerNoApplyAll.style.top = '0';
+    bannerNoApplyAll.style.left = '0';
+    bannerNoApplyAll.style.right = '0';
+    bannerNoApplyAll.style.bottom = '0';
+    bannerNoApplyAll.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    bannerNoApplyAll.style.zIndex = '999999999999999';
+    bannerNoApplyAll.style.textAlign = '-webkit-center';
+    bannerNoApplyAll.style.display = "none";
 }
 
 // function used to show the modal
-function showBanner() {
-    //add Overlay to the DOM
+function showBanner(checkbox) {
     head.appendChild(imbedStyle);
-    body.appendChild(overlayDiv);
-    styleBanner();
-    //add class that hides pseudo elements to apply-all button
-    document.getElementById('apply-all').classList.add('hide_pseudo');
-    overlayDiv.style.display = 'block';
+    if (checkbox) {
+        body.appendChild(banner);
+        styleBanner();
+        banner.style.display = "block";
+        document.getElementById('apply-all').classList.add('hide_pseudo');
+    }
+    else {
+        body.appendChild(bannerNoApplyAll);
+        styleBannerNotApplyAll();
+        bannerNoApplyAll.style.display = "block";
+    } 
 }
 
 // function used to remove the modal
 function removeBanner(){
-    if (overlayDiv.style) overlayDiv.style.display = 'none';
+    if (banner.style) banner.style.display = 'none';
     if (popupDiv.style) popupDiv.style.display = 'none';
 }
 
