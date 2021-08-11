@@ -86,29 +86,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
-        chrome.storage.local.set({ADVLIST: advList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0});
+        chrome.storage.local.set({ADVLIST: advList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
       })
       .then(openPage("registration.html"))
-
-    // let checkList = {"Advertising":[], "Analytics":[], "FingerprintingInvasive":[], "FingerprintingGeneral":[], "Cryptomining":[]}
-    // let gpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
-    // let nonGpcRequest = {"Advertising":0, "Analytics":0, "FingerprintingInvasive":0, "FingerprintingGeneral":0, "Cryptomining":0}
-    // fetch("json/services.json")
-    //   .then((response) => response.text())
-    //   .then((result) =>{
-    //     networks = (JSON.parse(result))["categories"];
-    //     for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-    //       for (let n of networks[category]){
-    //         for (let c of Object.values(n)){
-    //           for (let list of Object.values(c)){
-    //             checkList[category] = checkList[category].concat(list);
-    //           }
-    //         }
-    //       }
-    //     }
-    //     chrome.storage.local.set({TOTAL_REQUEST: 0, GPC_REQUEST: gpcRequest, NON_GPC_REQUEST: nonGpcRequest, CHECKLIST: checkList});
-    //   })
-    //   .then(openPage("registration.html"));
   } 
   await createUser(userScheme); 
 });
@@ -145,7 +125,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
-    chrome.storage.local.set({"SHOW_LEARNING_OUTCOME": true}, function(){
+    chrome.storage.local.set({"LEARNING": "Just Finished"}, function(){
       chrome.runtime.openOptionsPage();
     })
   }
