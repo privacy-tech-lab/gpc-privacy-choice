@@ -338,6 +338,16 @@ function createDefaultSettingInfo(){
             </div>
         </div>
         <div class="choice">
+        <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+        uk-tooltip="title:; pos: top-right">
+            <a class="uk-position-cover first" href="#" id="social" checked></a>
+            <span uk-icon="icon: cog; ratio: 4"></span>
+            <span class="uk-text-middle">Content & Social</span>
+        </div>
+        </div>
+      </div>
+      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+      <div class="choice">
         <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
         uk-tooltip="title: ; pos: top-right">
             <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
@@ -345,22 +355,12 @@ function createDefaultSettingInfo(){
             <span class="uk-text-middle">Cryptomining</span>
               </div>
         </div>
-      </div>
-      <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice">
                     <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: ; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
                         <span uk-icon="icon: cog; ratio: 4"></span>
                         <span class="uk-text-middle">Fingerprinting</span>
-                    </div>
-                </div>
-          <div class="choice">
-                    <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title:; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="social" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Content & Social</span>
                     </div>
                 </div>
                 <div class="choice">
