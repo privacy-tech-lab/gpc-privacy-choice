@@ -581,7 +581,14 @@ chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_B
     let sendSignalBanner = result.SEND_SIGNAL_BANNER;
     let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
     if (Object.keys(result.DOMAINS).length == 5){
-        let userProfile = "Not Privacy-Sensitive"
+        let userProfile;
+        if (sendSignalBanner <= 1){
+            userProfile = "Not Privacy-Sensitive"
+        } else if (sendSignalBanner >= 4){
+            userProfile = "Extremely Privacy-Sensitive"
+        } else {
+            userProfile = "Moderately Privacy-Sensitive"
+        }
         chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
         chrome.runtime.sendMessage({greeting:"LEARNING COMPLETED"})
     }
