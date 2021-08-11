@@ -568,7 +568,7 @@ chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], fu
     console.log("number of tracking banner: " + result.DO_NOT_SEND_SIGNAL_BANNER);
 })
 
-//send information to background regarding the source  of a potential ad interaction
+// send information to background regarding the source  of a potential ad interaction
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.greeting == "GET HTML TAG"){
@@ -577,19 +577,23 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
+// watcher function to switch from scheme 4 to scheme 3
+chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER", "LEARNING"], function (result){
     let sendSignalBanner = result.SEND_SIGNAL_BANNER;
     let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
-    if (Object.keys(result.DOMAINS).length == 5){
-        let userProfile;
-        if (sendSignalBanner <= 1){
-            userProfile = "Not Privacy-Sensitive"
-        } else if (sendSignalBanner >= 4){
-            userProfile = "Extremely Privacy-Sensitive"
-        } else {
-            userProfile = "Moderately Privacy-Sensitive"
+    console.log(result.LEARNING);
+    if (result.LEARNING == "In Progress"){
+        if (sendSignalBanner + doNotSendSignalBanner == 5){
+            let userProfile;
+            if (sendSignalBanner <= 1){
+                userProfile = "Not Privacy-Sensitive"
+            } else if (sendSignalBanner >= 4){
+                userProfile = "Extremely Privacy-Sensitive"
+            } else {
+                userProfile = "Moderately Privacy-Sensitive"
+            }
+            chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
+            chrome.runtime.sendMessage({greeting:"LEARNING COMPLETED"})
         }
-        chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
-        chrome.runtime.sendMessage({greeting:"LEARNING COMPLETED"})
-    }
+    }  
 })

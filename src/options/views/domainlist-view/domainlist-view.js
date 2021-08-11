@@ -717,12 +717,12 @@ export async function domainlistView(scaffoldTemplate) {
     createDomainlistManagerButtons();
     createList();
     addEventListeners();
-    chrome.storage.local.get(["SHOW_LEARNING_OUTCOME"], function(result){
-      if (result.SHOW_LEARNING_OUTCOME == true){
+    chrome.storage.local.get(["LEARNING"], function(result){
+      if (result.LEARNING == "Just Finished"){
         let modal = UIkit.modal("#learning-finish-modal");
         modal.show();
         document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
-        chrome.storage.local.set({"SHOW_LEARNING_OUTCOME": false});
+        chrome.storage.local.set({"LEARNING": "Completed"});
       }
     })
     
