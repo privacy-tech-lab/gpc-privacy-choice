@@ -46,7 +46,7 @@ function addEventListeners() {
           })
         }
     else document.getElementById("apply_to_all").checked=false
-  }
+    }
     if (event.target.id=='toggle_all_on' && document.getElementById("apply_to_all")){
       let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
       NOTE: Your current preferences will be permanently lost.`
@@ -79,7 +79,7 @@ function addEventListeners() {
         })
       }
       else document.getElementById("apply_to_all").checked=false
-  }
+    }
     if(event.target.id=='apply-all-switch'){
       chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
         if(result.APPLY_ALL){
@@ -132,7 +132,7 @@ function addEventListeners() {
           addToggleListeners();
       })
     }
-  }
+    }
     if(event.target.id=='toggle_all_off'&& !document.getElementById("apply_to_all").checked){
       let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
       NOTE: Your current preferences will be permanently lost.`
@@ -169,7 +169,7 @@ function addEventListeners() {
         }
         createList();
         addToggleListeners();
-      }
+    }
   
     chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "DOMAINS"], function (result) {  
       if(result.UI_SCHEME==3){
@@ -630,22 +630,6 @@ export function createList() {
   });
 }
 
-
-// Remove this function since it is no longer required under the new scheme organization
-// function createWalkThroughTour() {
-//   chrome.storage.local.get(["FIRST_INSTALLED"], function (result){
-//     if (result.FIRST_INSTALLED){
-//       let modal = UIkit.modal("#welcome-modal");
-//       modal.show();
-//       document.getElementById("modal-button").onclick = function () {
-//         modal.hide();
-//       }
-//     }
-//   });
-//   chrome.storage.local.set({FIRST_INSTALLED: false});
-// }
-
-
 function updatePrefScheme3() {
   chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"], function (result){
     let domains = result.DOMAINS;
@@ -675,7 +659,6 @@ function updatePrefScheme3() {
     chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
   })
 }
-
 
 async function updatePrefScheme2() {
 
@@ -806,6 +789,7 @@ export async function domainlistView(scaffoldTemplate) {
     createList();
     addEventListeners();
     chrome.storage.local.get(["LEARNING"], function(result){
+      console.log("result.LEARNING")
       if (result.LEARNING == "Just Finished"){
         let modal = UIkit.modal("#learning-finish-modal");
         modal.show();
