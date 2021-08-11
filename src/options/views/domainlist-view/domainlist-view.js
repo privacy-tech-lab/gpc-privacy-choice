@@ -289,13 +289,11 @@ function filterList() {
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
-  
+
   chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
-
     let apply_all_switch =
-    `
-    <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
+    ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
           <div>
             <label class="switch">
             `
@@ -303,20 +301,56 @@ function createDefaultSettingInfo(){
               buildToggle('apply-all-switch', !apply_all_bool)
             +
             `
-              <span></span>
+            <span></span>
             </label>
           </div>
           <div class="domain uk-width-expand">
           Show the Choice Banner Every Time I Visit a New Site
-    </div>
-    </div>
-    <br>
-
+      </div>
+      </div>
+      <br>
     `
 
     let defaultSettingInfo;
+    if(result.UI_SCHEME==1){
+      if(apply_all_bool){
+        if(result.ENABLED){
+          defaultSettingInfo =
+          `
+          ${apply_all_switch}
+          <div class="important-text">
+          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
+          </div>
+          You can opt out of sending the signal
+          to an individual domain by turning off the domain's switch in the domain list below or apply a
+          different setting to all current and future domains.
+          `
+        }
+        else{
 
-    if(result.UI_SCHEME==2){
+          defaultSettingInfo = `
+          ${apply_all_switch}
+          <div class="important-text"> You have opted to allow all domains to track and sell 
+          your information, unless otherwise stated in the domain list. </div>
+          You can opt out of allowing an individual domain to
+          track and sell your information by 
+          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
+          domains.
+          `  
+        }
+      }else{
+        defaultSettingInfo = `
+        ${apply_all_switch}
+        <div class="important-text"> When you visit a new domain you will be asked
+        to choose your privacy preference for that domain. </div>
+        You can change the privacy preference made for
+        an individual domain by 
+        toggling the domain's switch in the domain list below or you can choose a setting to apply to all
+        current and future domains.
+        `
+
+      }
+    } else if(result.UI_SCHEME==2){
       defaultSettingInfo =
       `
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
@@ -374,9 +408,7 @@ function createDefaultSettingInfo(){
       </div>
 
       `
-    }
-
-    if(result.UI_SCHEME==3){
+    } else if(result.UI_SCHEME==3){
       
       defaultSettingInfo =
       `
@@ -412,82 +444,52 @@ function createDefaultSettingInfo(){
         <hr>
       `
 
+    } else {
+      defaultSettingInfo = 
+      `
+      <div class="uk-container main">
+      <div class="uk-alert-success" uk-alert>
+      <a class="uk-alert-close" uk-close></a>
+      <p>You will see 10 banners poping up by random. Based on your banner decisions, we will learn your privacy profiles and put you in the relevant categories. You will no longer need to see the banners after that. The learning is currently in progress.</p>
+      </div>
+      </div>
+      <hr>
+      `
     }
 
-    if(result.UI_SCHEME==1){
-      if(apply_all_bool){
-        if(result.ENABLED){
-          defaultSettingInfo =
-          `
-          ${apply_all_switch}
-          <div class="important-text">
-          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
-          </div>
-          You can opt out of sending the signal
-          to an individual domain by turning off the domain's switch in the domain list below or apply a
-          different setting to all current and future domains.
-          `
-        }
-        else{
-
-          defaultSettingInfo = `
-          ${apply_all_switch}
-          <div class="important-text"> You have opted to allow all domains to track and sell 
-          your information, unless otherwise stated in the domain list. </div>
-          You can opt out of allowing an individual domain to
-          track and sell your information by 
-          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
-          domains.
-          `  
-        }
-      }else{
-        defaultSettingInfo = `
-        ${apply_all_switch}
-        <div class="important-text"> When you visit a new domain you will be asked
-        to choose your privacy preference for that domain. </div>
-        You can change the privacy preference made for
-        an individual domain by 
-        toggling the domain's switch in the domain list below or you can choose a setting to apply to all
-        current and future domains.
-        `
-
-      }
-  }
-
-  document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
-  if(result.UI_SCHEME==3){
-    if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
-      document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-    if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
-      document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-    if(result.USER_CHOICES=="Not Privacy-Sensitive"){
-      document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
-    }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
-  }
-  if(result.UI_SCHEME==2){
-    let userChoices=result.USER_CHOICES
-    if(userChoices['Advertising']){
-      document.getElementById('advertising-card').classList.add('uk-card-primary')
-    }else document.getElementById('advertising-card').classList.remove("uk-card-primary");
-    if(userChoices['Analytics']){
-      document.getElementById('analytics-card').classList.add('uk-card-primary')
-    }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
-    if(userChoices['Fingerprinting']){
-      document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
-    }else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
-    if(userChoices["Content & Social"]){
-      document.getElementById('social-card').classList.add('uk-card-primary')
-    }else document.getElementById('social-card').classList.remove("uk-card-primary");
-    if(userChoices['Cryptomining']){
-      document.getElementById('cryptomining-card').classList.add('uk-card-primary')
-    }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
-    if(userChoices['Others']){
-      document.getElementById('others-card').classList.add('uk-card-primary')
-    }else document.getElementById('others-card').classList.remove("uk-card-primary");
-  }
-})
+    document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
+    if(result.UI_SCHEME==3){
+      if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+        document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
+      if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+        document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
+      if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+        document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+      }else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+    } else if(result.UI_SCHEME==2){
+      let userChoices=result.USER_CHOICES
+      if(userChoices['Advertising']){
+        document.getElementById('advertising-card').classList.add('uk-card-primary')
+      }else document.getElementById('advertising-card').classList.remove("uk-card-primary");
+      if(userChoices['Analytics']){
+        document.getElementById('analytics-card').classList.add('uk-card-primary')
+      }else document.getElementById('analytics-card').classList.remove("uk-card-primary");
+      if(userChoices['Fingerprinting']){
+        document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
+      }else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
+      if(userChoices["Content & Social"]){
+        document.getElementById('social-card').classList.add('uk-card-primary')
+      }else document.getElementById('social-card').classList.remove("uk-card-primary");
+      if(userChoices['Cryptomining']){
+        document.getElementById('cryptomining-card').classList.add('uk-card-primary')
+      }else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
+      if(userChoices['Others']){
+        document.getElementById('others-card').classList.add('uk-card-primary')
+      }else document.getElementById('others-card').classList.remove("uk-card-primary");
+    }
+  })
 }
 
 
