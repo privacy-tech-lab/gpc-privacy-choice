@@ -70,6 +70,13 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then((response) => response.text())
       .then((result) => {
         networks = (JSON.parse(result))["categories"]
+        for (let n of networks["Advertising"]){
+          for (let c of Object.values(n)){
+            for (let list of Object.values(c)){
+              advList = advList.concat(list);
+            }
+          }
+        }
         for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
           for (let n of networks[category]){
             for (let c of Object.values(n)){
@@ -79,7 +86,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             }
           }
         }
-        chrome.storage.local.set({CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0});
+        chrome.storage.local.set({ADVLIST: advList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0});
       })
       .then(openPage("registration.html"))
 
