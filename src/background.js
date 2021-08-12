@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 4;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
@@ -65,7 +65,33 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         chrome.storage.local.set({NPSLIST: npsList});
       })
       .then(openPage("profile.html"));
-  } else openPage("registration.html");
+  } else {
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+          for (let n of networks[cat]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                npsList = npsList.concat(list);
+              }
+            }
+          }
+        }
+        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+          for (let n of networks[category]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                checkList = checkList.concat(list);
+              }
+            }
+          }
+        }
+        chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
+      })
+      .then(openPage("registration.html"))
+  } 
   await createUser(userScheme); 
 });
 
@@ -98,6 +124,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
       addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
+    })
+  }
+  if (request.greeting == "LEARNING COMPLETED"){
+    chrome.storage.local.set({"LEARNING": "Just Finished"}, function(){
+      chrome.runtime.openOptionsPage();
     })
   }
 });
@@ -190,8 +221,24 @@ async function updateSendSignalScheme3(){
   // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
-// TODO
-function updateSendSignalScheme4(){}
+// SCHEME 4:
+async function updateSendSignalScheme4(){
+  if(domainlistEnabledCache){
+    if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
+    else{
+      if (applyAllCache) sendSignal=enabledCache
+      else sendSignal=false
+    }
+  } else sendSignal = enabledCache
+
+  await chrome.storage.local.get(["SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER"], function (result){
+    let sendSignalBanner = result.SEND_SIGNAL_BANNER;
+    let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
+    if (sendSignalBanner + doNotSendSignalBanner == 5){
+      chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: "Not Privacy-Sensitive"});
+    }
+  })
+}
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
