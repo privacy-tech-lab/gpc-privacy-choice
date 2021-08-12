@@ -452,8 +452,8 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     if (result.UI_SCHEME == 1){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true);
     } else if (result.UI_SCHEME == 4){
-        // let random = Math.floor(Math.random() * 3);
-        let random = 1;
+        let random = Math.floor(Math.random() * 3);
+        // let random = 1;
         if (random == 1 && !(currentDomain in domains)) {
             showBanner(false);
         } else {
@@ -493,7 +493,7 @@ chrome.runtime.onMessage.addListener(
 chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_BANNER", "LEARNING"], function (result){
     let sendSignalBanner = result.SEND_SIGNAL_BANNER;
     let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
-    console.log(result.LEARNING);
+    console.log(sendSignalBanner, doNotSendSignalBanner, result.LEARNING);
     if (result.LEARNING == "In Progress"){
         if (sendSignalBanner + doNotSendSignalBanner == 5){
             let userProfile;
