@@ -70,10 +70,12 @@ chrome.runtime.onInstalled.addListener(async function (object) {
       .then((response) => response.text())
       .then((result) => {
         networks = (JSON.parse(result))["categories"]
-        for (let n of networks["Advertising"]){
-          for (let c of Object.values(n)){
-            for (let list of Object.values(c)){
-              npsList = npsList.concat(list);
+        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+          for (let n of networks[cat]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                npsList = npsList.concat(list);
+              }
             }
           }
         }
