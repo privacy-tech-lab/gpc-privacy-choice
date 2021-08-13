@@ -13,7 +13,7 @@ let userChoices = {
 // Add event listeners for toggling user choice
 document.querySelectorAll('.choice').forEach(item => {
     item.addEventListener('click', event => {
-        let category = event.target.nextElementSibling.nextElementSibling.innerText;
+        let category = event.target.innerText;
         userChoices[category] = !userChoices[category];
     })
 })
