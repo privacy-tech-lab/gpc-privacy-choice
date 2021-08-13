@@ -171,11 +171,11 @@ function addEventListeners() {
         addToggleListeners();
     }
   
-    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "DOMAINS"], function (result) {  
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
@@ -183,16 +183,16 @@ function addEventListeners() {
           updatePrefScheme3()
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
           updatePrefScheme3()
         }
         if (event.target.id == 'not-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
@@ -206,8 +206,8 @@ function addEventListeners() {
         if(event.target.id == 'advertising') {
           userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           })   
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
@@ -216,8 +216,8 @@ function addEventListeners() {
         if(event.target.id == 'analytics') {
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           }) 
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
@@ -226,8 +226,8 @@ function addEventListeners() {
         if(event.target.id == 'fingerprinting') {
           userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           }) 
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
@@ -236,8 +236,8 @@ function addEventListeners() {
         if(event.target.id == 'social') {
           userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
@@ -246,8 +246,8 @@ function addEventListeners() {
         if (event.target.id == 'cryptomining') {
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
@@ -256,8 +256,8 @@ function addEventListeners() {
         if (event.target.id == 'others') {
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()

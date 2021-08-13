@@ -94,7 +94,6 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
     else if (subcollection === "Privacy Choice") {
         db.collection("users").doc(currentUserDocID).collection("Privacy Configuration Interaction History").add({
             "Timestamp": firebase.firestore.Timestamp.fromDate(date),
-            "Domain": domain,
             "Recorded Change": {
                 "a) Title": setting,
                 "b) Interaction": {
@@ -102,7 +101,6 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
                     "ii) After": newSetting
                 }
             },
-            "Universal Setting": universalSetting, 
             "Origin Site": orginSite,
             "Location": location
         })
