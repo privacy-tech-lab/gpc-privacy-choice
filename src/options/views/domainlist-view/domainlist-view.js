@@ -20,13 +20,13 @@ function addEventListeners() {
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
             if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Options page"})
             }
             else if (allOn(result.DOMAINS) === true) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Options page"})
             }
             else {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Allow tracking" , newSetting: "No change", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Allow tracking" , newSetting: "No change", universalSetting: "Allow all", location: "Options page"})
             }
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
@@ -55,13 +55,13 @@ function addEventListeners() {
           chrome.storage.local.set({APPLY_ALL: true});
           chrome.storage.local.get(["DOMAINS"], function (result) {
               if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Options page"})
               }
               else if (allOff(result.DOMAINS) === true) {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Options page"})
               }
               else {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all", location: "Options page"})
               }
               let new_domains = result.DOMAINS;
               for (let d in new_domains){
@@ -83,7 +83,7 @@ function addEventListeners() {
     if(event.target.id=='apply-all-switch'){
       chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
         if(result.APPLY_ALL){
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page"})
           chrome.storage.local.set({DOMAINLIST_ENABLED: true});
           chrome.storage.local.set({UV_SETTING: "Off"});
           chrome.storage.local.set({APPLY_ALL: false});
@@ -102,13 +102,13 @@ function addEventListeners() {
       chrome.storage.local.set({APPLY_ALL: true});
       chrome.storage.local.set({ ENABLED: false });
       createDefaultSettingInfo();
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
     }
     if(event.target.id=='dont-allow-future-btn'){
       chrome.storage.local.set({APPLY_ALL: true});
       chrome.storage.local.set({ ENABLED: true });
       createDefaultSettingInfo();
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
     }
     if(event.target.id=='toggle_all_on'&& !document.getElementById("apply_to_all")){
       let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
@@ -116,10 +116,10 @@ function addEventListeners() {
       if (confirm(toggleOn_prompt)) {
         chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
           if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
           }
           if (allOff(result.DOMAINS) === true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
           }
           let new_domains = result.DOMAINS;
           for (let d in new_domains){
@@ -139,10 +139,10 @@ function addEventListeners() {
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
           if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
           }
           if (allOn(result.DOMAINS) === true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page"})
           }
           let new_domains = result.DOMAINS;
           for (let d in new_domains){
@@ -161,7 +161,7 @@ function addEventListeners() {
         let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.get(["UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page"})
           })
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
@@ -175,7 +175,7 @@ function addEventListeners() {
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
           chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
@@ -184,7 +184,7 @@ function addEventListeners() {
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
           chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
@@ -192,7 +192,7 @@ function addEventListeners() {
         }
         if (event.target.id == 'not-privacy-sensitive') {
           chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
@@ -203,44 +203,62 @@ function addEventListeners() {
         let userChoices=result.USER_CHOICES
         console.log(userChoices)
         if(event.target.id == 'advertising') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          })   
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'analytics') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          })  
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'fingerprinting') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          }) 
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'social') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          })
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'cryptomining') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          })
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'others') {
+          let prevChoice = result.USER_CHOICES
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          }) 
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
