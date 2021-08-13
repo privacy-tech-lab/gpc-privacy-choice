@@ -200,65 +200,66 @@ function addEventListeners() {
         }
       }
       if(result.UI_SCHEME==2){
+        chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
         let userChoices=result.USER_CHOICES
         console.log(userChoices)
         if(event.target.id == 'advertising') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })   
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'analytics') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
-          })  
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          }) 
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'fingerprinting') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           }) 
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'social') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'cryptomining') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
           })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'others') {
-          let prevChoice = result.USER_CHOICES
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: prevChoice, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
-          }) 
+          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Privacy Choice"})
+          })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
