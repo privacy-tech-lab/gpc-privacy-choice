@@ -30,6 +30,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     if (prolificID && validateID(prolificID)){
         try {
             userProfile = document.querySelector(".uk-card-primary").children[2].innerText;
+            console.log(userProfile);
         } catch (e){
         }
         if (userProfile){
