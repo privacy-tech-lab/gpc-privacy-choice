@@ -1,14 +1,6 @@
-// Exports the domainlist in local storage as a .txt file
-export async function handleDownload() {
-    chrome.storage.local.get(["DOMAINS"], function (result) {
-      var DOMAINS = result.DOMAINS;
-      var blob = new Blob([JSON.stringify(DOMAINS, null, 4)], {type: "text/plain;charset=utf-8"});
-      saveAs(blob, "OptMeowt_backup.json");
-    })
-}
-
 // Sets DOMAINS[domainKey] to true
 export async function addToDomainlist(domainKey) {
+  console.log("turning gpc on for: " + domainKey);
   let new_domains = [];
   chrome.storage.local.get(["DOMAINS"], function (result) {
     new_domains = result.DOMAINS;
@@ -21,6 +13,7 @@ export async function addToDomainlist(domainKey) {
 
 // Sets DOMAINS[domainKey] to false
 export async function removeFromDomainlist(domainKey) {
+  console.log("turning gpc off for: " + domainKey);
   let new_domains = [];
   chrome.storage.local.get(["DOMAINS"], function (result) {
     new_domains = result.DOMAINS;
@@ -59,9 +52,6 @@ export function allOff(domains) {
   return true
 }
 
-
-
-
 // Generates the HTML that will build the domainlist switch for a given domain in the domainlist
 export function buildToggle(domain, bool) {
   let toggle;
@@ -72,7 +62,6 @@ export function buildToggle(domain, bool) {
 
 // Turn on / off the domain from the setting page
 export async function toggleListener(elementId, domain) {
-
   document.getElementById(elementId).addEventListener("click", () => {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
     chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
