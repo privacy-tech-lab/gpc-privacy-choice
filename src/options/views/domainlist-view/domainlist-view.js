@@ -11,6 +11,7 @@ const headings = {
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
+// TODO: refactor this function
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
@@ -156,7 +157,6 @@ function addEventListeners() {
       })
     }
     }
-  
     if(event.target.id=='delete_all_domainlist'){
         let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
@@ -202,7 +202,6 @@ function addEventListeners() {
       if(result.UI_SCHEME==2){
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
         let userChoices=result.USER_CHOICES
-        console.log(userChoices)
         if(event.target.id == 'advertising') {
           userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
