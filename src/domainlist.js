@@ -64,14 +64,24 @@ export function buildToggle(domain, bool) {
 export async function toggleListener(elementId, domain) {
   document.getElementById(elementId).addEventListener("click", () => {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
-    chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
+    chrome.storage.local.get(["DOMAINS", "UV_SETTING", "UI_SCHEME"], function (result) {
       if (result.DOMAINS[domain]==true) {
         removeFromDomainlist(domain);
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, location: "Options page", setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, subcollection: "Domain"})
+        if (result.UI_SCHEME === 1) {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+        }
+        else {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: null, location: "Options page", subcollection: "Domain"})
+        }
       }
       else {
         addToDomainlist(domain);
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, location: "Options page", setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, subcollection: "Domain"})
+        if (result.UI_SCHEME === 1) {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+        }
+        else {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: null, location: "Options page", subcollection: "Domain"})
+        }
       }
     chrome.runtime.sendMessage
               ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true, newApplyAll: 'dontSet' })

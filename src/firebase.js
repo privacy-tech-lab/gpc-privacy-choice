@@ -73,7 +73,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 }
 
 // Adds user's Setting Interaction History
-export function addSettingInteractionHistory(domain, orginSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
+export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
     if (subcollection === "Domain") {
         db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
@@ -87,26 +87,12 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
                 }
             },
             "Universal Setting": universalSetting, 
-            "Origin Site": orginSite,
+            "Origin Site": originSite,
             "Location": location
         })
     }
     else if (subcollection === "Privacy Choice") {
         db.collection("users").doc(currentUserDocID).collection("Privacy Configuration Interaction History").add({
-            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
-            "Recorded Change": {
-                "a) Title": setting,
-                "b) Interaction": {
-                    "i) Before": prevSetting,
-                    "ii) After": newSetting
-                }
-            },
-            "Origin Site": orginSite,
-            "Location": location
-        })
-    }
-    else {
-        db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
             "Timestamp": firebase.firestore.Timestamp.fromDate(date),
             "Domain": domain,
             "Recorded Change": {
@@ -116,8 +102,7 @@ export function addSettingInteractionHistory(domain, orginSite, currentUserDocID
                     "ii) After": newSetting
                 }
             },
-            "Universal Setting": universalSetting, 
-            "Origin Site": orginSite,
+            "Origin Site": originSite,
             "Location": location
         })
     }
