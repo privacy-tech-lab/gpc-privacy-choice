@@ -161,6 +161,25 @@ function applyAllSwitchEvent() {
   })
 }
 
+function futureSettingPromptEvent(event) {
+  if (event.target.id=='allow-future-btn') {
+    chrome.storage.local.set({APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Allow all"});
+    chrome.storage.local.set({ ENABLED: false });
+    createDefaultSettingInfo();
+    console.log("Allow button")
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Allow all", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
+  }
+  else if (event.target.id=='dont-allow-future-btn') {
+    chrome.storage.local.set({APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Don't allow all"});
+    chrome.storage.local.set({ ENABLED: true });
+    createDefaultSettingInfo();
+    console.log("Don't allow button")
+    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't allow all", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
+  }
+}
+
 // Creates the event listeners for the `domainlist` page buttons and options
 // TODO: refactor this function
 function addEventListeners() {
@@ -175,21 +194,8 @@ function addEventListeners() {
     if(event.target.id=='apply-all-switch'){
       applyAllSwitchEvent();
   }
-    if(event.target.id=='allow-future-btn'){
-      chrome.storage.local.set({APPLY_ALL: true});
-      chrome.storage.local.set({UV_SETTING: "Allow all"});
-      chrome.storage.local.set({ ENABLED: false });
-      createDefaultSettingInfo();
-      console.log("Allow button")
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Allow all", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
-    }
-    if(event.target.id=='dont-allow-future-btn'){
-      chrome.storage.local.set({APPLY_ALL: true});
-      chrome.storage.local.set({UV_SETTING: "Don't allow all"});
-      chrome.storage.local.set({ ENABLED: true });
-      createDefaultSettingInfo();
-      console.log("Don't allow button")
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't allow all", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
+    if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
+      futureSettingPromptEvent(event);
     }
     if(event.target.id=='delete_all_domainlist'){
         let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
