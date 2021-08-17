@@ -1,4 +1,4 @@
-import { addToDomainlist } from "./domainlist.js";
+import { turnOnGPC } from "./domainlist.js";
 
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {

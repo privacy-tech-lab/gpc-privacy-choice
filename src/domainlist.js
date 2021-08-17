@@ -1,5 +1,5 @@
 // Sets DOMAINS[domainKey] to true
-export async function addToDomainlist(domainKey) {
+export async function turnOnGPC(domainKey) {
   console.log("turning gpc on for: " + domainKey);
   let new_domains = [];
   chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -12,7 +12,7 @@ export async function addToDomainlist(domainKey) {
 }
 
 // Sets DOMAINS[domainKey] to false
-export async function removeFromDomainlist(domainKey) {
+export async function turnOffGPC(domainKey) {
   console.log("turning gpc off for: " + domainKey);
   let new_domains = [];
   chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -66,7 +66,7 @@ export async function addDomainToggleListener(elementId, domain) {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
     chrome.storage.local.get(["DOMAINS", "UV_SETTING", "UI_SCHEME"], function (result) {
       if (result.DOMAINS[domain]==true) {
-        removeFromDomainlist(domain);
+        turnOffGPC(domain);
         if (result.UI_SCHEME === 1) {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         }
@@ -75,7 +75,7 @@ export async function addDomainToggleListener(elementId, domain) {
         }
       }
       else {
-        addToDomainlist(domain);
+        turnOnGPC(domain);
         if (result.UI_SCHEME === 1) {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         }
