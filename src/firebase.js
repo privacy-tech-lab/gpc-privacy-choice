@@ -1,4 +1,4 @@
-import { addToDomainlist } from "./domainlist.js";
+import { turnOnGPC } from "./domainlist.js";
 
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
@@ -73,21 +73,39 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 }
 
 // Adds user's Setting Interaction History
-export function addSettingInteractionHistory(domain, orginSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting){
+export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
-    db.collection("users").doc(currentUserDocID).collection("Setting Interaction History").add({
-        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
-        "Domain": domain,
-        "Recorded Change": {
-            "a) Title": setting,
-            "b) Interaction": {
-                "i) Before": prevSetting,
-                "ii) After": newSetting
-            }
-        },
-        "Universal Setting": universalSetting, 
-        "Origin Site": orginSite
-    })
+    if (subcollection === "Domain") {
+        db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
+            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+            "Domain": domain,
+            "Recorded Change": {
+                "a) Title": setting,
+                "b) Interaction": {
+                    "i) Before": prevSetting,
+                    "ii) After": newSetting
+                }
+            },
+            "Universal Setting": universalSetting, 
+            "Origin Site": originSite,
+            "Location": location
+        })
+    }
+    else if (subcollection === "Privacy Choice") {
+        db.collection("users").doc(currentUserDocID).collection("Privacy Configuration Interaction History").add({
+            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+            "Domain": domain,
+            "Recorded Change": {
+                "a) Title": setting,
+                "b) Interaction": {
+                    "i) Before": prevSetting,
+                    "ii) After": newSetting
+                }
+            },
+            "Origin Site": originSite,
+            "Location": location
+        })
+    }
 }
 
 // Add new domains to the domain list field of the user document

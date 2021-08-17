@@ -286,7 +286,7 @@ function showBanner(checkbox) {
                 chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
                 // Sends data to Setting Interaction History
                 chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off"})
+                    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
                 });       
             })
         }
@@ -304,7 +304,7 @@ function showBanner(checkbox) {
             });
             // Sends data to Setting Interaction History
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
             })
             
         }
@@ -326,7 +326,7 @@ function showBanner(checkbox) {
             });
             // Sends data to Setting Interaction History
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Banner", subcollection: "Domain"})
             })
         }
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
@@ -347,7 +347,7 @@ function showBanner(checkbox) {
             });
             // Sends data to Setting Interaction History
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
             })    
         }
         else if(event.target.id === 'rbe_open_options'){

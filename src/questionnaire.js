@@ -13,7 +13,7 @@ let userChoices = {
 // Add event listeners for toggling user choice
 document.querySelectorAll('.choice').forEach(item => {
     item.addEventListener('click', event => {
-        let category = event.target.nextElementSibling.nextElementSibling.innerText;
+        let category = event.target.innerText;
         userChoices[category] = !userChoices[category];
     })
 })
@@ -153,6 +153,9 @@ async function submit(prolificID, networks){
             } 
         }, 2000);
     });
+    chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
+      })
 }
 
 // Helper function to validate prolific ID

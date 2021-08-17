@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
+import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
 const headings = {
     title: 'Settings',
@@ -11,6 +11,7 @@ const headings = {
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
+// TODO: refactor this function
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
@@ -20,13 +21,13 @@ function addEventListeners() {
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
             if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
             }
             else if (allOn(result.DOMAINS) === true) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
             }
             else {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Allow tracking" , newSetting: "No change", universalSetting: "Allow all"})
+              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Allow tracking" , newSetting: "No change", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
             }
             let new_domains = result.DOMAINS;
             for (let d in new_domains){
@@ -47,7 +48,7 @@ function addEventListeners() {
         }
     else document.getElementById("apply_to_all").checked=false
     }
-    if (event.target.id=='toggle_all_on' && document.getElementById("apply_to_all")){
+    if (event.target.id=='toggle_all_on' && document.getElementById("apply_to_all").checked){
       let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
       NOTE: Your current preferences will be permanently lost.`
       if (confirm(toggleOn_prompt)) {
@@ -55,13 +56,13 @@ function addEventListeners() {
           chrome.storage.local.set({APPLY_ALL: true});
           chrome.storage.local.get(["DOMAINS"], function (result) {
               if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
               }
               else if (allOff(result.DOMAINS) === true) {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
               }
               else {
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all"})
+                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't allow tracking", newSetting: "No change", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
               }
               let new_domains = result.DOMAINS;
               for (let d in new_domains){
@@ -83,7 +84,7 @@ function addEventListeners() {
     if(event.target.id=='apply-all-switch'){
       chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
         if(result.APPLY_ALL){
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page", subcollection: "Domain"})
           chrome.storage.local.set({DOMAINLIST_ENABLED: true});
           chrome.storage.local.set({UV_SETTING: "Off"});
           chrome.storage.local.set({APPLY_ALL: false});
@@ -100,26 +101,30 @@ function addEventListeners() {
     })}
     if(event.target.id=='allow-future-btn'){
       chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({UV_SETTING: "Allow all"});
       chrome.storage.local.set({ ENABLED: false });
       createDefaultSettingInfo();
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+      console.log("Allow button")
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Allow all", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
     }
     if(event.target.id=='dont-allow-future-btn'){
       chrome.storage.local.set({APPLY_ALL: true});
+      chrome.storage.local.set({UV_SETTING: "Don't allow all"});
       chrome.storage.local.set({ ENABLED: true });
       createDefaultSettingInfo();
-      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "GPC Signal", prevSetting: "N/A" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+      console.log("Don't allow button")
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't allow all", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
     }
-    if(event.target.id=='toggle_all_on'&& !document.getElementById("apply_to_all")){
+    if(event.target.id=='toggle_all_on'&& !document.getElementById("apply_to_all").checked){
       let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
       NOTE: Your current preferences will be permanently lost.`
       if (confirm(toggleOn_prompt)) {
         chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
           if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING })
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
           }
           if (allOff(result.DOMAINS) === true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Allow Tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
           }
           let new_domains = result.DOMAINS;
           for (let d in new_domains){
@@ -139,10 +144,10 @@ function addEventListeners() {
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
           if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) !== true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
           }
           if (allOn(result.DOMAINS) === true) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC Signal", prevSetting: "Don't Allow Tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
           }
           let new_domains = result.DOMAINS;
           for (let d in new_domains){
@@ -156,12 +161,11 @@ function addEventListeners() {
       })
     }
     }
-  
     if(event.target.id=='delete_all_domainlist'){
         let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
         if (confirm(delete_prompt)) {
           chrome.storage.local.get(["UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
           })
           chrome.storage.local.set({ DOMAINS: {} });
           chrome.runtime.sendMessage
@@ -171,11 +175,11 @@ function addEventListeners() {
         addToggleListeners();
     }
   
-    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "DOMAINS"], function (result) {  
+    chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
       if(result.UI_SCHEME==3){
         if(event.target.id == 'extremely-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", universalSetting: result.UV_SETTING})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
           console.log("click listner")   
@@ -183,16 +187,16 @@ function addEventListeners() {
           updatePrefScheme3()
         }
         if (event.target.id == 'moderately-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", universalSetting: result.UV_SETTING})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
           createDefaultSettingInfo()
           updatePrefScheme3()
         }
         if (event.target.id == 'not-privacy-sensitive') {
-          chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", universalSetting: result.UV_SETTING})
+          chrome.storage.local.get(["USER_CHOICES"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
           })
           chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
           createDefaultSettingInfo()
@@ -200,47 +204,65 @@ function addEventListeners() {
         }
       }
       if(result.UI_SCHEME==2){
+        chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
         let userChoices=result.USER_CHOICES
-        console.log(userChoices)
         if(event.target.id == 'advertising') {
           userChoices["Advertising"]=!userChoices["Advertising"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          })   
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'analytics') {
           userChoices["Analytics"]=!userChoices["Analytics"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          }) 
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'fingerprinting') {
           userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          }) 
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if(event.target.id == 'social') {
           userChoices["Content & Social"]=!userChoices["Content & Social"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'cryptomining') {
           userChoices["Cryptomining"]=!userChoices["Cryptomining"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
         if (event.target.id == 'others') {
           userChoices["Others"]=!userChoices["Others"]
           chrome.storage.local.set({USER_CHOICES: userChoices});
-          console.log("click listner")   
+          chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
+          })
+          chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
           createDefaultSettingInfo()
           updatePrefScheme2()
         }
@@ -255,18 +277,23 @@ function addEventListeners() {
 function addToggleListeners() {
   chrome.storage.local.get(["DOMAINS"], function (result) {
     for (let domain in result.DOMAINS) {
-      toggleListener(domain, domain)
-      deleteButtonListener(domain)
+      addDomainToggleListener(domain, domain)
+      addDeleteButtonListener(domain)
     }
   });
 }
 
 // Delete buttons for each domain
-function deleteButtonListener (domain) {
+function addDeleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
-        permRemoveFromDomainlist(domain)
+        deleteDomain(domain)
         document.getElementById(`li ${domain}`).remove();
-})}
+        console.log("Delete a domain")
+        chrome.storage.local.get(["UV_SETTING"], function (result) {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+        })
+  })
+}
 
 // Filtered lists code heavily inspired by
 function filterList() {
@@ -357,54 +384,54 @@ function createDefaultSettingInfo(){
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
         <div class="choice">
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-          uk-tooltip="title: ; pos: top-right">
+          uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
               <a class="uk-position-cover first" href="#" id="advertising" checked></a>
-              <span uk-icon="icon: cog; ratio: 4"></span>
+              <span uk-icon="icon: cart; ratio: 1.5"></span>
               <span class="uk-text-middle">Advertising</span>
           </div>
         </div>
           <div class="choice">
             <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:; pos: top-right">
+            uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
                 <a class="uk-position-cover first" href="#" id="analytics" checked></a>
-                <span uk-icon="icon: cog; ratio: 4"></span>
+                <span uk-icon="icon: search; ratio: 1.5"></span>
                 <span class="uk-text-middle">Analytics</span>
             </div>
         </div>
         <div class="choice">
         <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-        uk-tooltip="title:; pos: top-right">
+        uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="social" checked></a>
-            <span uk-icon="icon: cog; ratio: 4"></span>
+            <span uk-icon="icon: social; ratio: 1.5"></span>
             <span class="uk-text-middle">Content & Social</span>
         </div>
         </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-      <div class="choice">
-        <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-        uk-tooltip="title: ; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-            <span uk-icon="icon: cog; ratio: 4"></span>
-            <span class="uk-text-middle">Cryptomining</span>
-              </div>
+        <div class="choice">
+          <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+          uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
+              <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
+              <span uk-icon="icon: nut; ratio: 1.5"></span>
+              <span class="uk-text-middle">Cryptomining</span>
+          </div>
         </div>
-          <div class="choice">
-                    <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: ; pos: top-right">
-                        <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
-                        <span class="uk-text-middle">Fingerprinting</span>
-                    </div>
-                </div>
-                <div class="choice">
-                <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                uk-tooltip="title: ; pos: top-right">
-                    <a class="uk-position-cover first" href="#" id="others" checked></a>
-                    <span uk-icon="icon: cog; ratio: 4"></span>
-                    <span class="uk-text-middle">Others</span>
-                </div>
+        <div class="choice">
+            <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
+                <span uk-icon="icon: bookmark; ratio: 1.5"></span>
+                <span class="uk-text-middle">Fingerprinting</span>
             </div>
+        </div>
+        <div class="choice">
+            <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id="others" checked></a>
+                <span uk-icon="icon: world; ratio: 1.5"></span>
+                <span class="uk-text-middle">Others</span>
+            </div>
+        </div>
       </div>
 
       `
@@ -419,23 +446,23 @@ function createDefaultSettingInfo(){
                     <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-                        <span uk-icon="icon: cog; ratio: 4"></span>
+                        <span uk-icon="icon: lock; ratio: 1.5"></span>
                         <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
                     </div>
                 </div>
                 <div class="choice">
                     <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title: GPC signals will only be sent to websites that have ads.; pos: top-right">
+                    uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
                         <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive"></a>
-                        <span uk-icon="icon: code; ratio: 4"></span>
+                        <span uk-icon="icon: user; ratio: 1.5"></span>
                         <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
                     </div>
                 </div>
                 <div class="choice">
                     <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title: GPC signals will not be sent to any websites.; pos: top-right">
+                    uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
                         <a class="uk-position-cover third" href="#" id="not-privacy-sensitive"></a>
-                        <span uk-icon="icon: settings; ratio: 4"></span>
+                        <span uk-icon="icon: unlock; ratio: 1.5"></span>
                         <span class="uk-text-middle">Not Privacy-Sensitive</span>
                     </div>
                 </div>

@@ -30,6 +30,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     if (prolificID && validateID(prolificID)){
         try {
             userProfile = document.querySelector(".uk-card-primary").children[2].innerText;
+            console.log(userProfile);
         } catch (e){
         }
         if (userProfile){
@@ -66,7 +67,7 @@ function submit(prolificID, userProfile){
         }, 2000);
     });
     chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING})
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Privacy Profile Survey", subcollection: "Privacy Choice"})
       })
 }
 

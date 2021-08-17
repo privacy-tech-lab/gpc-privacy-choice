@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 4;
+  let userScheme = 1;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
@@ -123,7 +123,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
-      addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting);
+      addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
