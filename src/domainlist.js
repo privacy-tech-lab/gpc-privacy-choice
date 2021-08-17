@@ -61,7 +61,7 @@ export function buildToggle(domain, bool) {
 }
 
 // Turn on / off the domain from the setting page
-export async function toggleListener(elementId, domain) {
+export async function addDomainToggleListener(elementId, domain) {
   document.getElementById(elementId).addEventListener("click", () => {
     chrome.storage.local.set({ ENABLED: true, DOMAINLIST_ENABLED: true });
     chrome.storage.local.get(["DOMAINS", "UV_SETTING", "UI_SCHEME"], function (result) {

@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, toggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
+import { buildToggle, addDomainToggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
 
 const headings = {
     title: 'Settings',
@@ -277,14 +277,14 @@ function addEventListeners() {
 function addToggleListeners() {
   chrome.storage.local.get(["DOMAINS"], function (result) {
     for (let domain in result.DOMAINS) {
-      toggleListener(domain, domain)
-      deleteButtonListener(domain)
+      addDomainToggleListener(domain, domain)
+      addDeleteButtonListener(domain)
     }
   });
 }
 
 // Delete buttons for each domain
-function deleteButtonListener (domain) {
+function addDeleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
         permRemoveFromDomainlist(domain)
         document.getElementById(`li ${domain}`).remove();
