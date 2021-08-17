@@ -141,6 +141,26 @@ function toggleAllOffEvent() {
   }
 }
 
+function applyAllSwitchEvent() {
+  chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
+    if(result.APPLY_ALL){
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page", subcollection: "Domain"})
+      chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+      chrome.storage.local.set({UV_SETTING: "Off"});
+      chrome.storage.local.set({APPLY_ALL: false});
+      chrome.storage.local.set({ ENABLED: true });
+      createDefaultSettingInfo();
+      chrome.runtime.sendMessage
+                ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
+    }
+    else{
+      createDefaultSettingInfo();
+      UIkit.modal("#future_setting_prompt").show()
+      createDefaultSettingInfo();
+    }
+  })
+}
+
 // Creates the event listeners for the `domainlist` page buttons and options
 // TODO: refactor this function
 function addEventListeners() {
@@ -153,23 +173,8 @@ function addEventListeners() {
       toggleAllOnEvent();
     }
     if(event.target.id=='apply-all-switch'){
-      chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
-        if(result.APPLY_ALL){
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page", subcollection: "Domain"})
-          chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-          chrome.storage.local.set({UV_SETTING: "Off"});
-          chrome.storage.local.set({APPLY_ALL: false});
-          chrome.storage.local.set({ ENABLED: true });
-          createDefaultSettingInfo();
-          chrome.runtime.sendMessage
-                    ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: 'dontSet' , newDomainlistEnabled: true })
-        }
-      else{
-        createDefaultSettingInfo();
-        UIkit.modal("#future_setting_prompt").show()
-        createDefaultSettingInfo();
-      }
-    })}
+      applyAllSwitchEvent();
+  }
     if(event.target.id=='allow-future-btn'){
       chrome.storage.local.set({APPLY_ALL: true});
       chrome.storage.local.set({UV_SETTING: "Allow all"});
