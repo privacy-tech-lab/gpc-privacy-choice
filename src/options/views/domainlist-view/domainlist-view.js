@@ -3,7 +3,7 @@
 // privacy-tech-lab, https://privacytechlab.org/
 
 import { renderParse, fetchParse } from '../../components/util.js'
-import { buildToggle, addDomainToggleListener, permRemoveFromDomainlist, allOn, allOff} from "../../../domainlist.js";
+import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
 const headings = {
     title: 'Settings',
@@ -286,7 +286,7 @@ function addToggleListeners() {
 // Delete buttons for each domain
 function addDeleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
-        permRemoveFromDomainlist(domain)
+        deleteDomain(domain)
         document.getElementById(`li ${domain}`).remove();
         console.log("Delete a domain")
         chrome.storage.local.get(["UV_SETTING"], function (result) {

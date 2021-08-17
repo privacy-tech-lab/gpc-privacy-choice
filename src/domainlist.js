@@ -25,7 +25,7 @@ export async function turnOffGPC(domainKey) {
 }
 
 // Removes DOMAINS[domainKey] from DOMAINS
-export async function permRemoveFromDomainlist(domainKey) {
+export async function deleteDomain(domainKey) {
   let new_domains = [];
   chrome.storage.local.get(["DOMAINS"], function (result) {
     new_domains = result.DOMAINS;
