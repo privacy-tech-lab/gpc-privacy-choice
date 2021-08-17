@@ -139,7 +139,7 @@ function toggleAllOffEvent() {
     }
   }
 }
-
+// "Apply all" switch is hit
 function applyAllSwitchEvent() {
   chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
     if(result.APPLY_ALL){
@@ -159,8 +159,9 @@ function applyAllSwitchEvent() {
     }
   })
 }
-
+// User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
 function futureSettingPromptEvent(event) {
+  // User hits "Allow tracking for all"
   if (event.target.id=='allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
     chrome.storage.local.set({UV_SETTING: "Allow all"});
@@ -169,6 +170,7 @@ function futureSettingPromptEvent(event) {
     console.log("Allow button")
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Allow all", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
   }
+  // User hits "Don't allow tracking" for all
   else if (event.target.id=='dont-allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
     chrome.storage.local.set({UV_SETTING: "Don't allow all"});
@@ -177,8 +179,9 @@ function futureSettingPromptEvent(event) {
     console.log("Don't allow button")
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't allow all", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
   }
+  // Otherwise, they hit cancel and nothing changes
 }
-
+// Entire domain list is deleted
 function deleteDomainListEvent() {
   let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
   if (confirm(delete_prompt)) {
@@ -192,7 +195,7 @@ function deleteDomainListEvent() {
   createList();
   addToggleListeners();
 }
-
+// User changes their privacy profile on scheme 3
 function privacyProfileEvent(event) {
   if(event.target.id == 'extremely-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
@@ -225,7 +228,7 @@ function privacyProfileEvent(event) {
     updatePrefScheme3()
   }
 }
-
+// User alters their category choice on scheme 2
 function categoriesEvent(event) {
   chrome.storage.local.get(["USER_CHOICES"], function (result) {  
     chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
@@ -294,30 +297,29 @@ function categoriesEvent(event) {
 }
 
 // Creates the event listeners for the `domainlist` page buttons and options
-// TODO: refactor this function
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
   document.addEventListener('click', event => {
     if (event.target.id=='toggle_all_off'){
       toggleAllOffEvent();
     }
-    if (event.target.id=='toggle_all_on'){
+    else if (event.target.id=='toggle_all_on'){
       toggleAllOnEvent();
     }
-    if(event.target.id=='apply-all-switch'){
+    else if(event.target.id=='apply-all-switch'){
       applyAllSwitchEvent();
     }
-    if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
+    else if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
       futureSettingPromptEvent(event);
     }
-    if(event.target.id=='delete_all_domainlist'){
+    else if(event.target.id=='delete_all_domainlist'){
       deleteDomainListEvent();
     }
     chrome.storage.local.get(["UI_SCHEME"], function (result) {  
       if(result.UI_SCHEME==3){
         privacyProfileEvent(event);
       }
-      if(result.UI_SCHEME==2){
+      else if(result.UI_SCHEME==2){
         categoriesEvent(event);
       }
     })
