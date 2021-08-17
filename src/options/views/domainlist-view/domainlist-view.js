@@ -180,6 +180,20 @@ function futureSettingPromptEvent(event) {
   }
 }
 
+function deleteDomainList() {
+  let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
+  if (confirm(delete_prompt)) {
+    chrome.storage.local.get(["UV_SETTING"], function (result) {
+      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+    })
+    chrome.storage.local.set({ DOMAINS: {} });
+    chrome.runtime.sendMessage
+          ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: {} , newDomainlistEnabled: 'dontSet' })
+  }
+  createList();
+  addToggleListeners();
+}
+
 // Creates the event listeners for the `domainlist` page buttons and options
 // TODO: refactor this function
 function addEventListeners() {
@@ -198,17 +212,7 @@ function addEventListeners() {
       futureSettingPromptEvent(event);
     }
     if(event.target.id=='delete_all_domainlist'){
-        let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
-        if (confirm(delete_prompt)) {
-          chrome.storage.local.get(["UV_SETTING"], function (result) {
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
-          })
-          chrome.storage.local.set({ DOMAINS: {} });
-          chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled: 'dontSet', newDomains: {} , newDomainlistEnabled: 'dontSet' })
-        }
-        createList();
-        addToggleListeners();
+      deleteDomainList();
     }
   
     chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {  
