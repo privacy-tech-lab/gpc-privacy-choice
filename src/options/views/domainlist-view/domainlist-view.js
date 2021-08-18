@@ -212,7 +212,7 @@ function privacyProfileEvent(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  if (event.target.id == 'moderately-privacy-sensitive') {
+  else if (event.target.id == 'moderately-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Moderately Privacy-Sensitive") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -222,7 +222,7 @@ function privacyProfileEvent(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  if (event.target.id == 'not-privacy-sensitive') {
+  else if (event.target.id == 'not-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Not Privacy-Sensitive") {
       chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
