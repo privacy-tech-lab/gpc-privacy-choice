@@ -242,6 +242,8 @@ function categoriesEvent(event) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })   
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
+      createDefaultSettingInfo()
+      updatePrefScheme2()
     }
     else if(event.target.id == 'analytics') {
       userChoices["Analytics"]=!userChoices["Analytics"]
@@ -250,6 +252,8 @@ function categoriesEvent(event) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       }) 
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
+      createDefaultSettingInfo()
+      updatePrefScheme2()
     }
     else if(event.target.id == 'fingerprinting') {
       userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
@@ -258,6 +262,8 @@ function categoriesEvent(event) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       }) 
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      createDefaultSettingInfo()
+      updatePrefScheme2()
     }
     else if(event.target.id == 'social') {
       userChoices["Content & Social"]=!userChoices["Content & Social"]
@@ -266,6 +272,8 @@ function categoriesEvent(event) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      createDefaultSettingInfo()
+      updatePrefScheme2()
     }
     else if (event.target.id == 'cryptomining') {
       userChoices["Cryptomining"]=!userChoices["Cryptomining"]
@@ -274,6 +282,8 @@ function categoriesEvent(event) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      createDefaultSettingInfo()
+      updatePrefScheme2()
     }
     else if (event.target.id == 'others') {
       userChoices["Others"]=!userChoices["Others"]
@@ -281,10 +291,10 @@ function categoriesEvent(event) {
       chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
-      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});  
-    }        
-    createDefaultSettingInfo()
-    updatePrefScheme2()
+      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      createDefaultSettingInfo()
+      updatePrefScheme2()
+    }
   })
 }
 
