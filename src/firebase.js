@@ -33,7 +33,7 @@ export async function createUser(schemeNumber){
             "Latitude": latitude, 
             "Longitude": longitude,
             "Browser": getBrowser(),
-            "Browser Engine": getBrowserEngine(),
+            "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
             "OS": getOS(),
             "Plugins": getPlugins(),
             "Language": getLanguage(),
@@ -210,10 +210,6 @@ function getBrowser() {
     return browser;
 }
 
-// Get the browser engine version
-function getBrowserEngine(){
-    return null
-}
 
 // Get the operating system of the user device
 function getOS(){
