@@ -28,7 +28,7 @@ export async function createUser(schemeNumber){
         // create the uers in the database
         db.collection("users").doc(userDocument.id).set({
             "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
-            "DNT": navigator.doNotTrack ? navigator.userAgent : "undefined",
+            "DNT": navigator.doNotTrack ? 1 : 0,
             "IP Address": userIP,
             "Latitude": latitude, 
             "Longitude": longitude,
