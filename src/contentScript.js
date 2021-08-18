@@ -268,10 +268,12 @@ function showBanner(checkbox) {
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
         let applyAllBool
+
         if(document.getElementById("apply-all")){
             applyAllBool = document.getElementById("apply-all").checked
         }
         else applyAllBool=false;
+
         if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
             // situation 1: enable GPC for the current domain
             removeBanner();
@@ -390,6 +392,24 @@ function getDomain(url) {
     return domain;
 }
 
+// SCHEME 1: add new domains to the domainlist after apply all option is chosen
+function addToDomainListScheme1(){
+    chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result){
+        let currentDomain = getDomain(window.location.href);
+        let domains = result.DOMAINS;
+        let value; 
+        if (!(currentDomain in domains)){
+            if (result.UV_SETTING == "Don't allow all") value = true;
+            else value = false;
+            // add the currentDomain and store it in the local storage
+            domains[currentDomain] = value;
+            chrome.storage.local.set({DOMAINS: domains});
+            // notify background to update the cache used for look up
+            chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
+        }
+    })
+}
+
 // SCHEME 2: add new domains to the domainlist in local storage based on the user's questionnaire response
 function addToDomainListScheme2(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
@@ -451,31 +471,25 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result
     let currentDomain = getDomain(window.location.href);
     if (result.UI_SCHEME == 1){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true);
+        else addToDomainListScheme1();
     } else if (result.UI_SCHEME == 4){
         let random = Math.floor(Math.random() * 3);
-        // let random = 1;
-        if (random == 1 && !(currentDomain in domains)) {
-            showBanner(false);
-        } else {
+        if (random == 1 && !(currentDomain in domains)) {showBanner(false);} 
+        else {
             chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result){
                 let currentDomain = getDomain(window.location.href);
                 let domains = result.DOMAINS;
                 let value = false;
                 if (!(currentDomain in domains)){
-                    console.log("Not in the domain list")
-                    console.log(result.CHECKLIST);
                     if (result.CHECKLIST.includes(currentDomain)) value = true;
                     domains[currentDomain] = value;
-                    console.log(domains);
                     chrome.storage.local.set({DOMAINS: domains});
                     chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'});
                 }
             })
         }
     } else {
-        // questionnaire scheme
         if (result.UI_SCHEME == 2) addToDomainListScheme2();
-        // privacy profile scheme
         else addToDomainListScheme3();
     }
 });
