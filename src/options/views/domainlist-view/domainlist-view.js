@@ -75,6 +75,7 @@ function toggleAllOnEvent() {
     }
   }
 }
+
 // "Allow tracking for all" button is clicked
 function toggleAllOffEvent() {
   // "Apply all" box is checked
@@ -139,6 +140,7 @@ function toggleAllOffEvent() {
     }
   }
 }
+
 // "Apply all" switch is hit
 function applyAllSwitchEvent() {
   chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
@@ -159,6 +161,7 @@ function applyAllSwitchEvent() {
     }
   })
 }
+
 // User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
 function futureSettingPromptEvent(event) {
   // User hits "Allow tracking for all"
@@ -181,6 +184,7 @@ function futureSettingPromptEvent(event) {
   }
   // Otherwise, they hit cancel and nothing changes
 }
+
 // Entire domain list is deleted
 function deleteDomainListEvent() {
   let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
@@ -195,6 +199,7 @@ function deleteDomainListEvent() {
   createList();
   addToggleListeners();
 }
+
 // User changes their privacy profile on scheme 3
 function privacyProfileEvent(event) {
   if(event.target.id == 'extremely-privacy-sensitive') {
@@ -228,6 +233,7 @@ function privacyProfileEvent(event) {
     updatePrefScheme3()
   }
 }
+
 // User alters their category choice on scheme 2
 function categoriesEvent(event) {
   chrome.storage.local.get(["USER_CHOICES"], function (result) {  
@@ -295,6 +301,7 @@ function categoriesEvent(event) {
     }
   })
 }
+
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
@@ -325,6 +332,7 @@ function addEventListeners() {
   })
   addToggleListeners();
 }
+
 // Creates the specific Domain List toggles as well as the perm delete
 function addToggleListeners() {
   chrome.storage.local.get(["DOMAINS"], function (result) {
@@ -366,6 +374,7 @@ function filterList() {
   };
 }
 
+// Applies user decision from privacy profile/questionnaire to cards on options page
 function cardInteractionSettings() {
   chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {
     if(result.UI_SCHEME==3){
@@ -414,7 +423,7 @@ function cardInteractionSettings() {
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
     let apply_all_switch =
     ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
@@ -867,10 +876,8 @@ async function updatePrefScheme2() {
 export async function domainlistView(scaffoldTemplate) {
     const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
     let content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view')
-
     document.getElementById('content').innerHTML = body.innerHTML
     document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
-
     createDefaultSettingInfo();
     createDomainlistManagerButtons();
     createList();
@@ -883,6 +890,5 @@ export async function domainlistView(scaffoldTemplate) {
         document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
         chrome.storage.local.set({"LEARNING": "Completed"});
       }
-    })
-    
+    })   
 }
