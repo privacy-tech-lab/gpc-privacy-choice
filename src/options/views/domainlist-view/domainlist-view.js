@@ -299,28 +299,28 @@ function categoriesEvent(event) {
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
-  document.addEventListener('click', event => {
-    if (event.target.id=='toggle_all_off'){
-      toggleAllOffEvent();
-    }
-    else if (event.target.id=='toggle_all_on'){
-      toggleAllOnEvent();
-    }
-    else if(event.target.id=='apply-all-switch'){
-      applyAllSwitchEvent();
-    }
-    else if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
-      futureSettingPromptEvent(event);
-    }
-    else if(event.target.id=='delete_all_domainlist'){
-      deleteDomainListEvent();
-    }
-    chrome.storage.local.get(["UI_SCHEME"], function (result) {  
-      if(result.UI_SCHEME==3){
-        privacyProfileEvent(event);
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {  
+    document.addEventListener('click', event => {
+      if (event.target.id=='toggle_all_off'){
+        toggleAllOffEvent();
+      }
+      else if (event.target.id=='toggle_all_on'){
+        toggleAllOnEvent();
+      }
+      else if(event.target.id=='apply-all-switch'){
+        applyAllSwitchEvent();
+      }
+      else if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
+        futureSettingPromptEvent(event);
+      }
+      else if(event.target.id=='delete_all_domainlist'){
+        deleteDomainListEvent();
+      }
+      else if (result.UI_SCHEME==3){
+          privacyProfileEvent(event);
       }
       else if(result.UI_SCHEME==2){
-        categoriesEvent(event);
+          categoriesEvent(event);
       }
     })
   })
