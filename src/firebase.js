@@ -1,5 +1,3 @@
-import { turnOnGPC } from "./domainlist.js";
-
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
     apiKey: "AIzaSyAhhtuwr4YOK_F0ZkULkKkFpyMC_5ZIaT4",
