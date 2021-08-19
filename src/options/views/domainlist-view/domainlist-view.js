@@ -209,6 +209,8 @@ function privacyProfileEvent(event) {
       }
     })
     chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+    createDefaultSettingInfo()
+    updatePrefScheme3()
   }
   else if (event.target.id == 'moderately-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
@@ -217,6 +219,8 @@ function privacyProfileEvent(event) {
       }
     })
     chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+    createDefaultSettingInfo()
+    updatePrefScheme3()
   }
   else if (event.target.id == 'not-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
@@ -225,9 +229,9 @@ function privacyProfileEvent(event) {
       }
     })
     chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+    createDefaultSettingInfo()
+    updatePrefScheme3()
   }
-  createDefaultSettingInfo()
-  updatePrefScheme3()
 }
 
 // User alters their category choice on scheme 2
