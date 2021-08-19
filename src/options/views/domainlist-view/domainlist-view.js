@@ -261,9 +261,9 @@ function categoriesEvent(event) {
       chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       }) 
-      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES}); 
       createDefaultSettingInfo()
-      updatePrefScheme2()
+      updatePrefScheme2()         
     }
     else if(event.target.id == 'social') {
       userChoices["Content & Social"]=!userChoices["Content & Social"]
@@ -271,9 +271,9 @@ function categoriesEvent(event) {
       chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
-      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});   
       createDefaultSettingInfo()
-      updatePrefScheme2()
+      updatePrefScheme2()       
     }
     else if (event.target.id == 'cryptomining') {
       userChoices["Cryptomining"]=!userChoices["Cryptomining"]
@@ -281,9 +281,9 @@ function categoriesEvent(event) {
       chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
-      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});  
       createDefaultSettingInfo()
-      updatePrefScheme2()
+      updatePrefScheme2()        
     }
     else if (event.target.id == 'others') {
       userChoices["Others"]=!userChoices["Others"]
@@ -291,10 +291,10 @@ function categoriesEvent(event) {
       chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: result.PREV_CHOICE, newSetting: result.USER_CHOICES, location: "Options page", subcollection: "Privacy Choice"})
       })
-      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});          
+      chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});  
       createDefaultSettingInfo()
       updatePrefScheme2()
-    }
+    }        
   })
 }
 
@@ -371,55 +371,52 @@ function filterList() {
 }
 
 // Applies user decision from privacy profile/questionnaire to cards on options page
-function cardInteractionSettings() {
-  chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES"], function (result) {
-    if(result.UI_SCHEME==3){
-      if(result.USER_CHOICES=='Extremely Privacy-Sensitive'){
+function cardInteractionSettings(scheme, userChoice) {
+    if(scheme==3){
+      if(userChoice=='Extremely Privacy-Sensitive'){
         document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
       }
       else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(result.USER_CHOICES=='Moderately Privacy-Sensitive'){
+      if(userChoice=='Moderately Privacy-Sensitive'){
         document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
       }
       else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(result.USER_CHOICES=="Not Privacy-Sensitive"){
+      if(userChoice=="Not Privacy-Sensitive"){
         document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
       }
       else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
     } 
-    else if(result.UI_SCHEME==2){
-      let userChoices=result.USER_CHOICES;
-      if(userChoices['Advertising']){
+    else if(scheme==2){
+      if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
       }
       else document.getElementById('advertising-card').classList.remove("uk-card-primary");
-      if(userChoices['Analytics']){
+      if(userChoice['Analytics']){
         document.getElementById('analytics-card').classList.add('uk-card-primary')
       }
       else document.getElementById('analytics-card').classList.remove("uk-card-primary");
-      if(userChoices['Fingerprinting']){
+      if(userChoice['Fingerprinting']){
         document.getElementById('fingerprinting-card').classList.add('uk-card-primary')
       }
       else document.getElementById('fingerprinting-card').classList.remove("uk-card-primary");
-      if(userChoices["Content & Social"]){
+      if(userChoice["Content & Social"]){
         document.getElementById('social-card').classList.add('uk-card-primary')
       }
       else document.getElementById('social-card').classList.remove("uk-card-primary");
-      if(userChoices['Cryptomining']){
+      if(userChoice['Cryptomining']){
         document.getElementById('cryptomining-card').classList.add('uk-card-primary')
       }
       else document.getElementById('cryptomining-card').classList.remove("uk-card-primary");
-      if(userChoices['Others']){
+      if(userChoice['Others']){
         document.getElementById('others-card').classList.add('uk-card-primary')
       }
       else document.getElementById('others-card').classList.remove("uk-card-primary");
     }
-  })
 }
 
 // Create HTML for the buttons and information on default/apply-all setting
 function createDefaultSettingInfo(){
-  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME"], function (result) {
+  chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
     let apply_all_switch =
     ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
@@ -587,7 +584,7 @@ function createDefaultSettingInfo(){
       `
     }
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
-    cardInteractionSettings();
+    cardInteractionSettings(result.UI_SCHEME, result.USER_CHOICES);
   })
 }
 
