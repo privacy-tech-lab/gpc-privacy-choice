@@ -48,15 +48,20 @@ function bannerMouseOverEvent() {
     body.addEventListener('mouseover', event => {
         let button_preb = event.target;
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
 =======
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
 >>>>>>> mouseOver event (#87).
+=======
+        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+>>>>>>> Don't allow event listener (#87).
             button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
         }
         let cursor_spot = event.target;
         let but1 = document.getElementById('allow-btn');
         let but2 = document.getElementById('dont-allow-btn');
+<<<<<<< HEAD
 <<<<<<< HEAD
         if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
             if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
@@ -88,11 +93,20 @@ function bannerClickEvent() {
         } 
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
             addAllowAllEventListener(currentDomain);
+=======
+        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
+            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+>>>>>>> Don't allow event listener (#87).
         }
     })
 }
 
+<<<<<<< HEAD
 // Enable GPC for the current domain
+=======
+// situation 1: enable GPC for the current domain
+>>>>>>> Don't allow event listener (#87).
 function addDontAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -106,6 +120,7 @@ function addDontAllowEventListener(currentDomain) {
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
             chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+<<<<<<< HEAD
         })    
     })
 }
@@ -166,6 +181,24 @@ function addAllowAllEventListener(currentDomain) {
 
 =======
 >>>>>>> mouseOver event (#87).
+=======
+        });       
+    })
+}
+
+function addDontAllowAllEventListener() {
+
+}
+
+function addAllowEventListener() {
+
+}
+
+function addAllowAllEventListener() {
+
+}
+
+>>>>>>> Don't allow event listener (#87).
 // function used to show the modal
 function showBanner(checkbox) {
     let bannerinnerHTML = `
@@ -379,25 +412,11 @@ function showBanner(checkbox) {
 =======
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
-        let applyAllBool = false;
-        if(document.getElementById("apply-all")) applyAllBool = document.getElementById("apply-all").checked;
+        let applyAllBool = document.getElementById("apply-all").checked;
         if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
-            // situation 1: enable GPC for the current domain
-            removeBanner();
-            chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-            chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER"], function (result) {
-                let new_domains = result.DOMAINS;
-                new_domains[currentDomain] = true;
-                sendSignalBanner = result.SEND_SIGNAL_BANNER; 
-                if (sendSignalBanner !== undefined) chrome.storage.local.set({ DOMAINS: new_domains, SEND_SIGNAL_BANNER: sendSignalBanner+1});
-                else chrome.storage.local.set({ DOMAINS: new_domains });
-                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
-                // Sends data to Setting Interaction History
-                chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
-                });       
-            })
-        } else if(event.target.id === 'allow-btn' && !applyAllBool) { 
+            addDontAllowEventListener(currentDomain);
+        } 
+        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
             // situation 2: disable GPC for the current domain
             removeBanner();
             chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -413,7 +432,8 @@ function showBanner(checkbox) {
                     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
                 })
             });
-        } else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
+        } 
+        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
             // situation 3: enable GPC for all future domains
             removeBanner();
             chrome.storage.local.set({UV_SETTING: "Don't allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
@@ -429,7 +449,8 @@ function showBanner(checkbox) {
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
                 chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Banner", subcollection: "Domain"})
             }); 
-        } else if(event.target.id === 'allow-btn' && applyAllBool) { 
+        } 
+        else if(event.target.id === 'allow-btn' && applyAllBool) { 
             // situation 4: disable GPC for all future domains
             removeBanner();
             chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
@@ -445,8 +466,7 @@ function showBanner(checkbox) {
             chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
                 chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
             })    
-        } else if(event.target.id === 'rbe_open_options'){ chrome.runtime.sendMessage({greeting:"OPEN OPTIONS"})
-        } else if(event.target.id === 'rbe-okay-btn'){removeBanner()}
+        }
     })
 >>>>>>> reorganized code for click event on the banner #87
 }
