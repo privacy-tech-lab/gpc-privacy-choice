@@ -11,7 +11,7 @@ const headings = {
 }
 
 // "Do not allow tracking for all" button is clicked
-function toggleAllOnEvent() {
+function addToggleAllOnEventListener() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
     let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
@@ -77,7 +77,7 @@ function toggleAllOnEvent() {
 }
 
 // "Allow tracking for all" button is clicked
-function toggleAllOffEvent() {
+function addToggleAllOffEventListener() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
     let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
@@ -142,7 +142,7 @@ function toggleAllOffEvent() {
 }
 
 // "Apply all" switch is hit
-function applyAllSwitchEvent() {
+function addApplyAllSwitchEventListener() {
   chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
     if(result.APPLY_ALL){
       chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page", subcollection: "Domain"})
@@ -163,7 +163,7 @@ function applyAllSwitchEvent() {
 }
 
 // User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
-function futureSettingPromptEvent(event) {
+function addFutureSettingPromptEventListener(event) {
   // User hits "Allow tracking for all"
   if (event.target.id=='allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
@@ -186,7 +186,7 @@ function futureSettingPromptEvent(event) {
 }
 
 // Entire domain list is deleted
-function deleteDomainListEvent() {
+function addDeleteDomainListEventListener() {
   let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
   if (confirm(delete_prompt)) {
     chrome.storage.local.get(["UV_SETTING"], function (result) {
@@ -201,8 +201,9 @@ function deleteDomainListEvent() {
 }
 
 // User changes their privacy profile on scheme 3
-function privacyProfileEvent(event) {
-  if(event.target.id == 'extremely-privacy-sensitive') {
+function addPrivacyProfileEventListener(event) {
+  console.log(event.target.id)
+  if(event.target.id == 'extremely-privacy-sensitive' || event.target.id == 'extremely-privacy-icon') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Extremely Privacy-Sensitive") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -212,7 +213,7 @@ function privacyProfileEvent(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  else if (event.target.id == 'moderately-privacy-sensitive') {
+  else if (event.target.id == 'moderately-privacy-sensitive' || event.target.id == 'moderately-privacy-icon') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Moderately Privacy-Sensitive") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -222,7 +223,7 @@ function privacyProfileEvent(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  else if (event.target.id == 'not-privacy-sensitive') {
+  else if (event.target.id == 'not-privacy-sensitive' || event.target.id == 'not-privacy-icon') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Not Privacy-Sensitive") {
       chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -235,7 +236,7 @@ function privacyProfileEvent(event) {
 }
 
 // User alters their category choice on scheme 2
-function categoriesEvent(event) {
+function addCategoriesEventListener(event) {
   chrome.storage.local.get(["USER_CHOICES"], function (result) {  
     chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
     let userChoices=result.USER_CHOICES
@@ -308,25 +309,25 @@ function addEventListeners() {
   chrome.storage.local.get(["UI_SCHEME"], function (result) {  
     document.addEventListener('click', event => {
       if (event.target.id=='toggle_all_off'){
-        toggleAllOffEvent();
+        addToggleAllOffEventListener();
       }
       else if (event.target.id=='toggle_all_on'){
-        toggleAllOnEvent();
+        addToggleAllOnEventListener();
       }
       else if(event.target.id=='apply-all-switch'){
-        applyAllSwitchEvent();
+        addApplyAllSwitchEventListener();
       }
       else if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
-        futureSettingPromptEvent(event);
+        addFutureSettingPromptEventListener(event);
       }
       else if(event.target.id=='delete_all_domainlist'){
-        deleteDomainListEvent();
+        addDeleteDomainListEventListener();
       }
       else if (result.UI_SCHEME==3){
-          privacyProfileEvent(event);
+        addPrivacyProfileEventListener(event);
       }
       else if(result.UI_SCHEME==2){
-          categoriesEvent(event);
+        addCategoriesEventListener(event);
       }
     })
   })
@@ -374,7 +375,7 @@ function filterList() {
   };
 }
 
-// Applies user decision from privacy profile/questionnaire to cards on options page
+// Handles the initialization of card selections/changing of card selections
 function cardInteractionSettings(scheme, userChoice) {
     if(scheme==3){
       if(userChoice=='Extremely Privacy-Sensitive'){
@@ -550,7 +551,7 @@ function createDefaultSettingInfo(){
             <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
               uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
               <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-              <span uk-icon="icon: lock; ratio: 1.5"></span>
+              <span id = 'extremely-privacy-icon' uk-icon="icon: lock; ratio: 1.5"></span>
               <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
             </div>
           </div>
@@ -558,7 +559,7 @@ function createDefaultSettingInfo(){
             <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
               <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive"></a>
-              <span uk-icon="icon: user; ratio: 1.5"></span>
+              <span id = 'moderately-privacy-icon' uk-icon="icon: user; ratio: 1.5"></span>
               <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
             </div>
           </div>
@@ -566,7 +567,7 @@ function createDefaultSettingInfo(){
             <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
               <a class="uk-position-cover third" href="#" id="not-privacy-sensitive"></a>
-              <span uk-icon="icon: unlock; ratio: 1.5"></span>
+              <span id = 'not-privacy-icon' uk-icon="icon: unlock; ratio: 1.5"></span>
               <span class="uk-text-middle">Not Privacy-Sensitive</span>
             </div>
           </div>

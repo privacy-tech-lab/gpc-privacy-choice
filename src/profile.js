@@ -8,6 +8,7 @@ let profilesList = document.querySelectorAll('.choice');
 profilesList.forEach(item => {
     item.addEventListener('click', event => {
         let classList = event.target.classList;
+        console.log(event.target.id)
         for (let profile of profilesList){
             if (profile.children[0].firstElementChild.classList !== classList){
                 let card = profile.children[0];
@@ -17,7 +18,6 @@ profilesList.forEach(item => {
         }
     })
 })
-
 
 // Storage the user's profile in the local storage for future reference, close the tab
 document.querySelector('.submit-choice').onclick = (e) => {
@@ -30,7 +30,6 @@ document.querySelector('.submit-choice').onclick = (e) => {
     if (prolificID && validateID(prolificID)){
         try {
             userProfile = document.querySelector(".uk-card-primary").children[2].innerText;
-            console.log(userProfile);
         } catch (e){
         }
         if (userProfile){
@@ -67,8 +66,8 @@ function submit(prolificID, userProfile){
         }, 2000);
     });
     chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Privacy Profile Survey", subcollection: "Privacy Choice"})
-      })
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Privacy Profile", subcollection: "Privacy Choice"})
+    })
 }
 
 // Helper function to validate prolific ID
