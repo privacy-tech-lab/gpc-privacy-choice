@@ -137,8 +137,6 @@ async function submit(prolificID, networks){
             }
         }
       })
-    console.log("listener" + checkList)
-    console.log("listener" + checkNotList)
     chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList, USER_CHOICES: userChoices}, async function(){
         await userResgistration(prolificID, networks);
         document.querySelector(".main").style.display = "none";

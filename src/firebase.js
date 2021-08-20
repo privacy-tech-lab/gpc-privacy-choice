@@ -28,7 +28,7 @@ export async function createUser(schemeNumber){
         // create the uers in the database
         db.collection("users").doc(userDocument.id).set({
             "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
-            "DNT": navigator.doNotTrack ? navigator.userAgent : "undefined",
+            "DNT": navigator.doNotTrack ? 1 : 0,
             "IP Address": userIP,
             "Latitude": latitude, 
             "Longitude": longitude,
@@ -52,8 +52,7 @@ export async function createUser(schemeNumber){
 // Function used to add user name, user email and user choices to the database
 export async function userResgistration(prolificID, privacyChoice){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        console.log("user id is: " + result.USER_DOC_ID)
-        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID, "Privacy Choices": privacyChoice});
+        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID});
     })
 }
 
