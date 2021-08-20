@@ -52,7 +52,6 @@ function addToggleAllOnEventListener() {
     NOTE: Your current preferences will be permanently lost.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-        console.log("YOOOO")
         if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         }
@@ -170,7 +169,6 @@ function addFutureSettingPromptEventListener(event) {
     chrome.storage.local.set({UV_SETTING: "Allow all"});
     chrome.storage.local.set({ ENABLED: false });
     createDefaultSettingInfo();
-    console.log("Allow button")
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Allow all", universalSetting: "Allow all", location: "Options page", subcollection: "Domain"})
   }
   // User hits "Don't allow tracking" for all
@@ -179,7 +177,6 @@ function addFutureSettingPromptEventListener(event) {
     chrome.storage.local.set({UV_SETTING: "Don't allow all"});
     chrome.storage.local.set({ ENABLED: true });
     createDefaultSettingInfo();
-    console.log("Don't allow button")
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't allow all", universalSetting: "Don't allow all", location: "Options page", subcollection: "Domain"})
   }
   // Otherwise, they hit cancel and nothing changes
@@ -202,7 +199,6 @@ function addDeleteDomainListEventListener() {
 
 // User changes their privacy profile on scheme 3
 function addPrivacyProfileEventListener(event) {
-  console.log(event.target.id)
   if(event.target.id == 'extremely-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Extremely Privacy-Sensitive") {
@@ -349,7 +345,6 @@ function addDeleteButtonListener (domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click",()=>{
         deleteDomain(domain)
         document.getElementById(`li ${domain}`).remove();
-        console.log("Delete a domain")
         chrome.storage.local.get(["UV_SETTING"], function (result) {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "Delete domain", prevSetting: null, newSetting: null, universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         })
@@ -736,7 +731,6 @@ function updatePrefScheme3() {
       }
       // add the currentDomain and store it in the local storage
       domains[d] = value;
-      console.log(domains)
     }
     chrome.storage.local.set({DOMAINS: domains});
     createList()
@@ -752,13 +746,10 @@ async function updatePrefScheme2() {
     let checkList = [];
     let checkNotList = [];
     let userChoices=result.USER_CHOICES
-    console.log("listener " + checkList)
-    console.log("listener " + checkNotList)
     // Parse the networks json file based on the user's response to JSON
     await fetch("../../json/services.json")
       .then((response) => response.text())
       .then((result) => {
-        console.log("building the list")
         let networks = (JSON.parse(result))["categories"]
         for (let category of Object.keys(userChoices)){
             if (userChoices[category] == true){
@@ -832,11 +823,8 @@ async function updatePrefScheme2() {
             }
         }
       })
-    console.log("listener " + checkList)
-    console.log("listener " + checkNotList)
     chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList})
 
-    console.log(result.USER_CHOICES)
     let domains = result.DOMAINS;
     for (let currentDomain in domains) {
       // by default, do not send GPC signals
@@ -850,9 +838,7 @@ async function updatePrefScheme2() {
           }
       }
       // add the currentDomain and store it in the local storage
-      console.log(value)
       domains[currentDomain] = value;
-      console.log(domains)
     }
     chrome.storage.local.set({DOMAINS: domains});
     createList()
@@ -872,7 +858,6 @@ export async function domainlistView(scaffoldTemplate) {
     createList();
     addEventListeners();
     chrome.storage.local.get(["LEARNING"], function(result){
-      console.log("result.LEARNING")
       if (result.LEARNING == "Just Finished"){
         let modal = UIkit.modal("#learning-finish-modal");
         modal.show();
