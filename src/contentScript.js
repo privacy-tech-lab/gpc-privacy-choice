@@ -43,6 +43,25 @@ function styleBanner() {
     imbedStyle.innerHTML=`.hide_pseudo:before, .hide_pseudo:after {content: none !important;}`
 }
 
+// Buttons of banner change color when user hovers over them
+function bannerMouseOverEvent() {
+    body.addEventListener('mouseover', event => {
+        let button_preb = event.target;
+        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
+            button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
+        }
+        let cursor_spot = event.target;
+        let but1 = document.getElementById('allow-btn');
+        let but2 = document.getElementById('dont-allow-btn');
+        let but3 = document.getElementById('rbe-okay-btn');
+        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'rbe-okay-btn' ) {
+            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but3) but3.style.backgroundColor = 'rgb(51, 153, 255)';
+        }
+    })
+}
+
 // function used to show the modal
 function showBanner(checkbox) {
     let bannerinnerHTML = `
@@ -249,21 +268,7 @@ function showBanner(checkbox) {
     banner.style.display = "block";
     if (checkbox)document.getElementById('apply-all').classList.add('hide_pseudo');
     // buttons change color when the cursor hovers over them
-    body.addEventListener('mouseover', event => {
-        let button_preb = event.target;
-        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
-            button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
-        }
-        let cursor_spot = event.target;
-        let but1 = document.getElementById('allow-btn');
-        let but2 = document.getElementById('dont-allow-btn');
-        let but3 = document.getElementById('rbe-okay-btn');
-        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'rbe-okay-btn' ) {
-            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
-            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
-            if (but3) but3.style.backgroundColor = 'rgb(51, 153, 255)';
-        }
-    })
+    bannerMouseOverEvent();
     // add event listener to close the modal
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
