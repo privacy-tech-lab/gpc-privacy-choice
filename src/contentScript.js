@@ -190,8 +190,22 @@ function addDontAllowAllEventListener() {
 
 }
 
-function addAllowEventListener() {
-
+// situation 2: disable GPC for the current domain
+function addAllowEventListener(currentDomain) {
+    removeBanner();
+    chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+    chrome.storage.local.get(["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"], function (result) {
+        let new_domains = result.DOMAINS;
+        new_domains[currentDomain] = false;
+        notSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
+        if (notSendSignalBanner !== undefined) chrome.storage.local.set({ DOMAINS: new_domains, DO_NOT_SEND_SIGNAL_BANNER: notSendSignalBanner+1});
+        else chrome.storage.local.set({ DOMAINS: new_domains });
+        chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
+        // Sends data to Setting Interaction History
+        chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+        })
+    })
 }
 
 function addAllowAllEventListener() {
@@ -417,21 +431,7 @@ function showBanner(checkbox) {
             addDontAllowEventListener(currentDomain);
         } 
         else if(event.target.id === 'allow-btn' && !applyAllBool) { 
-            // situation 2: disable GPC for the current domain
-            removeBanner();
-            chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-            chrome.storage.local.get(["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"], function (result) {
-                let new_domains = result.DOMAINS;
-                new_domains[currentDomain] = false;
-                notSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
-                if (notSendSignalBanner !== undefined) chrome.storage.local.set({ DOMAINS: new_domains, DO_NOT_SEND_SIGNAL_BANNER: notSendSignalBanner+1});
-                else chrome.storage.local.set({ DOMAINS: new_domains });
-                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
-                // Sends data to Setting Interaction History
-                chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                    chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
-                })
-            });
+            addAllowEventListener(currentDomain);
         } 
         else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
             // situation 3: enable GPC for all future domains
