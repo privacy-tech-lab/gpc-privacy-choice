@@ -208,8 +208,22 @@ function addAllowEventListener(currentDomain) {
     })
 }
 
-function addAllowAllEventListener() {
-
+// situation 4: disable GPC for all future domains
+function addAllowAllEventListener(currentDomain) {
+    removeBanner();
+    chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
+    chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
+        new_domains = result.DOMAINS;
+        // todo: check if this is really what we want?
+        for (let d in new_domains){ new_domains[d] = false;}
+        new_domains[currentDomain] = false;
+        chrome.storage.local.set({ DOMAINS: new_domains, ENABLED: false });
+        chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
+    })
+    // Sends data to Setting Interaction History
+    chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
+    }) 
 }
 
 >>>>>>> Don't allow event listener (#87).
@@ -451,21 +465,7 @@ function showBanner(checkbox) {
             }); 
         } 
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
-            // situation 4: disable GPC for all future domains
-            removeBanner();
-            chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
-            chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-                new_domains = result.DOMAINS;
-                // todo: check if this is really what we want?
-                for (let d in new_domains){ new_domains[d] = false;}
-                new_domains[currentDomain] = false;
-                chrome.storage.local.set({ DOMAINS: new_domains, ENABLED: false });
-                chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:false , newDomains:new_domains , newDomainlistEnabled: false, newApplyAll: true });
-            });
-            // Sends data to Setting Interaction History
-            chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-                chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
-            })    
+            addAllowAllEventListener(currentDomain);
         }
     })
 >>>>>>> reorganized code for click event on the banner #87
