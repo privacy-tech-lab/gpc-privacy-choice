@@ -389,7 +389,6 @@ function getDomain(url) {
             }
         }
     }
-    
     return domain;
 }
 
