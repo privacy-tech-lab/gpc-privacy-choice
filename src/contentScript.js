@@ -47,19 +47,32 @@ function styleBanner() {
 function bannerMouseOverEvent() {
     body.addEventListener('mouseover', event => {
         let button_preb = event.target;
+<<<<<<< HEAD
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+=======
+        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
+>>>>>>> mouseOver event (#87).
             button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
         }
         let cursor_spot = event.target;
         let but1 = document.getElementById('allow-btn');
         let but2 = document.getElementById('dont-allow-btn');
+<<<<<<< HEAD
         if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
             if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
             if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+=======
+        let but3 = document.getElementById('rbe-okay-btn');
+        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn' && cursor_spot.id !== 'rbe-okay-btn' ) {
+            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but3) but3.style.backgroundColor = 'rgb(51, 153, 255)';
+>>>>>>> mouseOver event (#87).
         }
     })
 }
 
+<<<<<<< HEAD
 function bannerClickEvent() {
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
@@ -151,6 +164,8 @@ function addAllowAllEventListener(currentDomain) {
     }) 
 }
 
+=======
+>>>>>>> mouseOver event (#87).
 // function used to show the modal
 function showBanner(checkbox) {
     let bannerinnerHTML = `
