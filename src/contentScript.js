@@ -78,6 +78,9 @@ function bannerMouseOverEvent() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Add listeners function (#87).
 function bannerClickEvent() {
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
@@ -93,20 +96,27 @@ function bannerClickEvent() {
         } 
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
             addAllowAllEventListener(currentDomain);
+<<<<<<< HEAD
 =======
         if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
             if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
             if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
 >>>>>>> Don't allow event listener (#87).
+=======
+>>>>>>> Add listeners function (#87).
         }
     })
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Enable GPC for the current domain
 =======
 // situation 1: enable GPC for the current domain
 >>>>>>> Don't allow event listener (#87).
+=======
+// Enable GPC for the current domain
+>>>>>>> Add listeners function (#87).
 function addDontAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -144,6 +154,7 @@ function addDontAllowAllEventListener(currentDomain) {
 }
 
 // Disable GPC for the current domain
+<<<<<<< HEAD
 function addAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -191,6 +202,8 @@ function addDontAllowAllEventListener() {
 }
 
 // situation 2: disable GPC for the current domain
+=======
+>>>>>>> Add listeners function (#87).
 function addAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -208,7 +221,7 @@ function addAllowEventListener(currentDomain) {
     })
 }
 
-// situation 4: disable GPC for all future domains
+// Disable GPC for all future domains
 function addAllowAllEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
@@ -436,6 +449,7 @@ function showBanner(checkbox) {
     bannerMouseOverEvent();
     // add event listener to close the modal
 <<<<<<< HEAD
+<<<<<<< HEAD
     bannerClickEvent();
 =======
     body.addEventListener('click', event => {
@@ -469,6 +483,9 @@ function showBanner(checkbox) {
         }
     })
 >>>>>>> reorganized code for click event on the banner #87
+=======
+    bannerClickEvent();
+>>>>>>> Add listeners function (#87).
 }
 
 // function used to remove the modal
