@@ -8,7 +8,6 @@ let profilesList = document.querySelectorAll('.choice');
 profilesList.forEach(item => {
     item.addEventListener('click', event => {
         let classList = event.target.classList;
-        console.log(event.target.id)
         for (let profile of profilesList){
             if (profile.children[0].firstElementChild.classList !== classList){
                 let card = profile.children[0];
@@ -29,7 +28,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
     
     if (prolificID && validateID(prolificID)){
         try {
-            userProfile = document.querySelector(".uk-card-primary").children[2].innerText;
+            userProfile = document.querySelector(".uk-card-primary").children[1].innerText;
         } catch (e){
         }
         if (userProfile){
