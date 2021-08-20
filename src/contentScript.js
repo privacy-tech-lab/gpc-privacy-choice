@@ -60,7 +60,26 @@ function bannerMouseOverEvent() {
     })
 }
 
-// situation 1: enable GPC for the current domain
+function bannerClickEvent() {
+    body.addEventListener('click', event => {
+        let currentDomain = getDomain(window.location.href);
+        let applyAllBool = document.getElementById("apply-all").checked;
+        if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
+            addDontAllowEventListener(currentDomain);
+        } 
+        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
+            addAllowEventListener(currentDomain);
+        } 
+        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
+            addDontAllowAllEventListener(currentDomain);
+        } 
+        else if(event.target.id === 'allow-btn' && applyAllBool) { 
+            addAllowAllEventListener(currentDomain);
+        }
+    })
+}
+
+// Enable GPC for the current domain
 function addDontAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -78,7 +97,7 @@ function addDontAllowEventListener(currentDomain) {
     })
 }
 
-// situation 3: enable GPC for all future domains
+// Enable GPC for all future domains
 function addDontAllowAllEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({UV_SETTING: "Don't allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
@@ -96,7 +115,7 @@ function addDontAllowAllEventListener(currentDomain) {
     })
 }
 
-// situation 2: disable GPC for the current domain
+// Disable GPC for the current domain
 function addAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -114,7 +133,7 @@ function addAllowEventListener(currentDomain) {
     })
 }
 
-// situation 4: disable GPC for all future domains
+// Disable GPC for all future domains
 function addAllowAllEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
@@ -340,22 +359,7 @@ function showBanner(checkbox) {
     // buttons change color when the cursor hovers over them
     bannerMouseOverEvent();
     // add event listener to close the modal
-    body.addEventListener('click', event => {
-        let currentDomain = getDomain(window.location.href);
-        let applyAllBool = document.getElementById("apply-all").checked;
-        if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
-            addDontAllowEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
-            addAllowEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
-            addDontAllowAllEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'allow-btn' && applyAllBool) { 
-            addAllowAllEventListener(currentDomain);
-        }
-    })
+    bannerClickEvent();
 }
 
 // function used to remove the modal
