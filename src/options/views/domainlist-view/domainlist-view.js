@@ -203,7 +203,7 @@ function addDeleteDomainListEventListener() {
 // User changes their privacy profile on scheme 3
 function addPrivacyProfileEventListener(event) {
   console.log(event.target.id)
-  if(event.target.id == 'extremely-privacy-sensitive' || event.target.id == 'extremely-privacy-icon') {
+  if(event.target.id == 'extremely-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Extremely Privacy-Sensitive") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -213,7 +213,7 @@ function addPrivacyProfileEventListener(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  else if (event.target.id == 'moderately-privacy-sensitive' || event.target.id == 'moderately-privacy-icon') {
+  else if (event.target.id == 'moderately-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Moderately Privacy-Sensitive") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -223,7 +223,7 @@ function addPrivacyProfileEventListener(event) {
     createDefaultSettingInfo()
     updatePrefScheme3()
   }
-  else if (event.target.id == 'not-privacy-sensitive' || event.target.id == 'not-privacy-icon') {
+  else if (event.target.id == 'not-privacy-sensitive') {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {
       if (result.USER_CHOICES !== "Not Privacy-Sensitive") {
       chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
@@ -492,7 +492,6 @@ function createDefaultSettingInfo(){
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="advertising" checked></a>
-            <span uk-icon="icon: cart; ratio: 1.5"></span>
             <span class="uk-text-middle">Advertising</span>
           </div>
         </div>
@@ -500,7 +499,6 @@ function createDefaultSettingInfo(){
           <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="analytics" checked></a>
-            <span uk-icon="icon: search; ratio: 1.5"></span>
             <span class="uk-text-middle">Analytics</span>
           </div>
         </div>
@@ -508,7 +506,6 @@ function createDefaultSettingInfo(){
           <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="social" checked></a>
-            <span uk-icon="icon: social; ratio: 1.5"></span>
             <span class="uk-text-middle">Content & Social</span>
           </div>
         </div>
@@ -518,7 +515,6 @@ function createDefaultSettingInfo(){
           <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-            <span uk-icon="icon: nut; ratio: 1.5"></span>
             <span class="uk-text-middle">Cryptomining</span>
           </div>
         </div>
@@ -526,7 +522,6 @@ function createDefaultSettingInfo(){
           <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
-            <span uk-icon="icon: bookmark; ratio: 1.5"></span>
             <span class="uk-text-middle">Fingerprinting</span>
           </div>
         </div>
@@ -534,7 +529,6 @@ function createDefaultSettingInfo(){
           <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
             uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="others" checked></a>
-            <span uk-icon="icon: world; ratio: 1.5"></span>
             <span class="uk-text-middle">Others</span>
           </div>
         </div>
@@ -551,23 +545,20 @@ function createDefaultSettingInfo(){
             <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
               uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
               <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-              <span id = 'extremely-privacy-icon' uk-icon="icon: lock; ratio: 1.5"></span>
               <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
             </div>
           </div>
           <div class="choice">
             <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-              <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive"></a>
-              <span id = 'moderately-privacy-icon' uk-icon="icon: user; ratio: 1.5"></span>
+              <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" checked></a>
               <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
             </div>
           </div>
           <div class="choice">
             <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
-              <a class="uk-position-cover third" href="#" id="not-privacy-sensitive"></a>
-              <span id = 'not-privacy-icon' uk-icon="icon: unlock; ratio: 1.5"></span>
+              <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" checked></a>
               <span class="uk-text-middle">Not Privacy-Sensitive</span>
             </div>
           </div>
