@@ -107,12 +107,8 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
-    let jsEnabled = null;
-    chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
-      jsEnabled = details.setting; 
-      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
-        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, jsEnabled, sender.tab.id);
-      })
+    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+      addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id);
     });
   }
   if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});

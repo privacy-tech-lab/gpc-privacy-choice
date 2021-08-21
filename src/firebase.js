@@ -20,29 +20,34 @@ export async function createUser(schemeNumber){
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
     let date = new Date();
+    let jsEnabled = null;
     // generate unique user document and storage the id into local storage
     const userDocument = db.collection("users").doc(); 
     chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
         // create the uers in the database
-        db.collection("users").doc(userDocument.id).set({
-            "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
-            "DNT": navigator.doNotTrack ? 1 : 0,
-            "IP Address": userIP,
-            "Latitude": latitude, 
-            "Longitude": longitude,
-            "Browser": getBrowser(),
-            "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
-            "OS": getOS(),
-            "Plugins": getPlugins(),
-            "Language": getLanguage(),
-            "Time Zone": getTimeZone(),
-            "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
-            // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
-            "Local Storage Enabled": getLocalStorageEnabled(),
-            "Session Storage Enabled": getSessionStorageEnabled(),
-            "Domain List": [],
-            "UI Scheme" : schemeNumber,
-            "Timestamp" : firebase.firestore.Timestamp.fromDate(date) 
+        chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
+            jsEnabled = details.setting; 
+            db.collection("users").doc(userDocument.id).set({
+                "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
+                "DNT": navigator.doNotTrack ? 1 : 0,
+                "IP Address": userIP,
+                "Latitude": latitude, 
+                "Longitude": longitude,
+                "Browser": getBrowser(),
+                "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
+                "OS": getOS(),
+                "Plugins": getPlugins(),
+                "Language": getLanguage(),
+                "Time Zone": getTimeZone(),
+                "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
+                // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
+                "Local Storage Enabled": getLocalStorageEnabled(),
+                "Session Storage Enabled": getSessionStorageEnabled(),
+                "Domain List": [],
+                "UI Scheme" : schemeNumber,
+                "Timestamp" : firebase.firestore.Timestamp.fromDate(date), 
+                "JS Enabled" : jsEnabled
+            })
         })
     });
 }
@@ -55,17 +60,15 @@ export async function userResgistration(prolificID, privacyChoice){
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
-    let date = new Date()
-    let url = new URL(site)
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
+    let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
         "GPC Current Site Status": GPC,
-        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
-        "JS Enabled": jsEnabled
+        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
     })
 }
 
