@@ -49,6 +49,7 @@ function bannerMouseOverEvent() {
         let button_preb = event.target;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
 =======
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn'|| button_preb.id === 'rbe-okay-btn') {
@@ -56,11 +57,15 @@ function bannerMouseOverEvent() {
 =======
         if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
 >>>>>>> Don't allow event listener (#87).
+=======
+        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
             button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
         }
         let cursor_spot = event.target;
         let but1 = document.getElementById('allow-btn');
         let but2 = document.getElementById('dont-allow-btn');
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
@@ -73,14 +78,22 @@ function bannerMouseOverEvent() {
             if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
             if (but3) but3.style.backgroundColor = 'rgb(51, 153, 255)';
 >>>>>>> mouseOver event (#87).
+=======
+        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
+            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
+            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
         }
     })
 }
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Add listeners function (#87).
+=======
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
 function bannerClickEvent() {
     body.addEventListener('click', event => {
         let currentDomain = getDomain(window.location.href);
@@ -97,6 +110,7 @@ function bannerClickEvent() {
         else if(event.target.id === 'allow-btn' && applyAllBool) { 
             addAllowAllEventListener(currentDomain);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
             if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
@@ -104,10 +118,13 @@ function bannerClickEvent() {
 >>>>>>> Don't allow event listener (#87).
 =======
 >>>>>>> Add listeners function (#87).
+=======
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
         }
     })
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 // Enable GPC for the current domain
@@ -117,6 +134,9 @@ function bannerClickEvent() {
 =======
 // Enable GPC for the current domain
 >>>>>>> Add listeners function (#87).
+=======
+// Enable GPC for the current domain
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
 function addDontAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -131,6 +151,9 @@ function addDontAllowEventListener(currentDomain) {
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
             chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
         })    
     })
 }
@@ -154,6 +177,7 @@ function addDontAllowAllEventListener(currentDomain) {
 }
 
 // Disable GPC for the current domain
+<<<<<<< HEAD
 <<<<<<< HEAD
 function addAllowEventListener(currentDomain) {
     removeBanner();
@@ -204,6 +228,8 @@ function addDontAllowAllEventListener() {
 // situation 2: disable GPC for the current domain
 =======
 >>>>>>> Add listeners function (#87).
+=======
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
 function addAllowEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -239,7 +265,10 @@ function addAllowAllEventListener(currentDomain) {
     }) 
 }
 
+<<<<<<< HEAD
 >>>>>>> Don't allow event listener (#87).
+=======
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
 // function used to show the modal
 function showBanner(checkbox) {
     let bannerinnerHTML = `
@@ -450,6 +479,7 @@ function showBanner(checkbox) {
     // add event listener to close the modal
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bannerClickEvent();
 =======
     body.addEventListener('click', event => {
@@ -486,6 +516,9 @@ function showBanner(checkbox) {
 =======
     bannerClickEvent();
 >>>>>>> Add listeners function (#87).
+=======
+    bannerClickEvent();
+>>>>>>> 96398c743b6f9f78af6fa4854057aae55672aee6
 }
 
 // function used to remove the modal
