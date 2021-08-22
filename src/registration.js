@@ -22,10 +22,14 @@ document.querySelector('.submit-choice').onclick = (e) => {
     } 
 }
 
+
 // Add user information into the database
 function submit(prolificID, userProfile){
+    const html = document.getElementById('3rd_party_cookie_test_results').innerHTML; 
+    const thirdPartyCookiesEnabled = (html=="Third party cookies are <b>functioning</b> in your browser.") ? true : false;
     chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: null}, async function(){
-        await userResgistration(prolificID, userProfile);
+        console.log("updating...." + thirdPartyCookiesEnabled + " " + prolificID);
+        await userResgistration(prolificID, userProfile, thirdPartyCookiesEnabled);
         document.querySelector(".main").style.display = "none";
         document.querySelector(".loading").style.display = "block";
         setTimeout(function(){

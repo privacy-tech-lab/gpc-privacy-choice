@@ -53,9 +53,9 @@ export async function createUser(schemeNumber){
 }
 
 // Function used to add user name, user email and user choices to the database
-export async function userResgistration(prolificID, privacyChoice){
+export async function userResgistration(prolificID, privacyChoice, thirdPartyCookiesEnabled){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID});
+        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID, "Third Party Cookies Enabled":thirdPartyCookiesEnabled});
     })
 }
 

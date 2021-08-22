@@ -41,5 +41,5 @@
     "adDomains.txt",
     "json/*.json"
   ],
-  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://www.googletagmanager.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://www.googletagmanager.com https://gpc-privacy-choice-cookie-test.herokuapp.com/index.php https://gpc-privacy-choice-cookie-test.herokuapp.com/step2.php; object-src 'self'"
 }
