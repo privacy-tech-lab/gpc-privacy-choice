@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {}});
   enable();
   // let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 1;
   // set the user scheme number and then open the relevant page
   chrome.storage.local.set({"UI_SCHEME": userScheme}, function(){
     if (userScheme == 1) openPage("registration.html");
@@ -104,6 +104,9 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === "openOptions") {
+    chrome.runtime.openOptionsPage();
+  }
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
