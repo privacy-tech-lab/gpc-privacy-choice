@@ -27,72 +27,71 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  chrome.storage.local.set({ENABLED: true});
-  chrome.storage.local.set({APPLY_ALL: false});
-  chrome.storage.local.set({UV_SETTING: "Off"});
-  chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-  chrome.storage.local.set({DOMAINS: {}});
+  chrome.storage.local.set({ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {}});
   enable();
-  //let userScheme = Math.floor(Math.random() * 4);
+  // let userScheme = Math.floor(Math.random() * 4);
   let userScheme = 1;
-  if (userScheme == 1) openPage("registration.html");
-  else if (userScheme == 2) openPage("questionnaire.html");
-  else if (userScheme == 3){
-    // parse the checklist needed for updating the sendSignals based on user's choice
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-          for (let n of networks[cat]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                npsList = npsList.concat(list);
+  // set the user scheme number and then open the relevant page
+  chrome.storage.local.set({"UI_SCHEME": userScheme}, function(){
+    if (userScheme == 1) openPage("registration.html");
+    else if (userScheme == 2) openPage("questionnaire.html");
+    else if (userScheme == 3){
+      // parse the checklist needed for updating the sendSignals based on user's choice
+      fetch("json/services.json")
+        .then((response) => response.text())
+        .then((result) => {
+          networks = (JSON.parse(result))["categories"]
+          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+            for (let n of networks[cat]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  npsList = npsList.concat(list);
+                }
               }
             }
           }
-        }
-        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-          for (let n of networks[category]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                checkList = checkList.concat(list);
+          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+            for (let n of networks[category]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  checkList = checkList.concat(list);
+                }
               }
             }
           }
-        }
-        chrome.storage.local.set({CHECKLIST: checkList});
-        chrome.storage.local.set({NPSLIST: npsList});
-      })
-      .then(openPage("profile.html"));
-  } else {
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-          for (let n of networks[cat]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                npsList = npsList.concat(list);
+          chrome.storage.local.set({CHECKLIST: checkList});
+          chrome.storage.local.set({NPSLIST: npsList});
+        })
+        .then(openPage("profile.html"));
+    } else {
+      fetch("json/services.json")
+        .then((response) => response.text())
+        .then((result) => {
+          networks = (JSON.parse(result))["categories"]
+          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+            for (let n of networks[cat]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  npsList = npsList.concat(list);
+                }
               }
             }
           }
-        }
-        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-          for (let n of networks[category]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                checkList = checkList.concat(list);
+          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+            for (let n of networks[category]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  checkList = checkList.concat(list);
+                }
               }
             }
           }
-        }
-        chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
-      })
-      .then(openPage("registration.html"))
-  } 
-  await createUser(userScheme); 
+          chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
+        })
+        .then(openPage("registration.html"))
+    } 
+  });
+  // remove user creation from this step
 });
 
 // Sets cache value to locally stored values after chrome booting up

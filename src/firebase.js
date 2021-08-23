@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
 // Function used to create a user in the database
-export async function createUser(schemeNumber){
+export async function createUser(prolificID, schemeNumber, thirdPartyCookiesEnabled){
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
@@ -40,13 +40,14 @@ export async function createUser(schemeNumber){
                 "Language": getLanguage(),
                 "Time Zone": getTimeZone(),
                 "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
-                // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
+                "Third Party HTTP Cookies Enabled": thirdPartyCookiesEnabled,
                 "Local Storage Enabled": getLocalStorageEnabled(),
                 "Session Storage Enabled": getSessionStorageEnabled(),
                 "Domain List": [],
                 "UI Scheme" : schemeNumber,
                 "Timestamp" : firebase.firestore.Timestamp.fromDate(date), 
-                "JS Enabled" : jsEnabled
+                "JS Enabled" : jsEnabled, 
+                "Prolific ID" : prolificID
             })
         })
     });
