@@ -150,6 +150,7 @@ async function submit(prolificID){
         });
     });
     
+    // todo: this will have to be implemented otherwise since it is not working at the moment
     chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
     })

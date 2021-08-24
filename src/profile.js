@@ -65,7 +65,7 @@ function submit(prolificID){
             }, 2000);
         });
     });
-
+    // todo: this will have to be implemented otherwise since it is not working at the moment
     chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Privacy Profile", subcollection: "Privacy Choice"})
     })
