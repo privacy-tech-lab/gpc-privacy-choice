@@ -1,4 +1,4 @@
-import {userResgistration, createUser} from "./firebase.js"
+import {createUser} from "./firebase.js"
 
 let userProfile = null;
 const PASSWORD = 12345;
@@ -32,8 +32,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
         try { userProfile = document.querySelector(".uk-card-primary").children[1].innerText;
         } catch (e){}
         if (userProfile){
-            chrome.storage.local.set({USER_PROFILE: userProfile}, function(){
-                submit(prolificID, true);});
+            chrome.storage.local.set({USER_PROFILE: userProfile}, function(){submit(prolificID);});
         } else {
             html += `<p class="uk-text-default">Please Select Your Privacy Sensitivity Profile</p>`;
             html += `</div>`
@@ -48,13 +47,13 @@ document.querySelector('.submit-choice').onclick = (e) => {
 }
 
 // Add user information into the database
-function submit(prolificID, thirdPartyCookiesEnabled){
+function submit(prolificID){
     chrome.storage.local.get(["UI_SCHEME"], function(result){
         let schemeNumber = result.UI_SCHEME;
         chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: true}, async function(){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
-            await createUser(prolificID, schemeNumber, thirdPartyCookiesEnabled);
+            await createUser(prolificID, schemeNumber);
             setTimeout(function(){
                 document.querySelector(".loading").style.display = "none";
                 let modal = UIkit.modal("#welcome-modal");
