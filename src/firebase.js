@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
 // Function used to create a user in the database
-export async function createUser(prolificID, schemeNumber, thirdPartyCookiesEnabled){
+export async function createUser(prolificID, schemeNumber){
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
@@ -39,8 +39,7 @@ export async function createUser(prolificID, schemeNumber, thirdPartyCookiesEnab
                 "Plugins": getPlugins(),
                 "Language": getLanguage(),
                 "Time Zone": getTimeZone(),
-                "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
-                "Third Party HTTP Cookies Enabled": thirdPartyCookiesEnabled,
+                "Cookies Enabled": getFirstPartyCookiesEnabled(),
                 "Local Storage Enabled": getLocalStorageEnabled(),
                 "Session Storage Enabled": getSessionStorageEnabled(),
                 "Domain List": [],
@@ -53,12 +52,6 @@ export async function createUser(prolificID, schemeNumber, thirdPartyCookiesEnab
     });
 }
 
-// Function used to add user name, user email and user choices to the database
-export async function userResgistration(prolificID, privacyChoice, thirdPartyCookiesEnabled){
-    chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID, "Third Party Cookies Enabled":thirdPartyCookiesEnabled});
-    })
-}
 
 // Add user entries into the Firebase
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
