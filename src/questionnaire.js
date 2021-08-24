@@ -1,4 +1,4 @@
-import {userResgistration, createUser} from "./firebase.js"
+import {createUser} from "./firebase.js"
 
 // Datastructure used to hold user choices of ad networks
 let userChoices = {
@@ -34,9 +34,9 @@ document.querySelector('.submit-choice').onclick = (e) => {
             confirmationModal.show();
             document.getElementById("confirmation-modal-button").onclick = function () {
                 confirmationModal.hide();
-                submit(prolificID, true);
+                submit(prolificID);
             }
-        } else {submit(prolificID, true);
+        } else {submit(prolificID);
         }
     } else {
         if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
@@ -50,7 +50,7 @@ document.querySelector('.submit-choice').onclick = (e) => {
 }
 
 // Add user information into the database
-async function submit(prolificID, thirdPartyCookiesEnabled){
+async function submit(prolificID){
     let checkList = [];
     let checkNotList = [];
 
@@ -137,7 +137,7 @@ async function submit(prolificID, thirdPartyCookiesEnabled){
         chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList, USER_CHOICES: userChoices}, async function(){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
-            await createUser(prolificID, schemeNumber, thirdPartyCookiesEnabled);
+            await createUser(prolificID, schemeNumber);
             setTimeout(function(){
                 document.querySelector(".loading").style.display = "none";
                 let modal = UIkit.modal("#welcome-modal");

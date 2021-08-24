@@ -4,7 +4,7 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
+import {addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
 let sendSignal = true;
@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {}});
   enable();
   // let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 1;
+  let userScheme = 2;
   // set the user scheme number and then open the relevant page
   chrome.storage.local.set({"UI_SCHEME": userScheme}, function(){
     if (userScheme == 1) openPage("registration.html");
