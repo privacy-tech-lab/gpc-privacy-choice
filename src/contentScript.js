@@ -115,7 +115,7 @@ function addSendEventListener(currentDomain) {
         chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Send signal", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
         })    
     })
 }
@@ -134,7 +134,7 @@ function addSendAllEventListener(currentDomain) {
     })
     // Sends data to Setting Interaction History
     chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Banner", subcollection: "Domain"})
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Send signal", universalSetting: "Send signal to all", location: "Banner", subcollection: "Domain"})
     })
 }
 
@@ -151,7 +151,7 @@ function addDontSendEventListener(currentDomain) {
         chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't send signal", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
         })
     })
 }
@@ -170,7 +170,7 @@ function addDontSendAllEventListener(currentDomain) {
     })
     // Sends data to Setting Interaction History
     chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't send signal", universalSetting: "Don't send signal to all", location: "Banner", subcollection: "Domain"})
     }) 
 }
 
@@ -210,6 +210,17 @@ function showBanner(checkbox) {
                     margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
+            </div>
+            <br>
+            <div style="
+                    margin-block-start: 0.5em;
+                    margin-inline-start: auto;
+                    margin-inline-end: auto;
+                    font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                    font-weight:300;
+                    padding-bottom:3px;
+                    margin-bottom: 7px;
+                    color: black;">
                         Would you like to send Do Not Sell signals to this domain?
             </div>
             <div style="
@@ -253,6 +264,7 @@ function showBanner(checkbox) {
                            No
                     </div>
             <div/>
+            <br>
             <div style="
                 display:inline;
                 align-tems: center;
@@ -278,8 +290,8 @@ function showBanner(checkbox) {
                     margin-block-end: 0.5em;
                     display: inline-flex;
                     color:black !important;
-                    font-size:16px;
-                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                    font-size:13px;
+                    font:13px/1.231 arial,helvetica,clean,sans-serif !important;
                     font-weight: 300;
                     margin-bottom:10px;
                     margin-left: 5px;
@@ -306,7 +318,7 @@ function showBanner(checkbox) {
                         text-decoration: none;
                         color: rgb(51, 153, 255);"
                     href=""
-                    >Review or modify the choices I have made.
+                    >Review or modify the choices you have made
                 </a>
             </div>
         </div> 
@@ -345,7 +357,18 @@ function showBanner(checkbox) {
                     margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
-                        Would you like to send do not sell signals to this domain?
+            </div>
+            <br>
+            <div style="
+                margin-block-start: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                font-weight:300;
+                padding-bottom:3px;
+                margin-bottom: 7px;
+                color: black;">
+                    Would you like to send do not sell signals to this domain?
             </div>
             <div style="
                 padding: unset;
@@ -388,6 +411,7 @@ function showBanner(checkbox) {
                         No
                     </div>
             <div/>
+            <br>
             <div>
                 <a 
                     id="open-options" 
@@ -402,7 +426,7 @@ function showBanner(checkbox) {
                         text-decoration: none;
                         color: rgb(51, 153, 255);"
                     href=""
-                    >Review or modify the choices I have made.
+                    >Review or modify the choices I have made
                 </a>
             </div>
         </div> 
