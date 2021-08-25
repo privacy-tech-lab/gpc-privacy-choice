@@ -123,7 +123,7 @@ function addSendEventListener(currentDomain) {
 // Enable GPC for all future domains
 function addSendAllEventListener(currentDomain) {
     removeBanner();
-    chrome.storage.local.set({UV_SETTING: "Don't allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Send signal to all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
     chrome.storage.local.get(["DOMAINS"], function (result) {
         let new_domains = result.DOMAINS;
         // todo: check if this is really what we want?
@@ -159,7 +159,7 @@ function addDontSendEventListener(currentDomain) {
 // Disable GPC for all future domains
 function addDontSendAllEventListener(currentDomain) {
     removeBanner();
-    chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Don't send signal to all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
     chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
         new_domains = result.DOMAINS;
         // todo: check if this is really what we want?
@@ -481,7 +481,7 @@ function addToDomainListScheme1(){
         let domains = result.DOMAINS;
         let value; 
         if (!(currentDomain in domains)){
-            if (result.UV_SETTING == "Don't allow all") value = true;
+            if (result.UV_SETTING == "Send signal to all") value = true;
             else value = false;
             // add the currentDomain and store it in the local storage
             domains[currentDomain] = value;

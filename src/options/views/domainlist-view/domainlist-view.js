@@ -36,7 +36,7 @@ function addToggleAllOnEventListener() {
             chrome.runtime.sendMessage
                 ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: new_domains , newDomainlistEnabled: false })
             chrome.storage.local.set({ DOMAINS: new_domains });
-            chrome.storage.local.set({UV_SETTING: "Don't allow all"});
+            chrome.storage.local.set({UV_SETTING: "Send signal to all"});
             chrome.storage.local.set({ ENABLED: true });
             createList();
             createDefaultSettingInfo();
@@ -97,7 +97,7 @@ function addToggleAllOffEventListener() {
                 new_domains[d] = false;
             }
             chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.storage.local.set({UV_SETTING: "Allow all"});
+            chrome.storage.local.set({UV_SETTING: "Don't send signal to all"});
             chrome.storage.local.set({APPLY_ALL: true});
             chrome.storage.local.set({ DOMAINS: new_domains });
             chrome.storage.local.set({ ENABLED: false });
@@ -166,7 +166,7 @@ function addFutureSettingPromptEventListener(event) {
   // User hits "Allow tracking for all"
   if (event.target.id=='allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
-    chrome.storage.local.set({UV_SETTING: "Allow all"});
+    chrome.storage.local.set({UV_SETTING: "Don't send signal to all"});
     chrome.storage.local.set({ ENABLED: false });
     createDefaultSettingInfo();
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Don't send signal to all", universalSetting: "Don't send signal to all", location: "Options page", subcollection: "Domain"})
@@ -174,7 +174,7 @@ function addFutureSettingPromptEventListener(event) {
   // User hits "Don't allow tracking" for all
   else if (event.target.id=='dont-allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
-    chrome.storage.local.set({UV_SETTING: "Don't allow all"});
+    chrome.storage.local.set({UV_SETTING: "Send signal to all"});
     chrome.storage.local.set({ ENABLED: true });
     createDefaultSettingInfo();
     chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: "Off" , newSetting: "Send signal to all", universalSetting: "Send signal to all", location: "Options page", subcollection: "Domain"})
