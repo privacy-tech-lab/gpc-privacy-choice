@@ -68,19 +68,19 @@ export async function addDomainToggleListener(elementId, domain) {
       if (result.DOMAINS[domain]==true) {
         turnOffGPC(domain);
         if (result.UI_SCHEME === 1) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Send signal" , newSetting: "Don't send signal", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         }
         else {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't allow tracking" , newSetting: "Allow tracking", universalSetting: null, location: "Options page", subcollection: "Domain"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Send signal" , newSetting: "Don't send signal", universalSetting: null, location: "Options page", subcollection: "Domain"})
         }
       }
       else {
         turnOnGPC(domain);
         if (result.UI_SCHEME === 1) {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't send signal" , newSetting: "Send signal", universalSetting: result.UV_SETTING, location: "Options page", subcollection: "Domain"})
         }
         else {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Allow tracking" , newSetting: "Don't allow tracking", universalSetting: null, location: "Options page", subcollection: "Domain"})
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: domain, setting: "GPC signal", prevSetting: "Don't send signal" , newSetting: "Send signal", universalSetting: null, location: "Options page", subcollection: "Domain"})
         }
       }
     chrome.runtime.sendMessage

@@ -47,40 +47,63 @@ function styleBanner() {
 function bannerMouseOverEvent() {
     body.addEventListener('mouseover', event => {
         let button_preb = event.target;
-        if(button_preb.id === 'allow-btn' || button_preb.id === 'dont-allow-btn') {
+        if(button_preb.id === 'send-button' || button_preb.id === 'dont-send-button') {
             button_preb.style.backgroundColor = 'rgb(0, 102, 204)';
         }
+        else if(button_preb.id === 'open-options') {
+            button_preb.style.color = 'rgb(0, 102, 204)';
+            button_preb.style.textDecoration = 'underline';
+        }
         let cursor_spot = event.target;
-        let but1 = document.getElementById('allow-btn');
-        let but2 = document.getElementById('dont-allow-btn');
-        if(cursor_spot.id !== 'allow-btn' && cursor_spot.id !== 'dont-allow-btn') {
-            if(but1) but1.style.backgroundColor = 'rgb(51, 153, 255)';
-            if (but2) but2.style.backgroundColor = 'rgb(51, 153, 255)';
+        let but1 = document.getElementById('send-button');
+        let but2 = document.getElementById('dont-send-button');
+        let openOptions = document.getElementById('open-options');
+        if(cursor_spot.id !== 'send-button' && cursor_spot.id !== 'dont-send-button') {
+            but1.style.backgroundColor = 'rgb(51, 153, 255)';
+            but2.style.backgroundColor = 'rgb(51, 153, 255)';
+        }
+        if(cursor_spot.id !== 'open-options') {
+            console.log("What's up")
+            openOptions.style.color = 'rgb(51, 153, 255)';
+            openOptions.style.textDecoration = 'none';
         }
     })
 }
 
+//User interacts with banner
 function bannerClickEvent() {
     body.addEventListener('click', event => {
+        console.log(event.target.id);
         let currentDomain = getDomain(window.location.href);
         let applyAllBool = document.getElementById("apply-all").checked;
-        if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
-            addDontAllowEventListener(currentDomain);
+        if(event.target.id === 'send-button' && !applyAllBool) { 
+            addSendEventListener(currentDomain);
+        }
+        else if(event.target.id === 'dont-send-button' && !applyAllBool) { 
+            addDontSendEventListener(currentDomain);
         } 
-        else if(event.target.id === 'allow-btn' && !applyAllBool) { 
-            addAllowEventListener(currentDomain);
+        else if(event.target.id === 'send-button' && applyAllBool) { 
+            addSendAllEventListener(currentDomain);
         } 
-        else if(event.target.id === 'dont-allow-btn' && applyAllBool) { 
-            addDontAllowAllEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'allow-btn' && applyAllBool) { 
-            addAllowAllEventListener(currentDomain);
+        else if(event.target.id === 'dont-send-button' && applyAllBool) { 
+            addDontSendAllEventListener(currentDomain);
+        }
+        else if(event.target.id === 'open-options') {
+            addOpenOptionsEventListener(currentDomain);
         }
     })
 }
 
-// Enable GPC for the current domain
-function addDontAllowEventListener(currentDomain) {
+//Go to options page
+function addOpenOptionsEventListener(currentDomain) {
+    chrome.runtime.sendMessage("openOptions");
+    chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "Open Options Page", prevSetting: null, newSetting: null, universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+    })    
+}
+
+//Enable GPC for the current domain
+function addSendEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
     chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER"], function (result) {
@@ -92,15 +115,15 @@ function addDontAllowEventListener(currentDomain) {
         chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains: new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' });
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Send signal", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
         })    
     })
 }
 
 // Enable GPC for all future domains
-function addDontAllowAllEventListener(currentDomain) {
+function addSendAllEventListener(currentDomain) {
     removeBanner();
-    chrome.storage.local.set({UV_SETTING: "Don't allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Send signal to all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
     chrome.storage.local.get(["DOMAINS"], function (result) {
         let new_domains = result.DOMAINS;
         // todo: check if this is really what we want?
@@ -111,12 +134,12 @@ function addDontAllowAllEventListener(currentDomain) {
     })
     // Sends data to Setting Interaction History
     chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't allow tracking", universalSetting: "Don't allow all", location: "Banner", subcollection: "Domain"})
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Send signal", universalSetting: "Send signal to all", location: "Banner", subcollection: "Domain"})
     })
 }
 
 // Disable GPC for the current domain
-function addAllowEventListener(currentDomain) {
+function addDontSendEventListener(currentDomain) {
     removeBanner();
     chrome.storage.local.set({DOMAINLIST_ENABLED: true});
     chrome.storage.local.get(["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"], function (result) {
@@ -128,15 +151,15 @@ function addAllowEventListener(currentDomain) {
         chrome.runtime.sendMessage({greeting:"UPDATE CACHE", newEnabled:'dontSet' , newDomains:new_domains , newDomainlistEnabled: true, newApplyAll: 'dontSet' })
         // Sends data to Setting Interaction History
         chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "GPC signal", prevSetting: "Preference not set" , newSetting: "Don't send signal", universalSetting: "Off", location: "Banner", subcollection: "Domain"})
         })
     })
 }
 
 // Disable GPC for all future domains
-function addAllowAllEventListener(currentDomain) {
+function addDontSendAllEventListener(currentDomain) {
     removeBanner();
-    chrome.storage.local.set({UV_SETTING: "Allow all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
+    chrome.storage.local.set({UV_SETTING: "Don't send signal to all", DOMAINLIST_ENABLED: false, APPLY_ALL: true});
     chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
         new_domains = result.DOMAINS;
         // todo: check if this is really what we want?
@@ -147,10 +170,9 @@ function addAllowAllEventListener(currentDomain) {
     })
     // Sends data to Setting Interaction History
     chrome.storage.local.set({ORIGIN_SITE: "Banner Decision"}, ()=>{
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Allow tracking", universalSetting: "Allow all", location: "Banner", subcollection: "Domain"})
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Preference not set" , newSetting: "Don't send signal", universalSetting: "Don't send signal to all", location: "Banner", subcollection: "Domain"})
     }) 
 }
-
 
 // function used to show the modal
 function showBanner(checkbox) {
@@ -188,7 +210,18 @@ function showBanner(checkbox) {
                     margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
-                        Would you like to send do not sell signals to this domain?
+            </div>
+            <br>
+            <div style="
+                    margin-block-start: 0.5em;
+                    margin-inline-start: auto;
+                    margin-inline-end: auto;
+                    font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                    font-weight:300;
+                    padding-bottom:3px;
+                    margin-bottom: 7px;
+                    color: black;">
+                        Would you like to send Do Not Sell signals to this domain?
             </div>
             <div style="
                 padding: unset;
@@ -199,7 +232,7 @@ function showBanner(checkbox) {
                 font-family:unset !important;
                 font-size: unset !important;
                 color: unset !important;">
-                    <div id="allow-btn" style="
+                    <div id="send-button" style="
                         font-size:16px;
                         border:none;
                         background-color:
@@ -213,9 +246,9 @@ function showBanner(checkbox) {
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                            No
+                            Yes
                     </div>
-                    <div id="dont-allow-btn" style="
+                    <div id="dont-send-button" style="
                         font-size:16px;
                         border:none;
                         background-color:rgb(51, 153, 255);
@@ -228,9 +261,10 @@ function showBanner(checkbox) {
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                           Send Signals
+                           No
                     </div>
             <div/>
+            <br>
             <div style="
                 display:inline;
                 align-tems: center;
@@ -256,8 +290,8 @@ function showBanner(checkbox) {
                     margin-block-end: 0.5em;
                     display: inline-flex;
                     color:black !important;
-                    font-size:16px;
-                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                    font-size:13px;
+                    font:13px/1.231 arial,helvetica,clean,sans-serif !important;
                     font-weight: 300;
                     margin-bottom:10px;
                     margin-left: 5px;
@@ -268,6 +302,24 @@ function showBanner(checkbox) {
                     top:unset;">
                         Apply to all websites you visit
                 </div>
+            </div>
+            <div>
+                <a 
+                    id="open-options" 
+                    style="
+                        line-height: 50%;
+                        margin-block-start: 0.5em;
+                        margin-inline-start: auto;
+                        margin-inline-end: auto;
+                        font: 13px/1.231 arial,helvetica,clean,sans-serif;
+                        font-weight:300;
+                        padding-bottom:3px;
+                        margin-bottom: 7px;
+                        text-decoration: none;
+                        color: rgb(51, 153, 255);"
+                    href=""
+                    >Review or modify the choices you have made
+                </a>
             </div>
         </div> 
     `
@@ -305,7 +357,18 @@ function showBanner(checkbox) {
                     margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
-                        Would you like to send do not sell signals to this domain?
+            </div>
+            <br>
+            <div style="
+                margin-block-start: 0.5em;
+                margin-inline-start: auto;
+                margin-inline-end: auto;
+                font: 16px/1.231 arial,helvetica,clean,sans-serif;
+                font-weight:300;
+                padding-bottom:3px;
+                margin-bottom: 7px;
+                color: black;">
+                    Would you like to send do not sell signals to this domain?
             </div>
             <div style="
                 padding: unset;
@@ -316,7 +379,7 @@ function showBanner(checkbox) {
                 font-family:unset !important;
                 font-size: unset !important;
                 color: unset !important;">
-                    <div id="allow-btn" style="
+                    <div id="send-button" style="
                         font-size:16px;
                         border:none;
                         background-color:
@@ -330,9 +393,9 @@ function showBanner(checkbox) {
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                            No
+                            Yes
                     </div>
-                    <div id="dont-allow-btn" style="
+                    <div id="dont-send-button" style="
                         font-size:16px;
                         border:none;
                         background-color:rgb(51, 153, 255);
@@ -345,9 +408,27 @@ function showBanner(checkbox) {
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                        Send Signals
+                        No
                     </div>
             <div/>
+            <br>
+            <div>
+                <a 
+                    id="open-options" 
+                    style="
+                        line-height: 50%;
+                        margin-block-start: 0.5em;
+                        margin-inline-start: auto;
+                        margin-inline-end: auto;
+                        font: 13px/1.231 arial,helvetica,clean,sans-serif;
+                        font-weight:300;
+                        padding-bottom:3px;
+                        text-decoration: none;
+                        color: rgb(51, 153, 255);"
+                    href=""
+                    >Review or modify the choices I have made
+                </a>
+            </div>
         </div> 
     `
     head.appendChild(imbedStyle);
@@ -400,7 +481,7 @@ function addToDomainListScheme1(){
         let domains = result.DOMAINS;
         let value; 
         if (!(currentDomain in domains)){
-            if (result.UV_SETTING == "Don't allow all") value = true;
+            if (result.UV_SETTING == "Send signal to all") value = true;
             else value = false;
             // add the currentDomain and store it in the local storage
             domains[currentDomain] = value;

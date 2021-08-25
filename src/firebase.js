@@ -52,7 +52,6 @@ export async function createUser(prolificID, schemeNumber){
     });
 }
 
-
 // Add user entries into the Firebase
 export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
     let date = new Date();
