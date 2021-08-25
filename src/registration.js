@@ -1,17 +1,15 @@
-import {userResgistration, createUser} from "./firebase.js"
+import {createUser} from "./firebase.js"
 
 let userProfile = null;
 const PASSWORD = 12345;
 
-// Storage the user's profile in the local storage for future reference, close the tab
-document.querySelector('.submit-choice').onclick = (e) => {
+// Form validation when the user submits their prolific id and password
+document.querySelector('.submit-choice').onclick = () => {
     let prolificID = document.getElementById("prolific-id").value;
     let password = document.getElementById("password").value;
     let html = `<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a>`
     if (prolificID && password && validateID(prolificID) && password == PASSWORD) {
-        let thirdPartyCookieHtml = document.getElementById('3rd_party_cookie_test_results').innerHTML; 
-        let thirdPartyCookiesEnabled = (thirdPartyCookieHtml=="Third party cookies are <b>functioning</b> in your browser.") ? true : false;
-        submit(prolificID, userProfile, thirdPartyCookiesEnabled);
+        submit(prolificID, userProfile);
     }  
     else {
         if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
@@ -24,14 +22,14 @@ document.querySelector('.submit-choice').onclick = (e) => {
     } 
 }
 
-// Add user information into the database
-function submit(prolificID, userProfile, thirdPartyCookiesEnabled){
+// Create user on the data base
+function submit(prolificID, userProfile){
     chrome.storage.local.get(["UI_SCHEME"], function(result){
         let schemeNumber = result.UI_SCHEME;
         chrome.storage.local.set({USER_CHOICES: userProfile}, async function(){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
-            await createUser(prolificID, schemeNumber, thirdPartyCookiesEnabled);
+            await createUser(prolificID, schemeNumber);
             setTimeout(function(){
                 document.querySelector(".loading").style.display = "none";
                 let modal = UIkit.modal("#welcome-modal");

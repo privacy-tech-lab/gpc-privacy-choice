@@ -12,8 +12,7 @@ window._3rd_party_test_step1_loaded = function(){
 }
 
 window._3rd_party_test_step2_loaded = function(cookieSuccess){
-    var resultsEl = document.getElementById('3rd_party_cookie_test_results'),
-        errorEl = document.getElementById('3rd_party_cookie_test_error');
+    var resultsEl = document.getElementById('3rd_party_cookie_test_results');
     // Show message
     resultsEl.innerHTML = (cookieSuccess ? 'Third party cookies are <b>functioning</b> in your browser.' : 'Third party cookies appear to be <b>disabled</b>.');
 

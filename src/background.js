@@ -4,7 +4,7 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
+import {addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
 let sendSignal = true;
@@ -91,7 +91,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         .then(openPage("registration.html"))
     } 
   });
-  // remove user creation from this step
 });
 
 // Sets cache value to locally stored values after chrome booting up
