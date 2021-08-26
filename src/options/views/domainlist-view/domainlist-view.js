@@ -302,7 +302,17 @@ function addCategoriesEventListener(event) {
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
   document.getElementById('searchbar').addEventListener('keyup', filterList);
-  chrome.storage.local.get(["UI_SCHEME"], function (result) {  
+  chrome.storage.local.get(["UI_SCHEME", "USER_CHOICES", "FIRST_TIME"], function (result) {  
+    if (result.FIRST_TIME == true) {
+      if (result.UI_SCHEME == 3) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: null, location: "Privacy Profile", subcollection: "Privacy Choice"})
+        chrome.storage.local.set({FIRST_TIME: false});
+      }
+      else if (result.UI_SCHEME == 2) {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
+        chrome.storage.local.set({FIRST_TIME: false});
+      }
+    }
     document.addEventListener('click', event => {
       if (event.target.id=='toggle_all_off'){
         addToggleAllOffEventListener();

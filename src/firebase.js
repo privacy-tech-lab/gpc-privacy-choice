@@ -67,6 +67,10 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
+    chrome.storage.local.get(["USER_CREATED", "USER_CHOICES"], function(result) {
+        console.log(result.USER_CREATED);
+        console.log(result.USER_CHOICES);
+    })
     let date = new Date()
     if (subcollection === "Domain") {
         db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
