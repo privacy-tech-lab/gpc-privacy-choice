@@ -138,6 +138,7 @@ async function submit(prolificID){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
             await createUser(prolificID, schemeNumber);
+            chrome.storage.local.set({FIRST_TIME: true});
             setTimeout(function(){
                 document.querySelector(".loading").style.display = "none";
                 let modal = UIkit.modal("#welcome-modal");
@@ -150,10 +151,10 @@ async function submit(prolificID){
         });
     });
     
-    // todo: this will have to be implemented otherwise since it is not working at the moment
-    chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
-    })
+// todo: this will have to be implemented otherwise since it is not working at the moment
+ //   chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
+ //      chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
+ //   })
 }
 
 // Helper function to validate prolific ID
