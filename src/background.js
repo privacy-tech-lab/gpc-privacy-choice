@@ -27,6 +27,7 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
+  chrome.storage.local.set({MUTED: [false,undefined]});
   chrome.storage.local.set({ENABLED: true});
   chrome.storage.local.set({APPLY_ALL: false});
   chrome.storage.local.set({UV_SETTING: "Off"});
@@ -34,7 +35,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 0;
   if (userScheme == 1) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
@@ -170,7 +171,7 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 async function updateSendSignal(){
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 1) updateSendSignalScheme1();
+    if (userScheme == 1 || userScheme == 0) updateSendSignalScheme1();
     else if (userScheme == 2) updateSendSignalScheme2();
     else if (userScheme == 3) updateSendSignalScheme3();
     else updateSendSignalScheme4();

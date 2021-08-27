@@ -160,6 +160,38 @@ function showBanner(checkbox) {
                         Apply to all websites you visit
                 </div>
             </div>
+            <input value="Empty" id="mute" type="checkbox" style="
+                content: none !important;
+                color-scheme: light !important;
+                float: unset;
+                cursor:pointer;
+                pointer-events: unset !important;
+                height: unset;
+                opacity: unset;
+                position: unset !important;
+                display:inline-flex;
+                color: unset !important;
+                width:unset;
+                -webkit-appearance:checkbox;
+                align-self: center;
+                margin:unset;">
+            <div for="apply-all" style="
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                display: inline-flex;
+                color:black !important;
+                font-size:16px;
+                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                font-weight: 300;
+                margin-bottom:10px;
+                margin-left: 5px;
+                font-family: unset;
+                position:unset !important;
+                padding:unset;
+                text-transform:unset;
+                top:unset;">
+                    Mute Choice Banner
+            </div>
         </div> 
     `
     let bannerNoApplyAllInnerHTML = `
@@ -239,6 +271,38 @@ function showBanner(checkbox) {
                         Send Signals
                     </div>
             <div/>
+            <input value="Empty" id="mute" type="checkbox" style="
+                    content: none !important;
+                    color-scheme: light !important;
+                    float: unset;
+                    cursor:pointer;
+                    pointer-events: unset !important;
+                    height: unset;
+                    opacity: unset;
+                    position: unset !important;
+                    display:inline-flex;
+                    color: unset !important;
+                    width:unset;
+                    -webkit-appearance:checkbox;
+                    align-self: center;
+                    margin:unset;">
+                <div for="apply-all" style="
+                    margin-block-start: 0.5em;
+                    margin-block-end: 0.5em;
+                    display: inline-flex;
+                    color:black !important;
+                    font-size:16px;
+                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                    font-weight: 300;
+                    margin-bottom:10px;
+                    margin-left: 5px;
+                    font-family: unset;
+                    position:unset !important;
+                    padding:unset;
+                    text-transform:unset;
+                    top:unset;">
+                        Mute Choice Banner
+                </div>
         </div> 
     `
     head.appendChild(imbedStyle);
@@ -248,6 +312,7 @@ function showBanner(checkbox) {
     styleBanner();
     banner.style.display = "block";
     if (checkbox)document.getElementById('apply-all').classList.add('hide_pseudo');
+    document.getElementById('mute').classList.add('hide_pseudo');
     // buttons change color when the cursor hovers over them
     body.addEventListener('mouseover', event => {
         let button_preb = event.target;
@@ -270,6 +335,17 @@ function showBanner(checkbox) {
         let applyAllBool
         if(document.getElementById("apply-all")){
             applyAllBool = document.getElementById("apply-all").checked
+        }
+        //mute choice banner
+        if(document.getElementById("mute")){
+            let muteBool = document.getElementById("mute").checked
+            let endMuteTime
+            if (muteBool){
+                let currentDate = new Date();
+                let time = currentDate.getTime()
+                endMuteTime=time+21600000
+            }
+            chrome.storage.local.set({MUTED: [muteBool,endMuteTime]});
         }
         else applyAllBool=false;
         if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
@@ -446,12 +522,24 @@ function addToDomainListScheme3(){
 }
 
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain 
-chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME"], function (result) {
+chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], function (result) {
     let domains = result.DOMAINS;
+    let bannerMuted=result.MUTED
+    //unmute banner if 6 hours have lapsed since mute
+    if (bannerMuted[0]==true){
+        let currentDate = new Date();
+        let time = currentDate.getTime()
+        if(time>bannerMuted[1]){
+            bannerMuted=false
+            chrome.storage.local.set({MUTED: [bannerMuted, undefined]});
+        }
+    }
     let currentDomain = getDomain(window.location.href);
     if (result.UI_SCHEME == 1){
-        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true);
-    } else if (result.UI_SCHEME == 4){
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(true);
+    } else if (result.UI_SCHEME == 0){
+        if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false);
+    } else if (result.UI_SCHEME == 4 && bannerMuted[0]!=true){
         let random = Math.floor(Math.random() * 3);
         // let random = 1;
         if (random == 1 && !(currentDomain in domains)) {
