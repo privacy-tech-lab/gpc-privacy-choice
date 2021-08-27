@@ -47,7 +47,83 @@ function styleBanner() {
 }
 
 // function used to show the modal
-function showBanner(checkbox) {
+function showBanner(applyAllOption, muteOption) {
+
+    let applyAllCheckbox = `
+            <div style="
+            display:inline;
+            align-tems: center;
+            align: center;
+            width: 100%">
+            <input value="Empty" id="apply-all" type="checkbox" style="
+                content: none !important;
+                color-scheme: light !important;
+                float: unset;
+                cursor:pointer;
+                pointer-events: unset !important;
+                height: unset;
+                opacity: unset;
+                position: unset !important;
+                display:inline-flex;
+                color: unset !important;
+                width:unset;
+                -webkit-appearance:checkbox;
+                align-self: center;
+                margin:unset;">
+            <div for="apply-all" style="
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                display: inline-flex;
+                color:black !important;
+                font-size:16px;
+                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                font-weight: 300;
+                margin-bottom:10px;
+                margin-left: 5px;
+                font-family: unset;
+                position:unset !important;
+                padding:unset;
+                text-transform:unset;
+                top:unset;">
+                    Apply to all websites you visit
+            </div>
+        </div>
+        `
+    let muteCheckbox=
+    `
+    <input value="Empty" id="mute" type="checkbox" style="
+                content: none !important;
+                color-scheme: light !important;
+                float: unset;
+                cursor:pointer;
+                pointer-events: unset !important;
+                height: unset;
+                opacity: unset;
+                position: unset !important;
+                display:inline-flex;
+                color: unset !important;
+                width:unset;
+                -webkit-appearance:checkbox;
+                align-self: center;
+                margin:unset;">
+            <div for="apply-all" style="
+                margin-block-start: 0.5em;
+                margin-block-end: 0.5em;
+                display: inline-flex;
+                color:black !important;
+                font-size:16px;
+                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                font-weight: 300;
+                margin-bottom:10px;
+                margin-left: 5px;
+                font-family: unset;
+                position:unset !important;
+                padding:unset;
+                text-transform:unset;
+                top:unset;">
+                    Mute Choice Banner
+            </div>
+    `
     let bannerinnerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
             <div style="
@@ -125,198 +201,24 @@ function showBanner(checkbox) {
                            Send Signals
                     </div>
             <div/>
-            <div style="
-                display:inline;
-                align-tems: center;
-                align: center;
-                width: 100%">
-                <input value="Empty" id="apply-all" type="checkbox" style="
-                    content: none !important;
-                    color-scheme: light !important;
-                    float: unset;
-                    cursor:pointer;
-                    pointer-events: unset !important;
-                    height: unset;
-                    opacity: unset;
-                    position: unset !important;
-                    display:inline-flex;
-                    color: unset !important;
-                    width:unset;
-                    -webkit-appearance:checkbox;
-                    align-self: center;
-                    margin:unset;">
-                <div for="apply-all" style="
-                    margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
-                    display: inline-flex;
-                    color:black !important;
-                    font-size:16px;
-                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
-                    font-weight: 300;
-                    margin-bottom:10px;
-                    margin-left: 5px;
-                    font-family: unset;
-                    position:unset !important;
-                    padding:unset;
-                    text-transform:unset;
-                    top:unset;">
-                        Apply to all websites you visit
-                </div>
-            </div>
-            <input value="Empty" id="mute" type="checkbox" style="
-                content: none !important;
-                color-scheme: light !important;
-                float: unset;
-                cursor:pointer;
-                pointer-events: unset !important;
-                height: unset;
-                opacity: unset;
-                position: unset !important;
-                display:inline-flex;
-                color: unset !important;
-                width:unset;
-                -webkit-appearance:checkbox;
-                align-self: center;
-                margin:unset;">
-            <div for="apply-all" style="
-                margin-block-start: 0.5em;
-                margin-block-end: 0.5em;
-                display: inline-flex;
-                color:black !important;
-                font-size:16px;
-                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
-                font-weight: 300;
-                margin-bottom:10px;
-                margin-left: 5px;
-                font-family: unset;
-                position:unset !important;
-                padding:unset;
-                text-transform:unset;
-                top:unset;">
-                    Mute Choice Banner
-            </div>
-        </div> 
-    `
-    let bannerNoApplyAllInnerHTML = `
-        <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
-            <div style="
-                line-height: 1.5;
-                font-family:unset !important;
-                font-size: unset !important;
-                color: unset !important;">
-                Your Privacy Choice
-            </div>
-            <hr style="
-                    height: .01px; 
-                    padding:0;
-                    margin:0px 0px;
-                    display: block;
-                    unicode-bidi: isolate;
-                    margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
-                    margin-inline-start: auto;
-                    margin-inline-end: auto;
-                    line-height: 1px;
-                    border: 0;
-                    border-top: 1px solid !important;
-                    color:black;
-                    font-weight:300;">
-            <div style="
-                    margin-block-start: 0.5em;
-                    margin-inline-start: auto;
-                    margin-inline-end: auto;
-                    font: 16px/1.231 arial,helvetica,clean,sans-serif;
-                    font-weight:300;
-                    padding-bottom:3px;
-                    margin-bottom: 7px;
-                    color: black;">
-                        You have a right to make your privacy choice under the law.
-                        Would you like to send do not sell signals to this domain?
-            </div>
-            <div style="
-                padding: unset;
-                margin-top: 7px;
-                width: 10px;
-                display: inline;
-                width: unset;
-                font-family:unset !important;
-                font-size: unset !important;
-                color: unset !important;">
-                    <div id="allow-btn" style="
-                        font-size:16px;
-                        border:none;
-                        background-color:
-                        rgb(51, 153, 255);
-                        color:white;
-                        padding:0.5em;
-                        border-radius:3.5px;
-                        font-weight:300;
-                        width: fit-content;
-                        display:inline;
-                        margin:3px;
-                        font-family: unset;
-                        cursor:pointer;">
-                            No
-                    </div>
-                    <div id="dont-allow-btn" style="
-                        font-size:16px;
-                        border:none;
-                        background-color:rgb(51, 153, 255);
-                        color:white;
-                        padding:0.5em;
-                        border-radius:3.5px;
-                        font-weight:300;
-                        width: fit-content;
-                        display:inline;
-                        margin:3px;
-                        font-family: unset;
-                        cursor:pointer;">
-                        Send Signals
-                    </div>
-            <div/>
-            <input value="Empty" id="mute" type="checkbox" style="
-                    content: none !important;
-                    color-scheme: light !important;
-                    float: unset;
-                    cursor:pointer;
-                    pointer-events: unset !important;
-                    height: unset;
-                    opacity: unset;
-                    position: unset !important;
-                    display:inline-flex;
-                    color: unset !important;
-                    width:unset;
-                    -webkit-appearance:checkbox;
-                    align-self: center;
-                    margin:unset;">
-                <div for="apply-all" style="
-                    margin-block-start: 0.5em;
-                    margin-block-end: 0.5em;
-                    display: inline-flex;
-                    color:black !important;
-                    font-size:16px;
-                    font:16px/1.231 arial,helvetica,clean,sans-serif !important;
-                    font-weight: 300;
-                    margin-bottom:10px;
-                    margin-left: 5px;
-                    font-family: unset;
-                    position:unset !important;
-                    padding:unset;
-                    text-transform:unset;
-                    top:unset;">
-                        Mute Choice Banner
-                </div>
+            <div id='apply-all-checkbox'> </div>
+            <div id='mute-checkbox'> </div>
         </div> 
     `
 
     head.appendChild(imbedStyle);
-    if (checkbox) banner.innerHTML = bannerinnerHTML;
-    else banner.innerHTML = bannerNoApplyAllInnerHTML;
+    banner.innerHTML = bannerinnerHTML;
     body.appendChild(banner);
     styleBanner();
     banner.style.display = "block";
-    if (checkbox)document.getElementById('apply-all').classList.add('hide_pseudo');
-    document.getElementById('mute').classList.add('hide_pseudo');
+    if (applyAllOption){
+        document.getElementById('apply-all-checkbox').innerHTML = applyAllCheckbox;
+        document.getElementById('apply-all').classList.add('hide_pseudo');
+    } 
+    if (muteOption){
+        document.getElementById('mute-checkbox').innerHTML = muteCheckbox;
+        document.getElementById('mute').classList.add('hide_pseudo');
+    }
     // buttons change color when the cursor hovers over them
     body.addEventListener('mouseover', event => {
         let button_preb = event.target;
@@ -542,11 +444,13 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
         }
     }
     let currentDomain = getDomain(window.location.href);
-    if (result.UI_SCHEME == 1){
-        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(true);
+    if (result.UI_SCHEME == 12){
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(true, true);
+    }else if (result.UI_SCHEME == 1){
+            if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true, false);
     } else if (result.UI_SCHEME == 0){
-        if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false);
-    } else if (result.UI_SCHEME == 4 && bannerMuted[0]!=true){
+        if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false, true);
+    } else if (result.UI_SCHEME == 4){
         let random = Math.floor(Math.random() * 3);
         // let random = 1;
         if (random == 1 && !(currentDomain in domains)) {
