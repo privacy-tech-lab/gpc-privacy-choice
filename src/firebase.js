@@ -74,6 +74,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
+    console.log(subcollection)
     if (subcollection === "Domain") {
         db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
             "Timestamp": firebase.firestore.Timestamp.fromDate(date),
@@ -103,6 +104,13 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
             },
             "Origin Site": originSite,
             "Location": location
+        })
+    }
+    else if(subcollection=="Choice Banner Mute"){
+        db.collection("users").doc(currentUserDocID).collection("Mute Interaction History").add({
+            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+            "Domain": domain,
+            "Recorded Change": setting
         })
     }
 }

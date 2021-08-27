@@ -4,6 +4,9 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
+let muteBool;
+let currentDomain = getDomain(window.location.href);
+
 const body = document.querySelector('body');
 const banner = document.createElement('div');
 const head=document.querySelector('head');
@@ -305,6 +308,7 @@ function showBanner(checkbox) {
                 </div>
         </div> 
     `
+
     head.appendChild(imbedStyle);
     if (checkbox) banner.innerHTML = bannerinnerHTML;
     else banner.innerHTML = bannerNoApplyAllInnerHTML;
@@ -331,23 +335,23 @@ function showBanner(checkbox) {
     })
     // add event listener to close the modal
     body.addEventListener('click', event => {
-        let currentDomain = getDomain(window.location.href);
         let applyAllBool
         if(document.getElementById("apply-all")){
             applyAllBool = document.getElementById("apply-all").checked
         }
+        else applyAllBool=false;
         //mute choice banner
         if(document.getElementById("mute")){
-            let muteBool = document.getElementById("mute").checked
+            muteBool = document.getElementById("mute").checked
             let endMuteTime
             if (muteBool){
                 let currentDate = new Date();
                 let time = currentDate.getTime()
-                endMuteTime=time+21600000
+                let muteTime=21600000
+                endMuteTime=time+muteTime
             }
             chrome.storage.local.set({MUTED: [muteBool,endMuteTime]});
         }
-        else applyAllBool=false;
         if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
             // situation 1: enable GPC for the current domain
             removeBanner();
@@ -437,6 +441,9 @@ function showBanner(checkbox) {
 
 // function used to remove the modal
 function removeBanner(){
+    if(muteBool){
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "mute choice banner", prevSetting: "N/A", newSetting: "N/A", universalSetting: "N/A", location: "Banner", subcollection: "Choice Banner Mute"})
+    }
     if (banner.style) banner.style.display = 'none';
     if (popupDiv.style) popupDiv.style.display = 'none';
 }
