@@ -206,18 +206,15 @@ function showBanner(checkbox) {
                     margin-inline-end: auto;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
-                    padding-bottom:3px;
-                    margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
             </div>
-            <br>
             <div style="
-                    margin-block-start: 0.5em;
+                    margin-block-start: unset;
                     margin-inline-start: auto;
                     margin-inline-end: auto;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
-                    font-weight:300;
+                    font-weight:600;
                     padding-bottom:3px;
                     margin-bottom: 7px;
                     color: black;">
@@ -226,6 +223,7 @@ function showBanner(checkbox) {
             <div style="
                 padding: unset;
                 margin-top: 7px;
+                margin-bottom: 7px;
                 width: 10px;
                 display: inline;
                 width: unset;
@@ -264,9 +262,9 @@ function showBanner(checkbox) {
                            No
                     </div>
             <div/>
-            <br>
             <div style="
-                display:inline;
+                margin-top:10px;
+                display:inline-block;
                 align-tems: center;
                 align: center;
                 width: 100%">
