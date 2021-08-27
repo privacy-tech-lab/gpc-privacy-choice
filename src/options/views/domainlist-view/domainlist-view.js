@@ -586,7 +586,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_on"
         class="uk-badge button blue-buttons"
         type="button">
-        Do Not Allow Tracking For All
+       Send Do Not Sell Signals to All
       </button>
     `
   let toggle_domainlist_off =
@@ -594,7 +594,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Allow Tracking For All
+        Send Do Not Sell Signals to None
       </button>
     `
   let delete_all =
