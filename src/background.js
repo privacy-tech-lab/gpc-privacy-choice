@@ -171,7 +171,7 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 async function updateSendSignal(){
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 1 || userScheme == 0) updateSendSignalScheme1();
+    if (userScheme == 1 || userScheme == 0 || userScheme==12) updateSendSignalScheme1();
     else if (userScheme == 2) updateSendSignalScheme2();
     else if (userScheme == 3) updateSendSignalScheme3();
     else updateSendSignalScheme4();
