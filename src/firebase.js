@@ -105,7 +105,11 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+        if (result.USER_DOC_ID){
+            db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+        } else {
+            console.log("Unregistered user: not connected to the database");
+        }
     })
 }
 
@@ -148,7 +152,6 @@ function getDomain(url) {
 
 // Add third party requests to browsing history document
 export function addThirdPartyRequests(details){
-
     chrome.tabs.get(details.tabId, (tab)=>{
         let tabId=tab.id
         let url = tab.url;
@@ -161,23 +164,26 @@ export function addThirdPartyRequests(details){
         let initiator_host = getDomain(initiator_object.href)
         if(isAdNetwork(initiator_host) && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
-                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
-                .get().then((docArray)=>{
-                        docArray.forEach((doc)=>{
-                            console.log(doc.id)
-                            db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                            doc(doc.id).collection("Third Party Requests").add({
-                                "ad network": initiator_host,
-                                "type": details.type,
-                                "url": details.url,
-                                "requestHeaders": details.requestHeaders,
-                                "initiator": details.initiator,
-                                "frameID": details.frameId,
-                                "Timestamp": firebase.firestore.Timestamp.fromDate(date)
+                if (result.USER_DOC_ID){
+                    db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
+                    .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
+                    .get().then((docArray)=>{
+                            docArray.forEach((doc)=>{
+                                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                                doc(doc.id).collection("Third Party Requests").add({
+                                    "ad network": initiator_host,
+                                    "type": details.type,
+                                    "url": details.url,
+                                    "requestHeaders": details.requestHeaders,
+                                    "initiator": details.initiator,
+                                    "frameID": details.frameId,
+                                    "Timestamp": firebase.firestore.Timestamp.fromDate(date)
+                                })
                             })
-                        })
-                })
+                    })
+                } else {
+                    console.log("Unregistered user: not connected to the database");
+                }          
             })
         }
     })
