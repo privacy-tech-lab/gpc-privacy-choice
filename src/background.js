@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   // let userScheme = Math.floor(Math.random() * 4);
   let userScheme = 1;
   // set the user scheme number and then open the relevant page
-  chrome.storage.local.set({"UI_SCHEME": userScheme}, function(){
+  chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     if (userScheme == 1) openPage("registration.html");
     else if (userScheme == 2) openPage("questionnaire.html");
     else if (userScheme == 3){
@@ -109,7 +109,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
     chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
-      addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id);
+      if (result.USER_DOC_ID){
+        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id);
+      } else {
+        console.log("Unregistered user: not connected to the database");
+      }
     });
   }
   if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
@@ -120,7 +124,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
-      addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
+      if (result.USER_DOC_ID){
+        addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
+      } else {
+        console.log("Unregistered user: not connected to the database");
+      }
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
