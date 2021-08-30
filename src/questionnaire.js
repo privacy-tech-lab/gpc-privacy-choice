@@ -132,12 +132,13 @@ async function submit(prolificID){
         }
     })
 
-    chrome.storage.local.get(["UI_SCHEME"], function(result){
+    chrome.storage.local.get(["UI_SCHEME", "UV_SETTING"], function(result){
         let schemeNumber = result.UI_SCHEME;
         chrome.storage.local.set({CHECKLIST: checkList, CHECKNOTLIST: checkNotList, USER_CHOICES: userChoices}, async function(){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
             await createUser(prolificID, schemeNumber);
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: userChoices, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
             setTimeout(function(){
                 document.querySelector(".loading").style.display = "none";
                 let modal = UIkit.modal("#welcome-modal");
@@ -149,11 +150,6 @@ async function submit(prolificID){
             }, 2000);
         });
     });
-    
-    // todo: this will have to be implemented otherwise since it is not working at the moment
-    chrome.storage.local.get(["USER_CHOICES", "UV_SETTING"], function (result) {
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All domains", setting: "Categories", prevSetting: "Preference not set", newSetting: result.USER_CHOICES, universalSetting: result.UV_SETTING, location: "Questionnaire", subcollection: "Privacy Choice"})
-    })
 }
 
 // Helper function to validate prolific ID
