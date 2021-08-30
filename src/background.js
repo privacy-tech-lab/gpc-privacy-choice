@@ -36,7 +36,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
   let userScheme = 12;
-  if (userScheme == 1) openPage("registration.html");
+  if (userScheme == 1 ||userScheme == 0 || userScheme == 12) openPage("registration.html");
   else if (userScheme == 2) openPage("questionnaire.html");
   else if (userScheme == 3){
     // parse the checklist needed for updating the sendSignals based on user's choice
@@ -52,6 +52,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
               }
             }
           }
+        }
           for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
             for (let n of networks[category]){
               for (let c of Object.values(n)){
@@ -92,7 +93,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         })
         .then(openPage("registration.html"))
     } 
-  });
 });
 
 // Sets cache value to locally stored values after chrome booting up
