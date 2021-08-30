@@ -4,7 +4,7 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-import {createUser, addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
+import {addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
 
 // Initializers
 let sendSignal = true;
@@ -52,48 +52,47 @@ chrome.runtime.onInstalled.addListener(async function (object) {
               }
             }
           }
-        }
-        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-          for (let n of networks[category]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                checkList = checkList.concat(list);
+          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+            for (let n of networks[category]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  checkList = checkList.concat(list);
+                }
               }
             }
           }
-        }
-        chrome.storage.local.set({CHECKLIST: checkList});
-        chrome.storage.local.set({NPSLIST: npsList});
-      })
-      .then(openPage("profile.html"));
-  } else {
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-          for (let n of networks[cat]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                npsList = npsList.concat(list);
+          chrome.storage.local.set({CHECKLIST: checkList});
+          chrome.storage.local.set({NPSLIST: npsList});
+        })
+        .then(openPage("profile.html"));
+    } else {
+      fetch("json/services.json")
+        .then((response) => response.text())
+        .then((result) => {
+          networks = (JSON.parse(result))["categories"]
+          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+            for (let n of networks[cat]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  npsList = npsList.concat(list);
+                }
               }
             }
           }
-        }
-        for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-          for (let n of networks[category]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                checkList = checkList.concat(list);
+          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+            for (let n of networks[category]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  checkList = checkList.concat(list);
+                }
               }
             }
           }
-        }
-        chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
-      })
-      .then(openPage("registration.html"))
-  } 
-  await createUser(userScheme); 
+          chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
+        })
+        .then(openPage("registration.html"))
+    } 
+  });
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -106,14 +105,17 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === "openOptions") {
+    chrome.runtime.openOptionsPage();
+  }
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
-    let jsEnabled = null;
-    chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
-      jsEnabled = details.setting; 
-      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
-        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, jsEnabled, sender.tab.id);
-      })
+    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+      if (result.USER_DOC_ID){
+        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id);
+      } else {
+        console.log("Unregistered user: not connected to the database");
+      }
     });
   }
   if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
@@ -124,7 +126,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.local.get( ["USER_DOC_ID", "ORIGIN_SITE"], function(result){
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
-      addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
+      if (result.USER_DOC_ID){
+        addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
+      } else {
+        console.log("Unregistered user: not connected to the database");
+      }
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){

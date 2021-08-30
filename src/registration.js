@@ -1,43 +1,46 @@
-import {userResgistration} from "./firebase.js"
+import {createUser} from "./firebase.js"
 
 let userProfile = null;
+const PASSWORD = 12345;
 
-// Storage the user's profile in the local storage for future reference, close the tab
-document.querySelector('.submit-choice').onclick = (e) => {
+// Form validation when the user submits their prolific id and password
+document.querySelector('.submit-choice').onclick = () => {
     let prolificID = document.getElementById("prolific-id").value;
-    let html = `<div class="uk-alert-danger" uk-alert>
-                <a class="uk-alert-close" uk-close></a>`
-    if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
-    if (prolificID && !validateID(prolificID)) html += `<p class="uk-text-default">Invalid Prolific ID</p>`;
-    
-    if (prolificID && validateID(prolificID)){
-            chrome.storage.local.set({USER_PROFILE: userProfile}, function(){
-                submit(prolificID, userProfile);
-            });
-    } 
+    let password = document.getElementById("password").value;
+    let html = `<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a>`
+    if (prolificID && password && validateID(prolificID) && password == PASSWORD) {
+        submit(prolificID, userProfile);
+    }  
     else {
+        if (!prolificID) html += `<p class="uk-text-default">User Prolific ID Required</p>`; 
+        if (!password) html += `<p class="uk-text-default">Password is Required</p>`; 
+        if (prolificID && !validateID(prolificID)) html += `<p class="uk-text-default">Invalid Prolific ID</p>`;
+        if (password && (password != PASSWORD)) html += `<p class="uk-text-default">Invalid Password</p>`;
         html += `</div>`
         let warnings = document.querySelector(".form-validation");
         warnings.innerHTML = html; 
     } 
 }
 
-// Add user information into the database
+// Create user on the data base
 function submit(prolificID, userProfile){
-    chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: null}, async function(){
-        await userResgistration(prolificID, userProfile);
-        document.querySelector(".main").style.display = "none";
-        document.querySelector(".loading").style.display = "block";
-        setTimeout(function(){
-            document.querySelector(".loading").style.display = "none";
-            let modal = UIkit.modal("#welcome-modal");
-            modal.show();
-            document.getElementById("welcome-modal-button").onclick = function () {
-              modal.hide();
-              window.close();
-            } 
-        }, 2000);
-    });
+    chrome.storage.local.get(["UI_SCHEME"], function(result){
+        let schemeNumber = result.UI_SCHEME;
+        chrome.storage.local.set({USER_CHOICES: userProfile}, async function(){
+            document.querySelector(".main").style.display = "none";
+            document.querySelector(".loading").style.display = "block";
+            await createUser(prolificID, schemeNumber);
+            setTimeout(function(){
+                document.querySelector(".loading").style.display = "none";
+                let modal = UIkit.modal("#welcome-modal");
+                modal.show();
+                document.getElementById("welcome-modal-button").onclick = function () {
+                  modal.hide();
+                  window.close();
+                } 
+            }, 2000);
+        });
+    })
 }
 
 // Helper function to validate prolific ID

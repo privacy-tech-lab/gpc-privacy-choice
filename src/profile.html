@@ -34,22 +34,33 @@
             </div>
         </div>
         <div class="uk-container main">
-            <h2 class="uk-h1 uk-text-center">Welcome to the Opt Out Research</h2>
-            <p class="uk-text-default">Lorem ipsum dolor sit amet, mel ut numquam praesent voluptaria. Mea in labores deleniti reformidans, duo illud sententiae an. Quot legendos cum te. Facilisi pericula honestatis eos eu, nostrud nostrum has an. Causae accusamus intellegebat cum eu, eam mazim aeque praesent eu. Periculis adolescens disputationi cu usu.</p>
+            <h2 class="uk-h1 uk-text-center">Welcome to the Global Privacy Choice Research</h2>
+            <hr>
+            <legend class="uk-legend uk-text-center">Basic Introduction of GPC</legend>
+            <p class="uk-h5">Global Privacy Control (GPC) is an online privacy standard in development at the W3C</p>
+            <ul class="uk-list uk-list-bullet">             
+                <li>Enable GPC to opt out from data selling/sharing</li>
+                <li>Whether a website must respect your opt out depends on local law. E.g., if you reside in California, the California Consumer Privacy Act requires so</li>
+                <li>Websites respecting GPC can still collect your data and show you ads, but they are no longer allowed to disclose your data to advertisers</li>
+                <li><a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a></li>
+            </ul>
             <hr>
             <form>
                 <fieldset class="uk-fieldset">
-                    <legend class="uk-legend uk-text-center">Basic Information</legend>
+                    <legend class="uk-legend uk-text-center">Sign Up Information</legend>
                     <div class="uk-margin">
                         <input id ="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
-                    </div>        
+                    </div> 
+                    <div class="uk-margin">
+                        <input id ="password" class="uk-input" type="text" placeholder="Access Password">
+                    </div>         
                 </fieldset>
             </form>
             <hr>
             <h2 class="uk-legend uk-text-center">Privacy Profile Survey</h2>
             <p class="uk-text-center uk-text-default">Read the privacy profiles options below, which level of privacy sentivity describes you well?</p>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div id='extremely-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" ></a>
@@ -57,7 +68,7 @@
                         <p>Do not track me on any website. </p>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div id='moderately-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
                         <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" ></a>
@@ -65,7 +76,7 @@
                         <p>Track me only on some sites.</p>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div id="not-privacy-sensitive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
                         <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" ></a>

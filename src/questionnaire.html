@@ -50,34 +50,45 @@
             </div>
         </div>
         <div class="uk-container main">   
-            <h2 class="uk-h1 uk-text-center">Welcome to the Opt Out Research</h2>
-            <p class="uk-text-default">Lorem ipsum dolor sit amet, mel ut numquam praesent voluptaria. Mea in labores deleniti reformidans, duo illud sententiae an. Quot legendos cum te. Facilisi pericula honestatis eos eu, nostrud nostrum has an. Causae accusamus intellegebat cum eu, eam mazim aeque praesent eu. Periculis adolescens disputationi cu usu.</p>
+            <h2 class="uk-h1 uk-text-center">Welcome to the Global Privacy Choice Research</h2>
+            <hr>
+            <legend class="uk-legend uk-text-center">Basic Introduction of GPC</legend>
+            <p class="uk-h5">Global Privacy Control (GPC) is an online privacy standard in development at the W3C</p>
+            <ul class="uk-list uk-list-bullet">             
+                <li>Enable GPC to opt out from data selling/sharing</li>
+                <li>Whether a website must respect your opt out depends on local law. E.g., if you reside in California, the California Consumer Privacy Act requires so</li>
+                <li>Websites respecting GPC can still collect your data and show you ads, but they are no longer allowed to disclose your data to advertisers</li>
+                <li><a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a></li>
+            </ul>
             <hr>
             <form>
                 <fieldset class="uk-fieldset">
-                    <legend class="uk-legend uk-text-center">Basic Information</legend>
+                    <legend class="uk-legend uk-text-center">Sign Up Information</legend>
                     <div class="uk-margin">
                         <input id ="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
-                    </div>        
+                    </div>   
+                    <div class="uk-margin">
+                        <input id ="password" class="uk-input" type="text" placeholder="Access Password">
+                    </div>       
                 </fieldset>
             </form>
             <hr>
             <legend class="uk-legend uk-text-center">Digital Privacy Questionnaire</legend>
             <p class="uk-text-center uk-text-default">Select below the forms of online tracking you do NOT want to be subjected to.</p>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Advertising</h3>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Analytics</h3>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Content & Social</h3>
@@ -85,19 +96,19 @@
                 </div>  
             </div>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Cryptomining</h3>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Fingerprinting</h3>
                     </div>
                 </div>
-                <div class="choice">
+                <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Others</h3>

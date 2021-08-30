@@ -1,5 +1,3 @@
-import { turnOnGPC } from "./domainlist.js";
-
 // Firebase configuration, connects to Firebase project
 const firebaseConfig = {
     apiKey: "AIzaSyAhhtuwr4YOK_F0ZkULkKkFpyMC_5ZIaT4",
@@ -16,58 +14,54 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
 // Function used to create a user in the database
-export async function createUser(schemeNumber){
+export async function createUser(prolificID, schemeNumber){
     let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
     let date = new Date();
+    let jsEnabled = null;
     // generate unique user document and storage the id into local storage
     const userDocument = db.collection("users").doc(); 
     chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
         // create the uers in the database
-        db.collection("users").doc(userDocument.id).set({
-            "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
-            "DNT": navigator.doNotTrack ? 1 : 0,
-            "IP Address": userIP,
-            "Latitude": latitude, 
-            "Longitude": longitude,
-            "Browser": getBrowser(),
-            "Browser Engine": getBrowserEngine(),
-            "OS": getOS(),
-            "Plugins": getPlugins(),
-            "Language": getLanguage(),
-            "Time Zone": getTimeZone(),
-            "First Party HTTP Cookies Enabled": getFirstPartyCookiesEnabled(),
-            // "Third Party HTTP Cookies Enabled": getThirdPartyCookiesEnabled(),
-            "Local Storage Enabled": getLocalStorageEnabled(),
-            "Session Storage Enabled": getSessionStorageEnabled(),
-            "Domain List": [],
-            "UI Scheme" : schemeNumber,
-            "Timestamp" : firebase.firestore.Timestamp.fromDate(date) 
+        chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
+            jsEnabled = details.setting; 
+            db.collection("users").doc(userDocument.id).set({
+                "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
+                "DNT": navigator.doNotTrack ? 1 : 0,
+                "IP Address": userIP,
+                "Latitude": latitude, 
+                "Longitude": longitude,
+                "Browser": getBrowser(),
+                "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
+                "OS": getOS(),
+                "Plugins": getPlugins(),
+                "Language": getLanguage(),
+                "Time Zone": getTimeZone(),
+                "Cookies Enabled": getFirstPartyCookiesEnabled(),
+                "Local Storage Enabled": getLocalStorageEnabled(),
+                "Session Storage Enabled": getSessionStorageEnabled(),
+                "Domain List": [],
+                "UI Scheme" : schemeNumber,
+                "Timestamp" : firebase.firestore.Timestamp.fromDate(date), 
+                "JS Enabled" : jsEnabled, 
+                "Prolific ID" : prolificID
+            })
         })
     });
 }
 
-// Function used to add user name, user email and user choices to the database
-export async function userResgistration(prolificID, privacyChoice){
-    chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).update({"Prolific ID":prolificID});
-    })
-}
-
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, jsEnabled, tabId){
-    let date = new Date()
-    let url = new URL(site)
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
+    let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "Timestamp": firebase.firestore.Timestamp.fromDate(date),
         "TabID": tabId,
         "Referer": referrer,
         "Current Site":  site,
         "GPC Current Site Status": GPC,
-        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool),
-        "JS Enabled": jsEnabled
+        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
     })
 }
 
@@ -118,7 +112,11 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+        if (result.USER_DOC_ID){
+            db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+        } else {
+            console.log("Unregistered user: not connected to the database");
+        }
     })
 }
 
@@ -161,7 +159,6 @@ function getDomain(url) {
 
 // Add third party requests to browsing history document
 export function addThirdPartyRequests(details){
-
     chrome.tabs.get(details.tabId, (tab)=>{
         let tabId=tab.id
         let url = tab.url;
@@ -174,23 +171,26 @@ export function addThirdPartyRequests(details){
         let initiator_host = getDomain(initiator_object.href)
         if(isAdNetwork(initiator_host) && url_host!="firestore.googleapis.com"){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
-                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
-                .get().then((docArray)=>{
-                        docArray.forEach((doc)=>{
-                            console.log(doc.id)
-                            db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                            doc(doc.id).collection("Third Party Requests").add({
-                                "ad network": initiator_host,
-                                "type": details.type,
-                                "url": details.url,
-                                "requestHeaders": details.requestHeaders,
-                                "initiator": details.initiator,
-                                "frameID": details.frameId,
-                                "Timestamp": firebase.firestore.Timestamp.fromDate(date)
+                if (result.USER_DOC_ID){
+                    db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
+                    .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
+                    .get().then((docArray)=>{
+                            docArray.forEach((doc)=>{
+                                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
+                                doc(doc.id).collection("Third Party Requests").add({
+                                    "ad network": initiator_host,
+                                    "type": details.type,
+                                    "url": details.url,
+                                    "requestHeaders": details.requestHeaders,
+                                    "initiator": details.initiator,
+                                    "frameID": details.frameId,
+                                    "Timestamp": firebase.firestore.Timestamp.fromDate(date)
+                                })
                             })
-                        })
-                })
+                    })
+                } else {
+                    console.log("Unregistered user: not connected to the database");
+                }          
             })
         }
     })
@@ -217,10 +217,6 @@ function getBrowser() {
     return browser;
 }
 
-// Get the browser engine version
-function getBrowserEngine(){
-    return null
-}
 
 // Get the operating system of the user device
 function getOS(){
