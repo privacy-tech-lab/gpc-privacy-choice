@@ -89,40 +89,34 @@ function showBanner(applyAllOption, muteOption) {
             </div>
         </div>
         `
-    let muteCheckbox=
+    let muteBtn=
     `
-    <input value="Empty" id="mute" type="checkbox" style="
-                content: none !important;
-                color-scheme: light !important;
-                float: unset;
-                cursor:pointer;
-                pointer-events: unset !important;
-                height: unset;
-                opacity: unset;
-                position: unset !important;
-                display:inline-flex;
-                color: unset !important;
-                width:unset;
-                -webkit-appearance:checkbox;
-                align-self: center;
-                margin:unset;">
-            <div for="apply-all" style="
-                margin-block-start: 0.5em;
-                margin-block-end: 0.5em;
-                display: inline-flex;
-                color:black !important;
-                font-size:16px;
-                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
-                font-weight: 300;
-                margin-bottom:10px;
-                margin-left: 5px;
-                font-family: unset;
-                position:unset !important;
-                padding:unset;
-                text-transform:unset;
-                top:unset;">
-                    Mute Choice Banner
-            </div>
+    <div style="
+        padding: unset;
+        margin-top: 7px;
+        width: 10px;
+        display: inline;
+        width: unset;
+        font-family:unset !important;
+        font-size: unset !important;
+        color: unset !important;">
+                    <div id="mute" style="
+                        font-size:13px;
+                        border:0.3px solid;
+                        background-color:
+                        rgb(212, 212, 212);
+                        color:black;
+                        padding:0.3em;
+                        border-radius:3px;
+                        font-weight:300;
+                        width: fit-content;
+                        display:inline;
+                        margin:3px;
+                        font-family: unset;
+                        cursor:pointer;">
+                            Mute banner
+                    </div>
+            <div/>
     `
     let bannerinnerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
@@ -202,7 +196,7 @@ function showBanner(applyAllOption, muteOption) {
                     </div>
             <div/>
             <div id='apply-all-checkbox'> </div>
-            <div id='mute-checkbox'> </div>
+            <div id='mute-btn'> </div>
         </div> 
     `
 
@@ -216,7 +210,7 @@ function showBanner(applyAllOption, muteOption) {
         document.getElementById('apply-all').classList.add('hide_pseudo');
     } 
     if (muteOption){
-        document.getElementById('mute-checkbox').innerHTML = muteCheckbox;
+        document.getElementById('mute-btn').innerHTML = muteBtn;
         document.getElementById('mute').classList.add('hide_pseudo');
     }
     // buttons change color when the cursor hovers over them
@@ -237,24 +231,25 @@ function showBanner(applyAllOption, muteOption) {
     })
     // add event listener to close the modal
     body.addEventListener('click', event => {
+        console.log(event.target.id);
         let applyAllBool
         if(document.getElementById("apply-all")){
             applyAllBool = document.getElementById("apply-all").checked
         }
         else applyAllBool=false;
         //mute choice banner
-        if(document.getElementById("mute")){
-            muteBool = document.getElementById("mute").checked
+        if(event.target.id === 'mute'){
+            let muteBool = true;
             let endMuteTime
-            if (muteBool){
-                let currentDate = new Date();
-                let time = currentDate.getTime()
-                let muteTime=21600000
-                endMuteTime=time+muteTime
-            }
+            let currentDate = new Date();
+            let time = currentDate.getTime()
+            let muteTime=21600000
+            endMuteTime=time+muteTime
             chrome.storage.local.set({MUTED: [muteBool,endMuteTime]});
+            removeBanner();
+            chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "mute choice banner", prevSetting: "N/A", newSetting: "N/A", universalSetting: "N/A", location: "Banner", subcollection: "Choice Banner Mute"});
         }
-        if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
+        else if(event.target.id === 'dont-allow-btn' && !applyAllBool) { 
             // situation 1: enable GPC for the current domain
             removeBanner();
             chrome.storage.local.set({DOMAINLIST_ENABLED: true});
@@ -343,9 +338,6 @@ function showBanner(applyAllOption, muteOption) {
 
 // function used to remove the modal
 function removeBanner(){
-    if(muteBool){
-        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: currentDomain, setting: "mute choice banner", prevSetting: "N/A", newSetting: "N/A", universalSetting: "N/A", location: "Banner", subcollection: "Choice Banner Mute"})
-    }
     if (banner.style) banner.style.display = 'none';
     if (popupDiv.style) popupDiv.style.display = 'none';
 }
