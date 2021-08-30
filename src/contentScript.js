@@ -57,18 +57,24 @@ function bannerMouseOverEvent() {
             button_preb.style.color = 'rgb(0, 102, 204)';
             button_preb.style.textDecoration = 'underline';
         }
+        else if(button_preb.id === 'mute') {
+            button_preb.style.backgroundColor = 'rgb(166, 166, 166)';
+        }
         let cursor_spot = event.target;
         let but1 = document.getElementById('send-button');
         let but2 = document.getElementById('dont-send-button');
         let openOptions = document.getElementById('open-options');
+        let mute = document.getElementById('mute');
         if(cursor_spot.id !== 'send-button' && cursor_spot.id !== 'dont-send-button') {
             but1.style.backgroundColor = 'rgb(51, 153, 255)';
             but2.style.backgroundColor = 'rgb(51, 153, 255)';
         }
         if(cursor_spot.id !== 'open-options') {
-            console.log("What's up")
             openOptions.style.color = 'rgb(51, 153, 255)';
             openOptions.style.textDecoration = 'none';
+        }
+        if(cursor_spot.id !== 'mute') {
+            mute.style.backgroundColor = 'rgb(212, 212, 212)';
         }
     })
 }
@@ -100,6 +106,7 @@ function bannerClickEvent() {
     })
 }
 
+// Mute banner for 6 hours
 function addMuteEventListener(currentDomain) {
     let muteBool = true;
     let endMuteTime
@@ -197,7 +204,8 @@ function showBanner(applyAllOption, muteOption) {
 
     let applyAllCheckbox = `
             <div style="
-            display:inline;
+            margin-top:10px;
+            display:inline-block;
             align-tems: center;
             align: center;
             width: 100%">
@@ -221,8 +229,8 @@ function showBanner(applyAllOption, muteOption) {
                 margin-block-end: 0.5em;
                 display: inline-flex;
                 color:black !important;
-                font-size:16px;
-                font:16px/1.231 arial,helvetica,clean,sans-serif !important;
+                font-size:13px;
+                font:13px/1.231 arial,helvetica,clean,sans-serif !important;
                 font-weight: 300;
                 margin-bottom:10px;
                 margin-left: 5px;
@@ -294,18 +302,15 @@ function showBanner(applyAllOption, muteOption) {
                     margin-inline-end: auto;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
-                    padding-bottom:3px;
-                    margin-bottom: 7px;
                     color: black;">
                         You have a right to make your privacy choice under the law.
             </div>
-            <br>
             <div style="
-                margin-block-start: 0.5em;
+                margin-block-start: unset;
                 margin-inline-start: auto;
                 margin-inline-end: auto;
                 font: 16px/1.231 arial,helvetica,clean,sans-serif;
-                font-weight:300;
+                font-weight:600;
                 padding-bottom:3px;
                 margin-bottom: 7px;
                 color: black;">
@@ -314,6 +319,7 @@ function showBanner(applyAllOption, muteOption) {
             <div style="
                 padding: unset;
                 margin-top: 7px;
+                margin-bottom:7px;
                 width: 10px;
                 display: inline;
                 width: unset;
