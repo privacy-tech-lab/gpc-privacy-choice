@@ -27,29 +27,32 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  chrome.storage.local.set({ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {}});
+  chrome.storage.local.set({MUTED: [false,undefined]});
+  chrome.storage.local.set({ENABLED: true});
+  chrome.storage.local.set({APPLY_ALL: false});
+  chrome.storage.local.set({UV_SETTING: "Off"});
+  chrome.storage.local.set({DOMAINLIST_ENABLED: true});
+  chrome.storage.local.set({DOMAINS: {}});
   enable();
-  // let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 3;
-  // set the user scheme number and then open the relevant page
-  chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
-    if (userScheme == 1) openPage("registration.html");
-    else if (userScheme == 2) openPage("questionnaire.html");
-    else if (userScheme == 3){
-      // parse the checklist needed for updating the sendSignals based on user's choice
-      fetch("json/services.json")
-        .then((response) => response.text())
-        .then((result) => {
-          networks = (JSON.parse(result))["categories"]
-          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-            for (let n of networks[cat]){
-              for (let c of Object.values(n)){
-                for (let list of Object.values(c)){
-                  npsList = npsList.concat(list);
-                }
+  //let userScheme = Math.floor(Math.random() * 4);
+  let userScheme = 12;
+  if (userScheme == 1 ||userScheme == 0 || userScheme == 12) openPage("registration.html");
+  else if (userScheme == 2) openPage("questionnaire.html");
+  else if (userScheme == 3){
+    // parse the checklist needed for updating the sendSignals based on user's choice
+    fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        networks = (JSON.parse(result))["categories"]
+        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+          for (let n of networks[cat]){
+            for (let c of Object.values(n)){
+              for (let list of Object.values(c)){
+                npsList = npsList.concat(list);
               }
             }
           }
+        }
           for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
             for (let n of networks[category]){
               for (let c of Object.values(n)){
@@ -90,7 +93,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         })
         .then(openPage("registration.html"))
     } 
-  });
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -175,7 +177,7 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 async function updateSendSignal(){
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 1) updateSendSignalScheme1();
+    if (userScheme == 1 || userScheme == 0 || userScheme==12) updateSendSignalScheme1();
     else if (userScheme == 2) updateSendSignalScheme2();
     else if (userScheme == 3) updateSendSignalScheme3();
     else updateSendSignalScheme4();

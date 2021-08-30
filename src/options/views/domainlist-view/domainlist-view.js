@@ -562,7 +562,7 @@ function createDefaultSettingInfo(){
       <hr>
       `
     } 
-    else {
+    else if (result.UI_SCHEME==4){
       defaultSettingInfo = 
       `
       <div class="uk-container main">
@@ -572,6 +572,17 @@ function createDefaultSettingInfo(){
         </div>
       </div>
       <hr>
+      `
+    }
+    else if (result.UI_SCHEME==0){
+      defaultSettingInfo = 
+      `
+      <div class="important-text"> When you visit a new domain you will be asked
+        to choose your privacy preference for that domain. 
+      </div>
+      You can change the privacy preference made for
+      an individual domain by 
+      toggling the domain's switch in the domain list below. 
       `
     }
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
@@ -586,7 +597,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_on"
         class="uk-badge button blue-buttons"
         type="button">
-        Do Not Allow Tracking For All
+       Send Do Not Sell Signals to All
       </button>
     `
   let toggle_domainlist_off =
@@ -594,7 +605,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Allow Tracking For All
+        Send Do Not Sell Signals to None
       </button>
     `
   let delete_all =
@@ -618,7 +629,7 @@ function createDomainlistManagerButtons(){
     `
   let apply_to_all=
   `
-    <label><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
+    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
   `
   let manager_btns=
   `
@@ -630,9 +641,15 @@ function createDomainlistManagerButtons(){
   `
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
-  if(result.UI_SCHEME==2 || result.UI_SCHEME==3)
-    document.getElementById('domainlist-manager-btns').classList.add("hide")
+    if(result.UI_SCHEME==2 || result.UI_SCHEME==3)
+      document.getElementById('domainlist-manager-btns').classList.add("hide")
+    if (result.UI_SCHEME==0){
+      document.getElementById('toggle_all_on').classList.add("hide")
+      document.getElementById('toggle_all_off').classList.add("hide")
+      document.getElementById('apply_to_all_label').classList.add("hide")
+    } 
   })
+
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
