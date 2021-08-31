@@ -36,34 +36,36 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
   let userScheme = 12;
-  if (userScheme == 1 ||userScheme == 0 || userScheme == 12) openPage("registration.html");
-  else if (userScheme == 2) openPage("questionnaire.html");
-  else if (userScheme == 3){
-    // parse the checklist needed for updating the sendSignals based on user's choice
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-          for (let n of networks[cat]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                npsList = npsList.concat(list);
-              }
-            }
-          }
-        }
-          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-            for (let n of networks[category]){
+  // set the users scheme before opening the sign up page
+  chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
+    if (userScheme == 1 || userScheme == 0 || userScheme == 12) openPage("registration.html");
+    else if (userScheme == 2) openPage("questionnaire.html");
+    else if (userScheme == 3){
+      // parse the checklist needed for updating the sendSignals based on user's choice
+      fetch("json/services.json")
+        .then((response) => response.text())
+        .then((result) => {
+          networks = (JSON.parse(result))["categories"]
+          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+            for (let n of networks[cat]){
               for (let c of Object.values(n)){
                 for (let list of Object.values(c)){
-                  checkList = checkList.concat(list);
+                  npsList = npsList.concat(list);
                 }
               }
             }
           }
-          chrome.storage.local.set({CHECKLIST: checkList});
-          chrome.storage.local.set({NPSLIST: npsList});
+            for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+              for (let n of networks[category]){
+                for (let c of Object.values(n)){
+                  for (let list of Object.values(c)){
+                    checkList = checkList.concat(list);
+                  }
+                }
+              }
+            }
+            chrome.storage.local.set({CHECKLIST: checkList});
+            chrome.storage.local.set({NPSLIST: npsList});
         })
         .then(openPage("profile.html"));
     } else {
@@ -93,6 +95,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
         })
         .then(openPage("registration.html"))
     } 
+  })
 });
 
 // Sets cache value to locally stored values after chrome booting up
