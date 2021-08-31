@@ -247,6 +247,9 @@ function showBanner(applyAllOption, muteOption) {
     `
     <div style="
         padding: unset;
+        position: relative;
+        left: 44%;
+        bottom: 0.7em;
         margin-top: 7px;
         width: 10px;
         display: inline;
@@ -256,10 +259,9 @@ function showBanner(applyAllOption, muteOption) {
         color: unset !important;">
                     <div id="mute" style="
                         font-size:13px;
-                        border:0.3px solid;
-                        background-color:
-                        rgb(212, 212, 212);
-                        color:black;
+                        border:0.3px solid rgb(140, 140, 140);
+                        background-color:rgb(212, 212, 212);
+                        color:rgb(120, 120, 120);
                         padding:0.3em;
                         border-radius:3px;
                         font-weight:300;
@@ -268,14 +270,15 @@ function showBanner(applyAllOption, muteOption) {
                         margin:3px;
                         font-family: unset;
                         cursor:pointer;">
-                            Mute banner
+                            Snooze
                     </div>
             <div/>
     `
     let bannerinnerHTML = `
         <div id="privacy-res-popup-container" style="-webkit-font-smoothing: unset !important;">
+            <div id='mute-btn'> </div>
             <div style="
-                line-height: 1.5;
+                line-height: 1;
                 font-family:unset !important;
                 font-size: unset !important;
                 color: unset !important;">
@@ -359,8 +362,6 @@ function showBanner(applyAllOption, muteOption) {
                     </div>
             <div/>
             <div id='apply-all-checkbox'> </div>
-            <div id='mute-btn'> </div>
-            <br>
             <div>
                 <a 
                     id="open-options" 
