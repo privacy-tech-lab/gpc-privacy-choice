@@ -82,27 +82,15 @@ function bannerMouseOverEvent() {
 //User interacts with banner
 function bannerClickEvent() {
     body.addEventListener('click', event => {
-        console.log(event.target.id);
         let currentDomain = getDomain(window.location.href);
-        let applyAllBool = document.getElementById("apply-all").checked;
-        if(event.target.id === 'mute') {
-          addMuteEventListener(currentDomain);
-        }
-        else if(event.target.id === 'send-button' && !applyAllBool) { 
-            addSendEventListener(currentDomain);
-        }
-        else if(event.target.id === 'dont-send-button' && !applyAllBool) { 
-            addDontSendEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'send-button' && applyAllBool) { 
-            addSendAllEventListener(currentDomain);
-        } 
-        else if(event.target.id === 'dont-send-button' && applyAllBool) { 
-            addDontSendAllEventListener(currentDomain);
-        }
-        else if(event.target.id === 'open-options') {
-            addOpenOptionsEventListener(currentDomain);
-        }
+        let applyAllBool = false;
+        if (document.getElementById("apply-all")) applyAllBool = document.getElementById("apply-all").checked;
+        if(event.target.id === 'mute') addMuteEventListener(currentDomain);
+        else if (event.target.id === 'send-button' && !applyAllBool) addSendEventListener(currentDomain);
+        else if(event.target.id === 'dont-send-button' && !applyAllBool) addDontSendEventListener(currentDomain);
+        else if(event.target.id === 'send-button' && applyAllBool) addSendAllEventListener(currentDomain);
+        else if(event.target.id === 'dont-send-button' && applyAllBool) addDontSendAllEventListener(currentDomain);
+        else if(event.target.id === 'open-options') addOpenOptionsEventListener(currentDomain);
     })
 }
 
@@ -520,10 +508,13 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
     let currentDomain = getDomain(window.location.href);
     if (result.UI_SCHEME == 12){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(true, true);
-    }else if (result.UI_SCHEME == 1){
-            if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true, false);
+        else addToDomainListScheme1();
+    } else if (result.UI_SCHEME == 1){
+        if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null)) showBanner(true, false);
+        else addToDomainListScheme1();
     } else if (result.UI_SCHEME == 0){
         if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false, true);
+        else addToDomainListScheme1();
     } else if (result.UI_SCHEME == 4){
         let random = Math.floor(Math.random() * 3);
         if (random == 1 && !(currentDomain in domains)) {showBanner(false);} 
