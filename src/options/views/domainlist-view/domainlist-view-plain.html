@@ -1,0 +1,36 @@
+<!--
+OptMeowt-Research is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+-->
+
+<template id="domainlist-view-plain">
+  <div class="uk-width-1-1" style="margin-top: 0px;">
+    <div id="future_setting_prompt" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px;">
+        Before turning off the choice banner you must select a privacy preference to apply to future domains that you visit. Would you like to send do not sell signals to new domains that you visit?
+        <h2 class="uk-modal-title"></h2>
+        <button class="uk-modal-close" style="font-size: 15px;" type="button">Cancel</button>
+        <button class="uk-modal-close" id="dont-allow-future-btn" type="button" style="font-size: 15px; float:right;">Yes, Send Do Not Sell Signals</button>
+        <button class="uk-modal-close" id="allow-future-btn" type="button" style="font-size: 15px; float:right;margin-right:4px;">No</button>
+      </div>
+    </div>
+    <div id="learning-finish-modal" uk-modal>
+      <div class="uk-modal-dialog">
+          <button class="uk-modal-close-default" type="button" uk-close></button>
+          <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+              <img src="./green_tick.jpg" alt="" style="margin: 0px;">
+              <h2 class="uk-align-center text-color-darker">Learning Finished</h2>
+          </div>
+          <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+            We have successfully categorizing you into one of the three privacy profiles based on your banner decisions. Feel free to add in additional customizations as you see fit. 
+          </div>
+          <div class="uk-modal-footer">
+            <button id="learning-finish-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
+          </div>
+      </div>
+    </div> 
+  </div>
+  <p id='current-apply-all-setting' style="font-size: medium;">
+  </p>
+</template>

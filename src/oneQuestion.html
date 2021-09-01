@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>User Profile</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../libs-css/uikit.min.css" />
+        <link rel="stylesheet" href="../libs-css/animate.compat.css" />
+        <script src="../libs-js/uikit.min.js"></script>
+        <script src="../libs-js/uikit-icons.min.js"></script>
+        <script src="../libs-js/mustache.js"></script>
+        
+      </head>
+<body>
+    <div class="uk-section">
+        <div class="uk-container loading" style="display: none;">
+            <div class ="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your privacy configurations</div>
+        </div>
+        <div class="uk-container welcome">
+            <div id="welcome-modal" uk-modal>
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+                        <img src="./green_tick.png" alt="" style="margin: 0px;">
+                        <h2 class="uk-align-center text-color-darker">You are all set!</h2>
+                    </div>
+                    <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
+                      We have successfully initalized your privacy configurations! GPC signal will be sent based on your choice. You can change the settings at anytime.
+                    <div class="uk-modal-footer">
+                      <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">I UNDERSTAND</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-container main">
+            <h2 class="uk-h1 uk-text-center">Welcome to the Global Privacy Choice Research</h2>
+            <hr>
+            <legend class="uk-legend uk-text-center">Basic Introduction of GPC</legend>
+            <p class="uk-h5">Global Privacy Control (GPC) is an online privacy standard in development at the W3C</p>
+            <ul class="uk-list uk-list-bullet">             
+                <li>Enable GPC to opt out from data selling/sharing</li>
+                <li>Whether a website must respect your opt out depends on local law. E.g., if you reside in California, the California Consumer Privacy Act requires so</li>
+                <li>Websites respecting GPC can still collect your data and show you ads, but they are no longer allowed to disclose your data to advertisers</li>
+                <li><a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a></li>
+            </ul>
+            <hr>
+            <form>
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-legend uk-text-center">Sign Up Information</legend>
+                    <div class="uk-margin">
+                        <input id ="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
+                    </div> 
+                    <div class="uk-margin">
+                        <input id ="password" class="uk-input" type="text" placeholder="Access Password">
+                    </div>         
+                </fieldset>
+            </form>
+            <hr>
+            <h2 class="uk-legend uk-text-center">Privacy Choice Survey</h2>
+            <p class="uk-text-center uk-text-default">Would you like to send a signal to opt out from ad tracking on the domains you visit?</p>
+            <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+                <div class="choice" style="cursor: pointer;">
+                    <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                        <a class="uk-position-cover first" href="#"></a>
+                        <h3 class="uk-card-title uk-margin">Yes, Send Signal</h3>
+                        <p>Do not track me on any website.</p>
+                    </div>
+                </div>
+                <div class="choice" style="cursor: pointer;">
+                    <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+                        <a class="uk-position-cover second" href="#"></a>
+                        <h3 class="uk-card-title uk-margin">No, Don't Send Signal</h3>
+                        <p>Feel free to track me for ad purposes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-validation uk-margin-medium-top"></div>
+            <br>
+            <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit My Choice</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-firestore.js"></script>
+    <script type="module" src="profile.js"></script>
+</body>
+</html>

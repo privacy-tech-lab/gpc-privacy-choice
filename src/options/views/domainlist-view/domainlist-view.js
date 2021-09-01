@@ -5,10 +5,8 @@
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
-const headings = {
-    title: 'Settings',
-    subtitle: "Toggle which domains should receive Do Not Sell signals"
-}
+const domainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Profile / Change Do Not Sell Signal Domains"}
+const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Status"}
 
 // "Do not allow tracking for all" button is clicked
 function addToggleAllOnEventListener() {
@@ -197,6 +195,28 @@ function addDeleteDomainListEventListener() {
   addToggleListeners();
 }
 
+// User changes GPC signal send status on scheme no domainlist
+function addGPCEventListener(event) {
+  if(event.target.id == 'sending') {
+    chrome.storage.local.get(["USER_CHOICES"], function (result) {
+      if (result.USER_CHOICES !== "Yes, Send Signal") {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Yes, Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+      }
+    })
+    chrome.storage.local.set({USER_CHOICES: "Yes, Send Signal"});
+    createDefaultSettingInfo();
+  }
+  else if (event.target.id == 'not-sending') {
+    chrome.storage.local.get(["USER_CHOICES"], function (result) {
+      if (result.USER_CHOICES !== "No, Don't Send Signal") {
+        chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "No, Don't Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+      }
+    })
+    chrome.storage.local.set({USER_CHOICES: "No, Don't Send Signal"}); 
+    createDefaultSettingInfo()
+  }
+}
+
 // User changes their privacy profile on scheme 3
 function addPrivacyProfileEventListener(event) {
   if(event.target.id == 'extremely-privacy-sensitive') {
@@ -301,33 +321,43 @@ function addCategoriesEventListener(event) {
 
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
-  document.getElementById('searchbar').addEventListener('keyup', filterList);
+  if (document.getElementById('searchbar') != null) document.getElementById('searchbar').addEventListener('keyup', filterList);
+
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
     document.addEventListener('click', event => {
       if (event.target.id=='toggle_all_off'){
         addToggleAllOffEventListener();
+        addToggleListeners();
       }
       else if (event.target.id=='toggle_all_on'){
         addToggleAllOnEventListener();
+        addToggleListeners();
       }
       else if(event.target.id=='apply-all-switch'){
         addApplyAllSwitchEventListener();
+        addToggleListeners();
       }
       else if(event.target.id=='allow-future-btn' || event.target.id=='dont-allow-future-btn'){
         addFutureSettingPromptEventListener(event);
+        addToggleListeners();
       }
       else if(event.target.id=='delete_all_domainlist'){
         addDeleteDomainListEventListener();
+        addToggleListeners();
       }
       else if (result.UI_SCHEME==3){
         addPrivacyProfileEventListener(event);
+        addToggleListeners();
       }
       else if(result.UI_SCHEME==2){
         addCategoriesEventListener(event);
+        addToggleListeners();
+      } 
+      else if (result.UI_SCHEME == 6){
+        addGPCEventListener(event);
       }
     })
   })
-  addToggleListeners();
 }
 
 // Creates the specific Domain List toggles as well as the perm delete
@@ -385,8 +415,7 @@ function cardInteractionSettings(scheme, userChoice) {
         document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
       }
       else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
-    } 
-    else if(scheme==2){
+    } else if(scheme==2){
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
       }
@@ -411,6 +440,14 @@ function cardInteractionSettings(scheme, userChoice) {
         document.getElementById('others-card').classList.add('uk-card-primary')
       }
       else document.getElementById('others-card').classList.remove("uk-card-primary");
+    } else if (scheme==6){
+      if(userChoice=='Yes, Send Signal'){
+        document.getElementById('sending').classList.add('uk-card-primary')
+      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
+
+      if(userChoice=="No, Don't Send Signal"){
+        document.getElementById('not-sending').classList.add('uk-card-primary')
+      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
     }
 }
 
@@ -418,14 +455,10 @@ function cardInteractionSettings(scheme, userChoice) {
 function createDefaultSettingInfo(){
   chrome.storage.local.get(["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"], function (result) {
     let apply_all_bool = result.APPLY_ALL;
-    let apply_all_switch =
-    ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
+    let apply_all_switch = ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
         <div>
           <label class="switch">
-            `
-            +
-              buildToggle('apply-all-switch', !apply_all_bool)
-            +
+            ` + buildToggle('apply-all-switch', !apply_all_bool) +
             `
             <span></span>
           </label>
@@ -435,7 +468,7 @@ function createDefaultSettingInfo(){
         </div>
       </div>
       <br>
-    `
+            `
     let defaultSettingInfo;
     if (result.UI_SCHEME==1) {
       if (apply_all_bool) {
@@ -583,6 +616,30 @@ function createDefaultSettingInfo(){
       You can change the privacy preference made for
       an individual domain by 
       toggling the domain's switch in the domain list below. 
+      `
+    }
+    else if (result.UI_SCHEME == 6){
+      defaultSettingInfo = 
+      `
+      <div class="uk-container main">
+        <div class="uk-child-width-1-2@m uk-grid-match uk-text-center" uk-grid>
+          <div class="choice">
+            <div id='sending' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+              <a class="uk-position-cover second" href="#" id="sending" checked></a>
+              <span class="uk-text-middle">Send Signal</span>
+            </div>
+          </div>
+          <div class="choice">
+            <div id="not-sending" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
+              <a class="uk-position-cover third" href="#" id="not-sending" checked></a>
+              <span class="uk-text-middle">Do Not Send Signal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
       `
     }
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
@@ -867,21 +924,33 @@ async function updatePrefScheme2() {
 }
 
 // Renders the `domain list` view in the options page
-export async function domainlistView(scaffoldTemplate) {
-    const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
-    let content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view')
-    document.getElementById('content').innerHTML = body.innerHTML
-    document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
-    createDefaultSettingInfo();
-    createDomainlistManagerButtons();
+export async function domainlistView(scaffoldTemplate, buildList) {
+  let body; 
+  let content;
+
+  if (buildList){
+    body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
+    content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
+  } else {
+    body = renderParse(scaffoldTemplate, nonDomainListHeadings, 'scaffold-component'); 
+    content = await fetchParse('./views/domainlist-view/domainlist-view-plain.html', 'domainlist-view-plain')
+  }
+    
+  document.getElementById('content').innerHTML = body.innerHTML
+  document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
+
+  createDefaultSettingInfo();
+  if (buildList){
+    createDomainlistManagerButtons(); 
     createList();
-    addEventListeners();
-    chrome.storage.local.get(["LEARNING"], function(result){
-      if (result.LEARNING == "Just Finished"){
-        let modal = UIkit.modal("#learning-finish-modal");
-        modal.show();
-        document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
-        chrome.storage.local.set({"LEARNING": "Completed"});
-      }
-    })   
+  } 
+  addEventListeners();
+  chrome.storage.local.get(["LEARNING"], function(result){
+    if (result.LEARNING == "Just Finished"){
+      let modal = UIkit.modal("#learning-finish-modal");
+      modal.show();
+      document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
+      chrome.storage.local.set({"LEARNING": "Completed"});
+    }
+  })   
 }

@@ -35,38 +35,40 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 12;
-  if (userScheme == 1 ||userScheme == 0 || userScheme == 12) openPage("registration.html");
-  else if (userScheme == 2) openPage("questionnaire.html");
-  else if (userScheme == 3){
-    // parse the checklist needed for updating the sendSignals based on user's choice
-    fetch("json/services.json")
-      .then((response) => response.text())
-      .then((result) => {
-        networks = (JSON.parse(result))["categories"]
-        for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
-          for (let n of networks[cat]){
-            for (let c of Object.values(n)){
-              for (let list of Object.values(c)){
-                npsList = npsList.concat(list);
-              }
-            }
-          }
-        }
-          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-            for (let n of networks[category]){
+  let userScheme = 1;
+  // set the users scheme before opening the sign up page
+  chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
+    if (userScheme == 1 || userScheme == 0 || userScheme == 12) openPage("registration.html");
+    else if (userScheme == 2) openPage("questionnaire.html");
+    else if (userScheme == 3){
+      // parse the checklist needed for updating the sendSignals based on user's choice
+      fetch("json/services.json")
+        .then((response) => response.text())
+        .then((result) => {
+          networks = (JSON.parse(result))["categories"]
+          for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
+            for (let n of networks[cat]){
               for (let c of Object.values(n)){
                 for (let list of Object.values(c)){
-                  checkList = checkList.concat(list);
+                  npsList = npsList.concat(list);
                 }
               }
             }
           }
-          chrome.storage.local.set({CHECKLIST: checkList});
-          chrome.storage.local.set({NPSLIST: npsList});
+            for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+              for (let n of networks[category]){
+                for (let c of Object.values(n)){
+                  for (let list of Object.values(c)){
+                    checkList = checkList.concat(list);
+                  }
+                }
+              }
+            }
+            chrome.storage.local.set({CHECKLIST: checkList});
+            chrome.storage.local.set({NPSLIST: npsList});
         })
         .then(openPage("profile.html"));
-    } else {
+    } else if (userScheme == 4) {
       fetch("json/services.json")
         .then((response) => response.text())
         .then((result) => {
@@ -92,7 +94,10 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
         .then(openPage("registration.html"))
-    } 
+    } else {
+      openPage("oneQuestion.html");
+    }
+  })
 });
 
 // Sets cache value to locally stored values after chrome booting up
@@ -105,8 +110,8 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "openOptions") {
-    chrome.runtime.openOptionsPage();
+  if (request === "openOptions") { 
+    chrome.runtime.openOptionsPage(() => {}) 
   }
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
@@ -118,7 +123,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
     });
   }
-  if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   // updates Setting Interaction History from contentScript.js and domainlist-view.js
