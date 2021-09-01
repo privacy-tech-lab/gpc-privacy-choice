@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 12;
+  let userScheme = 6;
   // set the users scheme before opening the sign up page
   chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     if (userScheme == 1 || userScheme == 0 || userScheme == 12) openPage("registration.html");
@@ -68,7 +68,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             chrome.storage.local.set({NPSLIST: npsList});
         })
         .then(openPage("profile.html"));
-    } else {
+    } else if (userScheme == 4) {
       fetch("json/services.json")
         .then((response) => response.text())
         .then((result) => {
@@ -94,7 +94,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
         .then(openPage("registration.html"))
-    } 
+    } else {
+      openPage("oneQuestion.html");
+    }
   })
 });
 
@@ -108,8 +110,13 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // TODO: what is this for?
   if (request === "openOptions") {
-    chrome.runtime.openOptionsPage();
+    chrome.storage.local.get(["UI_SCHEME"], function(result){
+      if (result.UI_SCHEME != 6){
+        chrome.runtime.openOptionsPage(() => {});
+      }
+    })
   }
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
@@ -121,7 +128,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
     });
   }
-  if (request.greeting == "OPEN OPTIONS") chrome.runtime.openOptionsPage(() => {});
+  if (request.greeting == "OPEN OPTIONS") {
+    chrome.storage.local.get(["UI_SCHEME"], function(result){
+      if (result.UI_SCHEME != 6){
+        chrome.runtime.openOptionsPage(() => {});
+      }
+    })
+  } 
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   // updates Setting Interaction History from contentScript.js and domainlist-view.js

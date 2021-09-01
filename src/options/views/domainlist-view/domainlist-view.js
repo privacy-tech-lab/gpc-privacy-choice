@@ -5,10 +5,8 @@
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
-const headings = {
-    title: 'Settings',
-    subtitle: "Toggle which domains should receive Do Not Sell signals"
-}
+const domainListHeadings = {title: 'Privacy Settings', subtitle: "Change domains you want to send Do Not Sell signals"}
+const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Do Not Sell signal send status"}
 
 // "Do not allow tracking for all" button is clicked
 function addToggleAllOnEventListener() {
@@ -585,6 +583,30 @@ function createDefaultSettingInfo(){
       toggling the domain's switch in the domain list below. 
       `
     }
+    else if (result.UI_SCHEME == 6){
+      defaultSettingInfo = 
+      `
+      <div class="uk-container main">
+        <div class="uk-child-width-1-2@m uk-grid-match uk-text-center" uk-grid>
+          <div class="choice">
+            <div id='sending' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+              <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" checked></a>
+              <span class="uk-text-middle">Send Signal</span>
+            </div>
+          </div>
+          <div class="choice">
+            <div id="not-sending" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
+              <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" checked></a>
+              <span class="uk-text-middle">Do Not Send Signal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      `
+    }
     document.getElementById('current-apply-all-setting').innerHTML = defaultSettingInfo;
     cardInteractionSettings(result.UI_SCHEME, result.USER_CHOICES);
   })
@@ -867,21 +889,33 @@ async function updatePrefScheme2() {
 }
 
 // Renders the `domain list` view in the options page
-export async function domainlistView(scaffoldTemplate) {
-    const body = renderParse(scaffoldTemplate, headings, 'scaffold-component')
-    let content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view')
-    document.getElementById('content').innerHTML = body.innerHTML
-    document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
-    createDefaultSettingInfo();
-    createDomainlistManagerButtons();
+export async function domainlistView(scaffoldTemplate, buildList) {
+  let body; 
+  let content;
+  if (buildList){
+    body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
+    content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
+  } else {
+    body = renderParse(scaffoldTemplate, nonDomainListHeadings, 'scaffold-component'); 
+    content = await fetchParse('./views/domainlist-view/domainlist-view-plain.html', 'domainlist-view-plain')
+  }
+    
+  document.getElementById('content').innerHTML = body.innerHTML
+  document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
+
+  createDefaultSettingInfo();
+  if (buildList){
+    createDomainlistManagerButtons(); 
     createList();
     addEventListeners();
-    chrome.storage.local.get(["LEARNING"], function(result){
-      if (result.LEARNING == "Just Finished"){
-        let modal = UIkit.modal("#learning-finish-modal");
-        modal.show();
-        document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
-        chrome.storage.local.set({"LEARNING": "Completed"});
-      }
-    })   
+  }
+
+  chrome.storage.local.get(["LEARNING"], function(result){
+    if (result.LEARNING == "Just Finished"){
+      let modal = UIkit.modal("#learning-finish-modal");
+      modal.show();
+      document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
+      chrome.storage.local.set({"LEARNING": "Completed"});
+    }
+  })   
 }
