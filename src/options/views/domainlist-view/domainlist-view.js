@@ -441,7 +441,6 @@ function cardInteractionSettings(scheme, userChoice) {
       }
       else document.getElementById('others-card').classList.remove("uk-card-primary");
     } else if (scheme==6){
-      console.log(userChoice);
       if(userChoice=='Yes, Send Signal'){
         document.getElementById('sending').classList.add('uk-card-primary')
       } else document.getElementById('not-sending').classList.remove("uk-card-primary");
@@ -928,7 +927,7 @@ async function updatePrefScheme2() {
 export async function domainlistView(scaffoldTemplate, buildList) {
   let body; 
   let content;
-  
+
   if (buildList){
     body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
