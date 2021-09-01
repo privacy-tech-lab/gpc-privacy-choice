@@ -5,8 +5,8 @@
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
-const domainListHeadings = {title: 'Privacy Settings', subtitle: "Change domains you want to send Do Not Sell signals"}
-const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Do Not Sell signal send status"}
+const domainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Profile / Change Do Not Sell Signal Domains"}
+const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Status"}
 
 // "Do not allow tracking for all" button is clicked
 function addToggleAllOnEventListener() {
@@ -928,6 +928,7 @@ async function updatePrefScheme2() {
 export async function domainlistView(scaffoldTemplate, buildList) {
   let body; 
   let content;
+  
   if (buildList){
     body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
