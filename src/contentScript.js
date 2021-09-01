@@ -376,7 +376,7 @@ function showBanner(applyAllOption, muteOption) {
                         text-decoration: none;
                         color: rgb(51, 153, 255);"
                     href=""
-                    >Review or modify the choices I have made
+                    >Review or modify the choices you have made
                 </a>
             </div>
         </div> 
