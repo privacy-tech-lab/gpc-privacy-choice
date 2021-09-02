@@ -35,9 +35,10 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 1;
+  let userScheme = 6;
   // set the users scheme before opening the sign up page
   chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
+    // Schemes 0, 1 or 2
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) openPage("registration.html");
     else if (userScheme == 3){
       // parse the checklist needed for updating the sendSignals based on user's choice
@@ -95,6 +96,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
         .then(openPage("registration.html"))
+      // Scheme 6
     } else {
       openPage("oneQuestion.html");
     }
@@ -189,7 +191,7 @@ async function updateSendSignal(){
   })
 }
 
-// SCHEME 1 
+// SCHEME 0/1/2 : Banner
 function updateSendSignalScheme1(){
   if(domainlistEnabledCache){
     if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
