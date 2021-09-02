@@ -349,7 +349,7 @@ function addEventListeners() {
         addPrivacyProfileEventListener(event);
         addToggleListeners();
       }
-      else if(result.UI_SCHEME==2){
+      else if(result.UI_SCHEME==4){
         addCategoriesEventListener(event);
         addToggleListeners();
       } 
@@ -511,7 +511,7 @@ function createDefaultSettingInfo(){
         `
       }
     } 
-    else if (result.UI_SCHEME==2) {
+    else if (result.UI_SCHEME==4) {
       defaultSettingInfo =
       `
       <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
@@ -595,7 +595,7 @@ function createDefaultSettingInfo(){
       <hr>
       `
     } 
-    else if (result.UI_SCHEME==4){
+    else if (result.UI_SCHEME==5){
       defaultSettingInfo = 
       `
       <div class="uk-container main">
@@ -698,7 +698,7 @@ function createDomainlistManagerButtons(){
   `
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
-    if(result.UI_SCHEME==2 || result.UI_SCHEME==3)
+    if(result.UI_SCHEME==4 || result.UI_SCHEME==3)
       document.getElementById('domainlist-manager-btns').classList.add("hide")
     if (result.UI_SCHEME==0){
       document.getElementById('toggle_all_on').classList.add("hide")
@@ -777,7 +777,7 @@ export function createList() {
     document.getElementById('domainlist-main').innerHTML = items;
 
     for (let domain of Object.values(Object.keys(result.DOMAINS))){
-      if(result.UI_SCHEME==2 || result.UI_SCHEME==3){
+      if(result.UI_SCHEME==4 || result.UI_SCHEME==3){
         document.getElementById(`delete ${domain}`).classList.add("hide")
       }
     }

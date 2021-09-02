@@ -38,8 +38,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   let userScheme = 1;
   // set the users scheme before opening the sign up page
   chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
-    if (userScheme == 1 || userScheme == 0 || userScheme == 12) openPage("registration.html");
-    else if (userScheme == 2) openPage("questionnaire.html");
+    if (userScheme == 0 || userScheme == 1 || userScheme == 2) openPage("registration.html");
     else if (userScheme == 3){
       // parse the checklist needed for updating the sendSignals based on user's choice
       fetch("json/services.json")
@@ -68,7 +67,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
             chrome.storage.local.set({NPSLIST: npsList});
         })
         .then(openPage("profile.html"));
-    } else if (userScheme == 4) {
+      }
+      else if (userScheme == 4) openPage("questionnaire.html");
+      else if (userScheme == 5) {
       fetch("json/services.json")
         .then((response) => response.text())
         .then((result) => {
@@ -181,10 +182,10 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 async function updateSendSignal(){
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 1 || userScheme == 0 || userScheme==12) updateSendSignalScheme1();
-    else if (userScheme == 2) updateSendSignalScheme2();
+    if (userScheme == 0 || userScheme == 1 || userScheme==2) updateSendSignalScheme1();
     else if (userScheme == 3) updateSendSignalScheme3();
-    else updateSendSignalScheme4();
+    else if (userScheme == 4) updateSendSignalScheme4();
+    else updateSendSignalScheme5();
   })
 }
 
@@ -199,8 +200,8 @@ function updateSendSignalScheme1(){
   } else sendSignal = enabledCache
 }
 
-// SCHEME 2
-async function updateSendSignalScheme2(){
+// SCHEME 4: Questionnaire
+async function updateSendSignalScheme4(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
     await chrome.storage.local.get(["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function(result){
@@ -215,7 +216,7 @@ async function updateSendSignalScheme2(){
   // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
-// SCHEME 3:
+// SCHEME 3: Privacy Profile
 async function updateSendSignalScheme3(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
@@ -232,8 +233,8 @@ async function updateSendSignalScheme3(){
   // console.log("updated signal for " + currentDomain + " is " + sendSignal);
 }
 
-// SCHEME 4:
-async function updateSendSignalScheme4(){
+// SCHEME 5: Machine Learning
+async function updateSendSignalScheme5(){
   if(domainlistEnabledCache){
     if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
     else{
