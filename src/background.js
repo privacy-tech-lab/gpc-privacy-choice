@@ -35,16 +35,17 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 6;
+  let userScheme = 4;
   // set the users scheme before opening the sign up page
   chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     // Schemes 0, 1 or 2
-    if (userScheme == 0 || userScheme == 1 || userScheme == 2) openPage("registration.html");
-    else if (userScheme == 3){
+    if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
+      openPage("registration.html");
+    } else if (userScheme == 3){
       // parse the checklist needed for updating the sendSignals based on user's choice
       fetch("json/services.json")
-        .then((response) => response.text())
-        .then((result) => {
+      .then((response) => response.text())
+      .then((result) => {
           networks = (JSON.parse(result))["categories"]
           for(let cat of ["Cryptomining", "FingerprintingInvasive", "FingerprintingGeneral"]) {
             for (let n of networks[cat]){
@@ -65,12 +66,11 @@ chrome.runtime.onInstalled.addListener(async function (object) {
               }
             }
             chrome.storage.local.set({CHECKLIST: checkList});
-            chrome.storage.local.set({NPSLIST: npsList});
-        })
-        .then(openPage("profile.html"));
-      }
-      else if (userScheme == 4) openPage("questionnaire.html");
-      else if (userScheme == 5) {
+            chrome.storage.local.set({NPSLIST: npsList});})
+      .then(openPage("profile.html"));
+    } else if (userScheme == 4) {
+      openPage("questionnaire.html");
+    } else if (userScheme == 5) {
       fetch("json/services.json")
         .then((response) => response.text())
         .then((result) => {
