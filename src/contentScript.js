@@ -438,7 +438,7 @@ function addToDomainListScheme1(){
 }
 
 // SCHEME 2: add new domains to the domainlist in local storage based on the user's questionnaire response
-function addToDomainListScheme2(){
+function addToDomainListScheme4(){
     chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], function (result){
         let currentDomain = getDomain(window.location.href);
         let domains = result.DOMAINS;
@@ -506,7 +506,7 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
         }
     }
     let currentDomain = getDomain(window.location.href);
-    if (result.UI_SCHEME == 12){
+    if (result.UI_SCHEME == 2){
         if (!result.APPLY_ALL && (domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(true, true);
         else addToDomainListScheme1();
     } else if (result.UI_SCHEME == 1){
@@ -515,7 +515,7 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
     } else if (result.UI_SCHEME == 0){
         if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false, true);
         else addToDomainListScheme1();
-    } else if (result.UI_SCHEME == 4){
+    } else if (result.UI_SCHEME == 5){
         let random = Math.floor(Math.random() * 3);
         if (random == 1 && !(currentDomain in domains)) {showBanner(false);} 
         else {
@@ -532,7 +532,7 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
             })
         }
     } else {
-        if (result.UI_SCHEME == 2) addToDomainListScheme2();
+        if (result.UI_SCHEME == 4) addToDomainListScheme4();
         else addToDomainListScheme3();
     }
 });
