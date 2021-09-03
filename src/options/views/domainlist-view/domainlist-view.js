@@ -138,7 +138,7 @@ function handleToggleAllOff() {
   }
 }
 
-// "Apply all" switch is hit
+// "Apply all" switch is hit //todo: needs to be renamed
 function addApplyAllSwitchEventListener() {
   chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
     if(result.APPLY_ALL){
@@ -159,7 +159,7 @@ function addApplyAllSwitchEventListener() {
   })
 }
 
-// User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
+// User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch //todo: needs to be renamed
 function addFutureSettingPromptEventListener(event) {
   // User hits "Allow tracking for all"
   if (event.target.id=='allow-future-btn') {
@@ -180,7 +180,7 @@ function addFutureSettingPromptEventListener(event) {
   // Otherwise, they hit cancel and nothing changes
 }
 
-// Entire domain list is deleted
+// Entire domain list is deleted //todo: needs to be renamed
 function addDeleteDomainListEventListener() {
   let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
   if (confirm(delete_prompt)) {
