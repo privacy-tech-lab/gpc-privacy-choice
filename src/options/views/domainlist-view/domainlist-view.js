@@ -342,7 +342,7 @@ function addEventListeners() {
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
     if (result.UI_SCHEME != 6) addToggleListeners();
     if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
-    if(result.UI_SCHEME ==4) addCategoriesEventListener();
+    if (result.UI_SCHEME == 4) addCategoriesEventListener();
     if (result.UI_SCHEME == 6) addGPCEventListener();
   })
 }
@@ -402,7 +402,7 @@ function cardInteractionSettings(scheme, userChoice) {
         document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
       }
       else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
-    } else if(scheme==2){
+    } else if(scheme == 4){
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
       }
