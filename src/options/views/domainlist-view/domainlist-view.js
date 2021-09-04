@@ -138,8 +138,8 @@ function handleToggleAllOff() {
   }
 }
 
-// "Apply all" switch is hit //todo: needs to be renamed
-function addApplyAllSwitchEventListener() {
+// "Apply all" switch is hit
+function handleApplyAllSwitch() {
   chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
     if(result.APPLY_ALL){
       chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Universal Setting", prevSetting: result.UV_SETTING , newSetting: "Off", universalSetting: "Off", location: "Options page", subcollection: "Domain"})
@@ -159,8 +159,8 @@ function addApplyAllSwitchEventListener() {
   })
 }
 
-// User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch //todo: needs to be renamed
-function addFutureSettingPromptEventListener(event) {
+// User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
+function handleFutureSettingPromptEvent(event) {
   // User hits "Allow tracking for all"
   if (event.target.id=='allow-future-btn') {
     chrome.storage.local.set({APPLY_ALL: true});
@@ -180,8 +180,8 @@ function addFutureSettingPromptEventListener(event) {
   // Otherwise, they hit cancel and nothing changes
 }
 
-// Entire domain list is deleted //todo: needs to be renamed
-function addDeleteDomainListEventListener() {
+// Entire domain list is deleted
+function handleDeleteDomainListEvent() {
   let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`
   if (confirm(delete_prompt)) {
     chrome.storage.local.get(["UV_SETTING"], function (result) {
@@ -195,7 +195,7 @@ function addDeleteDomainListEventListener() {
   addToggleListeners();
 }
 
-// User changes GPC signal send status on scheme no domainlist
+// User changes GPC signal send status on scheme 6
 function addGPCEventListener() {
   document.addEventListener('click', event => {
     if(event.target.id == 'sending') {
@@ -266,7 +266,7 @@ function addCategoriesEventListener() {
         })   
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
         createDefaultSettingInfo()
-        updatePrefScheme2()
+        updatePrefScheme4()
       }
       else if(event.target.id == 'analytics') {
         userChoices["Analytics"]=!userChoices["Analytics"]
@@ -276,7 +276,7 @@ function addCategoriesEventListener() {
         }) 
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
         createDefaultSettingInfo()
-        updatePrefScheme2()
+        updatePrefScheme4()
       }
       else if(event.target.id == 'fingerprinting') {
         userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
@@ -286,7 +286,7 @@ function addCategoriesEventListener() {
         }) 
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES}); 
         createDefaultSettingInfo()
-        updatePrefScheme2()         
+        updatePrefScheme4()         
       }
       else if(event.target.id == 'social') {
         userChoices["Content & Social"]=!userChoices["Content & Social"]
@@ -296,7 +296,7 @@ function addCategoriesEventListener() {
         })
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});   
         createDefaultSettingInfo()
-        updatePrefScheme2()       
+        updatePrefScheme4()       
       }
       else if (event.target.id == 'cryptomining') {
         userChoices["Cryptomining"]=!userChoices["Cryptomining"]
@@ -306,7 +306,7 @@ function addCategoriesEventListener() {
         })
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});  
         createDefaultSettingInfo()
-        updatePrefScheme2()        
+        updatePrefScheme4()        
       }
       else if (event.target.id == 'others') {
         userChoices["Others"]=!userChoices["Others"]
@@ -316,7 +316,7 @@ function addCategoriesEventListener() {
         })
         chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});  
         createDefaultSettingInfo()
-        updatePrefScheme2()
+        updatePrefScheme4()
       }        
     })
   })
@@ -324,20 +324,17 @@ function addCategoriesEventListener() {
 
 // Creates the event listeners for the `domainlist` page buttons and options
 function addEventListeners() {
-  
   // Add the serach functionality
   if (document.getElementById('searchbar') != null) document.getElementById('searchbar').addEventListener('keyup', filterList);
-  
   // Add click event handler
   document.addEventListener('click', event => {
     if (event.target.id == 'toggle_all_off') { handleToggleAllOff();
     } else if (event.target.id == 'toggle_all_on') { handleToggleAllOn();
-    } else if (event.target.id == 'apply-all-switch') { addApplyAllSwitchEventListener();
-    } else if (event.target.id == 'allow-future-btn' || event.target.id=='dont-allow-future-btn') {addFutureSettingPromptEventListener(event);
-    } else if (event.target.id == 'delete_all_domainlist') { addDeleteDomainListEventListener();
+    } else if (event.target.id == 'apply-all-switch') { handleApplyAllSwitch();
+    } else if (event.target.id == 'allow-future-btn' || event.target.id=='dont-allow-future-btn') {handleFutureSettingPromptEvent(event);
+    } else if (event.target.id == 'delete_all_domainlist') { handleDeleteDomainListEvent();
     }
   })
-
   // Add event listener based on the user's scheme
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
     if (result.UI_SCHEME != 6) addToggleListeners();
@@ -771,6 +768,7 @@ export function createList() {
   });
 }
 
+// Update the check list based on the user's choice in scheme 3
 function updatePrefScheme3() {
   chrome.storage.local.get(["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"], function (result){
     let domains = result.DOMAINS;
@@ -801,7 +799,8 @@ function updatePrefScheme3() {
   })
 }
 
-async function updatePrefScheme2() {
+// Update the check list based on the user's choice in scheme 4
+async function updatePrefScheme4() {
   chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], async function (result){
     let checkList = [];
     let checkNotList = [];
