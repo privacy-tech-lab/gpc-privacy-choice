@@ -187,7 +187,8 @@ async function updateSendSignal(){
     if (userScheme == 0 || userScheme == 1 || userScheme==2) updateSendSignalScheme1();
     else if (userScheme == 3) updateSendSignalScheme3();
     else if (userScheme == 4) updateSendSignalScheme4();
-    else updateSendSignalScheme5();
+    else if (userScheme == 5) updateSendSignalScheme5();
+    else updateSendSignalScheme6();
   })
 }
 
@@ -251,6 +252,14 @@ async function updateSendSignalScheme5(){
     if (sendSignalBanner + doNotSendSignalBanner == 5){
       chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: "Not Privacy-Sensitive"});
     }
+  })
+}
+
+// SCHEME 6: Plain YES/NO to Privacy
+async function updateSendSignalScheme6(){
+  await chrome.storage.local.get(["USER_CHOICES"], function (result){
+    if (result.USER_CHOICES == "Yes, Send Signal") sendSignal = true;
+    else sendSignal = false;
   })
 }
 
