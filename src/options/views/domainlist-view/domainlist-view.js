@@ -802,9 +802,7 @@ function updatePrefScheme3() {
 }
 
 async function updatePrefScheme2() {
-
   chrome.storage.local.get(["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"], async function (result){
-
     let checkList = [];
     let checkNotList = [];
     let userChoices=result.USER_CHOICES
