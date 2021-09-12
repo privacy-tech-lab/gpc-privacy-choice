@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({DOMAINS: {}});
   enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
+  let userScheme = 3;
   // set the users scheme before opening the sign up page
   chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     // Schemes 0, 1 or 2
@@ -118,9 +118,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   // add user's browsing history to the database
   if (request.greeting == "NEW PAGE"){
-    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
       if (result.USER_DOC_ID){
-        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id);
+        addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id, result.UI_SCHEME);
       } else {
         console.log("Unregistered user: not connected to the database");
       }

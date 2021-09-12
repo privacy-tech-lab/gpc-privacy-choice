@@ -53,7 +53,7 @@ export async function createUser(prolificID, schemeNumber){
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme){
     let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "Timestamp": firebase.firestore.Timestamp.fromDate(date),
@@ -61,7 +61,7 @@ export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, curre
         "Referer": referrer,
         "Current Site":  site,
         "GPC Current Site Status": GPC,
-        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
+        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
     })
 }
 
@@ -197,8 +197,11 @@ export function addThirdPartyRequests(details){
 }
 
 // Get GPC Global Status
-function getGPCGlobalStatus(applyALLBool, enabledBool){
-    if(applyALLBool) return enabledBool;
+function getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme){
+    if (uiScheme === 3 || uiScheme === 4 || uiScheme === 5) {
+        return "N/A"
+    }
+    else if (applyALLBool) return enabledBool;
     else return "unset"
 }
 
