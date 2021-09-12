@@ -15,6 +15,7 @@
     "geolocation"
   ],
   "browser_action": {
+    "default_icon": "img/gpc-choice-icon.png",
     "default_title": "GPC Privacy Choice"
   },
   "content_scripts": [
