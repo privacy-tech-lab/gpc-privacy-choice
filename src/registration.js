@@ -1,7 +1,7 @@
 import {createUser} from "./firebase.js"
+import {PASSWORD} from "./config.js"
 
 let userProfile = null;
-const PASSWORD = 12345;
 
 // Form validation when the user submits their prolific id and password
 document.querySelector('.submit-choice').onclick = () => {
