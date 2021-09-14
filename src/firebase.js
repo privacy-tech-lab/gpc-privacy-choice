@@ -178,12 +178,12 @@ export function addThirdPartyRequests(details){
                             docArray.forEach((doc)=>{
                                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                                 doc(doc.id).collection("Third Party Requests").add({
-                                    "ad network": initiator_host,
-                                    "type": details.type,
-                                    "url": details.url,
-                                    "requestHeaders": details.requestHeaders,
-                                    "initiator": details.initiator,
-                                    "frameID": details.frameId,
+                                    "Ad network": initiator_host,
+                                    "Type": details.type,
+                                    "URL": details.url,
+                                    "RequestHeaders": details.requestHeaders,
+                                    "Initiator": details.initiator,
+                                    "FrameID": details.frameId,
                                     "Timestamp": firebase.firestore.Timestamp.fromDate(date)
                                 })
                             })
@@ -336,10 +336,10 @@ function addAd(adEvent){
                 console.log(doc.id)
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                 doc(doc.id).collection("Ad Interactions").add({
-                    adTabId: adEvent.targetTabId,
+                    AdTabId: adEvent.targetTabId,
                     Timestamp: adEvent.timestamp,
-                    adSource: adEvent.adSource,
-                    adFrameId: adEvent.adFrameId,
+                    AdSource: adEvent.adSource,
+                    AdFrameId: adEvent.adFrameId,
                     "Initial Navigation to": adEvent.redirectionTo,
                     "Evidence of Ad Interaction":adEvent.reasoning
                 })

@@ -1,5 +1,5 @@
 {
-  "name": "OptMeowt-R",
+  "name": "GPC Privacy Choice",
   "version": "1.1.4",
   "description": "OptMeowt allows Web users to make use of their rights to opt out from the sale and sharing of personal data",
   "permissions": [
@@ -15,7 +15,8 @@
     "geolocation"
   ],
   "browser_action": {
-    "default_title": "OptMeowt-R"
+    "default_icon": "img/gpc-choice-icon.png",
+    "default_title": "GPC Privacy Choice"
   },
   "content_scripts": [
     {
@@ -41,5 +42,8 @@
     "adDomains.txt",
     "json/*.json"
   ],
+  "icons" : {
+    "32": "./img/gpc-choice-icon.png"
+  }, 
   "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://www.googletagmanager.com https://gpc-privacy-choice-cookie-test.herokuapp.com/index.php https://gpc-privacy-choice-cookie-test.herokuapp.com/step2.php; object-src 'self'"
 }
