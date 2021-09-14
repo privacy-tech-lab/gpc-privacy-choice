@@ -1,12 +1,4 @@
-// Firebase configuration, connects to Firebase project
-const firebaseConfig = {
-    apiKey: "AIzaSyAhhtuwr4YOK_F0ZkULkKkFpyMC_5ZIaT4",
-    authDomain: "gpc-privacy-choice.firebaseapp.com",
-    projectId: "gpc-privacy-choice",
-    storageBucket: "gpc-privacy-choice.appspot.com",
-    messagingSenderId: "784749626516",
-    appId: "1:784749626516:web:2c5a847289caab81d36081"
-};
+import {firebaseConfig} from "./config.js";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
