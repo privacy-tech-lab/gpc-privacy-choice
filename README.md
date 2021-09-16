@@ -68,54 +68,51 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 
 The GPC Privacy Choice extension is made up of 7 different schemes, each having different defining features. Upon downloading, a user could end up with any one of the different schemes. The purpose behind having so many variations is to provide researchers with valuable information on how users make privacy choices when given varying levels of usability. Listed below are the main components of each scheme.
 
-### Banner Schemes
-
-#### Scheme 0
+### Scheme 0
 
 Users are presented the **GPC Privacy Choice Banner** on each new site they visit with no **apply-all** option. There is instead a **snooze** button that, upon being selected, will prevent the banner from popping up on new sites for 6 hours. The domain list is present on the Options Page.
 
-[Picture]
+<img width="358" alt="Scheme 0" src="https://user-images.githubusercontent.com/54873610/133680181-dd35d89e-03f8-45b6-a796-fe22eae12228.png">
 
-#### Scheme 1
+### Scheme 1
 
 This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
 
-[Picture]
+<img width="344" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/133680222-db0b6971-a444-4597-ba35-d24af9d4a98c.png">
 
-#### Scheme 2
+### Scheme 2
 
 This is somewhat a combination of **Scheme 0** and **Scheme 1**. The **GPC Privacy Choice Banner** contains both the **apply-all** option as well as the **snooze** button. All **universal toggles**, as well as the domain list may be accessed from the Options Page.
 
-[Picture]
+<img width="333" alt="Scheme 2" src="https://user-images.githubusercontent.com/54873610/133680243-d3055654-e5ac-4347-aec8-bda18330103d.png">
 
-### Banner-less Schemes
-
-#### Scheme 3
+### Scheme 3
 
 This is our **Privacy Profile** scheme. Upon running the extension, users will be prompted to choose the privacy profile that they find most similar to themselves. Their privacy choices will then be personalized based on the selected profile. They may further personalize their privacy choices by accessing the domain list on the Options Page.
 
-[Picture]
+<img width="1281" alt="Scheme 3" src="https://user-images.githubusercontent.com/54873610/133680268-df78662c-e47f-499f-a8be-9dfe03ccbba2.png">
 
-#### Scheme 4
+### Scheme 4
 
 This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
 
-[Picture]
+<img width="1261" alt="Scheme 4" src="https://user-images.githubusercontent.com/54873610/133680285-6a4d43d3-002b-4cf7-bc66-d2b13702e7c0.png">
 
-#### Scheme 5
+### Scheme 5
 
 A combination of **Scheme 1** and **Scheme 3**, this is our **Machine-Learning** scheme. The user is randomly presented 10 banners in total on websites they visit. Their choices are recorded by the extension, which it then uses to make an educated selection on which **Privacy Profile** would suit them most. No banners are shown beyond the initial 10, and after the learning period is over users may change their privacy profile by accessing the Options Page.
 
-[Picture]
+<img width="658" alt="Scheme 5" src="https://user-images.githubusercontent.com/54873610/133680311-1d930b85-b1cd-4bdb-ab5b-57639006e084.png">
 
-#### Scheme 6
+### Scheme 6
 
 This scheme is the most simple of all. Users are initially prompted as to whether they'd like to send **GPC Signals** to all websites they visit or not. They may change this preference from the Options Page, but no domain list is present, so they cannot personalize their choices.
 
-[Picture]
+<img width="1284" alt="Scheme 6" src="https://user-images.githubusercontent.com/54873610/133680335-a27aba7f-dea8-4625-91e3-57846fd54d67.png">
 
 ## Data Collection
 
+TBD
 
 <p align="center">
   <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
