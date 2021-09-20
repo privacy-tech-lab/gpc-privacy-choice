@@ -1,3 +1,9 @@
+/*
+GPC Privacy Choice is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
+
 window._3rd_party_test_step1_loaded = function(){
     // At this point, a third-party domain has now attempted to set a cookie (if all went to plan!)
     var step2Url = 'https://gpc-privacy-choice-cookie-test.herokuapp.com/step2.php',

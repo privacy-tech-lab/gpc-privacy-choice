@@ -1,3 +1,9 @@
+/*
+GPC Privacy Choice is licensed under the MIT License
+Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
+privacy-tech-lab, https://privacytechlab.org/
+*/
+
 // Sets DOMAINS[domainKey] to true
 export async function turnOnGPC(domainKey) {
   console.log("turning gpc on for: " + domainKey);
