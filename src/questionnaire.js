@@ -1,4 +1,5 @@
 import {createUser} from "./firebase.js"
+import {PASSWORD} from "./config.js"
 
 // Datastructure used to hold user choices of ad networks
 let userChoices = {
@@ -9,7 +10,6 @@ let userChoices = {
     "Cryptomining": false,
     "Others": false
 };
-const PASSWORD = 12345;
 
 // Add event listeners for toggling user choice
 document.querySelectorAll('.choice').forEach(item => {
