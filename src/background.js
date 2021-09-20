@@ -27,18 +27,10 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  chrome.storage.local.set({MUTED: [false,undefined]});
-  chrome.storage.local.set({ENABLED: true});
-  chrome.storage.local.set({APPLY_ALL: false});
-  chrome.storage.local.set({UV_SETTING: "Off"});
-  chrome.storage.local.set({DOMAINLIST_ENABLED: true});
-  chrome.storage.local.set({DOMAINS: {}});
-  enable();
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 2;
-  // set the users scheme before opening the sign up page
-  chrome.storage.local.set({"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
-    // Schemes 0, 1 or 2
+  let userScheme = 5;
+  chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
+    enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
       openPage("registration.html");
     } else if (userScheme == 3){
@@ -56,17 +48,17 @@ chrome.runtime.onInstalled.addListener(async function (object) {
               }
             }
           }
-            for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
-              for (let n of networks[category]){
-                for (let c of Object.values(n)){
-                  for (let list of Object.values(c)){
-                    checkList = checkList.concat(list);
-                  }
+          for (let category of ["Advertising", "Analytics", "FingerprintingInvasive", "FingerprintingGeneral", "Cryptomining"]){
+            for (let n of networks[category]){
+              for (let c of Object.values(n)){
+                for (let list of Object.values(c)){
+                  checkList = checkList.concat(list);
                 }
               }
             }
-            chrome.storage.local.set({CHECKLIST: checkList});
-            chrome.storage.local.set({NPSLIST: npsList});})
+          }
+          chrome.storage.local.set({CHECKLIST: checkList});
+          chrome.storage.local.set({NPSLIST: npsList});})
       .then(openPage("profile.html"));
     } else if (userScheme == 4) {
       openPage("questionnaire.html");
@@ -96,7 +88,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
         .then(openPage("registration.html"))
-      // Scheme 6
     } else {
       openPage("oneQuestion.html");
     }
