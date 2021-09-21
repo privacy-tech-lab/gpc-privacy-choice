@@ -133,7 +133,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   if (request.greeting == "LEARNING COMPLETED"){
     chrome.storage.local.set({"LEARNING": "Just Finished"}, function(){
-      chrome.runtime.openOptionsPage();
+      let alreadyOpen = false;
+      let extensionID = chrome.runtime.id;
+      chrome.tabs.query({}, function(tabs) {
+        for (let i = 0, tab; tab = tabs[i]; i++) {
+            if (tab.url===("chrome-extension://"+ extensionID + "/options/options.html")) {
+              chrome.tabs.reload(tab.id, {}, function(){});
+              chrome.tabs.update(tab.id, {active: true});
+              alreadyOpen = true;
+            }
+        }
+      });
+      if (!alreadyOpen){
+        chrome.runtime.openOptionsPage();
+      }
     })
   }
 });

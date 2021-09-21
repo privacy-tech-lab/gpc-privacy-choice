@@ -919,22 +919,24 @@ export async function domainlistView(scaffoldTemplate, buildList) {
     body = renderParse(scaffoldTemplate, nonDomainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view-plain.html', 'domainlist-view-plain')
   }
-    
+  
   document.getElementById('content').innerHTML = body.innerHTML
   document.getElementById('scaffold-component-body').innerHTML = content.innerHTML
 
   createDefaultSettingInfo();
+
   if (buildList){
     createDomainlistManagerButtons(); 
     createList();
-  } 
+  }
   addEventListeners();
   chrome.storage.local.get(["LEARNING"], function(result){
     if (result.LEARNING == "Just Finished"){
-      let modal = UIkit.modal("#learning-finish-modal");
-      modal.show();
-      document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();} 
-      chrome.storage.local.set({"LEARNING": "Completed"});
+      chrome.storage.local.set({"LEARNING": "Completed"}, function(){
+        let modal = UIkit.modal("#learning-finish-modal");
+        modal.show();
+        document.getElementById("learning-finish-modal-button").onclick = function () {modal.hide();}   
+      });
     }
-  })   
+  })
 }
