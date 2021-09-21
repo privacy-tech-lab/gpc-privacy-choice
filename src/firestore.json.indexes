@@ -9,6 +9,10 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "CurrentSite",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "Timestamp",
           "order": "DESCENDING"
         }

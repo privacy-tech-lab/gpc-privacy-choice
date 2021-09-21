@@ -22,8 +22,6 @@ let domainsCache= {};
 let domainlistEnabledCache=true;
 let applyAllCache=false;
 
-// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
-chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
@@ -102,6 +100,7 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
   applyAllCache=result.APPLY_ALL;
 })
 
+<<<<<<< HEAD
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "openOptions") { 
@@ -112,10 +111,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
       if (result.USER_DOC_ID){
         addHistory(request.referrer, request.site, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, sender.tab.id, result.UI_SCHEME);
+=======
+// add user's browsing history to the database
+chrome.webNavigation.onCommitted.addListener(function(details){
+  if(details.frameId==0){
+    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+      if (result.USER_DOC_ID){
+        addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, details.timeStamp);
+>>>>>>> c424913 (update third party request data tracking #132)
       } else {
         console.log("Unregistered user: not connected to the database");
       }
     });
+  }
+})
+
+// Listener for runtime messages
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === "openOptions") { 
+    chrome.runtime.openOptionsPage(() => {}) 
   }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
