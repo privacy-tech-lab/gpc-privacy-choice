@@ -23,11 +23,6 @@
       "matches": ["<all_urls>"],
       "js": ["contentScript.js"],
       "run_at": "document_end"
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["browserHistory.js"],
-      "run_at": "document_start"
     }
   ],
   "options_ui": {

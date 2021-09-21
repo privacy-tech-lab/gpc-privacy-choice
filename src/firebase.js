@@ -53,13 +53,13 @@ export async function createUser(prolificID, schemeNumber){
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId){
+export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, time){
     let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+        "Timestamp": time,
         "TabID": tabId,
-        "Referer": referrer,
-        "Current Site":  site,
+        "Transition Type": referrer,
+        "CurrentSite":  site,
         "GPC Current Site Status": GPC,
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool)
     })
@@ -120,18 +120,38 @@ export function updateDomains(domainsList){
     })
 }
 
-// Put list of ad metwork domains into array
-let adDomains;
-const adDomainsFile= chrome.runtime.getURL("./adDomains.txt")
-let xmlreq = new XMLHttpRequest()
-xmlreq.open("GET", adDomainsFile, false) 
-xmlreq.send()
-adDomains = xmlreq.responseText.split("\n")
+// Put list of disconnect domains into array
 
+let disconnectList={};
+let disconnect;
+fetch("json/services.json")
+      .then((response) => response.text())
+      .then((result) => {
+        disconnect = JSON.parse(result)
+        console.log(disconnect)
+console.log(disconnect, "good")
+for(let c of Object.keys(disconnect['categories']))
+    for(let network of Object.values(disconnect['categories'][c])){
+        for(let domain of Object.values(network)){
+            let domains=Object.values(domain)[0]
+            for(let d of domains){
+                if(Object.keys(disconnectList).includes(d)) disconnectList[d][0].push(c) 
+                else disconnectList[d]=[[c], Object.keys(network)[0]]
+            }
+        }
+    }
+console.log(disconnectList)
+      })
 // Check if domain is in list of ad networks
-function isAdNetwork(domain){
-    return adDomains.includes(domain)
-}
+function isInDisconnect(domain){
+        if(Object.keys(disconnectList).includes(domain)){
+            console.log(true, disconnectList[domain])
+            return true;
+        }
+        else return false;
+            // if(i.includes(domain))
+            // console.log(Object.keys(c))
+    }
 
 // Auxiliary function for getDomain function
 function getHostName(url) {
@@ -157,34 +177,78 @@ function getDomain(url) {
     return domain;
 }
 
+// TO DO: Structure for holding third party requests while they are live
+let liveRequests={}
+
+// TO DO Class for objects holding information on third party requests
+class ThirdPartyRequest {
+    constructor(details) {
+      this.requestId=details.requestId;
+      this.timestamp= details.timeStamp;
+      liveRequests[this.requestId]=this
+    }
+    removeRequestEvent(){
+        console.log("deleting", liveRequests[this.requestId])
+        delete liveRequests[this.requestId]
+        delete this
+        console.log("deleted", liveRequests[this.requestId])
+    }
+  }
+
+// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
+
+chrome.webRequest.onBeforeRequest.addListener(function (details){
+    if(liveRequests[details.requestId]===undefined){
+        new ThirdPartyRequest(details);
+    } 
+    
+}, {urls: ["<all_urls>"]}
+);
+
+chrome.webRequest.onErrorOccurred.addListener((details)=>{
+    liveRequests[details.requestId].removeRequestEvent()
+}, {urls: ["<all_urls>"]}
+);
+chrome.webRequest.onCompleted.addListener((details)=>{
+    liveRequests[details.requestId].removeRequestEvent()
+}, {urls: ["<all_urls>"]}
+);
+
+
 // Add third party requests to browsing history document
 export function addThirdPartyRequests(details){
     chrome.tabs.get(details.tabId, (tab)=>{
-        let tabId=tab.id
+        console.log(liveRequests)
+        let tabId=details.tabId
+        let date = liveRequests[details.requestId].timestamp
+
         let url = tab.url;
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
-        let date = new Date()
         let request_url_object = new URL(details.url)
         let initiator_object = new URL(details.initiator)
         let url_host = getDomain(request_url_object.href)
         let initiator_host = getDomain(initiator_object.href)
-        if(isAdNetwork(initiator_host) && url_host!="firestore.googleapis.com"){
+        console.log(url_object.href)
+        if(isInDisconnect(initiator_host) && url_host!="firestore.googleapis.com" && initiator_host!=domain){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
                 if (result.USER_DOC_ID){
                     db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                    .where("TabID",'==', tabId).orderBy("Timestamp", "desc").limit(1)
+                    .where("TabID",'==', tabId).where("Timestamp","<=",date).orderBy("Timestamp", "desc").limit(1)
                     .get().then((docArray)=>{
                             docArray.forEach((doc)=>{
                                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                                 doc(doc.id).collection("Third Party Requests").add({
-                                    "Ad network": initiator_host,
+                                    "Domain": initiator_host,
+                                    "Network": disconnectList[initiator_host][1],
+                                    "NetworkCategory": disconnectList[initiator_host][0],
                                     "Type": details.type,
                                     "URL": details.url,
                                     "RequestHeaders": details.requestHeaders,
                                     "Initiator": details.initiator,
                                     "FrameID": details.frameId,
-                                    "Timestamp": firebase.firestore.Timestamp.fromDate(date)
+                                    "Timestamp": date,
                                 })
                             })
                     })
@@ -388,7 +452,7 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
         liveAdEvents[targetTabID].adSource=origin
         let initialLoad=getDomain(details.url)
         liveAdEvents[targetTabID].redirectionTo=initialLoad
-        if(adDomains.includes(origin) || adDomains.includes(initialLoad)){
+        if(isInDisconnect(origin) || isInDisconnect(initialLoad)){
             liveAdEvents[targetTabID].adBool=true;
             liveAdEvents[targetTabID].reasoning="navigation via ad network (highest confidence)"
         }
