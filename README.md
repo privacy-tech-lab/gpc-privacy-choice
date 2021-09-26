@@ -11,12 +11,14 @@
 </p>
 
 # GPC Privacy Choice
-  
- This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
+
+This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
+
+GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). **Kuba Alicki**, **Daniel Knopf**, **Abdallah Salia** contributed earlier.
 
 ## Installation of GPC Privacy Choice
-  
-  Follow the instructions below in order to download this browser extension.
+
+Follow the instructions below in order to download this browser extension.
 
 1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git` into your terminal.
 2. The GPC Privacy Choice Browser Extension should now be downloaded locally onto your device. Next, open a tab on Google Chrome.
@@ -24,7 +26,7 @@
 4. You should be brought to a page that contains all of the different extensions you have downloaded to Chrome. In the top left corner, click on the button that says `Load unpacked`.
 5. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be downloaded on your browser. Enjoy!
-  
+
 ## Files and Directories in this Repo
 
 - `src/`: Contains the main contents of the GPC Privacy Choice browser extension.
