@@ -50,6 +50,13 @@ document.querySelector('.submit-choice').onclick = (e) => {
 function submit(prolificID){
     chrome.storage.local.get(["UI_SCHEME", "UV_SETTING"], function(result){
         let schemeNumber = result.UI_SCHEME;
+        if (schemeNumber == 6) {
+            chrome.storage.local.set({APPLY_ALL: true});
+            if (userProfile == "Yes, Send Signal") {
+                chrome.storage.local.set({ENABLED: true});
+            }
+            else {chrome.storage.local.set({ENABLED: false});}
+        }
         chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: true}, async function(){
             document.querySelector(".main").style.display = "none";
             document.querySelector(".loading").style.display = "block";
