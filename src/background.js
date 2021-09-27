@@ -111,15 +111,17 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function(details){
-  if(details.frameId==0){
-    chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
-      if (result.USER_DOC_ID){
-        addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, details.timeStamp);
-      } else {
-        console.log("Unregistered user: not connected to the database");
-      }
-    });
-  }
+  chrome.tabs.get(details.tabId, (tab)=>{
+    if(details.frameId==0 && tab!=undefined){
+      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+        if (result.USER_DOC_ID){
+          addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, details.timeStamp);
+        } else {
+          console.log("Unregistered user: not connected to the database");
+        }
+      });
+    }
+  })
 })
 
 // Listener for runtime messages
