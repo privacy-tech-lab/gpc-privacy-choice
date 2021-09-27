@@ -45,17 +45,18 @@ export async function createUser(prolificID, schemeNumber){
 }
 
 // Add user entries into the Firebase
-export function addHistory(referrer, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time){
+export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time){
     let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "Timestamp": time,
         "TabID": tabId,
-        "Transition Type": referrer,
+        "Transition Type": transitionType,
         "CurrentSite":  site,
         "GPC Current Site Status": GPC,
         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
     })
 }
+
 
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
@@ -174,8 +175,9 @@ let liveRequests={}
 
 // TO DO Class for objects holding information on third party requests
 class ThirdPartyRequest {
-    constructor(details) {
+    constructor(details, url) {
       this.requestId=details.requestId;
+      this.url= url;
       this.timestamp= details.timeStamp;
       liveRequests[this.requestId]=this
     }
@@ -192,7 +194,10 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 chrome.webRequest.onBeforeRequest.addListener(function (details){
     if(liveRequests[details.requestId]===undefined){
-        new ThirdPartyRequest(details);
+        chrome.tabs.get(details.tabId, (tab)=>{
+        let url = tab.url;
+        new ThirdPartyRequest(details, url);
+        })
     } 
     
 }, {urls: ["<all_urls>"]}
@@ -214,8 +219,7 @@ export function addThirdPartyRequests(details){
         console.log(liveRequests)
         let tabId=details.tabId
         let date = liveRequests[details.requestId].timestamp
-
-        let url = tab.url;
+        let url = liveRequests[details.requestId].url;
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
         let request_url_object = new URL(details.url)
@@ -241,6 +245,7 @@ export function addThirdPartyRequests(details){
                                     "Initiator": details.initiator,
                                     "FrameID": details.frameId,
                                     "Timestamp": date,
+                                    "Site": url
                                 })
                             })
                     })
