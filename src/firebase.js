@@ -219,7 +219,7 @@ export function addThirdPartyRequests(details){
         console.log(liveRequests)
         let tabId=details.tabId
         let date = liveRequests[details.requestId].timestamp
-        let url = liveRequests[details.requestId].url;
+        let url = frames[tabId][details.frameId]
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
         let request_url_object = new URL(details.url)
@@ -231,7 +231,7 @@ export function addThirdPartyRequests(details){
             chrome.storage.local.get(["USER_DOC_ID"], function(result){
                 if (result.USER_DOC_ID){
                     db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                    .where("TabID",'==', tabId).where("Timestamp","<=",date).orderBy("Timestamp", "desc").limit(1)
+                    .where("TabID",'==', tabId).where("CurrentSite",'==', url).where("Timestamp","<=",date).orderBy("Timestamp", "desc").limit(1)
                     .get().then((docArray)=>{
                             docArray.forEach((doc)=>{
                                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
@@ -478,4 +478,27 @@ chrome.webNavigation.onCommitted.addListener((e)=>{
         if(liveAdEvents[e.tabId].adBool===true) addAd(liveAdEvents[e.tabId])
     }
     delete liveAdEvents[e.tabId]
+})
+
+//structure to map frames to urls
+let frames= {}
+
+chrome.webNavigation.onCommitted.addListener((details)=>{
+    if((details.transitionType=="auto_subframe" || details.transitionType=="manual_subframe") && details.frameId>0 && details.tabId>0){
+        chrome.tabs.get(details.tabId, (tab)=>{
+            if(frames[details.tabId]===undefined) frames[details.tabId]={}
+            frames[details.tabId][details.frameId]= tab.url
+            console.log(frames, details.frameId)
+        })   
+    }
+})
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo)=>{
+    sleep(1000).then(() => {
+        delete frames[tabId]
+      })
 })
