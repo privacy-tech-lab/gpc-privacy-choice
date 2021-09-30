@@ -74,43 +74,43 @@ The GPC Privacy Choice extension is made up of 7 different schemes, each having 
 
 Users are presented the **GPC Privacy Choice Banner** on each new site they visit with no **apply-all** option. There is instead a **snooze** button that, upon being selected, will prevent the banner from popping up on new sites for 6 hours. The domain list is present on the Options Page.
 
-<img width="358" alt="Scheme 0" src="https://user-images.githubusercontent.com/54873610/133680181-dd35d89e-03f8-45b6-a796-fe22eae12228.png">
+<img width="297" alt="Scheme 0" src="https://user-images.githubusercontent.com/54873610/135544372-65076249-7c2d-49b7-b277-c13a00371f8d.png">
 
 ### Scheme 1
 
 This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
 
-<img width="344" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/133680222-db0b6971-a444-4597-ba35-d24af9d4a98c.png">
+<img width="297" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/135544382-81ca44ab-7865-400c-bcb8-564d3fd4f269.png">
 
 ### Scheme 2
 
 This is somewhat a combination of **Scheme 0** and **Scheme 1**. The **GPC Privacy Choice Banner** contains both the **apply-all** option as well as the **snooze** button. All **universal toggles**, as well as the domain list may be accessed from the Options Page.
 
-<img width="333" alt="Scheme 2" src="https://user-images.githubusercontent.com/54873610/133680243-d3055654-e5ac-4347-aec8-bda18330103d.png">
+<img width="298" alt="Scheme 2" src="https://user-images.githubusercontent.com/54873610/135544388-6c401759-cd1a-4fc6-b595-7aa1226ae3f6.png">
 
 ### Scheme 3
 
 This is our **Privacy Profile** scheme. Upon running the extension, users will be prompted to choose the privacy profile that they find most similar to themselves. Their privacy choices will then be personalized based on the selected profile. They may further personalize their privacy choices by accessing the domain list on the Options Page.
 
-<img width="1281" alt="Scheme 3" src="https://user-images.githubusercontent.com/54873610/133680268-df78662c-e47f-499f-a8be-9dfe03ccbba2.png">
+<img width="1281" alt="Scheme 3" src="https://user-images.githubusercontent.com/54873610/135544395-e648e4ea-00e6-49c0-9629-3248c87ffba9.png">
 
 ### Scheme 4
 
 This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
 
-<img width="1261" alt="Scheme 4" src="https://user-images.githubusercontent.com/54873610/133680285-6a4d43d3-002b-4cf7-bc66-d2b13702e7c0.png">
+<img width="1251" alt="Scheme 4" src="https://user-images.githubusercontent.com/54873610/135544412-dc40313b-051a-4de5-8686-5e0363ee94f1.png">
 
 ### Scheme 5
 
 A combination of **Scheme 1** and **Scheme 3**, this is our **Machine-Learning** scheme. The user is randomly presented 10 banners in total on websites they visit. Their choices are recorded by the extension, which it then uses to make an educated selection on which **Privacy Profile** would suit them most. No banners are shown beyond the initial 10, and after the learning period is over users may change their privacy profile by accessing the Options Page.
 
-<img width="658" alt="Scheme 5" src="https://user-images.githubusercontent.com/54873610/133680311-1d930b85-b1cd-4bdb-ab5b-57639006e084.png">
+<img width="599" alt="Scheme 5" src="https://user-images.githubusercontent.com/54873610/135544427-c3dc79c5-c9db-4e09-9854-35f81d5a0ba2.png">
 
 ### Scheme 6
 
 This scheme is the most simple of all. Users are initially prompted as to whether they'd like to send **GPC Signals** to all websites they visit or not. They may change this preference from the Options Page, but no domain list is present, so they cannot personalize their choices.
 
-<img width="1284" alt="Scheme 6" src="https://user-images.githubusercontent.com/54873610/133680335-a27aba7f-dea8-4625-91e3-57846fd54d67.png">
+<img width="1252" alt="Scheme 6" src="https://user-images.githubusercontent.com/54873610/135544436-6da19bd5-780a-4174-b39a-624d864d389e.png">
 
 ## Data Collection
 
