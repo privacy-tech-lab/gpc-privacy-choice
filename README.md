@@ -80,7 +80,7 @@ Users are presented the **GPC Privacy Choice Banner** on each new site they visi
 
 This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
 
-<img width="297" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/135544382-81ca44ab-7865-400c-bcb8-564d3fd4f269.png">
+<img width="298" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/135544651-9faa941a-c237-418c-8d08-2555f06e2cb5.png">
 
 ### Scheme 2
 
