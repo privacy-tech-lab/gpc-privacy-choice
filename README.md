@@ -74,19 +74,19 @@ The GPC Privacy Choice extension is made up of 7 different schemes, each having 
 
 Users are presented the **GPC Privacy Choice Banner** on each new site they visit with no **apply-all** option. There is instead a **snooze** button that, upon being selected, will prevent the banner from popping up on new sites for 6 hours. The domain list is present on the Options Page.
 
-<img width="297" alt="Scheme 0" src="https://user-images.githubusercontent.com/54873610/135544372-65076249-7c2d-49b7-b277-c13a00371f8d.png">
+<img width="298" alt="Scheme 0" src="https://user-images.githubusercontent.com/54873610/135547002-d0a533e9-2025-42f3-ae78-1abd0c12daa8.png">
 
 ### Scheme 1
 
 This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
 
-<img width="298" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/135544651-9faa941a-c237-418c-8d08-2555f06e2cb5.png">
+<img width="297" alt="Scheme 1" src="https://user-images.githubusercontent.com/54873610/135547017-1f78b987-3936-4188-af14-98d2dc4db1f9.png">
 
 ### Scheme 2
 
 This is somewhat a combination of **Scheme 0** and **Scheme 1**. The **GPC Privacy Choice Banner** contains both the **apply-all** option as well as the **snooze** button. All **universal toggles**, as well as the domain list may be accessed from the Options Page.
 
-<img width="298" alt="Scheme 2" src="https://user-images.githubusercontent.com/54873610/135544388-6c401759-cd1a-4fc6-b595-7aa1226ae3f6.png">
+<img width="298" alt="Scheme 2" src="https://user-images.githubusercontent.com/54873610/135547019-c4d59658-ede0-47bd-9e95-f95546e130a2.png">
 
 ### Scheme 3
 
