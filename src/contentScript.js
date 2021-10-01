@@ -355,7 +355,8 @@ function showBanner(applyAllOption, muteOption) {
                     id="open-options" 
                     style="
                         line-height: 50%;
-                        margin-block-start: 0.5em;
+                        display: inline-block;
+                        margin-top: 15px;
                         margin-inline-start: auto;
                         margin-inline-end: auto;
                         font: 13px/1.231 arial,helvetica,clean,sans-serif;
