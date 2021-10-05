@@ -227,7 +227,9 @@ export function addThirdPartyRequests(details){
         console.log(liveRequests)
         let tabId=details.tabId
         let date = liveRequests[details.requestId].timestamp
-        let url = frames[tabId][details.frameId]
+        let url
+        if(details.frameId>0) url = frames[tabId][details.frameId]
+        else url=tab.url
         let url_object = new URL(url);
         let domain=getDomain(url_object.href)
         let request_url_object = new URL(details.url)
@@ -497,6 +499,25 @@ chrome.webNavigation.onCommitted.addListener((details)=>{
         })   
     }
 })
+
+//function to remove information on frames that no longer exist
+export function cleanFrames(tabId) {
+    chrome.tabs.get(tabId, (tab)=>{
+        let toRemove=[];
+        let url = tab.url
+        for(let frame of  Object.keys(frames[tabId])){
+            console.log(frame)
+            if(frames[tabId][frame] != url){
+                toRemove.push(frame)
+            }
+        }
+        sleep(1000).then(() => {
+            for(let frame in toRemove){
+                delete frames[tabId][toRemove[frame]]
+            }
+          })
+        })
+}
 
 const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
