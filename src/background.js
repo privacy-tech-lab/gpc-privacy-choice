@@ -4,7 +4,7 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-import {addHistory, updateDomains, addSettingInteractionHistory, addThirdPartyRequests} from "./firebase.js"
+import {addHistory, updateDomains, addSettingInteractionHistory, cleanFrames} from "./firebase.js"
 
 // Initializers
 let sendSignal = true;
@@ -106,6 +106,7 @@ chrome.webNavigation.onCommitted.addListener(function(details){
 
   chrome.tabs.get(details.tabId, (tab)=>{
     if(details.frameId==0 && tab!=undefined){
+      cleanFrames(details.tabId)
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
         if (result.USER_DOC_ID){
           addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp);
