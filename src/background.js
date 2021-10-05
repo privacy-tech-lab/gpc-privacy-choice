@@ -100,6 +100,7 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
   applyAllCache=result.APPLY_ALL;
 })
 
+<<<<<<< HEAD
 
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function(details){
@@ -110,6 +111,16 @@ chrome.webNavigation.onCommitted.addListener(function(details){
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
         if (result.USER_DOC_ID){
           addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp);
+=======
+// add user's browsing history to the database
+chrome.webNavigation.onCommitted.addListener(function(details){
+  chrome.tabs.get(details.tabId, (tab)=>{
+    if(details.frameId==0 && tab!=undefined){
+      cleanFrames(details.tabId)
+      chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID"], function(result){
+        if (result.USER_DOC_ID){
+          addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, details.timeStamp);
+>>>>>>> 35e879485c58c24499be84fc74929d2547a2b69b
         } else {
           console.log("Unregistered user: not connected to the database");
         }
