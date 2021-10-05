@@ -45,11 +45,7 @@ export async function createUser(prolificID, schemeNumber){
 }
 
 // Add user entries into the Firebase
-<<<<<<< HEAD
 export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time){
-=======
-export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, time){
->>>>>>> 35e879485c58c24499be84fc74929d2547a2b69b
     let date = new Date();
     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
         "Timestamp": time,
