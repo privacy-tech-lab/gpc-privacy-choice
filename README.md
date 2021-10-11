@@ -40,7 +40,6 @@ Follow the instructions below in order to download this browser extension.
 - `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
 - `src/background.html`: The extension's background page. Launches all critical extension scripts and libraries.
 - `src/background.js`: This is the main script running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
-- `src/browserHistory.js`: This is a content script that runs at the start of a document and sends a message to the background that a new page is being loaded.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
 - `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
@@ -114,8 +113,11 @@ This scheme is the most simple of all. Users are initially prompted as to whethe
 
 ## Data Collection
 
-TBD
+The GPC Privacy Choice browser extension records how users interact with different sites and make privacy choices. In the database, each user is represented by a unique ID, and all of their interactions are recorded under that ID, whether it be an initial privacy choice presented by a registration page, a privacy choice specific to a certain site, or a change in privacy choice on the options page. **DISCLAIMER: The GPC Privacy Choice browser extension records all of the different sites visited by users, as there could be possible relationships between the types of sites visited and the corresponding privacy choice made.**
 
-<p align="center">
+<p align="center"><img width="920" alt="Screen Shot 2021-10-11 at 7 51 45 PM" src="https://user-images.githubusercontent.com/54873610/136868329-b5d33dee-ce47-4110-9ae4-a4de774ca72c.png">
+  
+_Above is an example of a user's data profile, and some of the information that would be recorded._
+
   <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
 </p>
