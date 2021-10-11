@@ -1,46 +1,50 @@
 {
   "name": "GPC Privacy Choice",
   "version": "1.0",
-  "manifest_version": 3,
   "description": "A research browser extension studying the possiblity of attaining usable active privacy choice mechanism",
+  "manifest_version": 3,
   "icons" : {
     "32": "./img/gpc-choice-icon.png"
   }, 
   "permissions": [
     "webRequest",
-    "<all_urls>",
-    "webRequestBlocking",
+    "declarativeNetRequest",
     "webNavigation",
     "storage",
     "activeTab",
     "cookies",
     "tabs",
     "contentSettings",
-    "geolocation"
+    "geolocation",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*","https://*/*"
   ],
   "action": {
     "default_title": "GPC Privacy Choice"
   },
   "options_page": "options.html",
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["browserHistory.js"],
-      "run_at": "document_start"
-    }
-  ],
   "options_ui": {
     "page": "options/options.html",
     "open_in_tab": true
   },
-  "background": [{
-    "service_worker": ["background.js"]
-  }],
+  "background": {
+    "service_worker": "background.js", 
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["browserHistory.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_end"
+    }
+  ],
   "web_accessible_resources": [{
     "resources": ["adDomains.txt", "json/*.json"], 
     "matches": ["<all_urls>"]
