@@ -1,5 +1,5 @@
-import {createUser} from "./firebase.js"
-import {PASSWORD} from "./config.js"
+import { createUser } from "./firebase/firebase.js"
+import { PASSWORD } from "./config.js"
 
 // Datastructure used to hold user choices of ad networks
 let userChoices = {

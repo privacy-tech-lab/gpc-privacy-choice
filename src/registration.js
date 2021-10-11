@@ -1,5 +1,5 @@
-import {createUser} from "./firebase.js"
-import {PASSWORD} from "./config.js"
+import { createUser } from "./firebase/firebase.js"
+import { PASSWORD } from "./config.js"
 
 let userProfile = null;
 
