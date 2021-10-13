@@ -65,6 +65,8 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 
 ## Installation of Firebase Server
 
+Click [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
+
 ## Comprehensive Scheme List
 
 The GPC Privacy Choice extension is made up of 7 different schemes, each having different defining features. Upon downloading, a user could end up with any one of the different schemes. The purpose behind having so many variations is to provide researchers with valuable information on how users make privacy choices when given varying levels of usability. Listed below are the main components of each scheme.
@@ -113,7 +115,24 @@ This scheme is the most simple of all. Users are initially prompted as to whethe
 
 ## Data Collection
 
-The GPC Privacy Choice browser extension records how users interact with different sites and make privacy choices. In the database, each user is represented by a unique ID, and all of their interactions are recorded under that ID, whether it be an initial privacy choice presented by a registration page, a privacy choice specific to a certain site, or a change in privacy choice on the options page. **DISCLAIMER: The GPC Privacy Choice browser extension records all of the different sites visited by users, as there could be possible relationships between the types of sites visited and the corresponding privacy choice made.**
+The GPC Privacy Choice browser extension records how users interact with different sites and make privacy choices. In the database, each user is represented by a unique ID, and all of their interactions are recorded under that ID. Below are some different categories of data that might be recorded. **DISCLAIMER: The GPC Privacy Choice browser extension records all of the different sites visited by users, as there could be possible relationships between the types of sites visited and the corresponding privacy choice made.**
+
+### Browser History
+
+This category records the information of each site the user is on while using the browser extension.
+
+### Privacy Configuration Interaction History
+
+This category records the privacy decisions users might make on schemes 3, 4, 5 and 6. That is, more general privacy decisions based on groups or categorizations of tracking.
+
+### Domain Interaction History
+
+This category records the privacy decisions users might make on schemes 0, 1 or 2. These schemes use a banner to provide in-depth personalization, where privacy choices can be as specific as varying by the site a user is on.
+
+### Mute Interaction History
+
+This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
+
 
 <p align="center"><img width="920" alt="Screen Shot 2021-10-11 at 7 51 45 PM" src="https://user-images.githubusercontent.com/54873610/136868329-b5d33dee-ce47-4110-9ae4-a4de774ca72c.png">
   
