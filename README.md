@@ -16,16 +16,30 @@ This browser extension is entirely for research purposes, allowing us to better 
 
 GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). **Kuba Alicki**, **Daniel Knopf**, **Abdallah Salia** contributed earlier.
 
-## Installation of GPC Privacy Choice
+## Developer's Guide On Using GPC Privacy Choice
 
-Follow the instructions below in order to download this browser extension.
+Follow the instructions below in order to download and use this browser extension.
 
-1. Clone the library by entering `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git` into your terminal.
-2. The GPC Privacy Choice Browser Extension should now be downloaded locally onto your device. Next, open a tab on Google Chrome.
-3. In the top right corner of the browser, there's an icon of a puzzle piece. Click on the icon, and then subsequently click `Manage Extensions`.
-4. You should be brought to a page that contains all of the different extensions you have downloaded to Chrome. In the top left corner, click on the button that says `Load unpacked`.
-5. Select the folder `gpc-privacy-choice/src` from your files.
-6. The extension should now be downloaded on your browser. Enjoy!
+1. Clone the repository: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
+2. Create a firebase cloud firestore project, Follow this link [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
+3. In the `src` folder, create `config.js` file, and add in the following code, be sure to update the fields accordingly based on the project you have set up. The password can be randomly initialized, and it will be the password required later while using the extension.
+
+```
+  export const PASSWORD = "*******";
+
+  export const firebaseConfig = {
+      apiKey: "********",
+      authDomain: "******",
+      projectId: "******",
+      storageBucket: "******",
+      messagingSenderId: "******",
+      appId: "******",
+  };
+```
+
+4. To test the browser extension from local repository, open the browser (Chrome, Brave, etc) and find the manage extentsion options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner, and then clicking `Manage Extensions`.
+5. Turn on the developer mode, and then click the `Load unpacked`. Select the folder `gpc-privacy-choice/src` from your files.
+6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
 ## Files and Directories in this Repo
 
@@ -62,10 +76,6 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [uikit](https://github.com/uikit/uikit)
 - [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
-
-## Installation of Firebase Server
-
-Click [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
 
 ## Comprehensive Scheme List
 
@@ -133,10 +143,14 @@ This category records the privacy decisions users might make on schemes 0, 1 or 
 
 This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
 
-
 <p align="center"><img width="920" alt="Screen Shot 2021-10-11 at 7 51 45 PM" src="https://user-images.githubusercontent.com/54873610/136868329-b5d33dee-ce47-4110-9ae4-a4de774ca72c.png">
   
 _Above is an example of a user's data profile, and some of the information that would be recorded._
 
-  <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+<a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+
 </p>
+
+## Future Directions
+
+The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
