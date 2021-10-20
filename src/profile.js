@@ -1,5 +1,5 @@
 import { createUser } from "./firebase/firebase.js"
-import { PASSWORD } from "./config.js"
+const PASSWORD = "123456";
 
 let userProfile = null;
 

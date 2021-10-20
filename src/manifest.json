@@ -30,8 +30,7 @@
     "open_in_tab": true
   },
   "background": {
-    "service_worker": "background.js", 
-    "type": "module"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -50,6 +49,6 @@
     "matches": ["<all_urls>"]
   }],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; https://www.gstatic.com/; https://*.firebaseio.com; https://www.googleapis.com; https://www.googletagmanager.com; https://gpc-privacy-choice-cookie-test.herokuapp.com/index.php; https://gpc-privacy-choice-cookie-test.herokuapp.com/step2.php"
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
