@@ -149,7 +149,7 @@ This category records any privacy decisions made from the banner (schemes 0, 1 o
 
 This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
 
-<img width="920" alt="Screen Shot 2021-10-26 at 10 26 22 AM" src="https://user-images.githubusercontent.com/54873610/138899684-c0e14a81-0cfd-4c1a-8adb-59c979c864e0.png">
+<img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
 
 ## Future Directions
 
