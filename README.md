@@ -131,26 +131,28 @@ The GPC Privacy Choice browser extension records how users interact with differe
 
 This category records the information of each site the user is on while using the browser extension.
 
+<img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138903258-935eec9d-7845-487f-ab0f-0e53410623c2.png">
+
 ### Privacy Configuration Interaction History
 
-This category records the privacy decisions users might make on schemes 3, 4, 5 and 6. That is, more general privacy decisions based on groups or categorizations of tracking.
+This category records the privacy decisions users might make on schemes 3, 4, 5 and 6 from the user registration page. That is, more general privacy decisions based on groups or categorizations of tracking
+
+<img width="920" alt="Screen Shot 2021-10-26 at 10 20 03 AM" src="https://user-images.githubusercontent.com/54873610/138898583-863899bf-367a-4312-812a-e5b56b561ec4.png">
 
 ### Domain Interaction History
 
-This category records the privacy decisions users might make on schemes 0, 1 or 2. These schemes use a banner to provide in-depth personalization, where privacy choices can be as specific as varying by the site a user is on.
+This category records any privacy decisions made from the banner (schemes 0, 1 or 2), as well as changes made from the Options Page for any scheme. More specific privacy decisions are handled in this category, personalized choices for individual domains.
+
+<img width="920" alt="Screen Shot 2021-10-26 at 10 17 39 AM" src="https://user-images.githubusercontent.com/54873610/138897990-302be371-ec1b-469c-a5f0-962955b4d035.png">
 
 ### Mute Interaction History
 
 This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
 
-<p align="center"><img width="920" alt="Screen Shot 2021-10-11 at 7 51 45 PM" src="https://user-images.githubusercontent.com/54873610/136868329-b5d33dee-ce47-4110-9ae4-a4de774ca72c.png">
-  
-_Above is an example of a user's data profile, and some of the information that would be recorded._
-
-<a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
-
-</p>
+<img width="920" alt="Screen Shot 2021-10-26 at 10 26 22 AM" src="https://user-images.githubusercontent.com/54873610/138899684-c0e14a81-0cfd-4c1a-8adb-59c979c864e0.png">
 
 ## Future Directions
 
 The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
+
+<a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/privacy-choice-browser-extension/blob/main/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
