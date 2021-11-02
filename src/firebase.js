@@ -454,7 +454,7 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
         liveAdEvents[targetTabID].adSource=origin
         let initialLoad=getDomain(details.url)
         liveAdEvents[targetTabID].redirectionTo=initialLoad
-        if(isInDisconnect(origin) || isInDisconnect(initialLoad)){
+        if(isInDisconnect(origin) && frameId!=0 || isInDisconnect(initialLoad)){
             liveAdEvents[targetTabID].adBool=true;
             liveAdEvents[targetTabID].reasoning="navigation via ad network (highest confidence)"
         }
@@ -490,7 +490,6 @@ chrome.webNavigation.onCommitted.addListener((details)=>{
         chrome.tabs.get(details.tabId, (tab)=>{
             if(frames[details.tabId]===undefined) frames[details.tabId]={}
             frames[details.tabId][details.frameId]= tab.url
-            console.log(frames, details.frameId)
         })   
     }
 })
