@@ -101,6 +101,10 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
 })
 
 
+//dictionary that maps a TabId to the current url of the tab
+//used to get the previous url (referer) when navigation occurs
+let referer={}
+
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function(details){
 
@@ -109,7 +113,8 @@ chrome.webNavigation.onCommitted.addListener(function(details){
       cleanFrames(details.tabId)
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
         if (result.USER_DOC_ID){
-          addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp);
+          addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp, referer[details.tabId]);
+          referer[details.tabId]=details.url
         } else {
           console.log("Unregistered user: not connected to the database");
         }

@@ -44,17 +44,26 @@ export async function createUser(prolificID, schemeNumber){
     });
 }
 
+
 // Add user entries into the Firebase
-export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time){
-    let date = new Date();
-    db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-        "Timestamp": time,
-        "TabID": tabId,
-        "Transition Type": transitionType,
-        "CurrentSite":  site,
-        "GPC Current Site Status": GPC,
-        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
-    })
+export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time, referer){
+    if(referer!=site || referer===undefined){
+        if(transitionType!="link"){
+            referer="N/A"
+        }
+        if(referer===undefined){
+            referer="not found"
+        }
+        db.collection("users").doc(currentUserDocID).collection("Browser History").add({
+            "Timestamp": time,
+            "Referer": referer,
+            "TabID": tabId,
+            "Transition Type/Referer": transitionType,
+            "CurrentSite":  site,
+            "GPC Current Site Status": GPC,
+            "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
+        })
+    }
 }
 
 
@@ -170,10 +179,10 @@ function getDomain(url) {
     return domain;
 }
 
-// TO DO: Structure for holding third party requests while they are live
+// Structure for holding third party requests while they are live
 let liveRequests={}
 
-// TO DO Class for objects holding information on third party requests
+// Class for objects holding information on third party requests
 class ThirdPartyRequest {
     constructor(details, url) {
       this.requestId=details.requestId;
@@ -520,5 +529,6 @@ const sleep = (milliseconds) => {
 chrome.tabs.onRemoved.addListener((tabId, removeInfo)=>{
     sleep(1000).then(() => {
         delete frames[tabId]
+        delete referer[tabId]
       })
 })
