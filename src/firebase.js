@@ -454,7 +454,7 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
         liveAdEvents[targetTabID].adSource=origin
         let initialLoad=getDomain(details.url)
         liveAdEvents[targetTabID].redirectionTo=initialLoad
-        if(isInDisconnect(origin) && frameId!=0 || isInDisconnect(initialLoad)){
+        if(isInDisconnect(origin) && details.sourceFrameId!=0|| isInDisconnect(initialLoad) && (details.sourceFrameId!=0 || initialLoad!=origin)){
             liveAdEvents[targetTabID].adBool=true;
             liveAdEvents[targetTabID].reasoning="navigation via ad network (highest confidence)"
         }
