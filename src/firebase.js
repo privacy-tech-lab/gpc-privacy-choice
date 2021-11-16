@@ -62,6 +62,8 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
             "CurrentSite":  site,
             "GPC Current Site Status": GPC,
             "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
+        }).then(docRef => {
+            new ThirdPartyData(tabId, site, docRef.id, currentUserDocID)
         })
     }
 }
@@ -179,94 +181,100 @@ function getDomain(url) {
     return domain;
 }
 
-// Structure for holding third party requests while they are live
-let liveRequests={}
-
-// Class for objects holding information on third party requests
-class ThirdPartyRequest {
-    constructor(details, url) {
-      this.requestId=details.requestId;
-      this.url= url;
-      this.timestamp= details.timeStamp;
-      liveRequests[this.requestId]=this
-    }
-    removeRequestEvent(){
-        console.log("deleting", liveRequests[this.requestId])
-        delete liveRequests[this.requestId]
-        delete this
-        console.log("deleted", liveRequests[this.requestId])
-    }
-  }
-
 // Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
 chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
 
-chrome.webRequest.onBeforeRequest.addListener(function (details){
-    if(liveRequests[details.requestId]===undefined){
-        chrome.tabs.get(details.tabId, (tab)=>{
-        let url = tab.url;
-        new ThirdPartyRequest(details, url);
-        })
-    } 
-    
-}, {urls: ["<all_urls>"]}
-);
+//map tab and url to object containing third party request data for live sites
+let allThirdPartyData={}
 
-chrome.webRequest.onErrorOccurred.addListener((details)=>{
-    liveRequests[details.requestId].removeRequestEvent()
-}, {urls: ["<all_urls>"]}
-);
-chrome.webRequest.onCompleted.addListener((details)=>{
-    liveRequests[details.requestId].removeRequestEvent()
-}, {urls: ["<all_urls>"]}
-);
-
-
-// Add third party requests to browsing history document
-export function addThirdPartyRequests(details){
-    chrome.tabs.get(details.tabId, (tab)=>{
-        console.log(liveRequests)
-        let tabId=details.tabId
-        let date = liveRequests[details.requestId].timestamp
-        let url
-        if(details.frameId>0) url = frames[tabId][details.frameId]
-        else url=tab.url
-        let url_object = new URL(url);
-        let domain=getDomain(url_object.href)
-        let request_url_object = new URL(details.url)
-        let initiator_object = new URL(details.initiator)
-        let url_host = getDomain(request_url_object.href)
-        let initiator_host = getDomain(initiator_object.href)
-        console.log(url_object.href)
-        if(isInDisconnect(initiator_host) && url_host!="firestore.googleapis.com" && initiator_host!=domain){
-            chrome.storage.local.get(["USER_DOC_ID"], function(result){
-                if (result.USER_DOC_ID){
-                    db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-                    .where("TabID",'==', tabId).where("CurrentSite",'==', url).where("Timestamp","<=",date).orderBy("Timestamp", "desc").limit(1)
-                    .get().then((docArray)=>{
-                            docArray.forEach((doc)=>{
-                                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                                doc(doc.id).collection("Third Party Requests").add({
-                                    "Domain": initiator_host,
-                                    "Network": disconnectList[initiator_host][1],
-                                    "NetworkCategory": disconnectList[initiator_host][0],
-                                    "Type": details.type,
-                                    "URL": details.url,
-                                    "RequestHeaders": details.requestHeaders,
-                                    "Initiator": details.initiator,
-                                    "FrameID": details.frameId,
-                                    "Timestamp": date,
-                                    "Site": url
-                                })
-                            })
-                    })
-                } else {
-                    console.log("Unregistered user: not connected to the database");
-                }          
-            })
+//class to locally store info on third party requests when a site is live
+class ThirdPartyData{
+    constructor(tabId, url, docId, userDocId){
+        this.count=0
+        this.sCollection = db.collection("users").doc(userDocId).collection("Browser History").
+        doc(docId).collection("Third Party Requests Summary")
+        this.eCollection=db.collection("users").doc(userDocId).collection("Browser History").
+        doc(docId).collection("Third Party Requests (first 50)")
+        if(allThirdPartyData[tabId]===undefined) allThirdPartyData[tabId]={}
+        allThirdPartyData[tabId][url]= this
+        this.thirdPartyDomains ={}
+        for(let site of  Object.keys(allThirdPartyData[tabId])){
+            if(site!=url){
+                writeThirdPartyDataToDb(allThirdPartyData[tabId][site])
+                delete allThirdPartyData[tabId][site]
+            }
         }
-    })
+    }
+
 }
+
+//write locally stored third party request summary data to db
+function writeThirdPartyDataToDb(data){
+    for(let d in Object.values(data.thirdPartyDomains)){
+        let info = Object.values(data.thirdPartyDomains)[d]
+        data.sCollection.add(info)
+    }
+}
+
+//write info on a specific request to db
+function writeRequestToDb(data, collection){
+    collection.add(data)
+}
+
+
+// updates/create locally stored info on third party requests
+function addThirdPartyRequests(details){
+    if (details.tabId>=0){
+        chrome.tabs.get(details.tabId, (tab)=>{ 
+            if(tab!=undefined){
+                let tabId =details.tabId
+                let url
+                if(details.frameId>0) url = frames[tabId][details.frameId]
+                else url=tab.url
+                let initiator_object = new URL(details.initiator)
+                let initiator_host = getDomain(initiator_object.href)
+                let url_object = new URL(url);
+                let domain=getDomain(url_object.href)
+                let request_url_object = new URL(details.url)
+                let url_host = getDomain(request_url_object.href)
+                if(isInDisconnect(initiator_host) && url_host!="firestore.googleapis.com" && initiator_host!=domain){
+                    let network =disconnectList[initiator_host][1]
+                    let networkCategory = disconnectList[initiator_host][0]
+                    if(allThirdPartyData[tabId][url].count <50){
+                        let data = {
+                            Type: details.type,
+                            URL: details.url,
+                            RequestHeaders: details.requestHeaders,
+                            Initiator: details.initiator,
+                            FrameID: details.frameId,
+                            Timestamp: details.timeStamp,
+                            Site: url,
+                            Domain: initiator_host,
+                            Network: network,
+                            NetworkCategory: networkCategory
+
+                        }
+                        writeRequestToDb(data, allThirdPartyData[tabId][url].eCollection)
+                        allThirdPartyData[tabId][url].count+=1
+                    }
+                    let domainInfo = allThirdPartyData[tabId][url].thirdPartyDomains[initiator_host]
+                    if(domainInfo==undefined) {
+                        domainInfo ={
+                            Domain: initiator_host,
+                            RequestCount: 1,
+                            Network: network,
+                            NetworkCategory: networkCategory
+                        }
+                    }
+                    else domainInfo["RequestCount"]+=1
+                    allThirdPartyData[tabId][url].thirdPartyDomains[initiator_host]=domainInfo
+                }
+            }
+        })
+        
+    }
+}
+
 
 // Get GPC Global Status
 function getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme){
@@ -506,20 +514,24 @@ chrome.webNavigation.onCommitted.addListener((details)=>{
 //function to remove information on frames that no longer exist
 export function cleanFrames(tabId) {
     chrome.tabs.get(tabId, (tab)=>{
-        let toRemove=[];
-        let url = tab.url
-        for(let frame of  Object.keys(frames[tabId])){
-            console.log(frame)
-            if(frames[tabId][frame] != url){
-                toRemove.push(frame)
+        if(tab!=undefined){
+            let toRemove=[];
+            let url = tab.url
+            if (frames[tabId]!=undefined){
+                for(let frame of  Object.keys(frames[tabId])){
+                    console.log(frame)
+                    if(frames[tabId][frame] != url){
+                        toRemove.push(frame)
+                    }
+                }
+                sleep(1000).then(() => {
+                    for(let frame in toRemove){
+                        delete frames[tabId][toRemove[frame]]
+                    }
+                })
             }
-        }
-        sleep(1000).then(() => {
-            for(let frame in toRemove){
-                delete frames[tabId][toRemove[frame]]
-            }
-          })
-        })
+        }  
+    })
 }
 
 const sleep = (milliseconds) => {
@@ -527,6 +539,10 @@ const sleep = (milliseconds) => {
   }
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo)=>{
+    for(let site of  Object.keys(allThirdPartyData[tabId])){
+        writeThirdPartyDataToDb(allThirdPartyData[tabId][site])
+        delete allThirdPartyData[tabId][site]
+    }
     sleep(1000).then(() => {
         delete frames[tabId]
         delete referer[tabId]
