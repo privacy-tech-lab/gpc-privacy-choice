@@ -454,7 +454,7 @@ function createDefaultSettingInfo(){
       <br>
             `
     let defaultSettingInfo;
-    if (result.UI_SCHEME==1||2) {
+    if (result.UI_SCHEME==1||result.UI_SCHEME==2) {
       if (apply_all_bool) {
         if (result.ENABLED) {
           defaultSettingInfo =
