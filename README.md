@@ -21,7 +21,7 @@ GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, *
 Follow the instructions below in order to download and use this browser extension.
 
 1. Clone the repository: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
-2. Create a firebase cloud firestore project, Follow this link [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
+2. Create a Firebase Cloud Firestore project, Follow this link [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
 3. In the `src` folder, create `config.js` file, and add in the following code, be sure to update the fields accordingly based on the project you have set up. The password can be randomly initialized, and it will be the password required later while using the extension.
 
 ```
@@ -37,7 +37,7 @@ Follow the instructions below in order to download and use this browser extensio
   };
 ```
 
-4. To test the browser extension from local repository, open the browser (Chrome, Brave, etc) and find the manage extentsion options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner, and then clicking `Manage Extensions`.
+4. To test the browser extension from local repository, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner, and then clicking `Manage Extensions`.
 5. Turn on the developer mode, and then click the `Load unpacked`. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
@@ -135,7 +135,7 @@ This category records the information of each site the user is on while using th
 
 #### Ad Interaction Detection
 
-Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occured in a subframe or if the navigation involved the domain of an ad network as identified in the disconnect list.
+Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of an ad network as identified in the disconnect list.
 
 ### Privacy Configuration Interaction History
 
