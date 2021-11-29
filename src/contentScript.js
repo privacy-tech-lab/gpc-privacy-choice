@@ -305,7 +305,7 @@ function showBanner(applyAllOption, muteOption) {
                 padding-bottom:3px;
                 margin-bottom: 7px;
                 color: black;">
-                    Would you like to send do not sell signals to this domain?
+                    Would you like to send do not sell signals while visiting this domain?
             </div>
             <div style="
                 padding: unset;

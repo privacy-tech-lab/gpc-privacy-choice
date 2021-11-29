@@ -54,6 +54,7 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
         if(referer===undefined){
             referer="not found"
         }
+        if(GPC===undefined) GPC="unset"
         db.collection("users").doc(currentUserDocID).collection("Browser History").add({
             "Timestamp": time,
             "Referer": referer,

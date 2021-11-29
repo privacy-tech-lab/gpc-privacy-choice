@@ -585,7 +585,7 @@ function createDefaultSettingInfo(){
       <div class="uk-container main">
         <div class="uk-alert-success" uk-alert>
           <a class="uk-alert-close" uk-close></a>
-          <p>You will see 10 banners poping up by random. Based on your banner decisions, we will learn your privacy profiles and put you in the relevant categories. You will no longer need to see the banners after that. The learning is currently in progress.</p>
+          <p>You will see 10 banners popping up by random. Based on your banner decisions, we will learn your privacy profiles and put you in the relevant categories. You will no longer need to see the banners after that. The learning is currently in progress.</p>
         </div>
       </div>
       <hr>
@@ -599,7 +599,7 @@ function createDefaultSettingInfo(){
       </div>
       You can change the privacy preference made for
       an individual domain by 
-      toggling the domain's switch in the domain list below. 
+      toggling the domain's switch in the domain list below. When a switch is turned on do not sell signals will be sent.
       `
     }
     else if (result.UI_SCHEME == 6){
