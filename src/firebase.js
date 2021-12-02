@@ -7,7 +7,6 @@ let db = firebase.firestore();
 
 // Function used to create a user in the database
 export async function createUser(prolificID, schemeNumber){
-    let userIP = await getIP();
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
@@ -22,7 +21,6 @@ export async function createUser(prolificID, schemeNumber){
             db.collection("users").doc(userDocument.id).set({
                 "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
                 "DNT": navigator.doNotTrack ? 1 : 0,
-                "IP Address": userIP,
                 "Latitude": latitude, 
                 "Longitude": longitude,
                 "Browser": getBrowser(),
@@ -343,27 +341,6 @@ function getTimeZone(){
 // Get the FirstPartyCookiesEnabled status of the user
 function getFirstPartyCookiesEnabled(){
     return navigator.cookieEnabled;
-}
-
-// Get the ThirdPartyCookiesEnabled status of the user
-// Not sure about the API
-function getThirdPartyCookiesEnabled(){
-    return null;
-}
-
-// Get the user's IP address
-async function getIP() {
-    let ip = "unknown";
-    let ipRegex = /[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
-    await fetchIP('https://www.cloudflare.com/cdn-cgi/trace').then(data => {
-        ip = data.match(ipRegex)[0];
-    });
-    return ip;
-}
-
-// Helper function for getting user IP 
-function fetchIP(url) {
-    return fetch(url).then(res => res.text());
 }
 
 // Get the user's local storage enable status
