@@ -155,6 +155,10 @@ This category would be relevant for schemes where the mute button is present, th
 
 <img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
 
+## Existing Issues For The Extension
+
+Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. The team has tried its best to ensure the UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalies of the banner are not affected.
+
 ## Future Directions
 
 The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
