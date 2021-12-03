@@ -4,6 +4,7 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
+import { firebaseConfig } from "./config.js";
 import {addHistory, updateDomains, addSettingInteractionHistory, cleanFrames} from "./firebase.js"
 
 // Initializers
@@ -26,7 +27,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 3;
+  let userScheme = 0;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -113,7 +114,7 @@ chrome.webNavigation.onCommitted.addListener(function(details){
       cleanFrames(details.tabId)
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
         if (result.USER_DOC_ID){
-          addHistory(details.transitionType, details.url, sendSignal, result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp, referer[details.tabId]);
+          addHistory(details.transitionType, details.url, domainsCache[getDomain(details.url)], result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp, referer[details.tabId]);
           referer[details.tabId]=details.url
         } else {
           console.log("Unregistered user: not connected to the database");
@@ -196,10 +197,10 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
 }
 
 // Update the sendSignal boolean for the current page
-async function updateSendSignal(){
+async function updateSendSignal(tab){
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
     let userScheme = result.UI_SCHEME;
-    if (userScheme == 0 || userScheme == 1 || userScheme==2) updateSendSignalScheme1();
+    if (userScheme == 0 || userScheme == 1 || userScheme==2) updateSendSignalScheme1(tab);
     else if (userScheme == 3) updateSendSignalScheme3();
     else if (userScheme == 4) updateSendSignalScheme4();
     else if (userScheme == 5) updateSendSignalScheme5();
@@ -208,14 +209,18 @@ async function updateSendSignal(){
 }
 
 // SCHEME 0/1/2 : Banner
-function updateSendSignalScheme1(){
+function updateSendSignalScheme1(tabId){
   if(domainlistEnabledCache){
-    if (!(domainsCache[currentDomain]===undefined)) sendSignal=domainsCache[currentDomain]
-    else{
-      if (applyAllCache) sendSignal=enabledCache
-      else sendSignal=false
-    }
-  } else sendSignal = enabledCache
+      if(tabId<0) sendSignal=false
+      else chrome.tabs.get(tabId, (tab)=>{ 
+        let siteDomain=getDomain(tab.url)
+        if (!(domainsCache[siteDomain]===undefined)) sendSignal=domainsCache[siteDomain]
+        else{
+          if (applyAllCache) sendSignal=enabledCache
+          else sendSignal=false
+        }
+      })
+  }else sendSignal = enabledCache
 }
 
 // SCHEME 4: Questionnaire
@@ -278,10 +283,12 @@ async function updateSendSignalScheme6(){
   })
 }
 
+
+
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
   currentDomain = getDomain(details.url);
-  updateSendSignal();
+  updateSendSignal(details.tabId);
   if (sendSignal) {
     // console.log("adding GPC headers to " + currentDomain);
     for (let signal in optout_headers) {
@@ -298,7 +305,7 @@ function addHeaders (details)  {
 // Add dom signal if sendSignal to true
 function addDomSignal (details)  {
   currentDomain = getDomain(details.url);
-  updateSendSignal();
+  updateSendSignal(details.tabId);
   if (sendSignal) {
     // console.log("addding GPC dom signals");
     // From DDG, regarding `Injection into non-html pages` on issue-128
