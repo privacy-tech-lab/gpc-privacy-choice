@@ -159,6 +159,8 @@ This category would be relevant for schemes where the mute button is present, th
 
 Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. The team has tried its best to ensure the UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalies of the banner are not affected.
 
+Because of the ambiguity of ad interactions, our method of recording them is not full proof. While a vast majority of ad interaction data is correcrt, the extension may incorrectly record or miss a user clicking on an ad.
+
 ## Future Directions
 
 The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
