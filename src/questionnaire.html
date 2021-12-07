@@ -25,7 +25,7 @@
                         <h2 class="uk-align-center text-color-darker">You are all set!</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                      We have successfully initalized your privacy configurations! Your personal information will not be used for ad purposes on the categories of networks that you have selected! You can also find a list of your visited domains in the domain list page to customize your settings on inidividual domains.
+                        We have successfully initialized your privacy configuration! Per the categories you selected, sites are prevented from selling/sharing your data! You can also customize your settings for individual domains in the domain list settings.
                     </div>
                     <div class="uk-modal-footer">
                       <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
@@ -41,7 +41,7 @@
                         <h2 class="uk-align-center text-color-darker">You Have Not Selected Any Networks</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                      Since you have not selected any network categories, GPC signals will not be sent to any of the domains automatically. Are you sure that this is what you want?
+                        Since you have not selected any categories, GPC signals will not be sent to any sites. Are you sure that this is what you want?
                     </div>
                     <div class="uk-modal-footer">
                         <button id="modal-button" class="uk-button uk-button-default uk-modal-close uk-align-right" style="margin: 0px 10px;">CANCEL</button>
@@ -98,23 +98,23 @@
                     </div>       
                 </fieldset>
             </form>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Select below the forms of online tracking you do NOT want to be subjected to.</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">Select the categories of sites that you want to prevent from selling/sharing your data.</p>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
+                    uk-tooltip="title:Many sites use third party ad networks that sell/share your data for advertising purposes (say, bluekai.com on espn.com).; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Advertising</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
+                    uk-tooltip="title:Many sites use third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Analytics</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
+                    uk-tooltip="title:Many sites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Content & Social</h3>
                     </div>
                 </div>  
@@ -122,20 +122,20 @@
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
+                    uk-tooltip="title:Some sites use malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Cryptomining</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
+                    uk-tooltip="title:Browser fingerprinting is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version and the plugins you use.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Fingerprinting</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
-                        <h3 class="uk-card-title uk-margin">Others</h3>
+                    uk-tooltip="title:First party sites are the sites that you intentionally visit (say, espn.com when you browse there). This category also includes sites that do not fall under any of the other categories below.; pos: top-right">
+                        <h3 class="uk-card-title uk-margin">First Party Sites & Non-categorized Sites</h3>
                     </div>
                 </div>  
             </div>
