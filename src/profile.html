@@ -25,7 +25,7 @@
                         <h2 class="uk-align-center text-color-darker">You are all set!</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                      We have successfully initalized your privacy configurations! You personally information will not be used for ad purposes on the categories of networks that you have selected! You can also find a list of your visited domains in the domain list page to customize your settings on inidividual domains.
+                      We have successfully initialized your privacy configuration! Per the profile you selected, sites are prevented from selling/sharing your data! You can also customize your settings for individual domains in the domain list settings.
                     </div>
                     <div class="uk-modal-footer">
                       <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
@@ -81,30 +81,30 @@
                     </div>         
                 </fieldset>
             </form>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Read the privacy profiles options below, which level of privacy sentivity describes you well?</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">Select Your Privacy Profile</p>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div id='extremely-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-                    uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                    uk-tooltip="title: GPC signals will be sent to all sites you visit.; pos: top-right">
                         <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" ></a>
-                        <h3 class="uk-card-title uk-margin">Extremely Privacy-Sensitive</h3>
-                        <p>Do not track me on any website. </p>
+                        <h3 class="uk-card-title uk-margin">High Privacy-Sensitivity</h3>
+                        <p>Prevent <b>all sites</b> from selling/sharing my data</p>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div id='moderately-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+                    uk-tooltip="title: GPC signals will be sent to many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
                         <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" ></a>
-                        <h3 class="uk-card-title uk-margin">Moderately Privacy-Sensitive</h3>
-                        <p>Track me only on some sites.</p>
+                        <h3 class="uk-card-title uk-margin">Medium Privacy-Sensitivity</h3>
+                        <p>Prevent <b>many sites</b> from selling/sharing my data</p>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div id="not-privacy-sensitive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
+                    uk-tooltip="title: GPC signals will only be sent to sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
                         <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" ></a>
-                        <h3 class="uk-card-title uk-margin">Not Privacy-Sensitive</h3>
-                        <p>Feel free to track my information.</p>
+                        <h3 class="uk-card-title uk-margin">Low Privacy-Sensitivity</h3>
+                        <p>Prevent <b>only some sites</b>from selling/sharing my data</p>
                     </div>
                 </div>
             </div>
