@@ -498,25 +498,25 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME==4) {
       defaultSettingInfo =
       `
-      <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
+      <p class="uk-text-center">Select the categories of sites that you want to prevent from selling/sharing your data.</p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
         <div class="choice">
           <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
+            uk-tooltip="title:Many sites use third party ad networks that sell/share your data for advertising purposes (say, bluekai.com on espn.com).; pos: top-right">
             <a class="uk-position-cover first" href="#" id="advertising" checked></a>
             <span class="uk-text-middle">Advertising</span>
           </div>
         </div>
         <div class="choice">
           <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
+            uk-tooltip="title:Many sites use third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="analytics" checked></a>
             <span class="uk-text-middle">Analytics</span>
           </div>
         </div>
         <div class="choice">
           <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
+            uk-tooltip="title:Many sites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="social" checked></a>
             <span class="uk-text-middle">Content & Social</span>
           </div>
@@ -525,23 +525,23 @@ function createDefaultSettingInfo(){
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
         <div class="choice">
           <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
+            uk-tooltip="title:Some sites use malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
             <span class="uk-text-middle">Cryptomining</span>
           </div>
         </div>
         <div class="choice">
           <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
+            uk-tooltip="title:Browser fingerprinting is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version and the plugins you use.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
             <span class="uk-text-middle">Fingerprinting</span>
           </div>
         </div>
         <div class="choice">
           <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
+            uk-tooltip="title:First party sites are the sites that you intentionally visit (say, espn.com when you browse there). This category also includes sites that do not fall under any of the other categories below.; pos: top-right">
             <a class="uk-position-cover first" href="#" id="others" checked></a>
-            <span class="uk-text-middle">Others</span>
+            <span class="uk-text-middle">First Party Sites & Non-categorized Sites</span>
           </div>
         </div>
       </div>
@@ -555,23 +555,23 @@ function createDefaultSettingInfo(){
         <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
           <div class="choice">
             <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-              uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+              uk-tooltip="title: GPC signals will be sent to all sites you visit.; pos: top-right">
               <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
+              <span class="uk-text-middle">High Privacy-Sensitivity</span>
             </div>
           </div>
           <div class="choice">
             <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+              uk-tooltip="title: GPC signals will be sent to many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
               <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
+              <span class="uk-text-middle">Medium Privacy-Sensitivity </span>
             </div>
           </div>
           <div class="choice">
             <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
+              uk-tooltip="title: GPC signals will only be sent to sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
               <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Not Privacy-Sensitive</span>
+              <span class="uk-text-middle">Low Privacy-Sensitivity</span>
             </div>
           </div>
         </div>
