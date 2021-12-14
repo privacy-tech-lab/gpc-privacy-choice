@@ -24,7 +24,8 @@
                         <h2 class="uk-align-center text-color-darker">You are all set!</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                        We have successfully initialized your privacy configuration! Per the categories you selected, sites are prevented from selling/sharing your data! You can also customize your settings for individual domains in the domain list settings.
+                        We have successfully registered your GPC setting! Sites are prohibited from selling/sharing your data per the categories you selected! 
+                        You can review or modify your GPC setting, also for individual sites, in the extension settings.
                     </div>
                     <div class="uk-modal-footer">
                       <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
@@ -37,10 +38,10 @@
                 <div class="uk-modal-dialog uk-margin-auto-vertical">
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-                        <h2 class="uk-align-center text-color-darker">You Have Not Selected Any Networks</h2>
+                        <h2 class="uk-align-center text-color-darker">You Have Not Selected Any Categories</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                        Since you have not selected any categories, GPC signals will not be sent to any sites. Are you sure that this is what you want?
+                        Since you have not selected any categories, GPC will not be enabled on any site. Are you sure that this is what you want?
                     </div>
                     <div class="uk-modal-footer">
                         <button id="modal-button" class="uk-button uk-button-default uk-modal-close uk-align-right" style="margin: 0px 10px;">CANCEL</button>
@@ -97,51 +98,56 @@
                     </div>       
                 </fieldset>
             </form>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Select the categories of sites that you want to prevent from selling/sharing your data.</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">
+                The law gives you a privacy right:
+            </p>
+            <p class="uk-h5 uk-text">
+                Select one or more categories to specify which websites should be prohibited from selling/sharing your data. Hover over the cards to learn more.
+            </p>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many sites use third party ad networks that sell/share your data for advertising purposes (say, bluekai.com on espn.com).; pos: top-right">
+                    uk-tooltip="title:First party sites are sites that you visit intentionally. This category also includes sites that do not fall under any of the other categories.; pos: top-right">
+                        <h3 class="uk-card-title uk-margin">First Party Sites</h3>
+                    </div>
+                </div>  
+                <div class="choice" style="cursor: pointer;">
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title:(Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Advertising</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many sites use third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+                    uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Analytics</h3>
                     </div>
                 </div>
-                <div class="choice" style="cursor: pointer;">
-                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Many sites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
-                        <h3 class="uk-card-title uk-margin">Content & Social</h3>
-                    </div>
-                </div>  
             </div>
             <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Some sites use malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
+                    uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+                        <h3 class="uk-card-title uk-margin">Content & Social</h3>
+                    </div>
+                </div>  
+                <div class="choice" style="cursor: pointer;">
+                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                    uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
                         <h3 class="uk-card-title uk-margin">Cryptomining</h3>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:Browser fingerprinting is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version and the plugins you use.; pos: top-right">
-                        <h3 class="uk-card-title uk-margin">Fingerprinting</h3>
+                    uk-tooltip="title:Some sites integrate browser fingerprinting, which is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version or the plugins you use.; pos: top-right">
+                        <h3 class="uk-card-title uk-margin">Browser Fingerprinting</h3>
                     </div>
-                </div>
-                <div class="choice" style="cursor: pointer;">
-                    <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                    uk-tooltip="title:First party sites are the sites that you intentionally visit (say, espn.com when you browse there). This category also includes sites that do not fall under any of the other categories below.; pos: top-right">
-                        <h3 class="uk-card-title uk-margin">First Party Sites & Non-categorized Sites</h3>
-                    </div>
-                </div>  
+                </div> 
             </div>
 
             <div class="form-validation uk-margin-medium-top"></div>
             <br>
-            <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit My Choice</button>
+            <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit Your Choice</button>
         </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
