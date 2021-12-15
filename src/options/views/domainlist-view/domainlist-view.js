@@ -6,7 +6,6 @@ import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
 const domainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subtitle: "Review or Modify Your GPC Settings"}
-const nonDomainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subtitle: "Update Privacy Status"}
 
 // "Do not allow tracking for all" button is clicked
 function handleToggleAllOn() {
@@ -487,52 +486,51 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME==4) {
       defaultSettingInfo =
       `
-      <p class="uk-text-center">Select the categories of sites that you want to prevent from selling/sharing your data.</p>
+      <p class="uk-h5 uk-text-bold uk-text-italic">
+      The law gives you a privacy right:
+      </p>
+      <p class="uk-h5 uk-text">
+          Select one or more categories to specify which websites should be prohibited from selling/sharing your data. Hover over the cards to learn more.
+      </p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-        <div class="choice">
-          <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many sites use third party ad networks that sell/share your data for advertising purposes (say, bluekai.com on espn.com).; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="advertising" checked></a>
-            <span class="uk-text-middle">Advertising</span>
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:First party sites are sites that you visit intentionally. This category also includes sites that do not fall under any of the other categories.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">First Party Sites</h3>
+              </div>
+          </div>  
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:(Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">Advertising</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many sites use third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="analytics" checked></a>
-            <span class="uk-text-middle">Analytics</span>
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">Analytics</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many sites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="social" checked></a>
-            <span class="uk-text-middle">Content & Social</span>
-          </div>
-        </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-        <div class="choice">
-          <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Some sites use malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-            <span class="uk-text-middle">Cryptomining</span>
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">Content & Social</h3>
+              </div>
+          </div>  
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">Cryptomining</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Browser fingerprinting is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version and the plugins you use.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
-            <span class="uk-text-middle">Fingerprinting</span>
-          </div>
-        </div>
-        <div class="choice">
-          <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:First party sites are the sites that you intentionally visit (say, espn.com when you browse there). This category also includes sites that do not fall under any of the other categories below.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="others" checked></a>
-            <span class="uk-text-middle">First Party Sites & Non-categorized Sites</span>
-          </div>
-        </div>
+          <div class="choice" style="cursor: pointer;">
+              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Some sites integrate browser fingerprinting, which is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version or the plugins you use.; pos: top-right">
+                  <h3 class="uk-card-title uk-margin">Browser Fingerprinting</h3>
+              </div>
+          </div> 
       </div>
       `
     } 
@@ -540,29 +538,39 @@ function createDefaultSettingInfo(){
       defaultSettingInfo =
       `
       <div class="uk-container main">
-        <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
-        <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
-          <div class="choice">
-            <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-              uk-tooltip="title: GPC signals will be sent to all sites you visit.; pos: top-right">
-              <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">High Privacy-Sensitivity</span>
+        <p class="uk-h5 uk-text-bold uk-text-italic">
+        The law gives you a privacy right: 
+        </p>
+        <p class="uk-h5 uk-text">
+          Select a profile to specify which websites should be prohibited from selling/sharing your data. 
+          Hover over the cards to learn more.
+        </p>
+        <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+            <div class="choice" style="cursor: pointer;">
+                <div id='extremely-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                uk-tooltip="title: GPC will be enabled for all sites you visit.; pos: top-right">
+                    <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" ></a>
+                    <h3 class="uk-card-title uk-margin">High Privacy-Sensitivity</h3>
+                    <p><b>Prohibit all sites</b> from selling/sharing your data</p>
+                </div>
             </div>
-          </div>
-          <div class="choice">
-            <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will be sent to many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
-              <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Medium Privacy-Sensitivity </span>
+            <div class="choice" style="cursor: pointer;">
+                <div id='moderately-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                uk-tooltip="title: GPC will be enabled on many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
+                    <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" ></a>
+                    <h3 class="uk-card-title uk-margin">Medium Privacy-Sensitivity</h3>
+                    <p><b>Prohibit ad sites and malicious sites</b> from selling/sharing your data
+                    </p>
+                </div>
             </div>
-          </div>
-          <div class="choice">
-            <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will only be sent to sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
-              <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Low Privacy-Sensitivity</span>
+            <div class="choice" style="cursor: pointer;">
+                <div id="not-privacy-sensitive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                uk-tooltip="title: GPC will only be enabled on sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
+                    <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" ></a>
+                    <h3 class="uk-card-title uk-margin">Low Privacy-Sensitivity</h3>
+                    <p><b>Prohibit only malicious sites </b>from selling/sharing your data</p>
+                </div>
             </div>
-          </div>
         </div>
       </div>
       <hr>
@@ -596,23 +604,26 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME == 6){
       defaultSettingInfo = 
       `
-      <div class="uk-container main">
-        <div class="uk-child-width-1-2@m uk-grid-match uk-text-center" uk-grid>
-          <div class="choice">
-            <div id='sending' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+      <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
+      <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
+      <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
+      <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+          <div class="choice" style="cursor: pointer;">
+              <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+              uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                  <a class="uk-position-cover first" href="#"></a>
+                  <h3 class="uk-card-title uk-margin">Enable GPC</h3>
+                  <p>Do not track me on any website.</p>
+              </div>
+          </div>
+          <div class="choice" style="cursor: pointer;">
+              <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-              <a class="uk-position-cover second" href="#" id="sending" checked></a>
-              <span class="uk-text-middle">Send Signal</span>
-            </div>
+                  <a class="uk-position-cover second" href="#"></a>
+                  <h3 class="uk-card-title uk-margin">Disable GPC</h3>
+                  <p>Feel free to track me for ad purposes.</p>
+              </div>
           </div>
-          <div class="choice">
-            <div id="not-sending" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
-              <a class="uk-position-cover third" href="#" id="not-sending" checked></a>
-              <span class="uk-text-middle">Do Not Send Signal</span>
-            </div>
-          </div>
-        </div>
       </div>
       <hr>
       `
@@ -907,7 +918,7 @@ export async function domainlistView(scaffoldTemplate, buildList) {
     body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
   } else {
-    body = renderParse(scaffoldTemplate, nonDomainListHeadings, 'scaffold-component'); 
+    body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view-plain.html', 'domainlist-view-plain')
   }
   
