@@ -5,15 +5,14 @@
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
-const domainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Profile / Change Do Not Sell Signal Domains"}
-const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Status"}
+const domainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subtitle: "Review or Modify Your GPC Settings"}
+const nonDomainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subtitle: "Update Privacy Status"}
 
 // "Do not allow tracking for all" button is clicked
 function handleToggleAllOn() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
-    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
@@ -46,8 +45,7 @@ function handleToggleAllOn() {
   }
   // "Apply all" box isn't checked
   else {
-    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
         if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
@@ -77,8 +75,7 @@ function handleToggleAllOn() {
 function handleToggleAllOff() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
-    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
-      NOTE: Your current preferences will be permanently lost.`
+    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
             if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
@@ -111,8 +108,7 @@ function handleToggleAllOff() {
   }
   // "Apply all" box isn't checked
   else {
-    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOff_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
         if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
@@ -448,7 +444,7 @@ function createDefaultSettingInfo(){
           </label>
         </div>
         <div class="domain uk-width-expand">
-          Show the Choice Banner Every Time I Visit a New Site
+          Show the GPC Banner for Future Websites You Visit
         </div>
       </div>
       <br>
@@ -461,32 +457,25 @@ function createDefaultSettingInfo(){
           `
           ${apply_all_switch}
           <div class="important-text">
-          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
+          You have enabled GPC.
           </div>
-          You can opt out of sending the signal
-          to an individual domain by turning off the domain's switch in the domain list below or apply a
-          different setting to all current and future domains.
+          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
           `
         }
         else {
 
           defaultSettingInfo = `
           ${apply_all_switch}
-          <div class="important-text"> You have opted to allow all domains to track and sell 
-          your information, unless otherwise stated in the domain list. 
+          <div class="important-text"> You have disabled GPC.
           </div>
-          You can opt out of allowing an individual domain to
-          track and sell your information by 
-          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
-          domains.
+          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
           `  
         }
       }
       else {
         defaultSettingInfo = `
         ${apply_all_switch}
-        <div class="important-text"> When you visit a new domain you will be asked
-        to choose your privacy preference for that domain. 
+        <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
         You can change the privacy preference made for
         an individual domain by 
@@ -594,12 +583,9 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME==0){
       defaultSettingInfo = 
       `
-      <div class="important-text"> When you visit a new domain you will be asked
-        to choose your privacy preference for that domain. 
+      <div class="important-text"> Below you can change your GPC setting for an individual site.
       </div>
-      You can change the privacy preference made for
-      an individual domain by 
-      toggling the domain's switch in the domain list below. When a switch is turned on do not sell signals will be sent.
+      You can also apply a GPC setting to all current and future sites.
       `
     }
     else if (result.UI_SCHEME == 6){
@@ -638,7 +624,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_on"
         class="uk-badge button blue-buttons"
         type="button">
-       Send Do Not Sell Signals to All
+       Enable GPC on All Sites
       </button>
     `
   let toggle_domainlist_off =
@@ -646,7 +632,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Send Do Not Sell Signals to None
+        Disable GPC on All Sites
       </button>
     `
   let delete_all =
@@ -670,7 +656,7 @@ function createDomainlistManagerButtons(){
     `
   let apply_to_all=
   `
-    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
+    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply to Future Sites</label>
   `
   let manager_btns=
   `
