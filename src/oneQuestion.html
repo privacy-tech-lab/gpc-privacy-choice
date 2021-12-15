@@ -24,7 +24,7 @@
                         <h2 class="uk-align-center text-color-darker">You are all set!</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                      We have successfully initialized your privacy configurations! GPC signals will be sent based on your choice. You can change the settings at any time by clicking on the extension icon.
+                      We have successfully registered your GPC setting! You can review or modify your setting by clicking on the extension icon.
                     </div>
                     <div class="uk-modal-footer">
                       <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
@@ -80,13 +80,15 @@
                     </div>         
                 </fieldset>
             </form>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Would you like to send a signal to opt out from ad tracking on the domains you visit?</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
+            <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
+            <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
             <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
                         <a class="uk-position-cover first" href="#"></a>
-                        <h3 class="uk-card-title uk-margin">Yes, Send Signal</h3>
+                        <h3 class="uk-card-title uk-margin">Enable GPC</h3>
                         <p>Do not track me on any website.</p>
                     </div>
                 </div>
@@ -94,7 +96,7 @@
                     <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
                         <a class="uk-position-cover second" href="#"></a>
-                        <h3 class="uk-card-title uk-margin">No, Don't Send Signal</h3>
+                        <h3 class="uk-card-title uk-margin">Disable GPC</h3>
                         <p>Feel free to track me for ad purposes.</p>
                     </div>
                 </div>
