@@ -574,7 +574,12 @@ function createDefaultSettingInfo(){
       <div class="uk-container main">
         <div class="uk-alert-success" uk-alert>
           <a class="uk-alert-close" uk-close></a>
-          <p>You will see 10 banners popping up by random. Based on your banner decisions, we will learn your privacy profiles and put you in the relevant categories. You will no longer need to see the banners after that. The learning is currently in progress.</p>
+          <p>
+          You will see 10 GPC banners popping up randomized on sites you visit. 
+          Based on your choices, the extension will learn your privacy preferences. 
+          You will no longer need to make choices after the learning phase is completed. 
+          The learning phase is currently in progress.
+          </p>
         </div>
       </div>
       <hr>
