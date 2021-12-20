@@ -216,31 +216,31 @@ function addGPCEventListener() {
 // User changes their privacy profile on scheme 3
 function addPrivacyProfileEventListener() {
   document.addEventListener('click', function(event){
-    if(event.target.id == 'extremely-privacy-sensitive') {
+    if(event.target.id == 'high-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Extremely Privacy-Sensitive") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "High Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "High Privacy-Sensitivity", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+      chrome.storage.local.set({USER_CHOICES: "High Privacy-Sensitivity"});
       createDefaultSettingInfo()
       updatePrefScheme3()
-    } else if (event.target.id == 'moderately-privacy-sensitive') {
+    } else if (event.target.id == 'medium-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Moderately Privacy-Sensitive") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Medium Privacy-Sensitivity", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+      chrome.storage.local.set({USER_CHOICES: "Medium Privacy-Sensitivity"}); 
       createDefaultSettingInfo()
       updatePrefScheme3()
-    } else if (event.target.id == 'not-privacy-sensitive') {
+    } else if (event.target.id == 'low-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Not Privacy-Sensitive") {
+        if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+      chrome.storage.local.set({USER_CHOICES: "Low Privacy-Sensitivity"});  
       createDefaultSettingInfo()
       updatePrefScheme3()
     }
@@ -382,18 +382,18 @@ function filterList() {
 // Handles the initialization of card selections/changing of card selections
 function cardInteractionSettings(scheme, userChoice) {
     if(scheme==3){
-      if(userChoice=='Extremely Privacy-Sensitive'){
-        document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+      if(userChoice=='High Privacy-Sensitivity'){
+        document.getElementById('high-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(userChoice=='Moderately Privacy-Sensitive'){
-        document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+      else document.getElementById('high-privacy-sensitivity-card').classList.remove("uk-card-primary");
+      if(userChoice=='Medium Privacy-Sensitivity'){
+        document.getElementById('medium-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(userChoice=="Not Privacy-Sensitive"){
-        document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+      else document.getElementById('medium-privacy-sensitivity-card').classList.remove("uk-card-primary");
+      if(userChoice=="Low Privacy-Sensitivity"){
+        document.getElementById('low-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+      else document.getElementById('low-privacy-sensitivity-card').classList.remove("uk-card-primary");
     } else if(scheme == 4){
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
@@ -547,26 +547,26 @@ function createDefaultSettingInfo(){
         </p>
         <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
             <div class="choice" style="cursor: pointer;">
-                <div id='extremely-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                <div id='high-privacy-sensitivity-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                 uk-tooltip="title: GPC will be enabled for all sites you visit.; pos: top-right">
-                    <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" ></a>
+                    <a class="uk-position-cover first" href="#" id="high-privacy-sensitivity" ></a>
                     <h3 class="uk-card-title uk-margin">High Privacy-Sensitivity</h3>
                     <p><b>Prohibit all sites</b> from selling/sharing your data</p>
                 </div>
             </div>
             <div class="choice" style="cursor: pointer;">
-                <div id='moderately-privacy-sensitive-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                <div id='medium-privacy-sensitivity-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                 uk-tooltip="title: GPC will be enabled on many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
-                    <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" ></a>
+                    <a class="uk-position-cover second" href="#" id="medium-privacy-sensitivity" ></a>
                     <h3 class="uk-card-title uk-margin">Medium Privacy-Sensitivity</h3>
                     <p><b>Prohibit ad sites and malicious sites</b> from selling/sharing your data
                     </p>
                 </div>
             </div>
             <div class="choice" style="cursor: pointer;">
-                <div id="not-privacy-sensitive-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                <div id="low-privacy-sensitivity-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                 uk-tooltip="title: GPC will only be enabled on sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
-                    <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" ></a>
+                    <a class="uk-position-cover third" href="#" id="low-privacy-sensitivity" ></a>
                     <h3 class="uk-card-title uk-margin">Low Privacy-Sensitivity</h3>
                     <p><b>Prohibit only malicious sites </b>from selling/sharing your data</p>
                 </div>
@@ -778,14 +778,14 @@ function updatePrefScheme3() {
       // by default, do not send GPC signals
       let value = false;
       // if user chose extremely privacy sensitive: send GPC signals
-      if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+      if (result.USER_CHOICES == "High Privacy-Sensitivity") value = true;
       // if user chose not privacy sensitive: do not send GPC signals
-      else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
+      else if (result.USER_CHOICES == "Low Privacy-Sensitivity")  {
           value = false;
           if (result.NPSLIST.includes(d)) value = true;
       }
       // if the user chose moderately gpc signals
-      else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+      else if (result.USER_CHOICES == "Medium Privacy-Sensitivity"){
           // by default, the GPC signals are not sent unless the currentDomain is the the checkList
           value = false;
           if (result.CHECKLIST.includes(d)) value = true;

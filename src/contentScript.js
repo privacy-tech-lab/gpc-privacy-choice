@@ -472,14 +472,14 @@ function addToDomainListScheme3(){
         let value = false;
         if (!(currentDomain in domains)){
             // if user chose extremely privacy sensitive: send GPC signals
-            if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+            if (result.USER_CHOICES == "High Privacy-Sensitivity") value = true;
             // if user chose not privacy sensitive: do not send GPC signals
-            else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
+            else if (result.USER_CHOICES == "Low Privacy-Sensitivity")  {
                 value = false;
                 if (result.NPSLIST.includes(currentDomain)) value = true;
             }
             // if the user chose moderately gpc signals
-            else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+            else if (result.USER_CHOICES == "Medium Privacy-Sensitivity"){
                 // by default, the GPC signals are not sent unless the currentDomain is the the checkList
                 value = false;
                 if (result.CHECKLIST.includes(currentDomain)) value = true;
@@ -558,11 +558,11 @@ chrome.storage.local.get(["DOMAINS", "SEND_SIGNAL_BANNER", "DO_NOT_SEND_SIGNAL_B
         if (sendSignalBanner + doNotSendSignalBanner == 5){
             let userProfile;
             if (sendSignalBanner <= 1){
-                userProfile = "Not Privacy-Sensitive"
+                userProfile = "Low Privacy-Sensitivity"
             } else if (sendSignalBanner >= 4){
-                userProfile = "Extremely Privacy-Sensitive"
+                userProfile = "High Privacy-Sensitivity"
             } else {
-                userProfile = "Moderately Privacy-Sensitive"
+                userProfile = "Medium Privacy-Sensitivity"
             }
             chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: userProfile})
             chrome.runtime.sendMessage({greeting:"LEARNING COMPLETED"})
