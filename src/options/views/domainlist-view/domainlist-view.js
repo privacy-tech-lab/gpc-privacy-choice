@@ -193,21 +193,24 @@ function handleDeleteDomainListEvent() {
 // User changes GPC signal send status on scheme 6
 function addGPCEventListener() {
   document.addEventListener('click', event => {
-    if(event.target.id == 'sending') {
+    console.log("something is clicked here! ")
+    console.log(event.target.id)
+    if(event.target.id == 'privacy-on') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Yes, Send Signal") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Yes, Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Enable GPC") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Enable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Yes, Send Signal"});
+      chrome.storage.local.set({USER_CHOICES: "Enable GPC"});
       createDefaultSettingInfo();
-    } else if (event.target.id == 'not-sending') {
+    } else if (event.target.id == 'privacy-off') {
+      console.log("I am clicked!!")
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "No, Don't Send Signal") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "No, Don't Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Disable GPC") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Disable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "No, Don't Send Signal"}); 
+      chrome.storage.local.set({USER_CHOICES: "Disable GPC"}); 
       createDefaultSettingInfo()
     }
   })
@@ -420,13 +423,13 @@ function cardInteractionSettings(scheme, userChoice) {
       }
       else document.getElementById('others-card').classList.remove("uk-card-primary");
     } else if (scheme==6){
-      if(userChoice=='Yes, Send Signal'){
-        document.getElementById('sending').classList.add('uk-card-primary')
-      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
+      if(userChoice=='Enable GPC'){
+        document.getElementById('privacy-on-card').classList.add('uk-card-primary')
+      } else document.getElementById('privacy-on-card').classList.remove("uk-card-primary");
 
-      if(userChoice=="No, Don't Send Signal"){
-        document.getElementById('not-sending').classList.add('uk-card-primary')
-      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
+      if(userChoice=="Disable GPC"){
+        document.getElementById('privacy-off-card').classList.add('uk-card-primary')
+      } else document.getElementById('privacy-off-card').classList.remove("uk-card-primary");
     }
 }
 
@@ -608,22 +611,22 @@ function createDefaultSettingInfo(){
       <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
       <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
       <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-          <div class="choice" style="cursor: pointer;">
-              <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-              uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                  <a class="uk-position-cover first" href="#"></a>
-                  <h3 class="uk-card-title uk-margin">Enable GPC</h3>
-                  <p>Do not track me on any website.</p>
-              </div>
-          </div>
-          <div class="choice" style="cursor: pointer;">
-              <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-                  <a class="uk-position-cover second" href="#"></a>
-                  <h3 class="uk-card-title uk-margin">Disable GPC</h3>
-                  <p>Feel free to track me for ad purposes.</p>
-              </div>
-          </div>
+        <div class="choice" style="cursor: pointer;">
+            <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id='privacy-on'></a>
+                <h3 class="uk-card-title uk-margin">Enable GPC</h3>
+                <p>Do not track me on any website.</p>
+            </div>
+        </div>
+        <div class="choice" style="cursor: pointer;">
+            <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+            uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+                <a class="uk-position-cover second" href="#" id='privacy-off'></a>
+                <h3 class="uk-card-title uk-margin">Disable GPC</h3>
+                <p>Feel free to track me for ad purposes.</p>
+            </div>
+        </div>
       </div>
       <hr>
       `

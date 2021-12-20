@@ -52,7 +52,7 @@ function submit(prolificID){
         let schemeNumber = result.UI_SCHEME;
         if (schemeNumber == 6) {
             chrome.storage.local.set({APPLY_ALL: true});
-            if (userProfile == "Yes, Send Signal") {
+            if (userProfile == "Enable GPC") {
                 chrome.storage.local.set({ENABLED: true});
             }
             else {chrome.storage.local.set({ENABLED: false});}

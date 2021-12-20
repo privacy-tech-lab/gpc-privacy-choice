@@ -27,7 +27,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 5;
+  let userScheme = 6;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -278,7 +278,7 @@ async function updateSendSignalScheme5(){
 // SCHEME 6: Plain YES/NO to Privacy
 async function updateSendSignalScheme6(){
   await chrome.storage.local.get(["USER_CHOICES"], function (result){
-    if (result.USER_CHOICES == "Yes, Send Signal") sendSignal = true;
+    if (result.USER_CHOICES == "Enable GPC") sendSignal = true;
     else sendSignal = false;
   })
 }
