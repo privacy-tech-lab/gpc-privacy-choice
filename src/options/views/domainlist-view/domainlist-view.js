@@ -682,9 +682,11 @@ function createDomainlistManagerButtons(){
     ${apply_to_all}
     <hr>
   `
+
+  
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
-    if(result.UI_SCHEME==4 || result.UI_SCHEME==3)
+    if(result.UI_SCHEME == 3 || result.UI_SCHEME == 4 || result.UI_SCHEME == 5)
       document.getElementById('domainlist-manager-btns').classList.add("hide")
     if (result.UI_SCHEME==0){
       document.getElementById('toggle_all_on').classList.add("hide")
