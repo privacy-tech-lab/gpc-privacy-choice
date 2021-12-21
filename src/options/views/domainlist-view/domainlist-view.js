@@ -256,7 +256,7 @@ function addCategoriesEventListener() {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {  
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
       let userChoices=result.USER_CHOICES
-      if(event.target.id == 'advertising') {
+      if(event.target.id == 'Advertising') {
         userChoices["Advertising"]=!userChoices["Advertising"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -266,7 +266,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()
       }
-      else if(event.target.id == 'analytics') {
+      else if(event.target.id == 'Analytics') {
         userChoices["Analytics"]=!userChoices["Analytics"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -276,7 +276,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()
       }
-      else if(event.target.id == 'fingerprinting') {
+      else if(event.target.id == 'Fingerprinting') {
         userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -286,7 +286,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()         
       }
-      else if(event.target.id == 'social') {
+      else if(event.target.id == 'Content & Social') {
         userChoices["Content & Social"]=!userChoices["Content & Social"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -296,7 +296,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()       
       }
-      else if (event.target.id == 'cryptomining') {
+      else if (event.target.id == 'Cryptomining') {
         userChoices["Cryptomining"]=!userChoices["Cryptomining"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -306,7 +306,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()        
       }
-      else if (event.target.id == 'others') {
+      else if (event.target.id == 'Others') {
         userChoices["Others"]=!userChoices["Others"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -398,6 +398,7 @@ function cardInteractionSettings(scheme, userChoice) {
       }
       else document.getElementById('low-privacy-sensitivity-card').classList.remove("uk-card-primary");
     } else if(scheme == 4){
+      console.log("we are in scheme 4 right now")
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
       }
@@ -497,40 +498,46 @@ function createDefaultSettingInfo(){
       </p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:First party sites are sites that you visit intentionally. This category also includes sites that do not fall under any of the other categories.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Others"></a>
                   <h3 class="uk-card-title uk-margin">First Party Sites</h3>
               </div>
           </div>  
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="advertising-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:(Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Advertising"></a>
                   <h3 class="uk-card-title uk-margin">Advertising</h3>
               </div>
           </div>
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="analytics-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Analytics"></a>
                   <h3 class="uk-card-title uk-margin">Analytics</h3>
               </div>
           </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Content & Social"></a>
                   <h3 class="uk-card-title uk-margin">Content & Social</h3>
               </div>
           </div>  
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="cryptomining-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Cryptomining"></a>
                   <h3 class="uk-card-title uk-margin">Cryptomining</h3>
               </div>
           </div>
           <div class="choice" style="cursor: pointer;">
-              <div class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              <div id="fingerprinting-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
               uk-tooltip="title:Some sites integrate browser fingerprinting, which is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version or the plugins you use.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Fingerprinting"></a>
                   <h3 class="uk-card-title uk-margin">Browser Fingerprinting</h3>
               </div>
           </div> 
