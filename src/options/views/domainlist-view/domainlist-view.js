@@ -193,8 +193,6 @@ function handleDeleteDomainListEvent() {
 // User changes GPC signal send status on scheme 6
 function addGPCEventListener() {
   document.addEventListener('click', event => {
-    console.log("something is clicked here! ")
-    console.log(event.target.id)
     if(event.target.id == 'privacy-on') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Enable GPC") {
@@ -204,7 +202,6 @@ function addGPCEventListener() {
       chrome.storage.local.set({USER_CHOICES: "Enable GPC"});
       createDefaultSettingInfo();
     } else if (event.target.id == 'privacy-off') {
-      console.log("I am clicked!!")
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Disable GPC") {
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Disable GPC", location: "Options page", subcollection: "Privacy Choice"})
@@ -398,7 +395,6 @@ function cardInteractionSettings(scheme, userChoice) {
       }
       else document.getElementById('low-privacy-sensitivity-card').classList.remove("uk-card-primary");
     } else if(scheme == 4){
-      console.log("we are in scheme 4 right now")
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
       }
