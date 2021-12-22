@@ -27,7 +27,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 0;
+  let userScheme = 4;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -244,9 +244,9 @@ async function updateSendSignalScheme3(){
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
     await chrome.storage.local.get(["CHECKLIST", "NPSLIST", "USER_CHOICES"], function(result){
-      if (result.USER_CHOICES == "Not Privacy-Sensitive"){
+      if (result.USER_CHOICES == "Low Privacy-Sensitivity"){
         if (result.NPSLIST.includes(currentDomain)) sendSignal = true;
-      } else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+      } else if (result.USER_CHOICES == "Medium Privacy-Sensitivity"){
         if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
       } else {
         sendSignal = true;
@@ -270,7 +270,7 @@ async function updateSendSignalScheme5(){
     let sendSignalBanner = result.SEND_SIGNAL_BANNER;
     let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
     if (sendSignalBanner + doNotSendSignalBanner == 5){
-      chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: "Not Privacy-Sensitive"});
+      chrome.storage.local.set({UI_SCHEME: 3, USER_CHOICES: "Low Privacy-Sensitivity"});
     }
   })
 }
@@ -278,7 +278,7 @@ async function updateSendSignalScheme5(){
 // SCHEME 6: Plain YES/NO to Privacy
 async function updateSendSignalScheme6(){
   await chrome.storage.local.get(["USER_CHOICES"], function (result){
-    if (result.USER_CHOICES == "Yes, Send Signal") sendSignal = true;
+    if (result.USER_CHOICES == "Enable GPC") sendSignal = true;
     else sendSignal = false;
   })
 }

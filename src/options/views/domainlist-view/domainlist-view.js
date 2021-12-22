@@ -5,15 +5,13 @@
 import { renderParse, fetchParse } from '../../components/util.js'
 import { buildToggle, addDomainToggleListener, deleteDomain, allOn, allOff} from "../../../domainlist.js";
 
-const domainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Profile / Change Do Not Sell Signal Domains"}
-const nonDomainListHeadings = {title: 'Privacy Settings', subtitle: "Update Privacy Status"}
+const domainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subtitle: "Review or Modify Your GPC Settings"}
 
 // "Do not allow tracking for all" button is clicked
 function handleToggleAllOn() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
-    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.set({DOMAINLIST_ENABLED: false});
         chrome.storage.local.set({APPLY_ALL: true});
@@ -46,8 +44,7 @@ function handleToggleAllOn() {
   }
   // "Apply all" box isn't checked
   else {
-    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
         if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
@@ -77,8 +74,7 @@ function handleToggleAllOn() {
 function handleToggleAllOff() {
   // "Apply all" box is checked
   if (document.getElementById("apply_to_all").checked) {
-    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
-      NOTE: Your current preferences will be permanently lost.`
+    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
       if (confirm(toggleOff_prompt)) {
         chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
             if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
@@ -111,8 +107,7 @@ function handleToggleAllOff() {
   }
   // "Apply all" box isn't checked
   else {
-    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites in your domain list?
-    NOTE: Your current preferences will be permanently lost.`
+    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOff_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
         if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
@@ -198,21 +193,21 @@ function handleDeleteDomainListEvent() {
 // User changes GPC signal send status on scheme 6
 function addGPCEventListener() {
   document.addEventListener('click', event => {
-    if(event.target.id == 'sending') {
+    if(event.target.id == 'privacy-on') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Yes, Send Signal") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Yes, Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Enable GPC") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Enable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Yes, Send Signal"});
+      chrome.storage.local.set({USER_CHOICES: "Enable GPC"});
       createDefaultSettingInfo();
-    } else if (event.target.id == 'not-sending') {
+    } else if (event.target.id == 'privacy-off') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "No, Don't Send Signal") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "No, Don't Send Signal", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Disable GPC") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Disable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "No, Don't Send Signal"}); 
+      chrome.storage.local.set({USER_CHOICES: "Disable GPC"}); 
       createDefaultSettingInfo()
     }
   })
@@ -221,31 +216,31 @@ function addGPCEventListener() {
 // User changes their privacy profile on scheme 3
 function addPrivacyProfileEventListener() {
   document.addEventListener('click', function(event){
-    if(event.target.id == 'extremely-privacy-sensitive') {
+    if(event.target.id == 'high-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Extremely Privacy-Sensitive") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Extremely Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "High Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "High Privacy-Sensitivity", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Extremely Privacy-Sensitive"});
+      chrome.storage.local.set({USER_CHOICES: "High Privacy-Sensitivity"});
       createDefaultSettingInfo()
       updatePrefScheme3()
-    } else if (event.target.id == 'moderately-privacy-sensitive') {
+    } else if (event.target.id == 'medium-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Moderately Privacy-Sensitive") {
-          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Moderately Privacy-Sensitive", location: "Options page", subcollection: "Privacy Choice"})
+        if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Medium Privacy-Sensitivity", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Moderately Privacy-Sensitive"}); 
+      chrome.storage.local.set({USER_CHOICES: "Medium Privacy-Sensitivity"}); 
       createDefaultSettingInfo()
       updatePrefScheme3()
-    } else if (event.target.id == 'not-privacy-sensitive') {
+    } else if (event.target.id == 'low-privacy-sensitivity') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Not Privacy-Sensitive") {
+        if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
         chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Not Privacy Sensitive", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
-      chrome.storage.local.set({USER_CHOICES: "Not Privacy-Sensitive"});  
+      chrome.storage.local.set({USER_CHOICES: "Low Privacy-Sensitivity"});  
       createDefaultSettingInfo()
       updatePrefScheme3()
     }
@@ -258,7 +253,7 @@ function addCategoriesEventListener() {
     chrome.storage.local.get(["USER_CHOICES"], function (result) {  
       chrome.storage.local.set({PREV_CHOICE: result.USER_CHOICES});
       let userChoices=result.USER_CHOICES
-      if(event.target.id == 'advertising') {
+      if(event.target.id == 'Advertising') {
         userChoices["Advertising"]=!userChoices["Advertising"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -268,7 +263,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()
       }
-      else if(event.target.id == 'analytics') {
+      else if(event.target.id == 'Analytics') {
         userChoices["Analytics"]=!userChoices["Analytics"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -278,7 +273,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()
       }
-      else if(event.target.id == 'fingerprinting') {
+      else if(event.target.id == 'Fingerprinting') {
         userChoices["Fingerprinting"]=!userChoices["Fingerprinting"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -288,7 +283,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()         
       }
-      else if(event.target.id == 'social') {
+      else if(event.target.id == 'Content & Social') {
         userChoices["Content & Social"]=!userChoices["Content & Social"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -298,7 +293,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()       
       }
-      else if (event.target.id == 'cryptomining') {
+      else if (event.target.id == 'Cryptomining') {
         userChoices["Cryptomining"]=!userChoices["Cryptomining"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -308,7 +303,7 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo()
         updatePrefScheme4()        
       }
-      else if (event.target.id == 'others') {
+      else if (event.target.id == 'Others') {
         userChoices["Others"]=!userChoices["Others"]
         chrome.storage.local.set({USER_CHOICES: userChoices});
         chrome.storage.local.get(["USER_CHOICES", "PREV_CHOICE"], function (result) {
@@ -387,18 +382,18 @@ function filterList() {
 // Handles the initialization of card selections/changing of card selections
 function cardInteractionSettings(scheme, userChoice) {
     if(scheme==3){
-      if(userChoice=='Extremely Privacy-Sensitive'){
-        document.getElementById('extremely-privacy-sensitive-card').classList.add('uk-card-primary')
+      if(userChoice=='High Privacy-Sensitivity'){
+        document.getElementById('high-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('extremely-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(userChoice=='Moderately Privacy-Sensitive'){
-        document.getElementById('moderately-privacy-sensitive-card').classList.add('uk-card-primary')
+      else document.getElementById('high-privacy-sensitivity-card').classList.remove("uk-card-primary");
+      if(userChoice=='Medium Privacy-Sensitivity'){
+        document.getElementById('medium-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('moderately-privacy-sensitive-card').classList.remove("uk-card-primary");
-      if(userChoice=="Not Privacy-Sensitive"){
-        document.getElementById('not-privacy-sensitive-card').classList.add('uk-card-primary')
+      else document.getElementById('medium-privacy-sensitivity-card').classList.remove("uk-card-primary");
+      if(userChoice=="Low Privacy-Sensitivity"){
+        document.getElementById('low-privacy-sensitivity-card').classList.add('uk-card-primary')
       }
-      else document.getElementById('not-privacy-sensitive-card').classList.remove("uk-card-primary");
+      else document.getElementById('low-privacy-sensitivity-card').classList.remove("uk-card-primary");
     } else if(scheme == 4){
       if(userChoice['Advertising']){
         document.getElementById('advertising-card').classList.add('uk-card-primary')
@@ -425,13 +420,13 @@ function cardInteractionSettings(scheme, userChoice) {
       }
       else document.getElementById('others-card').classList.remove("uk-card-primary");
     } else if (scheme==6){
-      if(userChoice=='Yes, Send Signal'){
-        document.getElementById('sending').classList.add('uk-card-primary')
-      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
+      if(userChoice=='Enable GPC'){
+        document.getElementById('privacy-on-card').classList.add('uk-card-primary')
+      } else document.getElementById('privacy-on-card').classList.remove("uk-card-primary");
 
-      if(userChoice=="No, Don't Send Signal"){
-        document.getElementById('not-sending').classList.add('uk-card-primary')
-      } else document.getElementById('not-sending').classList.remove("uk-card-primary");
+      if(userChoice=="Disable GPC"){
+        document.getElementById('privacy-off-card').classList.add('uk-card-primary')
+      } else document.getElementById('privacy-off-card').classList.remove("uk-card-primary");
     }
 }
 
@@ -448,7 +443,7 @@ function createDefaultSettingInfo(){
           </label>
         </div>
         <div class="domain uk-width-expand">
-          Show the Choice Banner Every Time I Visit a New Site
+          Show the GPC Banner for Future Websites You Visit
         </div>
       </div>
       <br>
@@ -461,32 +456,25 @@ function createDefaultSettingInfo(){
           `
           ${apply_all_switch}
           <div class="important-text">
-          You have opted to send do not sell signals to all domains, unless otherwise stated in the domain list.
+          You have enabled GPC.
           </div>
-          You can opt out of sending the signal
-          to an individual domain by turning off the domain's switch in the domain list below or apply a
-          different setting to all current and future domains.
+          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
           `
         }
         else {
 
           defaultSettingInfo = `
           ${apply_all_switch}
-          <div class="important-text"> You have opted to allow all domains to track and sell 
-          your information, unless otherwise stated in the domain list. 
+          <div class="important-text"> You have disabled GPC.
           </div>
-          You can opt out of allowing an individual domain to
-          track and sell your information by 
-          turning on the domain's switch in the domain list below or apply a differnt setting to all current and future
-          domains.
+          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
           `  
         }
       }
       else {
         defaultSettingInfo = `
         ${apply_all_switch}
-        <div class="important-text"> When you visit a new domain you will be asked
-        to choose your privacy preference for that domain. 
+        <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
         You can change the privacy preference made for
         an individual domain by 
@@ -498,52 +486,57 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME==4) {
       defaultSettingInfo =
       `
-      <p class="uk-text-center">Select below the forms of online tracking you do NOT want to be subjected to.</p>
+      <p class="uk-h5 uk-text-bold uk-text-italic">
+      The law gives you a privacy right:
+      </p>
+      <p class="uk-h5 uk-text">
+          Select one or more categories to specify which websites should be prohibited from selling/sharing your data. Hover over the cards to learn more.
+      </p>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-        <div class="choice">
-          <div id='advertising-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use third party ad networks that will receive your data for advertising purposes. Ad networks will often track you across multiple sites you visit.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="advertising" checked></a>
-            <span class="uk-text-middle">Advertising</span>
+          <div class="choice" style="cursor: pointer;">
+              <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:First party sites are sites that you visit intentionally. This category also includes sites that do not fall under any of the other categories.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Others"></a>
+                  <h3 class="uk-card-title uk-margin">First Party Sites</h3>
+              </div>
+          </div>  
+          <div class="choice" style="cursor: pointer;">
+              <div id="advertising-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:(Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Advertising"></a>
+                  <h3 class="uk-card-title uk-margin">Advertising</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='analytics-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use third party services that will keep track of site metrics, for example, your geographical region or whether you experienced any errors on the site you visited.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="analytics" checked></a>
-            <span class="uk-text-middle">Analytics</span>
+          <div class="choice" style="cursor: pointer;">
+              <div id="analytics-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Analytics"></a>
+                  <h3 class="uk-card-title uk-margin">Analytics</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='social-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Many websites use content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and share your data with those.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="social" checked></a>
-            <span class="uk-text-middle">Content & Social</span>
-          </div>
-        </div>
       </div>
       <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-        <div class="choice">
-          <div id='cryptomining-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Some sites use malicious third party services that will use your computer to mine for crypto currencies.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="cryptomining" checked></a>
-            <span class="uk-text-middle">Cryptomining</span>
+          <div class="choice" style="cursor: pointer;">
+              <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Content & Social"></a>
+                  <h3 class="uk-card-title uk-margin">Content & Social</h3>
+              </div>
+          </div>  
+          <div class="choice" style="cursor: pointer;">
+              <div id="cryptomining-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Cryptomining"></a>
+                  <h3 class="uk-card-title uk-margin">Cryptomining</h3>
+              </div>
           </div>
-        </div>
-        <div class="choice">
-          <div id='fingerprinting-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:Browser fingerprinting is a sneaky technique to identify you based on the characteristics of your browser, for example, by your browser version and the plugins you use. Some sites use third party fingerprinting services for advertising purposes and disclose your data to those.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="fingerprinting" checked></a>
-            <span class="uk-text-middle">Fingerprinting</span>
-          </div>
-        </div>
-        <div class="choice">
-          <div id='others-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-            uk-tooltip="title:This category includes your first party sites, i.e., the sites that you intentionally visit, as well as sites that do not fall in any of the other categories.; pos: top-right">
-            <a class="uk-position-cover first" href="#" id="others" checked></a>
-            <span class="uk-text-middle">Others</span>
-          </div>
-        </div>
+          <div class="choice" style="cursor: pointer;">
+              <div id="fingerprinting-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Some sites integrate browser fingerprinting, which is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version or the plugins you use.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Fingerprinting"></a>
+                  <h3 class="uk-card-title uk-margin">Browser Fingerprinting</h3>
+              </div>
+          </div> 
       </div>
       `
     } 
@@ -551,29 +544,39 @@ function createDefaultSettingInfo(){
       defaultSettingInfo =
       `
       <div class="uk-container main">
-        <h2 class="uk-legend uk-text-center">Privacy Profile</h2>
-        <div class="uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
-          <div class="choice">
-            <div id='extremely-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
-              uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-              <a class="uk-position-cover first" href="#" id="extremely-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Extremely Privacy-Sensitive</span>
+        <p class="uk-h5 uk-text-bold uk-text-italic">
+        The law gives you a privacy right: 
+        </p>
+        <p class="uk-h5 uk-text">
+          Select a profile to specify which websites should be prohibited from selling/sharing your data. 
+          Hover over the cards to learn more.
+        </p>
+        <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+            <div class="choice" style="cursor: pointer;">
+                <div id='high-privacy-sensitivity-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+                uk-tooltip="title: GPC will be enabled for all sites you visit.; pos: top-right">
+                    <a class="uk-position-cover first" href="#" id="high-privacy-sensitivity" ></a>
+                    <h3 class="uk-card-title uk-margin">High Privacy-Sensitivity</h3>
+                    <p><b>Prohibit all sites</b> from selling/sharing your data</p>
+                </div>
             </div>
-          </div>
-          <div class="choice">
-            <div id='moderately-privacy-sensitive-card' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-              <a class="uk-position-cover second" href="#" id="moderately-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Moderately Privacy-Sensitive</span>
+            <div class="choice" style="cursor: pointer;">
+                <div id='medium-privacy-sensitivity-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                uk-tooltip="title: GPC will be enabled on many sites you visit, i.e., those with browser fingerprinting, cryptomining, advertising, and analytics.; pos: top-right">
+                    <a class="uk-position-cover second" href="#" id="medium-privacy-sensitivity" ></a>
+                    <h3 class="uk-card-title uk-margin">Medium Privacy-Sensitivity</h3>
+                    <p><b>Prohibit ad sites and malicious sites</b> from selling/sharing your data
+                    </p>
+                </div>
             </div>
-          </div>
-          <div class="choice">
-            <div id="not-privacy-sensitive-card" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
-              <a class="uk-position-cover third" href="#" id="not-privacy-sensitive" checked></a>
-              <span class="uk-text-middle">Not Privacy-Sensitive</span>
+            <div class="choice" style="cursor: pointer;">
+                <div id="low-privacy-sensitivity-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                uk-tooltip="title: GPC will only be enabled on sites that support malicious practices, i.e., those with browser fingerprinting and cryptomining.; pos: top-right">
+                    <a class="uk-position-cover third" href="#" id="low-privacy-sensitivity" ></a>
+                    <h3 class="uk-card-title uk-margin">Low Privacy-Sensitivity</h3>
+                    <p><b>Prohibit only malicious sites </b>from selling/sharing your data</p>
+                </div>
             </div>
-          </div>
         </div>
       </div>
       <hr>
@@ -585,7 +588,12 @@ function createDefaultSettingInfo(){
       <div class="uk-container main">
         <div class="uk-alert-success" uk-alert>
           <a class="uk-alert-close" uk-close></a>
-          <p>You will see 10 banners popping up by random. Based on your banner decisions, we will learn your privacy profiles and put you in the relevant categories. You will no longer need to see the banners after that. The learning is currently in progress.</p>
+          <p>
+          You will see 10 GPC banners popping up randomized on sites you visit. 
+          Based on your choices, the extension will learn your privacy preferences. 
+          You will no longer need to make choices after the learning phase is completed. 
+          The learning phase is currently in progress.
+          </p>
         </div>
       </div>
       <hr>
@@ -594,33 +602,33 @@ function createDefaultSettingInfo(){
     else if (result.UI_SCHEME==0){
       defaultSettingInfo = 
       `
-      <div class="important-text"> When you visit a new domain you will be asked
-        to choose your privacy preference for that domain. 
+      <div class="important-text"> Below you can change your GPC setting for an individual site.
       </div>
-      You can change the privacy preference made for
-      an individual domain by 
-      toggling the domain's switch in the domain list below. When a switch is turned on do not sell signals will be sent.
+      You can also apply a GPC setting to all current and future sites.
       `
     }
     else if (result.UI_SCHEME == 6){
       defaultSettingInfo = 
       `
-      <div class="uk-container main">
-        <div class="uk-child-width-1-2@m uk-grid-match uk-text-center" uk-grid>
-          <div class="choice">
-            <div id='sending' class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-              <a class="uk-position-cover second" href="#" id="sending" checked></a>
-              <span class="uk-text-middle">Send Signal</span>
+      <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
+      <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
+      <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
+      <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+        <div class="choice" style="cursor: pointer;">
+            <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
+            uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
+                <a class="uk-position-cover first" href="#" id='privacy-on'></a>
+                <h3 class="uk-card-title uk-margin">Enable GPC</h3>
+                <p>Do not track me on any website.</p>
             </div>
-          </div>
-          <div class="choice">
-            <div id="not-sending" class="uk-card-small uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-              uk-tooltip="title: GPC signals will only be sent to websites that support malicious and/or invasive tracking. This includes fingerprinting and cryptomining.; pos: top-right">
-              <a class="uk-position-cover third" href="#" id="not-sending" checked></a>
-              <span class="uk-text-middle">Do Not Send Signal</span>
+        </div>
+        <div class="choice" style="cursor: pointer;">
+            <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+            uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
+                <a class="uk-position-cover second" href="#" id='privacy-off'></a>
+                <h3 class="uk-card-title uk-margin">Disable GPC</h3>
+                <p>Feel free to track me for ad purposes.</p>
             </div>
-          </div>
         </div>
       </div>
       <hr>
@@ -638,7 +646,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_on"
         class="uk-badge button blue-buttons"
         type="button">
-       Send Do Not Sell Signals to All
+       Enable GPC on All Sites
       </button>
     `
   let toggle_domainlist_off =
@@ -646,7 +654,7 @@ function createDomainlistManagerButtons(){
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
         type="button">
-        Send Do Not Sell Signals to None
+        Disable GPC on All Sites
       </button>
     `
   let delete_all =
@@ -670,7 +678,7 @@ function createDomainlistManagerButtons(){
     `
   let apply_to_all=
   `
-    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply To Future Domains</label>
+    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply to Future Sites</label>
   `
   let manager_btns=
   `
@@ -680,9 +688,11 @@ function createDomainlistManagerButtons(){
     ${apply_to_all}
     <hr>
   `
+
+  
   document.getElementById('domainlist-manager-btns').innerHTML = manager_btns;
   chrome.storage.local.get(["UI_SCHEME"], function (result) {
-    if(result.UI_SCHEME==4 || result.UI_SCHEME==3)
+    if(result.UI_SCHEME == 3 || result.UI_SCHEME == 4 || result.UI_SCHEME == 5)
       document.getElementById('domainlist-manager-btns').classList.add("hide")
     if (result.UI_SCHEME==0){
       document.getElementById('toggle_all_on').classList.add("hide")
@@ -776,14 +786,14 @@ function updatePrefScheme3() {
       // by default, do not send GPC signals
       let value = false;
       // if user chose extremely privacy sensitive: send GPC signals
-      if (result.USER_CHOICES == "Extremely Privacy-Sensitive") value = true;
+      if (result.USER_CHOICES == "High Privacy-Sensitivity") value = true;
       // if user chose not privacy sensitive: do not send GPC signals
-      else if (result.USER_CHOICES == "Not Privacy-Sensitive")  {
+      else if (result.USER_CHOICES == "Low Privacy-Sensitivity")  {
           value = false;
           if (result.NPSLIST.includes(d)) value = true;
       }
       // if the user chose moderately gpc signals
-      else if (result.USER_CHOICES == "Moderately Privacy-Sensitive"){
+      else if (result.USER_CHOICES == "Medium Privacy-Sensitivity"){
           // by default, the GPC signals are not sent unless the currentDomain is the the checkList
           value = false;
           if (result.CHECKLIST.includes(d)) value = true;
@@ -916,7 +926,7 @@ export async function domainlistView(scaffoldTemplate, buildList) {
     body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view.html', 'domainlist-view');
   } else {
-    body = renderParse(scaffoldTemplate, nonDomainListHeadings, 'scaffold-component'); 
+    body = renderParse(scaffoldTemplate, domainListHeadings, 'scaffold-component'); 
     content = await fetchParse('./views/domainlist-view/domainlist-view-plain.html', 'domainlist-view-plain')
   }
   

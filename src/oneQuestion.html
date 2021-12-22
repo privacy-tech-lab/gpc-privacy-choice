@@ -14,18 +14,17 @@
 <body>
     <div class="uk-section">
         <div class="uk-container loading" style="display: none;">
-            <div class ="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your privacy configurations</div>
+            <div class ="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your privacy configurations ...</div>
         </div>
         <div class="uk-container welcome">
             <div id="welcome-modal" uk-modal>
                 <div class="uk-modal-dialog uk-margin-auto-vertical">
-                    <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
                         <img src="./green_tick.png" alt="" style="margin: 0px;">
                         <h2 class="uk-align-center text-color-darker">You are all set!</h2>
                     </div>
                     <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-                      We have successfully initalized your privacy configurations! GPC signal will be sent based on your choice. You can change the settings at anytime by clicking on the extension icon.
+                      We have successfully registered your GPC setting! You can review or modify your setting by clicking on the extension icon.
                     </div>
                     <div class="uk-modal-footer">
                       <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
@@ -41,11 +40,11 @@
                 <div class="uk-card-body">
                   <div class="uk-flex-middle" uk-grid>
                     <div class="uk-width-2-3@m">
-                      <h3 class="uk-card-title">Welcome to the Research!</h3>
-                      <p><b>Explain the tradeoff here: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in
-                        voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+                      <h3 class="uk-card-title">Welcome!</h3>
+                      <p>
+                        We are computer science researchers at Wesleyan University, a liberal arts University in Connecticut, United States. 
+                        We are studying the usability of a new privacy feature in web browsers called <b>Global Privacy Control (GPC)</b>.
+                      </p>
                       <p>Here at GPC Privacy Choice Research, our team is developing a usable scheme for the web users to
                         efficiently and accurately opt out of the networks where they prefer not be tracked for ad purposes.
                         Welcome on board to explore the possibilities of next generation privacy oriented browsing experience!</p>
@@ -58,18 +57,19 @@
               </div>
             </div>
             <h1 class="uk-heading-line uk-text-center"><span>What is GPC?</span></h1>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Our ad oup-out mechanisms are based on Global Privacy Control (GPC).
-              It is an online privacy standard in development at the W3C</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">
+              <b>Global Privacy Control (GPC)</b> is an online privacy standard in development at the W3C.
+            </p>
             <ul class="uk-list uk-list-bullet">
-              <li>Enabling GPC indicates that you want to opt out from data selling/sharing</li>
-              <li>Whether a website must respect your opt out depends on local law. E.g., if you reside in California, the
+              <li>Enable GPC to <b>opt out from data selling/sharing</b></li>
+              <li>Whether a website must respect <b>your opt out depends on local law.</b> E.g., if you reside in California, the
                 California Consumer Privacy Act requires so</li>
-              <li>Websites respecting GPC can still collect your data and show ads, but they are no longer allowed to disclose
-                your data to advertisers</li>
-              <li><a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a></li>
+              <li>Websites respecting GPC can still collect your data and show ads, but <b>they are no longer allowed to disclose
+                your data to advertisers</b></li>
             </ul>
+            <a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a>
             <h1 class="uk-heading-line uk-text-center"><span>Participant Registration</span></h1>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Let's get you registered to join other research participants!</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">Let's get you registered!</p>
             <form>
                 <fieldset class="uk-fieldset">
                     <div class="uk-margin">
@@ -80,21 +80,23 @@
                     </div>         
                 </fieldset>
             </form>
-            <p class="uk-h5 uk-text-bold uk-text-italic">Would you like to send a signal to opt out from ad tracking on the domains you visit?</p>
+            <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
+            <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
+            <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
             <div class="uk-child-width-1-2@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
                 <div class="choice" style="cursor: pointer;">
                     <div id='privacy-on-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary" 
                     uk-tooltip="title: GPC signals will be sent to all visited websites.; pos: top-right">
-                        <a class="uk-position-cover first" href="#"></a>
-                        <h3 class="uk-card-title uk-margin">Yes, Send Signal</h3>
+                        <a class="uk-position-cover first" href="#" id='privacy-on'></a>
+                        <h3 class="uk-card-title uk-margin">Enable GPC</h3>
                         <p>Do not track me on any website.</p>
                     </div>
                 </div>
                 <div class="choice" style="cursor: pointer;">
                     <div id='privacy-off-card' class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                     uk-tooltip="title: GPC signals will be sent to most websites that participate in tracking. Different types of tracking covered include fingerprinting, cryptomining, analytics and advertising.; pos: top-right">
-                        <a class="uk-position-cover second" href="#"></a>
-                        <h3 class="uk-card-title uk-margin">No, Don't Send Signal</h3>
+                        <a class="uk-position-cover second" href="#" id='privacy-off'></a>
+                        <h3 class="uk-card-title uk-margin">Disable GPC</h3>
                         <p>Feel free to track me for ad purposes.</p>
                     </div>
                 </div>
