@@ -9,41 +9,7 @@ const domainListHeadings = {title: 'Global Privacy Control (GPC) Settings', subt
 
 // "Do not allow tracking for all" button is clicked
 function handleToggleAllOn() {
-  // "Apply all" box is checked
-  if (document.getElementById("apply_to_all").checked) {
-    let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
-    if (confirm(toggleOn_prompt)) {
-      chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-        chrome.storage.local.set({APPLY_ALL: true});
-        chrome.storage.local.get(["DOMAINS"], function (result) {
-            if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) === false) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Personalized domain list" , newSetting: "Send signal", universalSetting: "Send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            else if (allOff(result.DOMAINS) === true) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC signal", prevSetting: "Don't send signal" , newSetting: "Send signal", universalSetting: "Send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            else {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Send signal", newSetting: "No change", universalSetting: "Send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            let new_domains = result.DOMAINS;
-            for (let d in new_domains){
-                new_domains[d] = true;
-            }
-            chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:true , newDomains: new_domains , newDomainlistEnabled: false })
-            chrome.storage.local.set({ DOMAINS: new_domains });
-            chrome.storage.local.set({UV_SETTING: "Send signal to all"});
-            chrome.storage.local.set({ ENABLED: true });
-            createList();
-            createDefaultSettingInfo();
-            document.getElementById("apply_to_all").checked=false
-            addToggleListeners();
-      })
-    }
-    else document.getElementById("apply_to_all").checked=false
-  }
   // "Apply all" box isn't checked
-  else {
     let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOn_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
@@ -67,46 +33,10 @@ function handleToggleAllOn() {
         addToggleListeners();
       })
     }
-  }
 }
 
 // "Allow tracking for all" button is clicked
 function handleToggleAllOff() {
-  // "Apply all" box is checked
-  if (document.getElementById("apply_to_all").checked) {
-    let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
-      if (confirm(toggleOff_prompt)) {
-        chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
-            if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Personalized domain list" , newSetting: "Don't send signal", universalSetting: "Don't send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            else if (allOn(result.DOMAINS) === true) {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Send signal" , newSetting: "Don't send signal", universalSetting: "Don't send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            else {
-              chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All existing and future domains", setting: "GPC Signal", prevSetting: "Don't send signal" , newSetting: "No change", universalSetting: "Don't send signal to all", location: "Options page", subcollection: "Domain"})
-            }
-            let new_domains = result.DOMAINS;
-            for (let d in new_domains){
-                new_domains[d] = false;
-            }
-            chrome.storage.local.set({DOMAINLIST_ENABLED: false});
-            chrome.storage.local.set({UV_SETTING: "Don't send signal to all"});
-            chrome.storage.local.set({APPLY_ALL: true});
-            chrome.storage.local.set({ DOMAINS: new_domains });
-            chrome.storage.local.set({ ENABLED: false });
-            chrome.runtime.sendMessage
-                ({greeting:"UPDATE CACHE", newEnabled:false , newDomains: new_domains , newDomainlistEnabled: false })
-              createList();
-            createDefaultSettingInfo();
-            document.getElementById("apply_to_all").checked=false
-            addToggleListeners();
-          })
-        }
-    else document.getElementById("apply_to_all").checked=false
-  }
-  // "Apply all" box isn't checked
-  else {
     let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`
     if (confirm(toggleOff_prompt)) {
       chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
@@ -130,7 +60,6 @@ function handleToggleAllOff() {
         addToggleListeners();
       })
     }
-  }
 }
 
 // "Apply all" switch is hit
@@ -676,16 +605,11 @@ function createDomainlistManagerButtons(){
         Delete All
       </button>
     `
-  let apply_to_all=
-  `
-    <label id="apply_to_all_label"><input id="apply_to_all" type="checkbox">Apply to Future Sites</label>
-  `
   let manager_btns=
   `
     ${toggle_domainlist_on}
     ${toggle_domainlist_off}
     ${delete_all}
-    ${apply_to_all}
     <hr>
   `
 
