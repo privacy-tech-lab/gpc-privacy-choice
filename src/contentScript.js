@@ -269,6 +269,7 @@ function showBanner(applyAllOption, muteOption) {
                 line-height: 1;
                 font-family:unset !important;
                 font-size: unset !important;
+                font-weight: 600;
                 color: unset !important;">
                 Global Privacy Control (GPC)
             </div>
@@ -299,19 +300,22 @@ function showBanner(applyAllOption, muteOption) {
                         The law gives you a privacy right:
             </div>
             <div style="
+                text-align: left;
                 margin-block-start: unset;
                 margin-inline-start: auto;
                 margin-inline-end: auto;
-                font: 15px/1.231 arial,helvetica,clean,sans-serif;
+                font: 13px/1.231 arial,helvetica,clean,sans-serif;
                 font-weight:300;
+                padding-bottom:3px;
                 color: black;">
                     Enable GPC to <strong>prohibit</strong> this website from selling/sharing your data.
             </div>
             <div style="
+            text-align: left;
             margin-block-start: unset;
             margin-inline-start: auto;
             margin-inline-end: auto;
-            font: 15px/1.231 arial,helvetica,clean,sans-serif;
+            font: 13px/1.231 arial,helvetica,clean,sans-serif;
             font-weight:300;
             padding-bottom:3px;
             margin-bottom: 7px;
