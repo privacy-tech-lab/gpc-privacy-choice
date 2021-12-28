@@ -302,8 +302,8 @@ function showBanner(applyAllOption, muteOption) {
             <div style="
                 text-align: left;
                 margin-block-start: unset;
-                margin-inline-start: auto;
-                margin-inline-end: auto;
+                margin-inline-start: 6%;
+                margin-inline-end: 5%;
                 font: 13px/1.231 arial,helvetica,clean,sans-serif;
                 font-weight:300;
                 padding-bottom:3px;
@@ -313,8 +313,8 @@ function showBanner(applyAllOption, muteOption) {
             <div style="
             text-align: left;
             margin-block-start: unset;
-            margin-inline-start: auto;
-            margin-inline-end: auto;
+            margin-inline-start: 6%;
+            margin-inline-end: 5%;
             font: 13px/1.231 arial,helvetica,clean,sans-serif;
             font-weight:300;
             padding-bottom:3px;
