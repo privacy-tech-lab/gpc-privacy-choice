@@ -308,7 +308,7 @@ function showBanner(applyAllOption, muteOption) {
                 font-weight:300;
                 padding-bottom:3px;
                 color: black;">
-                    Enable GPC to <strong>prohibit</strong> this website from selling/sharing your data.
+                    Enable GPC to <div style="font-weight: 600; display: inline;">prohibit </div> this website from selling/sharing your data.
             </div>
             <div style="
             text-align: left;
@@ -320,7 +320,7 @@ function showBanner(applyAllOption, muteOption) {
             padding-bottom:3px;
             margin-bottom: 7px;
             color: black;">
-                Disable GPC to <strong>permit</strong> this website to sell/share your data.
+                Disable GPC to <div style="font-weight: 600; display: inline;">permit</div> this website to sell/share your data.
         </div>
             <div style="
                 padding: unset;
