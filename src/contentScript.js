@@ -345,9 +345,7 @@ function showBanner(applyAllOption, muteOption) {
                         display:inline;
                         margin:3px;
                         font-family: unset;
-                        cursor:pointer;">
-                            ENABLE GPC
-                    </div>
+                        cursor:pointer;">ENABLE GPC</div>
                     <div id="dont-send-button" style="
                         font-size:14px;
                         border:none;
@@ -360,9 +358,7 @@ function showBanner(applyAllOption, muteOption) {
                         display:inline;
                         margin:3px;
                         font-family: unset;
-                        cursor:pointer;">
-                          DISABLE GPC
-                    </div>
+                        cursor:pointer;">DISABLE GPC</div>
             <div/>
             <div id='apply-all-checkbox'> </div>
             <div>
