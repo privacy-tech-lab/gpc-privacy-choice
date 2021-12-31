@@ -269,8 +269,9 @@ function showBanner(applyAllOption, muteOption) {
                 line-height: 1;
                 font-family:unset !important;
                 font-size: unset !important;
+                font-weight: 600;
                 color: unset !important;">
-                Your Privacy Choice
+                Global Privacy Control (GPC)
             </div>
             <hr style="
                     height: .01px; 
@@ -291,22 +292,36 @@ function showBanner(applyAllOption, muteOption) {
                     margin-block-start: 0.5em;
                     margin-inline-start: auto;
                     margin-inline-end: auto;
+                    padding-bottom:3px;
+                    margin-bottom: 7px;
                     font: 16px/1.231 arial,helvetica,clean,sans-serif;
                     font-weight:300;
                     color: black;">
-                        You have a right to make your privacy choice under the law.
+                        The law gives you a privacy right:
             </div>
             <div style="
+                text-align: left;
                 margin-block-start: unset;
-                margin-inline-start: auto;
-                margin-inline-end: auto;
-                font: 16px/1.231 arial,helvetica,clean,sans-serif;
-                font-weight:600;
+                margin-inline-start: 6%;
+                margin-inline-end: 5%;
+                font: 13px/1.231 arial,helvetica,clean,sans-serif;
+                font-weight:300;
                 padding-bottom:3px;
-                margin-bottom: 7px;
                 color: black;">
-                    Would you like to send do not sell signals while visiting this domain?
+                    Enable GPC to <div style="font-weight: 600; display: inline;">prohibit </div> this website from selling/sharing your data.
             </div>
+            <div style="
+            text-align: left;
+            margin-block-start: unset;
+            margin-inline-start: 6%;
+            margin-inline-end: 5%;
+            font: 13px/1.231 arial,helvetica,clean,sans-serif;
+            font-weight:300;
+            padding-bottom:3px;
+            margin-bottom: 7px;
+            color: black;">
+                Disable GPC to <div style="font-weight: 600; display: inline;">permit</div> this website to sell/share your data.
+        </div>
             <div style="
                 padding: unset;
                 margin-top: 7px;
@@ -318,7 +333,7 @@ function showBanner(applyAllOption, muteOption) {
                 font-size: unset !important;
                 color: unset !important;">
                     <div id="send-button" style="
-                        font-size:16px;
+                        font-size:14px;
                         border:none;
                         background-color:
                         rgb(51, 153, 255);
@@ -330,11 +345,9 @@ function showBanner(applyAllOption, muteOption) {
                         display:inline;
                         margin:3px;
                         font-family: unset;
-                        cursor:pointer;">
-                            Yes
-                    </div>
+                        cursor:pointer;">ENABLE GPC</div>
                     <div id="dont-send-button" style="
-                        font-size:16px;
+                        font-size:14px;
                         border:none;
                         background-color:rgb(51, 153, 255);
                         color:white;
@@ -345,9 +358,7 @@ function showBanner(applyAllOption, muteOption) {
                         display:inline;
                         margin:3px;
                         font-family: unset;
-                        cursor:pointer;">
-                          No
-                    </div>
+                        cursor:pointer;">DISABLE GPC</div>
             <div/>
             <div id='apply-all-checkbox'> </div>
             <div>
@@ -365,7 +376,7 @@ function showBanner(applyAllOption, muteOption) {
                         text-decoration: none;
                         color: rgb(51, 153, 255);"
                     href=""
-                    >Review or modify the choices you have made
+                    >Review or modify your settings
                 </a>
             </div>
         </div> 
