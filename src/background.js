@@ -27,7 +27,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   //let userScheme = Math.floor(Math.random() * 4);
-  let userScheme = 0;
+  let userScheme = 1;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -108,18 +108,24 @@ let referer={}
 
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function(details){
-
   chrome.tabs.get(details.tabId, (tab)=>{
+    // console.log("details.frameId:", details.frameId)
+    // console.log("tab: ", tab)
+    // console.log("details.transitionType: ", details.transitionType)
     if(details.frameId==0 && tab!=undefined && details.transitionType!="reload"){
       cleanFrames(details.tabId)
       chrome.storage.local.get(["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME"], function(result){
         if (result.USER_DOC_ID){
+          // console.log("Writting into the Browser History")
           addHistory(details.transitionType, details.url, domainsCache[getDomain(details.url)], result.APPLY_ALL, result.ENABLED, result.USER_DOC_ID, details.tabId, result.UI_SCHEME, details.timeStamp, referer[details.tabId]);
           referer[details.tabId]=details.url
         } else {
           console.log("Unregistered user: not connected to the database");
         }
       });
+    }
+    else {
+      // console.log("Not writing browser history to the database!");
     }
   })
 })
@@ -137,6 +143,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
       if (result.USER_DOC_ID){
+        // console.log("Adding into Doamin Interaction History")
         addSettingInteractionHistory(request.domain, originSite, userDocID, request.setting, request.prevSetting, request.newSetting, request.universalSetting, request.location, request.subcollection);
       } else {
         console.log("Unregistered user: not connected to the database");

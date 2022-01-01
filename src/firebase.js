@@ -45,6 +45,8 @@ export async function createUser(prolificID, schemeNumber){
 
 // Add user entries into the Firebase
 export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time, referer){
+    console.log("addHistory function is triggered!")
+    let date = new Date()
     if(referer!=site || referer===undefined){
         if(transitionType!="link"){
             referer="N/A"
@@ -52,9 +54,11 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
         if(referer===undefined){
             referer="not found"
         }
-        if(GPC===undefined) GPC="unset"
+        if(GPC===undefined) {
+            GPC="unset"
+        }
         db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-            "Timestamp": time,
+            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
             "Referer": referer,
             "TabID": tabId,
             "Transition Type/Referer": transitionType,
@@ -148,7 +152,7 @@ console.log(disconnectList)
 // Check if domain is in list of ad networks
 function isInDisconnect(domain){
         if(Object.keys(disconnectList).includes(domain)){
-            console.log(true, disconnectList[domain])
+            // console.log(true, disconnectList[domain])
             return true;
         }
         else return false;
