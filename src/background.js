@@ -4,7 +4,6 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-import { firebaseConfig } from "./config.js";
 import {addHistory, updateDomains, addSettingInteractionHistory, cleanFrames} from "./firebase.js"
 
 // Initializers
@@ -87,8 +86,10 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
         .then(openPage("registration.html"))
-    } else {
+    } else if (userScheme == 6) {
       openPage("oneQuestion.html");
+    } else {
+      console.log("ERROR: Unknown scheme number!")
     }
   })
 });
@@ -100,7 +101,6 @@ chrome.storage.local.get(["DOMAINS", "ENABLED", 'DOMAINLIST_ENABLED', 'APPLY_ALL
   domainlistEnabledCache=result.DOMAINLIST_ENABLED;
   applyAllCache=result.APPLY_ALL;
 })
-
 
 //dictionary that maps a TabId to the current url of the tab
 //used to get the previous url (referer) when navigation occurs
@@ -289,8 +289,6 @@ async function updateSendSignalScheme6(){
     else sendSignal = false;
   })
 }
-
-
 
 // Add headers if the sendSignal to true
 function addHeaders (details)  {
