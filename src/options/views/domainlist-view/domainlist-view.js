@@ -405,7 +405,6 @@ function createDefaultSettingInfo(){
         ${apply_all_switch}
         <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
-        You can also apply a GPC setting to all domains listed below or with the toggle switch above you can turn off domain-by-domain setting personalization for future domains.
         `
       }
     } 
