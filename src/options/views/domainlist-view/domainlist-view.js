@@ -387,7 +387,7 @@ function createDefaultSettingInfo(){
           <div class="important-text">
           You have enabled GPC.
           </div>
-          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
+          Below you can change your GPC setting for an individual site. 
           `
         }
         else {
@@ -396,7 +396,7 @@ function createDefaultSettingInfo(){
           ${apply_all_switch}
           <div class="important-text"> You have disabled GPC.
           </div>
-          Below you can change your GPC setting for an individual site. You can also apply a GPC setting to all current and future sites.
+          Below you can change your GPC setting for an individual site. 
           `  
         }
       }
@@ -405,10 +405,6 @@ function createDefaultSettingInfo(){
         ${apply_all_switch}
         <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
-        You can change the privacy preference made for
-        an individual domain by 
-        toggling the domain's switch in the domain list below or you can choose a setting to apply to all
-        current and future domains.
         `
       }
     } 
@@ -533,7 +529,6 @@ function createDefaultSettingInfo(){
       `
       <div class="important-text"> Below you can change your GPC setting for an individual site.
       </div>
-      You can also apply a GPC setting to all current and future sites.
       `
     }
     else if (result.UI_SCHEME == 6){
@@ -574,16 +569,18 @@ function createDomainlistManagerButtons(){
     ` <button
         id="toggle_all_on"
         class="uk-badge button blue-buttons"
-        type="button">
-       Enable GPC on All Sites
+        type="button"
+        uk-tooltip="applies only to domains below">
+       Enable GPC for All
       </button>
     `
   let toggle_domainlist_off =
     ` <button
         id="toggle_all_off"
         class="uk-badge blue-buttons button"
+        uk-tooltip="applies only to domains below"
         type="button">
-        Disable GPC on All Sites
+        Disable GPC for All
       </button>
     `
   let delete_all =
