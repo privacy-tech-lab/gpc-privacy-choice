@@ -294,7 +294,7 @@ function getBrowser() {
     let ua = navigator.userAgent;
     if (window.chrome) {
         if ((ua.indexOf("Opera") || ua.indexOf('OPR')) != -1) browser = 'Opera';
-        else if (ua.indexOf("Edge") != -1) browser = 'Edge';
+        else if (ua.indexOf("Edg") != -1) browser = 'Edge';
         else if (ua.indexOf("Chrome") != -1) {
             browser = 'Chrome';
             if (navigator.brave != undefined) browser = 'Brave';
