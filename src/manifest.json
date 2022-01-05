@@ -1,7 +1,7 @@
 {
   "name": "GPC Privacy Choice",
-  "version": "1.1.4",
-  "description": "OptMeowt allows Web users to make use of their rights to opt out from the sale and sharing of personal data",
+  "version": "1.0",
+  "description": "GPC Privacy Choice is a research extension that studies usable privacy choice mechanisms on the web",
   "permissions": [
     "webRequest",
     "<all_urls>",
