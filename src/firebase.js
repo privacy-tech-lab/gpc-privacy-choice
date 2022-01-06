@@ -45,7 +45,7 @@ export async function createUser(prolificID, schemeNumber){
 
 // Add user entries into the Firebase
 export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time, referer){
-    console.log("addHistory function is triggered!")
+    // console.log("addHistory function is triggered!")
     let date = new Date()
     if(referer!=site || referer===undefined){
         if(transitionType!="link"){
@@ -75,7 +75,7 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
-    console.log(subcollection)
+    // console.log(subcollection)
     if (subcollection === "Domain") {
         db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
             "Timestamp": firebase.firestore.Timestamp.fromDate(date),
@@ -135,20 +135,21 @@ fetch("json/services.json")
       .then((response) => response.text())
       .then((result) => {
         disconnect = JSON.parse(result)
-        console.log(disconnect)
-console.log(disconnect, "good")
-for(let c of Object.keys(disconnect['categories']))
-    for(let network of Object.values(disconnect['categories'][c])){
-        for(let domain of Object.values(network)){
-            let domains=Object.values(domain)[0]
-            for(let d of domains){
-                if(Object.keys(disconnectList).includes(d)) disconnectList[d][0].push(c) 
-                else disconnectList[d]=[[c], Object.keys(network)[0]]
+        // console.log(disconnect)
+        // console.log(disconnect, "good")
+        for(let c of Object.keys(disconnect['categories']))
+            for(let network of Object.values(disconnect['categories'][c])){
+                for(let domain of Object.values(network)){
+                    let domains=Object.values(domain)[0]
+                    for(let d of domains){
+                        if(Object.keys(disconnectList).includes(d)) disconnectList[d][0].push(c) 
+                        else disconnectList[d]=[[c], Object.keys(network)[0]]
+                    }
+                }
             }
-        }
-    }
-console.log(disconnectList)
+        // console.log(disconnectList)
       })
+
 // Check if domain is in list of ad networks
 function isInDisconnect(domain){
         if(Object.keys(disconnectList).includes(domain)){
@@ -398,7 +399,7 @@ function addAd(adEvent){
         .where("TabID",'==', adEvent.tabId).orderBy("Timestamp", "desc").limit(1)
         .get().then((docArray)=>{
             docArray.forEach((doc)=>{
-                console.log(doc.id)
+                // console.log(doc.id)
                 db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                 doc(doc.id).collection("Ad Interactions").add({
                     AdTabId: adEvent.targetTabId,
@@ -409,7 +410,7 @@ function addAd(adEvent){
                     "Evidence of Ad Interaction":adEvent.reasoning
                 })
                 .then((adDoc)=>{
-                    console.log(adEvent.targetTabId)
+                    // console.log(adEvent.targetTabId)
                     chrome.tabs.get(adEvent.targetTabId, (tab)=>{
                         db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
                         doc(doc.id).collection("Ad Interactions").doc(adDoc.id).update({"Ad Link": tab.url})})
@@ -459,7 +460,7 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
         }
         else{
             chrome.tabs.sendMessage(tabId, {greeting: "GET HTML TAG"}, function(response) {
-                console.log(response);
+                // console.log(response);
                 if(response=='IFRAME') liveAdEvents[targetTabID].adBool=true;
                 liveAdEvents[targetTabID].reasoning="linked from iFrame";
             });
@@ -475,7 +476,7 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details)=>{
 chrome.webNavigation.onCommitted.addListener((e)=>{
     if(liveAdEvents[e.tabId]===undefined) new AdEvent(e.tabId, e.tabId)
     if(e.transitionType=='link'){
-        console.log(liveAdEvents[e.tabId])
+        // console.log(liveAdEvents[e.tabId])
         if(liveAdEvents[e.tabId].adBool===true) addAd(liveAdEvents[e.tabId])
     }
     delete liveAdEvents[e.tabId]
@@ -501,7 +502,7 @@ export function cleanFrames(tabId) {
             let url = tab.url
             if (frames[tabId]!=undefined){
                 for(let frame of  Object.keys(frames[tabId])){
-                    console.log(frame)
+                    // console.log(frame)
                     if(frames[tabId][frame] != url){
                         toRemove.push(frame)
                     }
