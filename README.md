@@ -135,7 +135,9 @@ This category records the information of each site the user is on while using th
 
 #### Ad Interaction Detection
 
-Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of an ad network as identified in the disconnect list.
+Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect list.
+
+<img width="757" alt="Screen Shot 2022-01-10 at 10 20 23 AM" src="https://user-images.githubusercontent.com/77850710/148790993-f8db77c0-aa2e-40b6-9fca-50f0aa0aed76.png">
 
 ### Privacy Configuration Interaction History
 
