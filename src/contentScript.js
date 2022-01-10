@@ -530,7 +530,8 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
         if ((domains[currentDomain] === undefined || domains[currentDomain] == null) && bannerMuted[0]!=true) showBanner(false, true);
     } 
     else if (result.UI_SCHEME == 5){
-        let random = Math.floor(Math.random() * 5);
+        // the user has 1/4 chance of seeing the banner
+        let random = Math.floor(Math.random() * 4);
         if (random == 1 && !(currentDomain in domains)) {showBanner(false);} 
         else {
             chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result){
