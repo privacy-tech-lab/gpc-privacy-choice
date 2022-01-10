@@ -109,7 +109,7 @@ This is our **Privacy Profile** scheme. Upon running the extension, users will b
 
 This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
 
-<img width="1257" alt="4" src="https://user-images.githubusercontent.com/54873610/148790426-f5c7c989-8e8a-44d6-9329-e5c49d8bc295.png">
+<img width="1267" alt="Screen Shot 2022-01-10 at 10 20 25 AM" src="https://user-images.githubusercontent.com/54873610/148790754-31236b00-bb07-4b63-b082-9a83afd56bd6.png">
 
 ### Scheme 5
 
