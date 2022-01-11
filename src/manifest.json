@@ -8,7 +8,6 @@
     "webRequestBlocking",
     "webNavigation",
     "storage",
-    "activeTab",
     "cookies",
     "tabs",
     "contentSettings",
