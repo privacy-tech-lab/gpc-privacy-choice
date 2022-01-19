@@ -8,7 +8,6 @@
     "webRequestBlocking",
     "webNavigation",
     "storage",
-    "cookies",
     "tabs",
     "contentSettings",
     "geolocation"
