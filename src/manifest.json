@@ -4,15 +4,13 @@
   "description": "GPC Privacy Choice is a research extension that studies usable privacy choice mechanisms on the web",
   "permissions": [
     "webRequest",
-    "<all_urls>",
-    "webRequestBlocking",
     "webNavigation",
     "storage",
     "tabs",
     "contentSettings",
     "geolocation"
   ],
-  "browser_action": {
+  "action": {
     "default_title": "GPC Privacy Choice"
   },
   "content_scripts": [
@@ -27,16 +25,19 @@
     "open_in_tab": true
   },
   "background": {
-    "page": "background.html"
+    "service_worker": "firebase.js", 
+    "type": "module"
   },
-  "manifest_version": 2,
-  "web_accessible_resources": [
-    "adDomains.txt",
-    "json/*.json"
-  ],
+  "manifest_version": 3,
+  "web_accessible_resources": [{
+    "resources": ["adDomains.txt", "json/*.json"],
+    "matches": ["<all_urls>"]
+  }],
   "icons" : {
     "32": "./img/gpc-choice-icon.png",
     "128":"./img/gpc-choice-icon.png" 
   }, 
-  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://www.googletagmanager.com https://gpc-privacy-choice-cookie-test.herokuapp.com/index.php https://gpc-privacy-choice-cookie-test.herokuapp.com/step2.php; object-src 'self'"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  } 
 }
