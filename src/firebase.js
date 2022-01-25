@@ -118,10 +118,11 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
+    const intDoc = doc(collection(db,"users", currentUserDocID, "Domain Interaction History"));
     // console.log(subcollection)
     if (subcollection === "Domain") {
-        db.collection("users").doc(currentUserDocID).collection("Domain Interaction History").add({
-            "Timestamp": firebase.firestore.Timestamp.fromDate(date),
+        const intData = {
+            "Timestamp": date,
             "Domain": domain,
             "Recorded Change": {
                 "a) Title": setting,
@@ -133,10 +134,11 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
             "Universal Setting": universalSetting, 
             "Origin Site": originSite,
             "Location": location
-        })
+        }
+        setDoc(intDoc, intData)
     }
     else if (subcollection === "Privacy Choice") {
-        db.collection("users").doc(currentUserDocID).collection("Privacy Configuration Interaction History").add({
+        const intData = {
             "Timestamp": date, 
             // firebase.firestore.Timestamp.fromDate(date),
             "Domain": domain,
@@ -149,15 +151,17 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
             },
             "Origin Site": originSite,
             "Location": location
-        })
+        }
+        setDoc(intDoc, intData)
     }
     else if(subcollection=="Choice Banner Mute"){
-        db.collection("users").doc(currentUserDocID).collection("Mute Interaction History").add({
+        const intData = {
             "Timestamp": date,
             //  firebase.firestore.Timestamp.fromDate(date),
             "Domain": domain,
             "Recorded Change": setting
-        })
+        }
+        setDoc(intDoc, intData)
     }
 }
 
@@ -243,10 +247,10 @@ let allThirdPartyData={}
 class ThirdPartyData{
     constructor(tabId, url, docId, userDocId){
         this.count=0
-        this.sCollection = db.collection("users").doc(userDocId).collection("Browser History").
-        doc(docId).collection("Third Party Requests Summary")
-        this.eCollection=db.collection("users").doc(userDocId).collection("Browser History").
-        doc(docId).collection("Third Party Requests (first 50)")
+        this.sCollection = collection(db, "users", userDocId, "Browser History",
+        docId, "Third Party Requests Summary")
+        this.eCollection=collection(db, "users", userDocId, "Browser History",
+        docId, "Third Party Requests (first 50)")
         if(allThirdPartyData[tabId]===undefined) allThirdPartyData[tabId]={}
         allThirdPartyData[tabId][url]= this
         this.thirdPartyDomains ={}
@@ -262,20 +266,22 @@ class ThirdPartyData{
 
 //write locally stored third party request summary data to db
 function writeThirdPartyDataToDb(data){
+
     for(let d in Object.values(data.thirdPartyDomains)){
         let info = Object.values(data.thirdPartyDomains)[d]
-        data.sCollection.add(info)
+        set(doc(data.sCollection), info)
     }
 }
 
 //write info on a specific request to db
 function writeRequestToDb(data, collection){
-    collection.add(data)
+    set(doc(collection),data)
 }
 
 
 // updates/create locally stored info on third party requests
 function addThirdPartyRequests(details){
+    console.log(details)
     if (details.tabId>=0){
         chrome.tabs.get(details.tabId, (tab)=>{ 
             if(tab!=undefined){
@@ -571,6 +577,7 @@ const sleep = (milliseconds) => {
   }
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo)=>{
+  console.log(allThirdPartyData, tabId)
     for(let site of  Object.keys(allThirdPartyData[tabId])){
         writeThirdPartyDataToDb(allThirdPartyData[tabId][site])
         delete allThirdPartyData[tabId][site]
