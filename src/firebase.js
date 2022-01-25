@@ -83,18 +83,35 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
         if(GPC===undefined) {
             GPC="unset"
         }
-        db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-            "Timestamp": Timestamp.fromDate(date),
+        const newBrowserRef = doc(collection(db, "users", currentUserDocID, "Browser History"));
+    
+            const userData = {  
+                          "Timestamp": Timestamp.fromDate(date),
             "Referer": referer,
             "TabID": tabId,
             "Transition Type/Referer": transitionType,
             "CurrentSite":  site,
             "GPC Current Site Status": GPC,
             "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
-        }).then(docRef => {
-            new ThirdPartyData(tabId, site, docRef.id, currentUserDocID)
-        })
-    }
+
+                              }
+        setDoc(newBrowserRef, userData).then(() => {
+                  new ThirdPartyData(tabId, site, newBrowserRef.id, currentUserDocID)
+              })
+                      
+    //     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
+    //         "Timestamp": Timestamp.fromDate(date),
+    //         "Referer": referer,
+    //         "TabID": tabId,
+    //         "Transition Type/Referer": transitionType,
+    //         "CurrentSite":  site,
+    //         "GPC Current Site Status": GPC,
+    //         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
+    //     }).then(docRef => {
+    //         new ThirdPartyData(tabId, site, docRef.id, currentUserDocID)
+    //     })
+    // }
+      }
 }
 
 
