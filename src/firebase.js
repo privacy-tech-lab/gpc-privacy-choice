@@ -1,24 +1,43 @@
 import { firebaseConfig } from "./config.js";
 import { initializeApp } from "./firebase-app.js";
-import { getFirestore, collection, addDoc } from "./firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, Timestamp } from "./firebase-firestore.js";
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-// const db = firebaseApp.firestore;
 const db = getFirestore(firebaseApp);
 console.log(db);
+
 // Function used to create a user in the database
 export async function createUser(prolificID, schemeNumber){
     let crd = await getLocation();
     let longitude = crd.longitude ? crd.longitude : "unknown longitude";
     let latitude = crd.latitude ? crd.latitude : "unknown latitude";
     let date = new Date();
-    let jsEnabled = null;
     // generate unique user document and storage the id into local storage
-    const docRef = await addDoc(collection(db, "users"), {
-        name: "Tokyo",
-        country: "Japan"
-    });
+    const newUserRef = doc(collection(db, "users"));
+    console.log("new user reference created: ", newUserRef);
+    chrome.storage.local.set({"USER_DOC_ID": newUserRef.id, "UI_SCHEME": schemeNumber}, function(){
+      chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
+        const userData = {  "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
+                            "DNT": navigator.doNotTrack ? 1 : 0,
+                            "Latitude": latitude, 
+                            "Longitude": longitude,
+                            "Browser": getBrowser(),
+                            "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
+                            "OS": getOS(),
+                            "Plugins": getPlugins(),
+                            "Language": getLanguage(),
+                            "Time Zone": getTimeZone(),
+                            "Cookies Enabled": getFirstPartyCookiesEnabled(),
+                            "Local Storage Enabled": getLocalStorageEnabled(),
+                            "Session Storage Enabled": getSessionStorageEnabled(),
+                            "Domain List": [],
+                            "UI Scheme" : schemeNumber,
+                            "Timestamp" : Timestamp.fromDate(date), 
+                            "JS Enabled" : details.setting, 
+                            "Prolific ID" : prolificID
+                          }
+        setDoc(newUserRef, userData);})
     
     // const userDocument = db.collection("users").doc(); 
     // chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
@@ -48,12 +67,11 @@ export async function createUser(prolificID, schemeNumber){
     //         })
     //     })
     // });
-}
-
+})}
 
 // Add user entries into the Firebase
 export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool, currentUserDocID, tabId, uiScheme, time, referer){
-    // console.log("addHistory function is triggered!")
+    console.log("addHistory function is triggered!")
     let date = new Date()
     if(referer!=site || referer===undefined){
         if(transitionType!="link"){
@@ -66,8 +84,7 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
             GPC="unset"
         }
         db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-            "Timestamp": date,
-            // firebase.firestore.Timestamp.fromDate(date),
+            "Timestamp": Timestamp.fromDate(date),
             "Referer": referer,
             "TabID": tabId,
             "Transition Type/Referer": transitionType,
@@ -131,9 +148,12 @@ export function addSettingInteractionHistory(domain, originSite, currentUserDocI
 export function updateDomains(domainsList){
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
         if (result.USER_DOC_ID){
-            db.collection("users").doc(result.USER_DOC_ID).update({"Domain List": domainsList})
+          const userRef = doc(db, "users", result.USER_DOC_ID);
+          updateDoc(userRef, {
+            "Domain List": domainsList
+          });
         } else {
-            console.log("Unregistered user: not connected to the database");
+          console.log("Unregistered user: not connected to the database");
         }
     })
 }
