@@ -38,35 +38,6 @@ export async function createUser(prolificID, schemeNumber){
                             "Prolific ID" : prolificID
                           }
         setDoc(newUserRef, userData);})
-    
-    // const userDocument = db.collection("users").doc(); 
-    // chrome.storage.local.set({"USER_DOC_ID": userDocument.id, "UI_SCHEME": schemeNumber}, function(){
-    //     // create the uers in the database
-    //     chrome.contentSettings.javascript.get({primaryUrl:"http:*"},function(details){
-    //         jsEnabled = details.setting; 
-    //         db.collection("users").doc(userDocument.id).set({
-    //             "User Agent": navigator.userAgent ? navigator.userAgent : "undefined",
-    //             "DNT": navigator.doNotTrack ? 1 : 0,
-    //             "Latitude": latitude, 
-    //             "Longitude": longitude,
-    //             "Browser": getBrowser(),
-    //             "Rendering Engine": navigator.appVersion.includes("WebKit") ? "WebKit Engine" : "Other Rendering Engine",
-    //             "OS": getOS(),
-    //             "Plugins": getPlugins(),
-    //             "Language": getLanguage(),
-    //             "Time Zone": getTimeZone(),
-    //             "Cookies Enabled": getFirstPartyCookiesEnabled(),
-    //             "Local Storage Enabled": getLocalStorageEnabled(),
-    //             "Session Storage Enabled": getSessionStorageEnabled(),
-    //             "Domain List": [],
-    //             "UI Scheme" : schemeNumber,
-    //             "Timestamp" : date,
-    //             // firebase.firestore.Timestamp.fromDate(date), 
-    //             "JS Enabled" : jsEnabled, 
-    //             "Prolific ID" : prolificID
-    //         })
-    //     })
-    // });
 })}
 
 // Add user entries into the Firebase
@@ -84,83 +55,58 @@ export function addHistory(transitionType, site, GPC, applyALLBool, enabledBool,
             GPC="unset"
         }
         const newBrowserRef = doc(collection(db, "users", currentUserDocID, "Browser History"));
-    
-            const userData = {  
-                          "Timestamp": Timestamp.fromDate(date),
-            "Referer": referer,
-            "TabID": tabId,
-            "Transition Type/Referer": transitionType,
-            "CurrentSite":  site,
-            "GPC Current Site Status": GPC,
-            "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
-
-                              }
-        setDoc(newBrowserRef, userData).then(() => {
-                  new ThirdPartyData(tabId, site, newBrowserRef.id, currentUserDocID)
-              })
-                      
-    //     db.collection("users").doc(currentUserDocID).collection("Browser History").add({
-    //         "Timestamp": Timestamp.fromDate(date),
-    //         "Referer": referer,
-    //         "TabID": tabId,
-    //         "Transition Type/Referer": transitionType,
-    //         "CurrentSite":  site,
-    //         "GPC Current Site Status": GPC,
-    //         "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
-    //     }).then(docRef => {
-    //         new ThirdPartyData(tabId, site, docRef.id, currentUserDocID)
-    //     })
-    // }
+        const userData = { "Timestamp": Timestamp.fromDate(date),
+                           "Referer": referer,
+                           "TabID": tabId,
+                           "Transition Type/Referer": transitionType,
+                           "CurrentSite":  site,
+                           "GPC Current Site Status": GPC,
+                           "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
+                          }
+        setDoc(newBrowserRef, userData).then(() => {new ThirdPartyData(tabId, site, newBrowserRef.id, currentUserDocID)})
       }
 }
-
 
 // Adds user's Setting Interaction History
 export function addSettingInteractionHistory(domain, originSite, currentUserDocID, setting, prevSetting, newSetting, universalSetting, location, subcollection){
     let date = new Date()
     const intDoc = doc(collection(db,"users", currentUserDocID, "Domain Interaction History"));
-    // console.log(subcollection)
     if (subcollection === "Domain") {
-        const intData = {
-            "Timestamp": date,
-            "Domain": domain,
-            "Recorded Change": {
-                "a) Title": setting,
-                "b) Interaction": {
-                    "i) Before": prevSetting,
-                    "ii) After": newSetting
-                }
-            },
-            "Universal Setting": universalSetting, 
-            "Origin Site": originSite,
-            "Location": location
-        }
+        const intData = { "Timestamp": Timestamp.fromDate(date),
+                          "Domain": domain,
+                          "Recorded Change": {
+                              "a) Title": setting,
+                              "b) Interaction": {
+                                  "i) Before": prevSetting,
+                                  "ii) After": newSetting
+                              }
+                          },
+                          "Universal Setting": universalSetting, 
+                          "Origin Site": originSite,
+                          "Location": location
+                        }
         setDoc(intDoc, intData)
     }
     else if (subcollection === "Privacy Choice") {
-        const intData = {
-            "Timestamp": date, 
-            // firebase.firestore.Timestamp.fromDate(date),
-            "Domain": domain,
-            "Recorded Change": {
-                "a) Title": setting,
-                "b) Interaction": {
-                    "i) Before": prevSetting,
-                    "ii) After": newSetting
-                }
-            },
-            "Origin Site": originSite,
-            "Location": location
-        }
+        const intData = { "Timestamp": Timestamp.fromDate(date), 
+                          "Domain": domain,
+                          "Recorded Change": {
+                              "a) Title": setting,
+                              "b) Interaction": {
+                                  "i) Before": prevSetting,
+                                  "ii) After": newSetting
+                              }
+                          },
+                          "Origin Site": originSite,
+                          "Location": location
+                        }
         setDoc(intDoc, intData)
     }
     else if(subcollection=="Choice Banner Mute"){
-        const intData = {
-            "Timestamp": date,
-            //  firebase.firestore.Timestamp.fromDate(date),
-            "Domain": domain,
-            "Recorded Change": setting
-        }
+        const intData = { "Timestamp": Timestamp.fromDate(date),
+                          "Domain": domain,
+                          "Recorded Change": setting
+                        }
         setDoc(intDoc, intData)
     }
 }
