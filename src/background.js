@@ -5,8 +5,8 @@ privacy-tech-lab, https://privacytechlab.org/
 */
 
 import { firebaseConfig } from "./config.js";
-import { initializeApp } from "./firebase-app.js";
-import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, Timestamp } from "./firebase-firestore.js";
+import { initializeApp } from "./firebase/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, Timestamp } from "./firebase/firebase-firestore.js";
 import { getBrowser, getFirstPartyCookiesEnabled, getGPCGlobalStatus, getOS, getLocation, getPlugins, getLanguage, getLocalStorageEnabled, getSessionStorageEnabled, getTimeZone} from "./util.js";
 
 // Connect with Database
@@ -595,13 +595,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-// Set the ORIGIN_SITE property in local storage as current site url for option page
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   let url = tab.url;
-//   chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
-//     chrome.runtime.openOptionsPage(() => {});
-//   });
-// });
+
 
 // Enable the extenstion with default sendSignal set to true
 const enable = () => {
@@ -767,4 +761,12 @@ function openPage(url){
     });
 }
 
-chrome.action.onClicked.addListener((tab) => openPage("options/options.html"))
+// Set the ORIGIN_SITE property in local storage as current site url for option page
+chrome.action.onClicked.addListener(function(tab) {
+  let url = tab.url;
+  chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
+    chrome.runtime.openOptionsPage(() => {
+      openPage("options/options.html");
+    });
+  });
+});

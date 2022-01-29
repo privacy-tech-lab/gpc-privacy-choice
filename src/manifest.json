@@ -21,7 +21,7 @@
     }
   ],
   "background": {
-    "service_worker": "firebase.js", 
+    "service_worker": "background.js", 
     "type": "module"
   },
   "manifest_version": 3,

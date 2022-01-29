@@ -1,4 +1,4 @@
-import {createUser} from "./firebase.js"
+import {createUser} from "./background.js"
 import {PASSWORD} from "./config.js"
 
 let userProfile = null;
