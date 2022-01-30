@@ -1,5 +1,5 @@
-import {createUser} from "./firebase.js"
-import {PASSWORD} from "./config.js"
+import {createUser} from "../background.js"
+import {PASSWORD} from "../config.js"
 
 // Datastructure used to hold user choices of ad networks
 let userChoices = {
@@ -55,7 +55,7 @@ async function submit(prolificID){
     let checkNotList = [];
 
     // Parse the networks json file based on the user's response to JSON
-    await fetch("json/services.json")
+    await fetch("../json/services.json")
       .then((response) => response.text())
       .then((result) => {
         let networks = (JSON.parse(result))["categories"]

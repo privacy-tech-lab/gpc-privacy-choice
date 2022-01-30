@@ -42,29 +42,40 @@ Follow the instructions below in order to download and use this browser extensio
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
 ## Files and Directories in this Repo
-
-- `src/`: Contains the main contents of the GPC Privacy Choice browser extension.
+- `src/firebase`: Contains all the Firebase related configurations/scripts
+  - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
+  - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
+  - `src/firebase/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
+  - locally hosted firestore script for connecting with the data base
+    - `src/firebase/firebase-app.js`
+    - `src/firebase/firebase-auth.js`
+    - `src/firebase/firebase-firestore.js`
+  - `src/firebase/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
+- `src/img`: Contains all image resources
+- `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
+  - `src/json/headers.json`: Contains the opt out HTTP header specs.
+  - `src/json/services.json`: 
 - `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
 - `src/popup`: Contains the UI elements and scripts for the popup inside the extensions bar.
-- `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
-- `src/json/headers.json`: Contains the opt out HTTP header specs.
-- `src/json/firebase.json`: The Firebase (Firestore) configuration file.
-- `src/json/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
-- `src/background.html`: The extension's background page. Launches all critical extension scripts and libraries.
-- `src/background.js`: This is the main script running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
+- `src/registration`: Contains all user registration scripts relevant for performing the research
+  - html files for different user schemes
+    - `src/registration/oneQuestion.html`
+    - `src/registration/profile.html`
+    - `src/registration/questionnaire.html`
+    - `src/registration/registration.html`
+  - javascript files for registering users
+    - `src/registration/profile.js`
+    - `src/registration/questionnaire.js`
+    - `src/registration/registration.js`
+- `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
 - `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
-- `src/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
-- `src/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
-- `src/profile.js`: This file sets up the user-registration page for schemes 3 and 6.
-- `src/questionnaire.js`: This file sets up the user-registration page for scheme 4.
-- `src/registration.js`: This file is a generic user-registration page for the remaining schemes.
-- `thirdPartyCookies.js`: TBD
-- `src/oneQuestion.html`: Works with `src/profile.js` to set up the user-registration page for scheme 6.
+- `src/util.js`: This provided utility functions for `background.js`
+
 
 ## Third Party Libraries
 
