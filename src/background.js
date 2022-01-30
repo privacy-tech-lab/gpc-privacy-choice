@@ -455,7 +455,7 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
-      openPage("registration.html");
+      openPage("registration/registration.html");
     } else if (userScheme == 3){
       // parse the checklist needed for updating the sendSignals based on user's choice
       fetch("json/services.json")
@@ -482,9 +482,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           }
           chrome.storage.local.set({CHECKLIST: checkList});
           chrome.storage.local.set({NPSLIST: npsList});})
-      .then(openPage("profile.html"));
+      .then(openPage("registration/profile.html"));
     } else if (userScheme == 4) {
-      openPage("questionnaire.html");
+      openPage("registration/questionnaire.html");
     } else if (userScheme == 5) {
       fetch("json/services.json")
         .then((response) => response.text())
@@ -510,9 +510,9 @@ chrome.runtime.onInstalled.addListener(async function (object) {
           }
           chrome.storage.local.set({NPSLIST: npsList, CHECKLIST: checkList, SEND_SIGNAL_BANNER: 0, DO_NOT_SEND_SIGNAL_BANNER: 0, LEARNING: "In Progress"});
         })
-        .then(openPage("registration.html"))
+        .then(openPage("registration/registration.html"))
     } else if (userScheme == 6) {
-      openPage("oneQuestion.html");
+      openPage("registration/oneQuestion.html");
     } else {
       console.log("ERROR: Unknown scheme number!")
     }
