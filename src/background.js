@@ -6,7 +6,7 @@ privacy-tech-lab, https://privacytechlab.org/
 
 import { firebaseConfig } from "./config.js";
 import { initializeApp } from "./firebase/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, Timestamp } from "./firebase/firebase-firestore.js";
+import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, Timestamp, query, where, limit, orderBy, getDocs} from "./firebase/firebase-firestore.js";
 import { getBrowser, getFirstPartyCookiesEnabled, getGPCGlobalStatus, getOS, getLocation, getPlugins, getLanguage, getLocalStorageEnabled, getSessionStorageEnabled, getTimeZone} from "./util.js";
 
 // Connect with Database
@@ -286,35 +286,41 @@ function addThirdPartyRequests(details){
 
 
 
-
 // Add ad interaction entry to database
 function addAd(adEvent){
     console.log(adEvent)
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
-        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History")
-        .where("TabID",'==', adEvent.tabId).orderBy("Timestamp", "desc").limit(1)
-        .get().then((docArray)=>{
-            docArray.forEach((doc)=>{
-                // console.log(doc.id)
-                db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                doc(doc.id).collection("Ad Interactions").add({
-                    AdTabId: adEvent.targetTabId,
-                    Timestamp: adEvent.timestamp,
-                    AdSource: adEvent.adSource,
-                    AdFrameId: adEvent.adFrameId,
-                    "Initial Navigation to": adEvent.redirectionTo,
-                    "Evidence of Ad Interaction":adEvent.reasoning
-                })
-                .then((adDoc)=>{
-                    // console.log(adEvent.targetTabId)
-                    chrome.tabs.get(adEvent.targetTabId, (tab)=>{
-                        db.collection("users").doc(result.USER_DOC_ID).collection("Browser History").
-                        doc(doc.id).collection("Ad Interactions").doc(adDoc.id).update({"Ad Link": tab.url})})
-                    adEvent.removeAdEvent()
-                })
-            })
-        })
-    })
+      const historyRef = collection(db, "users", result.USER_DOC_ID, "Browser History");
+      const q = query(historyRef, where("TabID",'==', adEvent.tabId), orderBy("Timestamp", "desc"), limit(1));
+     getDocs(q).then((querySnapshot)=>
+      querySnapshot.forEach((d) => {
+                const newBrowserRef =collection(db, "users", result.USER_DOC_ID, "Browser History", d.id, "Ad Interactions");
+                const userData = { 
+                                  AdTabId: adEvent.targetTabId,
+                                  Timestamp: adEvent.timestamp,
+                                  AdSource: adEvent.adSource,
+                                  AdFrameId: adEvent.adFrameId,
+                                  "Initial Navigation to": adEvent.redirectionTo,
+                                  "Evidence of Ad Interaction":adEvent.reasoning
+                                  }
+                addDoc(newBrowserRef, userData)
+                  .then((adDoc)=>{
+                      // console.log(adEvent.targetTabId)
+                      const docRef = doc(db, "users", result.USER_DOC_ID, "Browser History", d.id, "Ad Interactions", adDoc.id);
+                      const data = { "Timestamp": Timestamp.fromDate(date),
+                                        "Referer": referer,
+                                        "TabID": tabId,
+                                        "Transition Type/Referer": transitionType,
+                                        "CurrentSite":  site,
+                                        "GPC Current Site Status": GPC,
+                                        "GPC Global Status": getGPCGlobalStatus(applyALLBool, enabledBool, uiScheme)
+                                        }
+                      updateDoc(docRef, data);
+                      adEvent.removeAdEvent()
+                  })
+              })
+     )
+          })
 }
 
 let liveAdEvents={}
@@ -714,7 +720,7 @@ function addHeaders (details)  {
   currentDomain = getDomain(details.url);
   updateSendSignal(details.tabId);
   if (sendSignal) {
-    // console.log("adding GPC headers to " + currentDomain);
+    console.log("adding GPC headers to " + currentDomain);
     for (let signal in optout_headers) {
       let s = optout_headers[signal];
       details.requestHeaders.push({ name: s.name, value: s.value });
