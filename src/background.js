@@ -558,9 +558,8 @@ chrome.webNavigation.onCommitted.addListener(function(details){
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "openOptions") { 
-    console.log("yoooooo")
-    chrome.runtime.openOptionsPage(() => {openPage("options/options.html")}) 
+  if (request === "openOptions") {
+    openPage("options/options.html");
   }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
@@ -578,6 +577,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
+    console.log("HELLO WORLD")
     chrome.storage.local.set({"LEARNING": "Just Finished"}, function(){
       let alreadyOpen = false;
       let extensionID = chrome.runtime.id;
@@ -591,7 +591,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
       });
       if (!alreadyOpen){
-        chrome.runtime.openOptionsPage();
+        openPage("options/options.html");
       }
     })
   }
