@@ -53,9 +53,16 @@ function submit(prolificID){
         if (schemeNumber == 6) {
             chrome.storage.local.set({APPLY_ALL: true});
             if (userProfile == "Enable GPC") {
+                chrome.declarativeNetRequest.updateEnabledRulesets(
+                    {enableRulesetIds: ["universal_GPC"]},()=> console.log("universal_GPC rule enabled")
+                  )
                 chrome.storage.local.set({ENABLED: true});
             }
-            else {chrome.storage.local.set({ENABLED: false});}
+            else{
+                chrome.declarativeNetRequest.updateEnabledRulesets(
+                    {disableRulesetIds: ["universal_GPC"]},()=> console.log("universal_GPC rule disabled")
+                  )
+                chrome.storage.local.set({ENABLED: false});}
         }
         chrome.storage.local.set({USER_CHOICES: userProfile, MADE_DECISION: true}, async function(){
             document.querySelector(".main").style.display = "none";

@@ -125,6 +125,9 @@ function addGPCEventListener() {
     if(event.target.id == 'privacy-on') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Enable GPC") {
+          chrome.declarativeNetRequest.updateEnabledRulesets(
+            {enableRulesetIds: ["universal_GPC"]},()=> console.log("universal_GPC rule enabled")
+          )
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Enable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })
@@ -133,6 +136,9 @@ function addGPCEventListener() {
     } else if (event.target.id == 'privacy-off') {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Disable GPC") {
+          chrome.declarativeNetRequest.updateEnabledRulesets(
+            {disableRulesetIds: ["universal_GPC"]},()=> console.log("universal_GPC rule disabled")
+          )
           chrome.runtime.sendMessage({greeting:"INTERACTION", domain: "All future domains", setting: "Privacy Profile", prevSetting: result.USER_CHOICES, newSetting: "Disable GPC", location: "Options page", subcollection: "Privacy Choice"})
         }
       })

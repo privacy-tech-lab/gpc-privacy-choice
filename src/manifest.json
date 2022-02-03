@@ -8,8 +8,11 @@
     "storage",
     "tabs",
     "contentSettings",
-    "geolocation"
+    "geolocation",
+    "declarativeNetRequest",
+    "scripting"
   ],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_title": "GPC Privacy Choice"
   },
@@ -35,5 +38,12 @@
   }, 
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
-  } 
+  },
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "universal_GPC",
+      "enabled": false,
+      "path": "rules.json"
+    }]}
 }
+

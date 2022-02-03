@@ -13,6 +13,8 @@ import { getBrowser, getFirstPartyCookiesEnabled, getGPCGlobalStatus, getOS, get
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
+
+
 // Function used to create a user in the database
 export async function createUser(prolificID, schemeNumber){
     let crd = await getLocation();
@@ -188,9 +190,6 @@ function getDomain(url) {
     return domain;
 }
 
-// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
-chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders"]);
-
 //map tab and url to object containing third party request data for live sites
 let allThirdPartyData={}
 
@@ -220,20 +219,23 @@ function writeThirdPartyDataToDb(data){
 
     for(let d in Object.values(data.thirdPartyDomains)){
         let info = Object.values(data.thirdPartyDomains)[d]
-        set(doc(data.sCollection), info)
+        setDoc(doc(data.sCollection), info)
     }
 }
 
 //write info on a specific request to db
 function writeRequestToDb(data, collection){
-    set(doc(collection),data)
+  console.log(data)
+    setDoc(doc(collection),data)
 }
 
+// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
+chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all_urls>"]},["requestHeaders"]);
 
 // updates/create locally stored info on third party requests
 function addThirdPartyRequests(details){
-    console.log(details)
-    if (details.tabId>=0){
+    console.log("add third party requests triggered!", details)
+    if(details.tabId>=0){
         chrome.tabs.get(details.tabId, (tab)=>{ 
             if(tab!=undefined){
                 let tabId =details.tabId
@@ -284,11 +286,10 @@ function addThirdPartyRequests(details){
     }
 }
 
-
-
 // Add ad interaction entry to database
 function addAd(adEvent){
     console.log(adEvent)
+    // Create a query against the collection.
     chrome.storage.local.get(["USER_DOC_ID"], function(result){
       const historyRef = collection(db, "users", result.USER_DOC_ID, "Browser History");
       const q = query(historyRef, where("TabID",'==', adEvent.tabId), orderBy("Timestamp", "desc"), limit(1));
@@ -457,7 +458,8 @@ let applyAllCache=false;
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  let userScheme = Math.floor(Math.random() * 7);
+  // let userScheme = Math.floor(Math.random() * 7);
+  let userScheme = 1;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -609,13 +611,13 @@ const enable = () => {
     .then((response) => response.text())
     .then((value) => {
       optout_headers = JSON.parse(value);
-      chrome.webRequest.onBeforeRequest.addListener(addDomSignal, {urls: ["<all_urls>"]}, ["blocking"]);
-      chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
+      // chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
       chrome.storage.local.set({ ENABLED: true });
       // setCache(enabled=true)
     })
     .catch((e) => console.log(`Failed to intialize OptMeowt (JSON load process) (ContentScript): ${e}`));
 }
+
 
 // Function used to set the locally stored values in the cache upon change
 function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontSet', applyAll='dontSet'){
@@ -627,6 +629,7 @@ function setCache(enabled='dontSet', domains='dontSet', domainlistEnabled='dontS
   if(domainlistEnabled!='dontSet') domainlistEnabledCache=domainlistEnabled;
   if(applyAll!='dontSet') applyAllCache=applyAll;
 }
+
 
 // Update the sendSignal boolean for the current page
 async function updateSendSignal(tab){
@@ -776,3 +779,49 @@ chrome.action.onClicked.addListener(function(tab) {
     });
   });
 });
+
+
+
+
+
+// Create Persistent Service Worker
+// code from https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension/66618269#66618269
+let lifeline;
+
+keepAlive();
+
+chrome.runtime.onConnect.addListener(port => {
+  if (port.name === 'keepAlive') {
+    lifeline = port;
+    setTimeout(keepAliveForced, 295e3); // 5 minutes minus 5 seconds
+    port.onDisconnect.addListener(keepAliveForced);
+  }
+});
+
+function keepAliveForced() {
+  lifeline?.disconnect();
+  lifeline = null;
+  keepAlive();
+}
+
+async function keepAlive() {
+  if (lifeline) return;
+  for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
+    try {
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        function: () => chrome.runtime.connect({ name: 'keepAlive' }),
+        // `function` will become `func` in Chrome 93+
+      });
+      chrome.tabs.onUpdated.removeListener(retryOnTabUpdate);
+      return;
+    } catch (e) {}
+  }
+  chrome.tabs.onUpdated.addListener(retryOnTabUpdate);
+}
+
+async function retryOnTabUpdate(tabId, info, tab) {
+  if (info.url && /^(file|https?):/.test(info.url)) {
+    keepAlive();
+  }
+}
