@@ -557,8 +557,8 @@ chrome.webNavigation.onCommitted.addListener(function(details){
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "openOptions") { 
-    chrome.runtime.openOptionsPage(() => {}) 
+  if (request === "openOptions") {
+    openPage("options/options.html");
   }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
@@ -589,7 +589,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
       });
       if (!alreadyOpen){
-        chrome.runtime.openOptionsPage();
+        openPage("options/options.html");
       }
     })
   }
@@ -765,8 +765,6 @@ function openPage(url){
 chrome.action.onClicked.addListener(function(tab) {
   let url = tab.url;
   chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
-    chrome.runtime.openOptionsPage(() => {
-      openPage("options/options.html");
-    });
+    openPage("options/options.html");
   });
 });
