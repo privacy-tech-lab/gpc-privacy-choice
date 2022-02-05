@@ -577,7 +577,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     })
   }
   if (request.greeting == "LEARNING COMPLETED"){
-    console.log("HELLO WORLD")
     chrome.storage.local.set({"LEARNING": "Just Finished"}, function(){
       let alreadyOpen = false;
       let extensionID = chrome.runtime.id;
@@ -767,8 +766,6 @@ function openPage(url){
 chrome.action.onClicked.addListener(function(tab) {
   let url = tab.url;
   chrome.storage.local.set({"ORIGIN_SITE": url}, ()=>{
-    chrome.runtime.openOptionsPage(() => {
-      openPage("options/options.html");
-    });
+    openPage("options/options.html");
   });
 });
