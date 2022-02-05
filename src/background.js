@@ -451,8 +451,7 @@ let applyAllCache=false;
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  //let userScheme = Math.floor(Math.random() * 7);
-  let userScheme = 0
+  let userScheme = Math.floor(Math.random() * 7);
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
