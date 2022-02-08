@@ -225,7 +225,6 @@ function writeThirdPartyDataToDb(data){
 
 //write info on a specific request to db
 function writeRequestToDb(data, collection){
-  console.log(data)
     setDoc(doc(collection),data)
 }
 
