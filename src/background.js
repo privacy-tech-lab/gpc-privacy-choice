@@ -459,7 +459,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   // let userScheme = Math.floor(Math.random() * 7);
-  let userScheme = 6;
+  let userScheme = 1;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -564,7 +564,7 @@ chrome.webNavigation.onCommitted.addListener(function(details){
 })
 
 function addRule (domain, id){
-  chrome.declarativeNetRequests.updateDynamicRules({addRules:{
+  chrome.declarativeNetRequest.updateDynamicRules({addRules:{
     "id" : id,
     "action" : { "type" : "modifyHeaders",
       "requestHeaders": [
@@ -576,9 +576,11 @@ function addRule (domain, id){
     }
   }
   })
+  chrome.declarativeNetRequest.getDynamicRules((rules)=>console.log(rules))
+  console.log("New Rule")
 }
 function rmRule (id){
-  chrome.declarativeNetRequests.updateDynamicRules({removeRuleIds:[id]})
+  chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds:[id]})
 }
 
 // Listener for runtime messages

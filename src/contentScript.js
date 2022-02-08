@@ -468,7 +468,9 @@ function addToDomainListScheme4(){
                 }
             }
             // add the currentDomain and store it in the local storage
-            domains[currentDomain] = value;
+            domains[currentDomain].bool = value;
+            domains[currentDomain].id=Object.keys(domains).length+1
+            if(domains[currentDomain].bool){chrome.runtime.sendMessage({greeting: "NEW RULE", d: currentDomain, id: domains[currentDomain].id})}
             chrome.storage.local.set({DOMAINS: domains});
             // notify background to update the cache used for look up
             chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
@@ -498,7 +500,9 @@ function addToDomainListScheme3(){
                 if (result.CHECKLIST.includes(currentDomain)) value = true;
             }
             // add the currentDomain and store it in the local storage
-            domains[currentDomain] = value;
+            domains[currentDomain].bool = value;
+            domains[currentDomain].id=Object.keys(domains).length+1
+            if(domains[currentDomain].bool){chrome.runtime.sendMessage({greeting: "NEW RULE", d: currentDomain, id: domains[currentDomain].id})}
             chrome.storage.local.set({DOMAINS: domains});
             // notify background to update the cache used for look up
             chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet' })
@@ -542,7 +546,9 @@ chrome.storage.local.get(["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"], functio
                 let value = false;
                 if (!(currentDomain in domains)){
                     if (result.CHECKLIST.includes(currentDomain)) value = true;
-                    domains[currentDomain] = value;
+                    domains[currentDomain].bool = value;
+                    domains[currentDomain].id=Object.keys(domains).length+1
+                    if(domains[currentDomain].bool){chrome.runtime.sendMessage({greeting: "NEW RULE", d: currentDomain, id: domains[currentDomain].id})}
                     chrome.storage.local.set({DOMAINS: domains});
                     chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'});
                 }
