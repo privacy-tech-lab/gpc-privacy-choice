@@ -561,25 +561,6 @@ chrome.webNavigation.onCommitted.addListener(function(details){
   })
 })
 
-function addRule (domain, id){
-  chrome.declarativeNetRequest.updateDynamicRules({addRules:[{
-    "id" : id,
-    "action" : { "type" : "modifyHeaders",
-      "requestHeaders": [
-          { "header": "Sec-GPC", "operation": "set", "value": "1" },
-          { "header": "DNT", "operation": "set", "value": "1" }
-        ]},
-    "condition" : {
-      "urlFilter" : "||^"+domain+"*"
-    }
-  }]
-  })
-  chrome.declarativeNetRequest.getDynamicRules((rules)=>console.log(rules))
-  console.log("New Rule")
-}
-function rmRule (id){
-  chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds:[id]})
-}
 
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -587,9 +568,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.runtime.openOptionsPage(() => {}) 
   }
   //create dynamic rule for domain
-  if (request.greeting=="NEW RULE") addRule(result.d, result.id)
+  if (request.greeting=="NEW RULE") addRule(request.d, request.id)
   //remove dynamic rule
-  if (request.greeting=="RM RULE") rmRule(result.id)
+  if (request.greeting=="RM RULE") rmRule(request.id)
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   // updates Setting Interaction History from contentScript.js and domainlist-view.js
@@ -625,8 +606,25 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-
-
+function addRule (domain, id){
+  chrome.declarativeNetRequest.updateDynamicRules({addRules:[{
+    "id" : id,
+    "action" : { "type" : "modifyHeaders",
+      "requestHeaders": [
+          { "header": "Sec-GPC", "operation": "set", "value": "1" },
+          { "header": "DNT", "operation": "set", "value": "1" }
+        ]},
+    "condition" : {
+      "urlFilter" : "||^"+domain+"*"
+    }
+  }]
+  })
+  chrome.declarativeNetRequest.getDynamicRules((rules)=>console.log(rules))
+  console.log("New Rule")
+}
+function rmRule (id){
+  chrome.declarativeNetRequest.updateDynamicRules({removeRuleIds:[id]})
+}
 // Enable the extenstion with default sendSignal set to true
 const enable = () => {
   fetch("json/headers.json")
