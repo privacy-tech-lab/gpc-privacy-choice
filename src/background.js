@@ -564,7 +564,7 @@ chrome.webNavigation.onCommitted.addListener(function(details){
 })
 
 function addRule (domain, id){
-  chrome.declarativeNetRequest.updateDynamicRules({addRules:{
+  chrome.declarativeNetRequest.updateDynamicRules({addRules:[{
     "id" : id,
     "action" : { "type" : "modifyHeaders",
       "requestHeaders": [
@@ -574,7 +574,7 @@ function addRule (domain, id){
     "condition" : {
       "urlFilter" : "||^"+domain+"*"
     }
-  }
+  }]
   })
   chrome.declarativeNetRequest.getDynamicRules((rules)=>console.log(rules))
   console.log("New Rule")
