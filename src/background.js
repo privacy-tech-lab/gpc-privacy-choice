@@ -234,7 +234,6 @@ chrome.webRequest.onSendHeaders.addListener(addThirdPartyRequests, {urls: ["<all
 
 // updates/create locally stored info on third party requests
 function addThirdPartyRequests(details){
-    console.log("add third party requests triggered!", details)
     if(details.tabId>=0){
         chrome.tabs.get(details.tabId, (tab)=>{ 
             if(tab!=undefined){
