@@ -441,10 +441,12 @@ function addToDomainListScheme1(){
             if (result.UV_SETTING == "Send signal to all") value = true;
             else value = false;
             // add the currentDomain and store it in the local storage
-            domains[currentDomain] = value;
+            domains[currentDomain].bool=value;
+            domains[currentDomain].id=Object.keys(domains).length+1
             chrome.storage.local.set({DOMAINS: domains});
             // notify background to update the cache used for look up
             chrome.runtime.sendMessage({greeting: "UPDATE CACHE", newEnabled:'dontSet' , newDomains: domains , newDomainlistEnabled: "dontSet", newApplyAll: 'dontSet'})
+            if(domains[currentDomain].bool){chrome.runtime.sendMessage({greeting: "NEW RULE", d: currentDomain, id: domains[currentDomain].id})}
         }
     })
 }

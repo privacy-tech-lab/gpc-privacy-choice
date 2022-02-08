@@ -459,7 +459,7 @@ let applyAllCache=false;
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   // let userScheme = Math.floor(Math.random() * 7);
-  let userScheme = 1;
+  let userScheme = 6;
   chrome.storage.local.set({MUTED: [false,undefined], ENABLED: true, APPLY_ALL: false, UV_SETTING: "Off", DOMAINLIST_ENABLED: true, DOMAINS: {},"UI_SCHEME": userScheme, "USER_DOC_ID": null}, function(){
     enable();
     if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
@@ -563,11 +563,33 @@ chrome.webNavigation.onCommitted.addListener(function(details){
   })
 })
 
+function addRule (domain, id){
+  chrome.declarativeNetRequests.updateDynamicRules({addRules:{
+    "id" : id,
+    "action" : { "type" : "modifyHeaders",
+      "requestHeaders": [
+          { "header": "Sec-GPC", "operation": "set", "value": "1" },
+          { "header": "DNT", "operation": "set", "value": "1" }
+        ]},
+    "condition" : {
+      "urlFilter" : "||^"+domain+"*"
+    }
+  }
+  })
+}
+function rmRule (id){
+  chrome.declarativeNetRequests.updateDynamicRules({removeRuleIds:[id]})
+}
+
 // Listener for runtime messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "openOptions") { 
     chrome.runtime.openOptionsPage(() => {}) 
   }
+  //create dynamic rule for domain
+  if (request.greeting=="NEW RULE") addRule(result.d, result.id)
+  //remove dynamic rule
+  if (request.greeting=="RM RULE") rmRule(result.id)
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") setCache(request.newEnabled, request.newDomains, request.newDomainlistEnabled, request.newApplyAll);
   // updates Setting Interaction History from contentScript.js and domainlist-view.js
