@@ -562,8 +562,8 @@ function addToDomainListScheme1() {
       else value = false;
       // add the currentDomain and store it in the local storage
       // todo: 564-565 returns an error
-      //   domains[currentDomain].bool = value;
-      //   domains[currentDomain].id = Object.keys(domains).length + 1;
+      // domains[currentDomain].bool = value;
+      // domains[currentDomain].id = Object.keys(domains).length + 1;
       chrome.storage.local.set({ DOMAINS: domains });
       // notify background to update the cache used for look up
       chrome.runtime.sendMessage({
@@ -582,48 +582,6 @@ function addToDomainListScheme1() {
       }
     }
   });
-}
-
-// SCHEME 2: add new domains to the domainlist in local storage based on the user's questionnaire response
-function addToDomainListScheme4() {
-  chrome.storage.local.get(
-    ["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
-    function (result) {
-      let currentDomain = getDomain(window.location.href);
-      let domains = result.DOMAINS;
-      // by default, do not send GPC signals
-      let value = false;
-      if (!(currentDomain in domains)) {
-        // send GPC signals if the currentDomain is in the checkList
-        if (result.CHECKLIST.includes(currentDomain)) value = true;
-        else {
-          // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
-          if (result.USER_CHOICES["Others"] == true) {
-            if (!result.CHECKNOTLIST.includes(currentDomain)) value = true;
-          }
-        }
-        // add the currentDomain and store it in the local storage
-        // domains[currentDomain].bool = value;
-        // domains[currentDomain].id = Object.keys(domains).length + 1;
-        // if (domains[currentDomain].bool) {
-        //   chrome.runtime.sendMessage({
-        //     greeting: "NEW RULE",
-        //     d: currentDomain,
-        //     id: domains[currentDomain].id,
-        //   });
-        // }
-        chrome.storage.local.set({ DOMAINS: domains });
-        // notify background to update the cache used for look up
-        chrome.runtime.sendMessage({
-          greeting: "UPDATE CACHE",
-          newEnabled: "dontSet",
-          newDomains: domains,
-          newDomainlistEnabled: "dontSet",
-          newApplyAll: "dontSet",
-        });
-      }
-    }
-  );
 }
 
 // SCHEME 3: add new domains to the domainlist in local storage based on the user's choice of privacy profile
@@ -649,6 +607,52 @@ function addToDomainListScheme3() {
           value = false;
           if (result.CHECKLIST.includes(currentDomain)) value = true;
         }
+        // the code below returns error
+        // add the currentDomain and store it in the local storage
+        // domains[currentDomain].bool = value;
+        // domains[currentDomain].id = Object.keys(domains).length + 1;
+        // if (domains[currentDomain].bool) {
+        //   chrome.runtime.sendMessage({
+        //     greeting: "NEW RULE",
+        //     d: currentDomain,
+        //     id: domains[currentDomain].id,
+        //   });
+        // }
+        domains[currentDomain] = value;
+        console.log("domains: " + Object.values(Object.keys(domains)));
+        chrome.storage.local.set({ DOMAINS: domains });
+        // notify background to update the cache used for look up
+        chrome.runtime.sendMessage({
+          greeting: "UPDATE CACHE",
+          newEnabled: "dontSet",
+          newDomains: domains,
+          newDomainlistEnabled: "dontSet",
+          newApplyAll: "dontSet",
+        });
+      }
+    }
+  );
+}
+
+// SCHEME 4: add new domains to the domainlist in local storage based on the user's questionnaire response
+function addToDomainListScheme4() {
+  chrome.storage.local.get(
+    ["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
+    function (result) {
+      let currentDomain = getDomain(window.location.href);
+      let domains = result.DOMAINS;
+      // by default, do not send GPC signals
+      let value = false;
+      if (!(currentDomain in domains)) {
+        // send GPC signals if the currentDomain is in the checkList
+        if (result.CHECKLIST.includes(currentDomain)) value = true;
+        else {
+          // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
+          if (result.USER_CHOICES["Others"] == true) {
+            if (!result.CHECKNOTLIST.includes(currentDomain)) value = true;
+          }
+        }
+        // commented out code below returns an error
         // add the currentDomain and store it in the local storage
         // domains[currentDomain].bool = value;
         // domains[currentDomain].id = Object.keys(domains).length + 1;
