@@ -42,8 +42,6 @@ import {
   openPage,
 } from "./util.js";
 
-import { ThirdPartyData } from "./thirdPartyData.js";
-import { AdEvent } from "./adEvent.js";
 import { addRule, rmRule } from "./editRules.js";
 
 /*================================================================================================================
@@ -100,6 +98,57 @@ fetch("json/services.json")
       }
     // console.log(disconnectList)
   });
+
+//class to locally store info on third party requests when a site is live
+class ThirdPartyData {
+  constructor(tabId, url, docId, userDocId) {
+    this.count = 0;
+    this.sCollection = collection(
+      db,
+      "users",
+      userDocId,
+      "Browser History",
+      docId,
+      "Third Party Requests Summary"
+    );
+    this.eCollection = collection(
+      db,
+      "users",
+      userDocId,
+      "Browser History",
+      docId,
+      "Third Party Requests (first 50)"
+    );
+    if (allThirdPartyData[tabId] === undefined) allThirdPartyData[tabId] = {};
+    allThirdPartyData[tabId][url] = this;
+    this.thirdPartyDomains = {};
+    for (let site of Object.keys(allThirdPartyData[tabId])) {
+      if (site != url) {
+        writeThirdPartyDataToDb(allThirdPartyData[tabId][site]);
+        delete allThirdPartyData[tabId][site];
+      }
+    }
+  }
+}
+
+// Class for objects holding information on a potential ad interaction
+class AdEvent {
+  constructor(originTabId, targetTabId) {
+    let date = new Date();
+    this.tabId = originTabId;
+    this.targetTabId = targetTabId;
+    this.adFrameId = null;
+    this.reasoning = null;
+    this.adBool = false;
+    this.timestamp = date;
+    //   firebase.firestore.Timestamp.fromDate(date)
+    liveAdEvents[targetTabId] = this;
+  }
+  removeAdEvent() {
+    delete liveAdEvents[this.tabId];
+    delete this;
+  }
+}
 
 /*====================================================================================================================
 This contains firestore  function for interacting with the DB
@@ -513,8 +562,8 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-  let userScheme = Math.floor(Math.random() * 7);
-  // let userScheme = 1;
+  // let userScheme = Math.floor(Math.random() * 7);
+  let userScheme = 3;
   chrome.storage.local.set(
     {
       MUTED: [false, undefined],
