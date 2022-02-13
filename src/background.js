@@ -42,7 +42,6 @@ import {
   openPage,
 } from "./util.js";
 
-import { setCache } from "./updateSignal.js";
 import { ThirdPartyData } from "./thirdPartyData.js";
 import { AdEvent } from "./adEvent.js";
 import { addRule, rmRule } from "./editRules.js";
@@ -257,6 +256,7 @@ export function addSettingInteractionHistory(
 
 // Add new domains to the domain list field of the user document
 export function updateDomains(domainsList) {
+  console.log("updating the domain list");
   chrome.storage.local.get(["USER_DOC_ID"], function (result) {
     if (result.USER_DOC_ID) {
       const userRef = doc(db, "users", result.USER_DOC_ID);
@@ -267,6 +267,23 @@ export function updateDomains(domainsList) {
       console.log("Unregistered user: not connected to the database");
     }
   });
+}
+
+// Function used to set the locally stored values in the cache upon change
+function setCache(
+  enabled = "dontSet",
+  domains = "dontSet",
+  domainlistEnabled = "dontSet",
+  applyAll = "dontSet"
+) {
+  if (enabled != "dontSet") enabledCache = enabled;
+  if (domains != "dontSet") {
+    domainsCache = domains;
+    updateDomains(Object.keys(domains));
+  }
+  if (domainlistEnabled != "dontSet")
+    domainlistEnabledCache = domainlistEnabled;
+  if (applyAll != "dontSet") applyAllCache = applyAll;
 }
 
 //write locally stored third party request summary data to db

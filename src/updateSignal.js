@@ -1,20 +1,3 @@
-// Function used to set the locally stored values in the cache upon change
-export function setCache(
-  enabled = "dontSet",
-  domains = "dontSet",
-  domainlistEnabled = "dontSet",
-  applyAll = "dontSet"
-) {
-  if (enabled != "dontSet") enabledCache = enabled;
-  if (domains != "dontSet") {
-    domainsCache = domains;
-    updateDomains(Object.keys(domains));
-  }
-  if (domainlistEnabled != "dontSet")
-    domainlistEnabledCache = domainlistEnabled;
-  if (applyAll != "dontSet") applyAllCache = applyAll;
-}
-
 // Update the sendSignal boolean for the current page
 export async function updateSendSignal(tab) {
   await chrome.storage.local.get(["UI_SCHEME"], async function (result) {
