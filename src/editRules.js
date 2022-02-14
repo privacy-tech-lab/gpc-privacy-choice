@@ -25,3 +25,8 @@ export function addRule(domain, id) {
 export function rmRule(id) {
   chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
 }
+
+// Create new rule sets
+function updateNewRuleSets() {
+  console.log("to be implemented");
+}
