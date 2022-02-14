@@ -564,7 +564,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
 	// let userScheme = Math.floor(Math.random() * 7);
-	let userScheme = 4;
+	let userScheme = 0;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
@@ -729,7 +729,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		chrome.runtime.openOptionsPage(() => {});
 	}
 	// new domains added / user toggle from the domain page
-	if (request.greeting == "NEW RULE") addRule(request.d, request.id);
+	if (request.greeting == "NEW RULE") {
+		addRule(request.d, request.id);
+	}
 	if (request.greeting == "RM RULE") rmRule(request.id);
 	// if user changes profile (rebuild the ruleset)
 	// if user changes categories (rebuild the ruleset)

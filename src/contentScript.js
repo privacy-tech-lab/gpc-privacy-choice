@@ -153,13 +153,15 @@ function addSendEventListener(currentDomain) {
 		["DOMAINS", "SEND_SIGNAL_BANNER"],
 		function (result) {
 			let new_domains = result.DOMAINS;
+			new_domains[currentDomain] = {};
 			new_domains[currentDomain].bool = true;
 			sendSignalBanner = result.SEND_SIGNAL_BANNER;
-			if (sendSignalBanner !== undefined)
+			if (sendSignalBanner !== undefined) {
 				chrome.storage.local.set({
 					DOMAINS: new_domains,
 					SEND_SIGNAL_BANNER: sendSignalBanner + 1,
 				});
+			}
 			else chrome.storage.local.set({ DOMAINS: new_domains });
 			chrome.runtime.sendMessage({
 				greeting: "UPDATE CACHE",
@@ -167,6 +169,11 @@ function addSendEventListener(currentDomain) {
 				newDomains: new_domains,
 				newDomainlistEnabled: true,
 				newApplyAll: "dontSet",
+			});
+			chrome.runtime.sendMessage({
+				greeting: "NEW RULE",
+				d: currentDomain,
+				id: new_domains[currentDomain].id,
 			});
 			// Sends data to Setting Interaction History
 			chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
@@ -181,6 +188,7 @@ function addSendEventListener(currentDomain) {
 					subcollection: "Domain",
 				});
 			});
+			
 		}
 	);
 }
@@ -196,11 +204,24 @@ function addSendAllEventListener(currentDomain) {
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		let new_domains = result.DOMAINS;
 		// todo: check if this is really what we want?
-		for (let d in new_domains) {
-			new_domains[d].bool = true;
+		for (let currentD in new_domains) {
+			new_domains[currentD] = {};
+			new_domains[currentD].bool = true;
+			chrome.runtime.sendMessage({
+				greeting: "NEW RULE",
+				d: currentD,
+				id: new_domains[currentD].id,
+			});
 		}
-		new_domains[currentDomain] = true;
+		// pretty repetitive, look into refactoring
+		new_domains[currentDomain] = {}
+		new_domains[currentDomain].bool = true;
 		chrome.storage.local.set({ DOMAINS: new_domains });
+		chrome.runtime.sendMessage({
+			greeting: "NEW RULE",
+			d: currentDomin,
+			id: new_domains[currentDomain].id,
+		});
 		chrome.runtime.sendMessage({
 			greeting: "UPDATE CACHE",
 			newEnabled: "dontSet",
@@ -232,6 +253,7 @@ function addDontSendEventListener(currentDomain) {
 		["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"],
 		function (result) {
 			let new_domains = result.DOMAINS;
+			new_domains[currentDomain] = {};
 			new_domains[currentDomain].bool = false;
 			notSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
 			if (notSendSignalBanner !== undefined)
@@ -276,9 +298,11 @@ function addDontSendAllEventListener(currentDomain) {
 		new_domains = result.DOMAINS;
 		// todo: check if this is really what we want?
 		for (let d in new_domains) {
+			new_domains[d] = {}
 			new_domains[d].bool = false;
 		}
-		new_domains[currentDomain] = false;
+		new_domains[currentDomain] = {}
+		new_domains[currentDomain].bool = false;
 		chrome.storage.local.set({ DOMAINS: new_domains, ENABLED: false });
 		chrome.runtime.sendMessage({
 			greeting: "UPDATE CACHE",
@@ -573,13 +597,6 @@ function addToDomainListScheme1() {
 				newDomainlistEnabled: "dontSet",
 				newApplyAll: "dontSet",
 			});
-			if (domains[currentDomain].bool) {
-				chrome.runtime.sendMessage({
-					greeting: "NEW RULE",
-					d: currentDomain,
-					id: domains[currentDomain].id,
-				});
-			}
 		}
 	});
 }
@@ -725,7 +742,8 @@ chrome.storage.local.get(
 			let random = Math.floor(Math.random() * 4);
 			if (random == 1 && !(currentDomain in domains)) {
 				showBanner(false);
-			} else {
+			} 
+			else {
 				chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result) {
 					let currentDomain = getDomain(window.location.href);
 					let domains = result.DOMAINS;
@@ -752,7 +770,8 @@ chrome.storage.local.get(
 					}
 				});
 			}
-		} else {
+		} 
+		else {
 			if (result.UI_SCHEME == 4) addToDomainListScheme4();
 			else addToDomainListScheme3();
 		}
