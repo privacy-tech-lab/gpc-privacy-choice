@@ -591,6 +591,7 @@ function addToDomainListScheme3() {
 		function (result) {
 			let currentDomain = getDomain(window.location.href);
 			let domains = result.DOMAINS;
+			console.log(domains);
 			// by default, do not send GPC signals
 			let value = false;
 			if (!(currentDomain in domains)) {
@@ -609,16 +610,16 @@ function addToDomainListScheme3() {
 				}
 				// the code below returns error
 				// add the currentDomain and store it in the local storage
-				// domains[currentDomain].bool = value;
-				// domains[currentDomain].id = Object.keys(domains).length + 1;
-				// if (domains[currentDomain].bool) {
-				//   chrome.runtime.sendMessage({
-				//     greeting: "NEW RULE",
-				//     d: currentDomain,
-				//     id: domains[currentDomain].id,
-				//   });
-				// }
+				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
+				domains[currentDomain].id = Object.keys(domains).length + 1;
+				if (domains[currentDomain].bool) {
+					chrome.runtime.sendMessage({
+						greeting: "NEW RULE",
+						d: currentDomain,
+						id: domains[currentDomain].id,
+					});
+				}
 				console.log("domains: " + Object.values(Object.keys(domains)));
 				chrome.storage.local.set({ DOMAINS: domains });
 				// notify background to update the cache used for look up
@@ -654,6 +655,7 @@ function addToDomainListScheme4() {
 				}
 				// commented out code below returns an error
 				// add the currentDomain and store it in the local storage
+				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
 				domains[currentDomain].id = Object.keys(domains).length + 1;
 				if (domains[currentDomain].bool) {
