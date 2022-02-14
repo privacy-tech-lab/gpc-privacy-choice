@@ -54,7 +54,7 @@ export async function deleteDomain(domainKey) {
 // Returns true if all domains are toggled on, false otherwise
 export function allOn(domains) {
 	for (let d in domains) {
-		if (domains[d] === false) return false;
+		if (domains[d].bool === false) return false;
 	}
 	return true;
 }
@@ -62,7 +62,7 @@ export function allOn(domains) {
 // Returns true if all domains are toggled off, false otherwise
 export function allOff(domains) {
 	for (let d in domains) {
-		if (domains[d] === true) return false;
+		if (domains[d].bool === true) return false;
 	}
 	return true;
 }
@@ -84,7 +84,7 @@ export async function addDomainToggleListener(elementId, domain) {
 				chrome.storage.local.get(
 					["DOMAINS", "UV_SETTING", "UI_SCHEME"],
 					function (result) {
-						if (result.DOMAINS[domain] == true) {
+						if (result.DOMAINS[domain].bool == true) {
 							turnOffGPC(domain);
 							if (result.UI_SCHEME == 1) {
 								chrome.runtime.sendMessage({

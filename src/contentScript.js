@@ -276,7 +276,7 @@ function addDontSendAllEventListener(currentDomain) {
 		new_domains = result.DOMAINS;
 		// todo: check if this is really what we want?
 		for (let d in new_domains) {
-			new_domains[d] = false;
+			new_domains[d].bool = false;
 		}
 		new_domains[currentDomain] = false;
 		chrome.storage.local.set({ DOMAINS: new_domains, ENABLED: false });
@@ -618,7 +618,7 @@ function addToDomainListScheme3() {
 				//     id: domains[currentDomain].id,
 				//   });
 				// }
-				domains[currentDomain] = value;
+				domains[currentDomain].bool = value;
 				console.log("domains: " + Object.values(Object.keys(domains)));
 				chrome.storage.local.set({ DOMAINS: domains });
 				// notify background to update the cache used for look up
