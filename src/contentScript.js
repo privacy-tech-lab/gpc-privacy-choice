@@ -608,7 +608,7 @@ function addToDomainListScheme3() {
 					value = false;
 					if (result.CHECKLIST.includes(currentDomain)) value = true;
 				}
-				// the code below returns error
+
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
@@ -653,7 +653,7 @@ function addToDomainListScheme4() {
 						if (!result.CHECKNOTLIST.includes(currentDomain)) value = true;
 					}
 				}
-				// commented out code below returns an error
+
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
