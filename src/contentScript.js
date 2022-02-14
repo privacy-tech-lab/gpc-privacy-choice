@@ -203,7 +203,7 @@ function addSendAllEventListener(currentDomain) {
 	});
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		let new_domains = result.DOMAINS;
-		// todo: check if this is really what we want?
+		// sets all domains in list to 'enable gpc'
 		for (let currentD in new_domains) {
 			new_domains[currentD] = {};
 			new_domains[currentD].bool = true;
@@ -214,6 +214,7 @@ function addSendAllEventListener(currentDomain) {
 			});
 		}
 		// pretty repetitive, look into refactoring
+		// sets current domain to 'enable gpc'
 		new_domains[currentDomain] = {}
 		new_domains[currentDomain].bool = true;
 		chrome.storage.local.set({ DOMAINS: new_domains });
@@ -296,7 +297,7 @@ function addDontSendAllEventListener(currentDomain) {
 	});
 	chrome.storage.local.get(["DOMAINS", "ENABLED"], function (result) {
 		new_domains = result.DOMAINS;
-		// todo: check if this is really what we want?
+		// sets all domains in list to 'disable gpc'
 		for (let d in new_domains) {
 			new_domains[d] = {}
 			new_domains[d].bool = false;
