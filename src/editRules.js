@@ -40,59 +40,62 @@ async function clearRules() {
 export async function updateProfileRuleSets() {
   // clear all existing rules
   await clearRules();
-  await chrome.storage.local.get(
-    ["CHECKLIST", "USER_CHOICES"],
-    function (result) {
-      console.log(result.USER_CHOICES);
-      // High privacy sensitivity => add all domains
-      if (result.USER_CHOICES == "High Privacy-Sensitivity") {
-        chrome.declarativeNetRequest.updateDynamicRules({
-          addRules: [
-            {
-              id: 1,
-              action: {
-                type: "modifyHeaders",
-                requestHeaders: [
-                  { header: "Sec-GPC", operation: "set", value: "1" },
-                  { header: "DNT", operation: "set", value: "1" },
-                ],
-              },
-              condition: {
-                urlFilter: "*",
-              },
+  chrome.storage.local.get(["CHECKLIST", "USER_CHOICES"], function (result) {
+    console.log(result.USER_CHOICES);
+    // High privacy sensitivity => add all domains
+    if (result.USER_CHOICES == "High Privacy-Sensitivity") {
+      const promise = chrome.declarativeNetRequest.updateDynamicRules({
+        addRules: [
+          {
+            id: 1,
+            action: {
+              type: "modifyHeaders",
+              requestHeaders: [
+                { header: "Sec-GPC", operation: "set", value: "1" },
+                { header: "DNT", operation: "set", value: "1" },
+              ],
             },
-          ],
-        });
-      }
-      // Medium privacy sensitivity => add all domains from CHECKLIST
-      else if (result.USER_CHOICES == "Medium Privacy-Sensitivity") {
-        let domains = result.CHECKLIST;
-        console.log(domains);
-        chrome.declarativeNetRequest.updateDynamicRules({
-          addRules: [
-            {
-              id: 1,
-              action: {
-                type: "modifyHeaders",
-                requestHeaders: [
-                  { header: "Sec-GPC", operation: "set", value: "1" },
-                  { header: "DNT", operation: "set", value: "1" },
-                ],
-              },
-              condition: {
-                urlFilter: "|*",
-                domains: domains,
-              },
+            condition: {
+              urlFilter: "*",
             },
-          ],
-        });
-      }
+          },
+        ],
+      });
+      promise.then(function (res) {
+        chrome.declarativeNetRequest.getDynamicRules((rules) =>
+          console.log("After: ", rules)
+        );
+      });
     }
-  );
-
-  chrome.declarativeNetRequest.getDynamicRules((rules) =>
-    console.log("after: ", rules)
-  );
+    // Medium privacy sensitivity => add all domains from CHECKLIST
+    else if (result.USER_CHOICES == "Medium Privacy-Sensitivity") {
+      let domains = result.CHECKLIST;
+      console.log(domains);
+      const promise = chrome.declarativeNetRequest.updateDynamicRules({
+        addRules: [
+          {
+            id: 1,
+            action: {
+              type: "modifyHeaders",
+              requestHeaders: [
+                { header: "Sec-GPC", operation: "set", value: "1" },
+                { header: "DNT", operation: "set", value: "1" },
+              ],
+            },
+            condition: {
+              urlFilter: "|*",
+              domains: domains,
+            },
+          },
+        ],
+      });
+      promise.then(function (res) {
+        chrome.declarativeNetRequest.getDynamicRules((rules) =>
+          console.log("After: ", rules)
+        );
+      });
+    }
+  });
 }
 
 export function updateCategoryRuleSets() {
