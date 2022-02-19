@@ -42,7 +42,12 @@ import {
   openPage,
 } from "./util.js";
 
-import { addRule, rmRule } from "./editRules.js";
+import {
+  addRule,
+  rmRule,
+  updateProfileRuleSets,
+  updateCategoryRuleSets,
+} from "./editRules.js";
 
 /*================================================================================================================
 This section contains constant created for background.js
@@ -563,7 +568,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   // let userScheme = Math.floor(Math.random() * 7);
-  let userScheme = 2;
+  let userScheme = 3;
   chrome.storage.local.set(
     {
       MUTED: [false, undefined],
@@ -740,11 +745,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   // if user changes profile (rebuild the ruleset)
   if (request.greeting == "UPDATE PROFILE") {
-    console.log("Updating the ruleset based on the profiles");
+    console.log("Updating the rule sets based on new profile");
+    updateProfileRuleSets();
   }
   // if user changes categories (rebuild the ruleset)
   if (request.greeting == "UPDATE CATEGORIES") {
-    console.log("Updating the ruleset based on the categories");
+    console.log("Updating the rule sets based on new categories");
+    updateCategoryRuleSets();
   }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") {
