@@ -753,6 +753,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Updating the rule sets based on new categories");
     updateCategoryRuleSets();
   }
+  if (request.greeting == "DOMAIN SPECIFIC GPC ON") {
+    console.log("Updating the GPC Signal for ", request.domainKey);
+  }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") {
     console.log("Updating the cache");
