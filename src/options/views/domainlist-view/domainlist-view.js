@@ -294,6 +294,7 @@ function addPrivacyProfileEventListener() {
         }
       });
       chrome.storage.local.set({ USER_CHOICES: "High Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
     } else if (event.target.id == "medium-privacy-sensitivity") {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
@@ -309,6 +310,7 @@ function addPrivacyProfileEventListener() {
         }
       });
       chrome.storage.local.set({ USER_CHOICES: "Medium Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
     } else if (event.target.id == "low-privacy-sensitivity") {
       chrome.storage.local.get(["USER_CHOICES"], function (result) {
         if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
@@ -324,10 +326,10 @@ function addPrivacyProfileEventListener() {
         }
       });
       chrome.storage.local.set({ USER_CHOICES: "Low Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
     }
     createDefaultSettingInfo();
     // updatePrefScheme3();
-    chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
   });
 }
 
