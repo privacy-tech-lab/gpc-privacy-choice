@@ -155,6 +155,7 @@ function addSendEventListener(currentDomain) {
 			let new_domains = result.DOMAINS;
 			new_domains[currentDomain] = {};
 			new_domains[currentDomain].bool = true;
+			new_domains[currentDomain].id = Object.keys(new_domains).length
 			sendSignalBanner = result.SEND_SIGNAL_BANNER;
 			if (sendSignalBanner !== undefined) {
 				chrome.storage.local.set({
@@ -207,6 +208,7 @@ function addSendAllEventListener(currentDomain) {
 		for (let currentD in new_domains) {
 			new_domains[currentD] = {};
 			new_domains[currentD].bool = true;
+			new_domains[currentD].id = Object.keys(new_domains).length
 			chrome.runtime.sendMessage({
 				greeting: "NEW RULE",
 				d: currentD,
@@ -217,6 +219,7 @@ function addSendAllEventListener(currentDomain) {
 		// sets current domain to 'enable gpc'
 		new_domains[currentDomain] = {}
 		new_domains[currentDomain].bool = true;
+		new_domains[currentDomain].id = Object.keys(new_domains).length
 		chrome.storage.local.set({ DOMAINS: new_domains });
 		chrome.runtime.sendMessage({
 			greeting: "NEW RULE",
@@ -630,7 +633,7 @@ function addToDomainListScheme3() {
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
-				domains[currentDomain].id = Object.keys(domains).length + 1;
+				domains[currentDomain].id = Object.keys(domains).length;
 				if (domains[currentDomain].bool) {
 					chrome.runtime.sendMessage({
 						greeting: "NEW RULE",
@@ -675,7 +678,7 @@ function addToDomainListScheme4() {
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain] = {};
 				domains[currentDomain].bool = value;
-				domains[currentDomain].id = Object.keys(domains).length + 1;
+				domains[currentDomain].id = Object.keys(domains).length;
 				if (domains[currentDomain].bool) {
 					chrome.runtime.sendMessage({
 						greeting: "NEW RULE",
@@ -751,8 +754,9 @@ chrome.storage.local.get(
 					let value = false;
 					if (!(currentDomain in domains)) {
 						if (result.CHECKLIST.includes(currentDomain)) value = true;
+						domains[currentDomain] = {};
 						domains[currentDomain].bool = value;
-						domains[currentDomain].id = Object.keys(domains).length + 1;
+						domains[currentDomain].id = Object.keys(domains).length;
 						if (domains[currentDomain].bool) {
 							chrome.runtime.sendMessage({
 								greeting: "NEW RULE",
