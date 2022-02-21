@@ -47,6 +47,8 @@ import {
   rmRule,
   updateProfileRuleSets,
   updateCategoryRuleSets,
+  updateToggleOnRuleSet,
+  updateToggleOffRuleSet,
 } from "./editRules.js";
 
 /*================================================================================================================
@@ -480,12 +482,96 @@ export function addAd(adEvent) {
 This contains chrome api listeners for events
 ======================================================================================================================*/
 
-// Attach addThirdPartyRequest function to record all the request made to the the thirdy party websites
-chrome.webRequest.onSendHeaders.addListener(
-  addThirdPartyRequests,
-  { urls: ["<all_urls>"] },
-  ["requestHeaders"]
-);
+// Main driver listening to the run time message
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // new domains added / user toggle from the domain page
+  if (request.greeting == "NEW RULE") {
+    console.log("Adding the new rules");
+    addRule(request.d, request.id);
+  }
+  if (request.greeting == "RM RULE") {
+    console.log("Removing the new rules");
+    rmRule(request.id);
+  }
+  // if user changes profile (rebuild the ruleset)
+  if (request.greeting == "UPDATE PROFILE") {
+    console.log("Updating the rule sets based on new profile");
+    updateProfileRuleSets();
+  }
+  // if user changes categories (rebuild the ruleset)
+  if (request.greeting == "UPDATE CATEGORIES") {
+    console.log("Updating the rule sets based on new categories");
+    updateCategoryRuleSets();
+  }
+  // user turns on the gpc for a domain from options page
+  if (request.greeting == "DOMAIN SPECIFIC GPC ON") {
+    console.log("Turning on GPC Signal for ", request.domainKey);
+    updateToggleOnRuleSet();
+  }
+  // user turns off the gpc for a domain from options page
+  if (request.greeting == "DOMAIN SPECIFIC GPC OFF") {
+    console.log("Turning off GPC Signal for ", request.domainKey);
+    updateToggleOffRuleSet();
+  }
+  // update cache from contentScript.js
+  if (request.greeting == "UPDATE CACHE") {
+    console.log("Updating the cache");
+    setCache(
+      request.newEnabled,
+      request.newDomains,
+      request.newDomainlistEnabled,
+      request.newApplyAll
+    );
+  }
+  // updates Setting Interaction History from contentScript.js and domainlist-view.js
+  if (request.greeting == "INTERACTION") {
+    console.log("Recording interactions from the domain list page");
+    chrome.storage.local.get(["USER_DOC_ID", "ORIGIN_SITE"], function (result) {
+      let userDocID = result.USER_DOC_ID;
+      let originSite = result.ORIGIN_SITE;
+      if (result.USER_DOC_ID) {
+        // console.log("Adding into Doamin Interaction History")
+        addSettingInteractionHistory(
+          request.domain,
+          originSite,
+          userDocID,
+          request.setting,
+          request.prevSetting,
+          request.newSetting,
+          request.universalSetting,
+          request.location,
+          request.subcollection
+        );
+      } else {
+        console.log("Unregistered user: not connected to the database");
+      }
+    });
+  }
+  // update the rule sets when the learning has finished
+  if (request.greeting == "LEARNING COMPLETED") {
+    console.log("Learning is finished. Automatically switching...");
+    chrome.storage.local.set({ LEARNING: "Just Finished" }, function () {
+      let alreadyOpen = false;
+      let extensionID = chrome.runtime.id;
+      chrome.tabs.query({}, function (tabs) {
+        for (let i = 0, tab; (tab = tabs[i]); i++) {
+          if (
+            tab.url ===
+            "chrome-extension://" + extensionID + "/options/options.html"
+          ) {
+            chrome.tabs.reload(tab.id, {}, function () {});
+            chrome.tabs.update(tab.id, { active: true });
+            alreadyOpen = true;
+          }
+        }
+      });
+      if (!alreadyOpen) {
+        chrome.runtime.openOptionsPage();
+      }
+    });
+  }
+});
+
 
 // Listen for user opening a potential ad in a new tab
 chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
@@ -675,17 +761,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
   );
 });
 
-// Sets cache value to locally stored values after chrome booting up
-chrome.storage.local.get(
-  ["DOMAINS", "ENABLED", "DOMAINLIST_ENABLED", "APPLY_ALL"],
-  function (result) {
-    enabledCache = result.ENABLED;
-    domainsCache = result.DOMAINS;
-    domainlistEnabledCache = result.DOMAINLIST_ENABLED;
-    applyAllCache = result.APPLY_ALL;
-  }
-);
-
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function (details) {
   chrome.tabs.get(details.tabId, (tab) => {
@@ -727,93 +802,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   });
 });
 
-// Listener for runtime messages
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // open the options page
-  if (request === "openOptions") {
-    console.log("Opening options page");
-    chrome.runtime.openOptionsPage(() => {});
-  }
-  // new domains added / user toggle from the domain page
-  if (request.greeting == "NEW RULE") {
-    console.log("Adding the new rules");
-    addRule(request.d, request.id);
-  }
-  if (request.greeting == "RM RULE") {
-    console.log("Removing the new rules");
-    rmRule(request.id);
-  }
-  // if user changes profile (rebuild the ruleset)
-  if (request.greeting == "UPDATE PROFILE") {
-    console.log("Updating the rule sets based on new profile");
-    updateProfileRuleSets();
-  }
-  // if user changes categories (rebuild the ruleset)
-  if (request.greeting == "UPDATE CATEGORIES") {
-    console.log("Updating the rule sets based on new categories");
-    updateCategoryRuleSets();
-  }
-  if (request.greeting == "DOMAIN SPECIFIC GPC ON") {
-    console.log("Updating the GPC Signal for ", request.domainKey);
-  }
-  // update cache from contentScript.js
-  if (request.greeting == "UPDATE CACHE") {
-    console.log("Updating the cache");
-    setCache(
-      request.newEnabled,
-      request.newDomains,
-      request.newDomainlistEnabled,
-      request.newApplyAll
-    );
-  }
-  // updates Setting Interaction History from contentScript.js and domainlist-view.js
-  if (request.greeting == "INTERACTION") {
-    console.log("Recording interactions from the domain list page");
-    chrome.storage.local.get(["USER_DOC_ID", "ORIGIN_SITE"], function (result) {
-      let userDocID = result.USER_DOC_ID;
-      let originSite = result.ORIGIN_SITE;
-      if (result.USER_DOC_ID) {
-        // console.log("Adding into Doamin Interaction History")
-        addSettingInteractionHistory(
-          request.domain,
-          originSite,
-          userDocID,
-          request.setting,
-          request.prevSetting,
-          request.newSetting,
-          request.universalSetting,
-          request.location,
-          request.subcollection
-        );
-      } else {
-        console.log("Unregistered user: not connected to the database");
-      }
-    });
-  }
-  // update the rule sets when the learning has finished
-  if (request.greeting == "LEARNING COMPLETED") {
-    console.log("Learning is finished. Automatically switching...");
-    chrome.storage.local.set({ LEARNING: "Just Finished" }, function () {
-      let alreadyOpen = false;
-      let extensionID = chrome.runtime.id;
-      chrome.tabs.query({}, function (tabs) {
-        for (let i = 0, tab; (tab = tabs[i]); i++) {
-          if (
-            tab.url ===
-            "chrome-extension://" + extensionID + "/options/options.html"
-          ) {
-            chrome.tabs.reload(tab.id, {}, function () {});
-            chrome.tabs.update(tab.id, { active: true });
-            alreadyOpen = true;
-          }
-        }
-      });
-      if (!alreadyOpen) {
-        chrome.runtime.openOptionsPage();
-      }
-    });
-  }
-});
 
 // Set the ORIGIN_SITE property in local storage as current site url for option page
 chrome.action.onClicked.addListener(function (tab) {
@@ -865,4 +853,17 @@ async function retryOnTabUpdate(tabId, info, tab) {
   if (info.url && /^(file|https?):/.test(info.url)) {
     keepAlive();
   }
+}
+
+function updateCache(){
+  // Sets cache value to locally stored values after chrome booting up
+  chrome.storage.local.get(
+    ["DOMAINS", "ENABLED", "DOMAINLIST_ENABLED", "APPLY_ALL"],
+    function (result) {
+      enabledCache = result.ENABLED;
+      domainsCache = result.DOMAINS;
+      domainlistEnabledCache = result.DOMAINLIST_ENABLED;
+      applyAllCache = result.APPLY_ALL;
+    }
+  );
 }

@@ -27,6 +27,7 @@ export function rmRule(id) {
   chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
 }
 
+// Clear rules from the rule set
 async function clearRules() {
   chrome.declarativeNetRequest.getDynamicRules((rules) => {
     console.log("before: ", rules);
@@ -36,7 +37,17 @@ async function clearRules() {
   });
 }
 
-// Create new rule sets based on the user privacy profile
+// Update rule set when user toggles domain on
+export function updateToggleOnRuleSet(){
+  console.log("updateToggleOnRuleSet to be implemented");
+}
+
+// Update rule set when user toggles domain off
+export function updateToggleOffRuleSet(){
+  console.log("updateToggleOffRuleSet to be implemented");
+}
+
+// Update new rule sets based on the user privacy profile (scheme 3)
 export async function updateProfileRuleSets() {
   // clear all existing rules
   await clearRules();
@@ -98,6 +109,9 @@ export async function updateProfileRuleSets() {
   });
 }
 
-export function updateCategoryRuleSets() {
+// Update new rule sets based on the user privacy profile (scheme 4)
+export async function updateCategoryRuleSets() {
   console.log("updateCategoryRuleSets to be implemented");
 }
+
+

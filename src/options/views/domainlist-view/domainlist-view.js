@@ -5,16 +5,159 @@
 import { renderParse, fetchParse } from "../../components/util.js";
 import {
   buildToggle,
-  addDomainToggleListener,
   deleteDomain,
   allOn,
   allOff,
+  turnOnGPC,
 } from "../../../domainlist.js";
 
 const domainListHeadings = {
   title: "Global Privacy Control (GPC) Settings",
   subtitle: "Review or Modify Your GPC Settings",
 };
+
+// Creates all the event listeners for the options page buttons
+function addEventListeners() {
+  // Add event listener based on the user's scheme
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    if (result.UI_SCHEME != 6) addToggleListeners();
+    if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
+    if (result.UI_SCHEME == 4) addCategoriesEventListener();
+    if (result.UI_SCHEME == 6) addGPCEventListener();
+  });
+  // Add the serach handler if exist
+  if (document.getElementById("searchbar") != null)
+    document.getElementById("searchbar").addEventListener("keyup", filterList);
+  // Add global toggle functionalities if exist
+  document.addEventListener("click", (event) => {
+    if (event.target.id == "toggle_all_off") {
+      handleToggleAllOff();
+    } else if (event.target.id == "toggle_all_on") {
+      handleToggleAllOn();
+    } else if (event.target.id == "apply-all-switch") {
+      handleApplyAllSwitch();
+    } else if (
+      event.target.id == "allow-future-btn" ||
+      event.target.id == "dont-allow-future-btn"
+    ) {
+      handleFutureSettingPromptEvent(event);
+    } else if (event.target.id == "delete_all_domainlist") {
+      handleDeleteDomainListEvent();
+    }
+  });
+}
+
+// Creates the specific Domain List toggles as well as the perm delete
+function addToggleListeners() {
+  chrome.storage.local.get(["DOMAINS"], function (result) {
+    for (let domain in result.DOMAINS) {
+      addDomainToggleListener(domain, domain);
+      addDeleteButtonListener(domain);
+    }
+  });
+}
+
+// Turn on / off the domain from the setting page
+function addDomainToggleListener(elementId, domain) {
+  document.getElementById(elementId).addEventListener("click", () => {
+    chrome.storage.local.set(
+      { ENABLED: true, DOMAINLIST_ENABLED: true },
+      function () {
+        chrome.storage.local.get(
+          ["DOMAINS", "UV_SETTING", "UI_SCHEME"],
+          function (result) {
+            console.log(result.DOMAINS[domain])
+            if (result.DOMAINS[domain] == true) {
+              let new_domains = [];
+              chrome.storage.local.get(["DOMAINS"], function (result) {
+                new_domains = result.DOMAINS;
+                new_domains[domainKey] = false;
+                console.log("Seeting new_domains[domainKey] to, ", new_domains[domainKey])
+                chrome.storage.local.set({ DOMAINS: new_domains });
+              });
+              chrome.runtime.sendMessage({greeting: "DOMAIN SPECIFIC GPC OFF", domainKey: domain});
+              if (result.UI_SCHEME == 1) {
+                chrome.runtime.sendMessage({
+                  greeting: "INTERACTION",
+                  domain: domain,
+                  setting: "GPC signal",
+                  prevSetting: "Don't allow tracking",
+                  newSetting: "Allow tracking",
+                  universalSetting: result.UV_SETTING,
+                  location: "Options page",
+                  subcollection: "Domain",
+                });
+              } else {
+                chrome.runtime.sendMessage({
+                  greeting: "INTERACTION",
+                  domain: domain,
+                  setting: "GPC signal",
+                  prevSetting: "Don't allow tracking",
+                  newSetting: "Allow tracking",
+                  universalSetting: null,
+                  location: "Options page",
+                  subcollection: "Domain",
+                });
+              }
+            } else {
+              let new_domains = [];
+              chrome.storage.local.get(["DOMAINS"], function (result) {
+                new_domains = result.DOMAINS;
+                new_domains[domainKey] = true;
+                console.log("Seeting new_domains[domainKey] to, ", new_domains[domainKey])
+                chrome.storage.local.set({ DOMAINS: new_domains });
+              });
+              chrome.runtime.sendMessage({greeting: "DOMAIN SPECIFIC GPC ON", domainKey: domain});
+              if (result.UI_SCHEME == 1) {
+                chrome.runtime.sendMessage({
+                  greeting: "INTERACTION",
+                  domain: domain,
+                  setting: "GPC signal",
+                  prevSetting: "Allow tracking",
+                  newSetting: "Don't allow tracking",
+                  universalSetting: result.UV_SETTING,
+                  location: "Options page",
+                  subcollection: "Domain",
+                });
+              } else {
+                chrome.runtime.sendMessage({
+                  greeting: "INTERACTION",
+                  domain: domain,
+                  setting: "GPC signal",
+                  prevSetting: "Allow tracking",
+                  newSetting: "Don't allow tracking",
+                  universalSetting: null,
+                  location: "Options page",
+                  subcollection: "Domain",
+                });
+              }
+            }
+          }
+        );
+      }
+    );
+  });
+}
+
+// Toggle delete buttons for each domain
+function addDeleteButtonListener(domain) {
+  document.getElementById(`delete ${domain}`).addEventListener("click", () => {
+    deleteDomain(domain);
+    document.getElementById(`li ${domain}`).remove();
+    chrome.storage.local.get(["UV_SETTING"], function (result) {
+      chrome.runtime.sendMessage({
+        greeting: "INTERACTION",
+        domain: domain,
+        setting: "Delete domain",
+        prevSetting: null,
+        newSetting: null,
+        universalSetting: result.UV_SETTING,
+        location: "Options page",
+        subcollection: "Domain",
+      });
+    });
+  });
+}
 
 // "Do not allow tracking for all" button is clicked
 function handleToggleAllOn() {
@@ -329,7 +472,7 @@ function addPrivacyProfileEventListener() {
       chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
     }
     createDefaultSettingInfo();
-    // updatePrefScheme3();
+    updatePrefScheme3();
   });
 }
 
@@ -460,67 +603,6 @@ function addCategoriesEventListener() {
         createDefaultSettingInfo();
         updatePrefScheme4();
       }
-    });
-  });
-}
-
-// Creates the event listeners for the `domainlist` page buttons and options
-function addEventListeners() {
-  // Add the serach functionality
-  if (document.getElementById("searchbar") != null)
-    document.getElementById("searchbar").addEventListener("keyup", filterList);
-  // Add click event handler
-  document.addEventListener("click", (event) => {
-    if (event.target.id == "toggle_all_off") {
-      handleToggleAllOff();
-    } else if (event.target.id == "toggle_all_on") {
-      handleToggleAllOn();
-    } else if (event.target.id == "apply-all-switch") {
-      handleApplyAllSwitch();
-    } else if (
-      event.target.id == "allow-future-btn" ||
-      event.target.id == "dont-allow-future-btn"
-    ) {
-      handleFutureSettingPromptEvent(event);
-    } else if (event.target.id == "delete_all_domainlist") {
-      handleDeleteDomainListEvent();
-    }
-  });
-  // Add event listener based on the user's scheme
-  chrome.storage.local.get(["UI_SCHEME"], function (result) {
-    if (result.UI_SCHEME != 6) addToggleListeners();
-    if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
-    if (result.UI_SCHEME == 4) addCategoriesEventListener();
-    if (result.UI_SCHEME == 6) addGPCEventListener();
-  });
-}
-
-// Creates the specific Domain List toggles as well as the perm delete
-function addToggleListeners() {
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    for (let domain in result.DOMAINS) {
-      addDomainToggleListener(domain, domain);
-      addDeleteButtonListener(domain);
-    }
-  });
-}
-
-// Delete buttons for each domain
-function addDeleteButtonListener(domain) {
-  document.getElementById(`delete ${domain}`).addEventListener("click", () => {
-    deleteDomain(domain);
-    document.getElementById(`li ${domain}`).remove();
-    chrome.storage.local.get(["UV_SETTING"], function (result) {
-      chrome.runtime.sendMessage({
-        greeting: "INTERACTION",
-        domain: domain,
-        setting: "Delete domain",
-        prevSetting: null,
-        newSetting: null,
-        universalSetting: result.UV_SETTING,
-        location: "Options page",
-        subcollection: "Domain",
-      });
     });
   });
 }
@@ -889,7 +971,7 @@ function createDomainlistManagerButtons() {
 }
 
 // Create HTML for displaying the list of domains in the domainlist, and their respective options
-export function createList() {
+function createList() {
   let items = "";
   chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) {
     console.log("domains: " + Object.values(Object.keys(result.DOMAINS)));
