@@ -9,7 +9,7 @@ import {
   allOn,
   allOff,
   turnOnGPC,
-} from "../../../domainlist.js";
+} from "./domainlist-util.js";
 
 const domainListHeadings = {
   title: "Global Privacy Control (GPC) Settings",
