@@ -12,14 +12,22 @@ users actions on domains-list/options page --- chrome runtime --> background.js 
 import { renderParse, fetchParse } from "../../components/util.js";
 import {
   addToggleListeners,
-  handleToggleAllOn, 
-  handleToggleAllOff, 
-  handleApplyAllSwitch, 
+  handleToggleAllOn,
+  handleToggleAllOff,
+  handleApplyAllSwitch,
   handleDeleteDomainListEvent,
-  handleFutureSettingPromptEvent
+  handleFutureSettingPromptEvent,
+  addCategoriesEventListener,
+  addGPCEventListener,
+  addPrivacyProfileEventListener,
 } from "./domainlist-util.js";
 
-import { createDomainlistManagerButtons, createDefaultSettingInfo, createList} from "./domainlist-ui.js";
+import {
+  createDomainlistManagerButtons,
+  createDefaultSettingInfo,
+  createList,
+  filterList,
+} from "./domainlist-ui.js";
 
 const domainListHeadings = {
   title: "Global Privacy Control (GPC) Settings",
@@ -107,260 +115,6 @@ function addEventListeners() {
       handleDeleteDomainListEvent();
     }
   });
-}
-
-// User changes GPC signal send status on scheme 6
-function addGPCEventListener() {
-  document.addEventListener("click", (event) => {
-    if (event.target.id == "privacy-on") {
-      chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Enable GPC") {
-          chrome.declarativeNetRequest.updateEnabledRulesets(
-            { enableRulesetIds: ["universal_GPC"] },
-            () => console.log("universal_GPC rule enabled")
-          );
-          chrome.runtime.sendMessage({
-            greeting: "INTERACTION",
-            domain: "All future domains",
-            setting: "Privacy Profile",
-            prevSetting: result.USER_CHOICES,
-            newSetting: "Enable GPC",
-            location: "Options page",
-            subcollection: "Privacy Choice",
-          });
-        }
-      });
-      chrome.storage.local.set({ USER_CHOICES: "Enable GPC" });
-      createDefaultSettingInfo();
-    } else if (event.target.id == "privacy-off") {
-      chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Disable GPC") {
-          chrome.declarativeNetRequest.updateEnabledRulesets(
-            { disableRulesetIds: ["universal_GPC"] },
-            () => console.log("universal_GPC rule disabled")
-          );
-          chrome.runtime.sendMessage({
-            greeting: "INTERACTION",
-            domain: "All future domains",
-            setting: "Privacy Profile",
-            prevSetting: result.USER_CHOICES,
-            newSetting: "Disable GPC",
-            location: "Options page",
-            subcollection: "Privacy Choice",
-          });
-        }
-      });
-      chrome.storage.local.set({ USER_CHOICES: "Disable GPC" });
-      createDefaultSettingInfo();
-    }
-  });
-}
-
-// User changes their privacy profile on scheme 3
-function addPrivacyProfileEventListener() {
-  document.addEventListener("click", function (event) {
-    if (event.target.id == "high-privacy-sensitivity") {
-      chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "High Privacy-Sensitivity") {
-          chrome.runtime.sendMessage({
-            greeting: "INTERACTION",
-            domain: "All future domains",
-            setting: "Privacy Profile",
-            prevSetting: result.USER_CHOICES,
-            newSetting: "High Privacy-Sensitivity",
-            location: "Options page",
-            subcollection: "Privacy Choice",
-          });
-        }
-      });
-      chrome.storage.local.set({ USER_CHOICES: "High Privacy-Sensitivity" });
-      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
-    } else if (event.target.id == "medium-privacy-sensitivity") {
-      chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
-          chrome.runtime.sendMessage({
-            greeting: "INTERACTION",
-            domain: "All future domains",
-            setting: "Privacy Profile",
-            prevSetting: result.USER_CHOICES,
-            newSetting: "Medium Privacy-Sensitivity",
-            location: "Options page",
-            subcollection: "Privacy Choice",
-          });
-        }
-      });
-      chrome.storage.local.set({ USER_CHOICES: "Medium Privacy-Sensitivity" });
-      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
-    } else if (event.target.id == "low-privacy-sensitivity") {
-      chrome.storage.local.get(["USER_CHOICES"], function (result) {
-        if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
-          chrome.runtime.sendMessage({
-            greeting: "INTERACTION",
-            domain: "All future domains",
-            setting: "Privacy Profile",
-            prevSetting: result.USER_CHOICES,
-            newSetting: "Not Privacy Sensitive",
-            location: "Options page",
-            subcollection: "Privacy Choice",
-          });
-        }
-      });
-      chrome.storage.local.set({ USER_CHOICES: "Low Privacy-Sensitivity" });
-      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
-    }
-    createDefaultSettingInfo();
-    updatePrefScheme3();
-  });
-}
-
-// User alters their category choice on scheme 4
-function addCategoriesEventListener() {
-  document.addEventListener("click", function (event) {
-    chrome.storage.local.get(["USER_CHOICES"], function (result) {
-      chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-      let userChoices = result.USER_CHOICES;
-      if (event.target.id == "Advertising") {
-        userChoices["Advertising"] = !userChoices["Advertising"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      } else if (event.target.id == "Analytics") {
-        userChoices["Analytics"] = !userChoices["Analytics"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      } else if (event.target.id == "Fingerprinting") {
-        userChoices["Fingerprinting"] = !userChoices["Fingerprinting"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      } else if (event.target.id == "Content & Social") {
-        userChoices["Content & Social"] = !userChoices["Content & Social"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      } else if (event.target.id == "Cryptomining") {
-        userChoices["Cryptomining"] = !userChoices["Cryptomining"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      } else if (event.target.id == "Others") {
-        userChoices["Others"] = !userChoices["Others"];
-        chrome.storage.local.set({ USER_CHOICES: userChoices });
-        chrome.storage.local.get(
-          ["USER_CHOICES", "PREV_CHOICE"],
-          function (result) {
-            chrome.runtime.sendMessage({
-              greeting: "INTERACTION",
-              domain: "All domains",
-              setting: "Categories",
-              prevSetting: result.PREV_CHOICE,
-              newSetting: result.USER_CHOICES,
-              location: "Options page",
-              subcollection: "Privacy Choice",
-            });
-          }
-        );
-        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
-        createDefaultSettingInfo();
-        updatePrefScheme4();
-      }
-    });
-  });
-}
-
-// Filtered lists code heavily inspired by
-function filterList() {
-  let input, list, li, count;
-  input = document.getElementById("searchbar").value.toLowerCase();
-  list = document.getElementById("domainlist-main");
-  li = list.getElementsByTagName("li");
-  count = li.length;
-
-  for (let i = 0; i < count; i++) {
-    let d = li[i].getElementsByClassName("domain")[0];
-    let txtValue = d.innerText;
-    if (txtValue.toLowerCase().indexOf(input) > -1) {
-      li[i].style.display = "";
-    } else {
-      li[i].style.display = "none";
-    }
-  }
 }
 
 // Update the check list based on the user's choice in scheme 3
@@ -524,5 +278,3 @@ async function updatePrefScheme4() {
     }
   );
 }
-
-

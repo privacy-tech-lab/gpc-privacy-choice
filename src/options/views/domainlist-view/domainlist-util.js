@@ -1,69 +1,3 @@
-// Sets DOMAINS[domainKey] to true
-async function turnOnGPC(domainKey) {
-  console.log("Turning GPC on for: " + domainKey);
-  let new_domains = [];
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    new_domains = result.DOMAINS;
-    new_domains[domainKey] = true;
-    chrome.storage.local.set({ DOMAINS: new_domains });
-  });
-}
-
-// Sets DOMAINS[domainKey] to false
-async function turnOffGPC(domainKey) {
-  console.log("Turning GPC off for: " + domainKey);
-  let new_domains = [];
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    new_domains = result.DOMAINS;
-    new_domains[domainKey] = false;
-    chrome.storage.local.set({ DOMAINS: new_domains });
-  });
-}
-
-// Removes DOMAINS[domainKey] from DOMAINS
-export async function deleteDomain(domainKey) {
-  let new_domains = [];
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    new_domains = result.DOMAINS;
-    delete new_domains[domainKey];
-    chrome.storage.local.set({ DOMAINS: new_domains });
-    chrome.runtime.sendMessage({
-      greeting: "UPDATE CACHE",
-      newEnabled: "dontSet",
-      newDomains: new_domains,
-      newDomainlistEnabled: "dontSet",
-      newApplyAll: "dontSet",
-    });
-  });
-}
-
-// Returns true if all domains are toggled on, false otherwise
-export function allOn(domains) {
-  for (let d in domains) {
-    if (domains[d].bool === false) return false;
-  }
-  return true;
-}
-
-// Returns true if all domains are toggled off, false otherwise
-export function allOff(domains) {
-  for (let d in domains) {
-    if (domains[d].bool === true) return false;
-  }
-  return true;
-}
-
-
-// Creates the specific Domain List toggles as well as the perm delete
-export function addToggleListeners() {
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    for (let domain in result.DOMAINS) {
-      addDomainToggleListener(domain, domain);
-      addDeleteButtonListener(domain);
-    }
-  });
-}
-
 // Turn on / off the domain from the setting page
 async function addDomainToggleListener(elementId, domain) {
   document.getElementById(elementId).addEventListener("click", () => {
@@ -73,10 +7,19 @@ async function addDomainToggleListener(elementId, domain) {
         chrome.storage.local.get(
           ["DOMAINS", "UV_SETTING", "UI_SCHEME"],
           function (result) {
-            console.log("The current setting for ", domain, " is: ", result.DOMAINS[domain])
+            console.log(
+              "The current setting for ",
+              domain,
+              " is: ",
+              result.DOMAINS[domain]
+            );
             if (result.DOMAINS[domain] == true) {
               turnOffGPC(domain);
-              chrome.runtime.sendMessage({greeting: "DOMAIN SPECIFIC GPC OFF", domainKey: domain});
+              // delegate the edit of rule set to the background
+              chrome.runtime.sendMessage({
+                greeting: "DOMAIN SPECIFIC GPC OFF",
+                domainKey: domain,
+              });
               if (result.UI_SCHEME == 1) {
                 chrome.runtime.sendMessage({
                   greeting: "INTERACTION",
@@ -102,7 +45,10 @@ async function addDomainToggleListener(elementId, domain) {
               }
             } else {
               turnOnGPC(domain);
-              chrome.runtime.sendMessage({greeting: "DOMAIN SPECIFIC GPC ON", domainKey: domain});
+              chrome.runtime.sendMessage({
+                greeting: "DOMAIN SPECIFIC GPC ON",
+                domainKey: domain,
+              });
               if (result.UI_SCHEME == 1) {
                 chrome.runtime.sendMessage({
                   greeting: "INTERACTION",
@@ -139,6 +85,11 @@ function addDeleteButtonListener(domain) {
   document.getElementById(`delete ${domain}`).addEventListener("click", () => {
     deleteDomain(domain);
     document.getElementById(`li ${domain}`).remove();
+    // delegate the edit of rule set to the background
+    chrome.runtime.sendMessage({
+      greeting: "DELETE SPECIFIC DOMAIN",
+      domainKey: domain,
+    });
     chrome.storage.local.get(["UV_SETTING"], function (result) {
       chrome.runtime.sendMessage({
         greeting: "INTERACTION",
@@ -151,6 +102,65 @@ function addDeleteButtonListener(domain) {
         subcollection: "Domain",
       });
     });
+  });
+}
+
+// Sets DOMAINS[domainKey] to true
+async function turnOnGPC(domainKey) {
+  console.log("Turning GPC on for: " + domainKey);
+  let new_domains = [];
+  chrome.storage.local.get(["DOMAINS"], function (result) {
+    new_domains = result.DOMAINS;
+    new_domains[domainKey] = true;
+    chrome.storage.local.set({ DOMAINS: new_domains });
+  });
+}
+
+// Sets DOMAINS[domainKey] to false
+async function turnOffGPC(domainKey) {
+  console.log("Turning GPC off for: " + domainKey);
+  let new_domains = [];
+  chrome.storage.local.get(["DOMAINS"], function (result) {
+    new_domains = result.DOMAINS;
+    new_domains[domainKey] = false;
+    chrome.storage.local.set({ DOMAINS: new_domains });
+  });
+}
+
+// Returns true if all domains are toggled on, false otherwise
+function allOn(domains) {
+  for (let d in domains) {
+    if (domains[d].bool === false) return false;
+  }
+  return true;
+}
+
+// Returns true if all domains are toggled off, false otherwise
+function allOff(domains) {
+  for (let d in domains) {
+    if (domains[d].bool === true) return false;
+  }
+  return true;
+}
+
+// Removes DOMAINS[domainKey] from DOMAINS
+// TODO: Send a different message to the background
+async function deleteDomain(domainKey) {
+  let new_domains = [];
+  chrome.storage.local.get(["DOMAINS"], function (result) {
+    new_domains = result.DOMAINS;
+    delete new_domains[domainKey];
+    chrome.storage.local.set({ DOMAINS: new_domains });
+  });
+}
+
+// Creates the specific Domain List toggles as well as the perm delete
+export function addToggleListeners() {
+  chrome.storage.local.get(["DOMAINS"], function (result) {
+    for (let domain in result.DOMAINS) {
+      addDomainToggleListener(domain, domain);
+      addDeleteButtonListener(domain);
+    }
   });
 }
 
@@ -365,4 +375,239 @@ export function handleDeleteDomainListEvent() {
   }
   createList();
   addToggleListeners();
+}
+
+// User changes their privacy profile on scheme 3
+export function addPrivacyProfileEventListener() {
+  document.addEventListener("click", function (event) {
+    if (event.target.id == "high-privacy-sensitivity") {
+      chrome.storage.local.get(["USER_CHOICES"], function (result) {
+        if (result.USER_CHOICES !== "High Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({
+            greeting: "INTERACTION",
+            domain: "All future domains",
+            setting: "Privacy Profile",
+            prevSetting: result.USER_CHOICES,
+            newSetting: "High Privacy-Sensitivity",
+            location: "Options page",
+            subcollection: "Privacy Choice",
+          });
+        }
+      });
+      chrome.storage.local.set({ USER_CHOICES: "High Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+    } else if (event.target.id == "medium-privacy-sensitivity") {
+      chrome.storage.local.get(["USER_CHOICES"], function (result) {
+        if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({
+            greeting: "INTERACTION",
+            domain: "All future domains",
+            setting: "Privacy Profile",
+            prevSetting: result.USER_CHOICES,
+            newSetting: "Medium Privacy-Sensitivity",
+            location: "Options page",
+            subcollection: "Privacy Choice",
+          });
+        }
+      });
+      chrome.storage.local.set({ USER_CHOICES: "Medium Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+    } else if (event.target.id == "low-privacy-sensitivity") {
+      chrome.storage.local.get(["USER_CHOICES"], function (result) {
+        if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
+          chrome.runtime.sendMessage({
+            greeting: "INTERACTION",
+            domain: "All future domains",
+            setting: "Privacy Profile",
+            prevSetting: result.USER_CHOICES,
+            newSetting: "Not Privacy Sensitive",
+            location: "Options page",
+            subcollection: "Privacy Choice",
+          });
+        }
+      });
+      chrome.storage.local.set({ USER_CHOICES: "Low Privacy-Sensitivity" });
+      chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+    }
+    createDefaultSettingInfo();
+    updatePrefScheme3();
+  });
+}
+
+// User alters their category choice on scheme 4
+export function addCategoriesEventListener() {
+  document.addEventListener("click", function (event) {
+    chrome.storage.local.get(["USER_CHOICES"], function (result) {
+      chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+      let userChoices = result.USER_CHOICES;
+      if (event.target.id == "Advertising") {
+        userChoices["Advertising"] = !userChoices["Advertising"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      } else if (event.target.id == "Analytics") {
+        userChoices["Analytics"] = !userChoices["Analytics"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      } else if (event.target.id == "Fingerprinting") {
+        userChoices["Fingerprinting"] = !userChoices["Fingerprinting"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      } else if (event.target.id == "Content & Social") {
+        userChoices["Content & Social"] = !userChoices["Content & Social"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      } else if (event.target.id == "Cryptomining") {
+        userChoices["Cryptomining"] = !userChoices["Cryptomining"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      } else if (event.target.id == "Others") {
+        userChoices["Others"] = !userChoices["Others"];
+        chrome.storage.local.set({ USER_CHOICES: userChoices });
+        chrome.storage.local.get(
+          ["USER_CHOICES", "PREV_CHOICE"],
+          function (result) {
+            chrome.runtime.sendMessage({
+              greeting: "INTERACTION",
+              domain: "All domains",
+              setting: "Categories",
+              prevSetting: result.PREV_CHOICE,
+              newSetting: result.USER_CHOICES,
+              location: "Options page",
+              subcollection: "Privacy Choice",
+            });
+          }
+        );
+        chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+        createDefaultSettingInfo();
+        updatePrefScheme4();
+      }
+    });
+  });
+}
+
+// User changes GPC signal send status on scheme 6
+export function addGPCEventListener() {
+  document.addEventListener("click", (event) => {
+    if (event.target.id == "privacy-on") {
+      chrome.storage.local.get(["USER_CHOICES"], function (result) {
+        if (result.USER_CHOICES !== "Enable GPC") {
+          chrome.declarativeNetRequest.updateEnabledRulesets(
+            { enableRulesetIds: ["universal_GPC"] },
+            () => console.log("universal_GPC rule enabled")
+          );
+          chrome.runtime.sendMessage({
+            greeting: "INTERACTION",
+            domain: "All future domains",
+            setting: "Privacy Profile",
+            prevSetting: result.USER_CHOICES,
+            newSetting: "Enable GPC",
+            location: "Options page",
+            subcollection: "Privacy Choice",
+          });
+        }
+      });
+      chrome.storage.local.set({ USER_CHOICES: "Enable GPC" });
+      createDefaultSettingInfo();
+    } else if (event.target.id == "privacy-off") {
+      chrome.storage.local.get(["USER_CHOICES"], function (result) {
+        if (result.USER_CHOICES !== "Disable GPC") {
+          chrome.declarativeNetRequest.updateEnabledRulesets(
+            { disableRulesetIds: ["universal_GPC"] },
+            () => console.log("universal_GPC rule disabled")
+          );
+          chrome.runtime.sendMessage({
+            greeting: "INTERACTION",
+            domain: "All future domains",
+            setting: "Privacy Profile",
+            prevSetting: result.USER_CHOICES,
+            newSetting: "Disable GPC",
+            location: "Options page",
+            subcollection: "Privacy Choice",
+          });
+        }
+      });
+      chrome.storage.local.set({ USER_CHOICES: "Disable GPC" });
+      createDefaultSettingInfo();
+    }
+  });
 }

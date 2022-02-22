@@ -8,7 +8,7 @@ This file contains functions which are used to create the HTML for building the 
 
 // Create HTML for buttons to manage entire domainlist at once
 export function createDomainlistManagerButtons() {
-    let toggle_domainlist_on = ` <button
+  let toggle_domainlist_on = ` <button
           id="toggle_all_on"
           class="uk-badge button blue-buttons"
           type="button"
@@ -16,7 +16,7 @@ export function createDomainlistManagerButtons() {
          Enable GPC for All
         </button>
       `;
-    let toggle_domainlist_off = ` <button
+  let toggle_domainlist_off = ` <button
           id="toggle_all_off"
           class="uk-badge blue-buttons button"
           uk-tooltip="applies only to domains below"
@@ -24,7 +24,7 @@ export function createDomainlistManagerButtons() {
           Disable GPC for All
         </button>
       `;
-    let delete_all = ` <button
+  let delete_all = ` <button
           id="delete_all_domainlist"
           style="
               margin-right: 17px;
@@ -42,132 +42,131 @@ export function createDomainlistManagerButtons() {
           Delete All
         </button>
       `;
-    let manager_btns = `
+  let manager_btns = `
       ${toggle_domainlist_on}
       ${toggle_domainlist_off}
       ${delete_all}
       <hr>
     `;
-  
-    document.getElementById("domainlist-manager-btns").innerHTML = manager_btns;
-    chrome.storage.local.get(["UI_SCHEME"], function (result) {
-      if (result.UI_SCHEME == 3 || result.UI_SCHEME == 4 || result.UI_SCHEME == 5)
-        document.getElementById("domainlist-manager-btns").classList.add("hide");
-      if (result.UI_SCHEME == 0) {
-        document.getElementById("toggle_all_on").classList.add("hide");
-        document.getElementById("toggle_all_off").classList.add("hide");
-        document.getElementById("apply_to_all_label").classList.add("hide");
-      }
-    });
-  }
+
+  document.getElementById("domainlist-manager-btns").innerHTML = manager_btns;
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    if (result.UI_SCHEME == 3 || result.UI_SCHEME == 4 || result.UI_SCHEME == 5)
+      document.getElementById("domainlist-manager-btns").classList.add("hide");
+    if (result.UI_SCHEME == 0) {
+      document.getElementById("toggle_all_on").classList.add("hide");
+      document.getElementById("toggle_all_off").classList.add("hide");
+      document.getElementById("apply_to_all_label").classList.add("hide");
+    }
+  });
+}
 
 // Handles the initialization of card selections/changing of card selections
 export function cardInteractionSettings(scheme, userChoice) {
-    if (scheme == 3) {
-      if (userChoice == "High Privacy-Sensitivity") {
-        document
-          .getElementById("high-privacy-sensitivity-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("high-privacy-sensitivity-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice == "Medium Privacy-Sensitivity") {
-        document
-          .getElementById("medium-privacy-sensitivity-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("medium-privacy-sensitivity-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice == "Low Privacy-Sensitivity") {
-        document
-          .getElementById("low-privacy-sensitivity-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("low-privacy-sensitivity-card")
-          .classList.remove("uk-card-primary");
-    } else if (scheme == 4) {
-      if (userChoice["Advertising"]) {
-        document
-          .getElementById("advertising-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("advertising-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice["Analytics"]) {
-        document
-          .getElementById("analytics-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("analytics-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice["Fingerprinting"]) {
-        document
-          .getElementById("fingerprinting-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("fingerprinting-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice["Content & Social"]) {
-        document.getElementById("social-card").classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("social-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice["Cryptomining"]) {
-        document
-          .getElementById("cryptomining-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("cryptomining-card")
-          .classList.remove("uk-card-primary");
-      if (userChoice["Others"]) {
-        document.getElementById("others-card").classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("others-card")
-          .classList.remove("uk-card-primary");
-    } else if (scheme == 6) {
-      if (userChoice == "Enable GPC") {
-        document
-          .getElementById("privacy-on-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("privacy-on-card")
-          .classList.remove("uk-card-primary");
-  
-      if (userChoice == "Disable GPC") {
-        document
-          .getElementById("privacy-off-card")
-          .classList.add("uk-card-primary");
-      } else
-        document
-          .getElementById("privacy-off-card")
-          .classList.remove("uk-card-primary");
-    }
-  }
+  if (scheme == 3) {
+    if (userChoice == "High Privacy-Sensitivity") {
+      document
+        .getElementById("high-privacy-sensitivity-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("high-privacy-sensitivity-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice == "Medium Privacy-Sensitivity") {
+      document
+        .getElementById("medium-privacy-sensitivity-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("medium-privacy-sensitivity-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice == "Low Privacy-Sensitivity") {
+      document
+        .getElementById("low-privacy-sensitivity-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("low-privacy-sensitivity-card")
+        .classList.remove("uk-card-primary");
+  } else if (scheme == 4) {
+    if (userChoice["Advertising"]) {
+      document
+        .getElementById("advertising-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("advertising-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Analytics"]) {
+      document
+        .getElementById("analytics-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("analytics-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Fingerprinting"]) {
+      document
+        .getElementById("fingerprinting-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("fingerprinting-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Content & Social"]) {
+      document.getElementById("social-card").classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("social-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Cryptomining"]) {
+      document
+        .getElementById("cryptomining-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("cryptomining-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Others"]) {
+      document.getElementById("others-card").classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("others-card")
+        .classList.remove("uk-card-primary");
+  } else if (scheme == 6) {
+    if (userChoice == "Enable GPC") {
+      document
+        .getElementById("privacy-on-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("privacy-on-card")
+        .classList.remove("uk-card-primary");
 
+    if (userChoice == "Disable GPC") {
+      document
+        .getElementById("privacy-off-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("privacy-off-card")
+        .classList.remove("uk-card-primary");
+  }
+}
 
 // Create HTML for the buttons and information on default/apply-all setting
 export function createDefaultSettingInfo() {
-    chrome.storage.local.get(
-      ["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"],
-      function (result) {
-        let apply_all_bool = result.APPLY_ALL;
-        let apply_all_switch =
-          ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
+  chrome.storage.local.get(
+    ["APPLY_ALL", "ENABLED", "UI_SCHEME", "USER_CHOICES"],
+    function (result) {
+      let apply_all_bool = result.APPLY_ALL;
+      let apply_all_switch =
+        ` <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
           <div>
             <label class="switch">
               ` +
-          buildToggle("apply-all-switch", !apply_all_bool) +
-          `
+        buildToggle("apply-all-switch", !apply_all_bool) +
+        `
               <span></span>
             </label>
           </div>
@@ -177,34 +176,34 @@ export function createDefaultSettingInfo() {
         </div>
         <br>
               `;
-        let defaultSettingInfo;
-        if (result.UI_SCHEME == 1 || result.UI_SCHEME == 2) {
-          if (apply_all_bool) {
-            if (result.ENABLED) {
-              defaultSettingInfo = `
+      let defaultSettingInfo;
+      if (result.UI_SCHEME == 1 || result.UI_SCHEME == 2) {
+        if (apply_all_bool) {
+          if (result.ENABLED) {
+            defaultSettingInfo = `
             ${apply_all_switch}
             <div class="important-text">
             You have enabled GPC.
             </div>
             Below you can change your GPC setting for an individual site. 
             `;
-            } else {
-              defaultSettingInfo = `
+          } else {
+            defaultSettingInfo = `
             ${apply_all_switch}
             <div class="important-text"> You have disabled GPC.
             </div>
             Below you can change your GPC setting for an individual site. 
             `;
-            }
-          } else {
-            defaultSettingInfo = `
+          }
+        } else {
+          defaultSettingInfo = `
           ${apply_all_switch}
           <div class="important-text"> Below you can change your GPC setting for an individual site.
           </div>
           `;
-          }
-        } else if (result.UI_SCHEME == 4) {
-          defaultSettingInfo = `
+        }
+      } else if (result.UI_SCHEME == 4) {
+        defaultSettingInfo = `
         <p class="uk-h5 uk-text-bold uk-text-italic">
         The law gives you a privacy right:
         </p>
@@ -258,8 +257,8 @@ export function createDefaultSettingInfo() {
             </div> 
         </div>
         `;
-        } else if (result.UI_SCHEME == 3) {
-          defaultSettingInfo = `
+      } else if (result.UI_SCHEME == 3) {
+        defaultSettingInfo = `
         <div class="uk-container main">
           <p class="uk-h5 uk-text-bold uk-text-italic">
           The law gives you a privacy right: 
@@ -298,8 +297,8 @@ export function createDefaultSettingInfo() {
         </div>
         <hr>
         `;
-        } else if (result.UI_SCHEME == 5) {
-          defaultSettingInfo = `
+      } else if (result.UI_SCHEME == 5) {
+        defaultSettingInfo = `
         <div class="uk-container main">
           <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
@@ -313,13 +312,13 @@ export function createDefaultSettingInfo() {
         </div>
         <hr>
         `;
-        } else if (result.UI_SCHEME == 0) {
-          defaultSettingInfo = `
+      } else if (result.UI_SCHEME == 0) {
+        defaultSettingInfo = `
         <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
         `;
-        } else if (result.UI_SCHEME == 6) {
-          defaultSettingInfo = `
+      } else if (result.UI_SCHEME == 6) {
+        defaultSettingInfo = `
         <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
         <p class="uk-h5 uk-text">Enable GPC to <b>prohibit</b> this website from selling/sharing your data.</p>
         <p class="uk-h5 uk-text">Disable GPC to <b>permit</b> this website to sell/share your data.</p>
@@ -343,39 +342,38 @@ export function createDefaultSettingInfo() {
         </div>
         <hr>
         `;
-        }
-        document.getElementById("current-apply-all-setting").innerHTML =
-          defaultSettingInfo;
-        cardInteractionSettings(result.UI_SCHEME, result.USER_CHOICES);
       }
-    );
-  }
-  
+      document.getElementById("current-apply-all-setting").innerHTML =
+        defaultSettingInfo;
+      cardInteractionSettings(result.UI_SCHEME, result.USER_CHOICES);
+    }
+  );
+}
+
 // Generates the HTML that will build the domainlist switch for a given domain in the domainlist
 export function buildToggle(domain, bool) {
-    let toggle;
-    if (bool) toggle = `<input type="checkbox" id="${domain}" checked />`;
-    else toggle = `<input type="checkbox" id="${domain}" />`;
-    return toggle;
-  }
+  let toggle;
+  if (bool) toggle = `<input type="checkbox" id="${domain}" checked />`;
+  else toggle = `<input type="checkbox" id="${domain}" />`;
+  return toggle;
+}
 
-
-  // Create HTML for displaying the list of domains in the domainlist, and their respective options
+// Create HTML for displaying the list of domains in the domainlist, and their respective options
 export function createList() {
-    let items = "";
-    chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) {
-      console.log("domains: " + Object.values(Object.keys(result.DOMAINS)));
-      for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
-        items +=
-          `
+  let items = "";
+  chrome.storage.local.get(["DOMAINS", "UI_SCHEME"], function (result) {
+    console.log("domains: " + Object.values(Object.keys(result.DOMAINS)));
+    for (let domain of Object.values(Object.keys(result.DOMAINS)).sort()) {
+      items +=
+        `
         <li id="li ${domain}">
           <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
             <div>
               <label class="switch">
               ` +
-          buildToggle(domain, result.DOMAINS[domain].bool) +
-          //<input type="checkbox" id="select" class="check text-color dark-checkbox" />
-          `
+        buildToggle(domain, result.DOMAINS[domain].bool) +
+        //<input type="checkbox" id="select" class="check text-color dark-checkbox" />
+        `
                 <span></span>
               </label>
             </div>
@@ -391,10 +389,10 @@ export function createList() {
             >
               <label class="switch" >
               ` +
-          // +
-          // buildToggle(domain, result.DOMAINS[domain])
-          // // `<input type="checkbox" id="toggle-domainlist" />`
-          `
+        // +
+        // buildToggle(domain, result.DOMAINS[domain])
+        // // `<input type="checkbox" id="toggle-domainlist" />`
+        `
                 <span></span>
               </label>
             </div>
@@ -421,14 +419,32 @@ export function createList() {
           </div>
         </li>
               `;
+    }
+    document.getElementById("domainlist-main").innerHTML = items;
+
+    for (let domain of Object.values(Object.keys(result.DOMAINS))) {
+      if (result.UI_SCHEME == 4 || result.UI_SCHEME == 3) {
+        document.getElementById(`delete ${domain}`).classList.add("hide");
       }
-      document.getElementById("domainlist-main").innerHTML = items;
-  
-      for (let domain of Object.values(Object.keys(result.DOMAINS))) {
-        if (result.UI_SCHEME == 4 || result.UI_SCHEME == 3) {
-          document.getElementById(`delete ${domain}`).classList.add("hide");
-        }
-      }
-    });
+    }
+  });
+}
+
+// Filtered lists code heavily inspired by
+export function filterList() {
+  let input, list, li, count;
+  input = document.getElementById("searchbar").value.toLowerCase();
+  list = document.getElementById("domainlist-main");
+  li = list.getElementsByTagName("li");
+  count = li.length;
+
+  for (let i = 0; i < count; i++) {
+    let d = li[i].getElementsByClassName("domain")[0];
+    let txtValue = d.innerText;
+    if (txtValue.toLowerCase().indexOf(input) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
   }
-  
+}
