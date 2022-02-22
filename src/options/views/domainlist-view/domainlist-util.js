@@ -53,13 +53,6 @@ export function allOff(domains) {
   return true;
 }
 
-// Generates the HTML that will build the domainlist switch for a given domain in the domainlist
-export function buildToggle(domain, bool) {
-  let toggle;
-  if (bool) toggle = `<input type="checkbox" id="${domain}" checked />`;
-  else toggle = `<input type="checkbox" id="${domain}" />`;
-  return toggle;
-}
 
 // Creates the specific Domain List toggles as well as the perm delete
 export function addToggleListeners() {
