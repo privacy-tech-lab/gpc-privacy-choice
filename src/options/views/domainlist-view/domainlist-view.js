@@ -34,6 +34,37 @@ const domainListHeadings = {
   subtitle: "Review or Modify Your GPC Settings",
 };
 
+// Creates all the event listeners for the options page buttons
+function addEventListeners() {
+  // Add event listener based on the user's scheme
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    if (result.UI_SCHEME != 6) addToggleListeners();
+    if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
+    if (result.UI_SCHEME == 4) addCategoriesEventListener();
+    if (result.UI_SCHEME == 6) addGPCEventListener();
+  });
+  // Add the serach handler if exist
+  if (document.getElementById("searchbar") != null)
+    document.getElementById("searchbar").addEventListener("keyup", filterList);
+  // Add global toggle functionalities if exist
+  document.addEventListener("click", (event) => {
+    if (event.target.id == "toggle_all_off") {
+      handleToggleAllOff();
+    } else if (event.target.id == "toggle_all_on") {
+      handleToggleAllOn();
+    } else if (event.target.id == "apply-all-switch") {
+      handleApplyAllSwitch();
+    } else if (
+      event.target.id == "allow-future-btn" ||
+      event.target.id == "dont-allow-future-btn"
+    ) {
+      handleFutureSettingPromptEvent(event);
+    } else if (event.target.id == "delete_all_domainlist") {
+      handleDeleteDomainListEvent();
+    }
+  });
+}
+
 // Renders the `domain list` view in the options page
 export async function domainlistView(scaffoldTemplate, buildList) {
   let body;
@@ -84,197 +115,4 @@ export async function domainlistView(scaffoldTemplate, buildList) {
       });
     }
   });
-}
-
-// Creates all the event listeners for the options page buttons
-function addEventListeners() {
-  // Add event listener based on the user's scheme
-  chrome.storage.local.get(["UI_SCHEME"], function (result) {
-    if (result.UI_SCHEME != 6) addToggleListeners();
-    if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
-    if (result.UI_SCHEME == 4) addCategoriesEventListener();
-    if (result.UI_SCHEME == 6) addGPCEventListener();
-  });
-  // Add the serach handler if exist
-  if (document.getElementById("searchbar") != null)
-    document.getElementById("searchbar").addEventListener("keyup", filterList);
-  // Add global toggle functionalities if exist
-  document.addEventListener("click", (event) => {
-    if (event.target.id == "toggle_all_off") {
-      handleToggleAllOff();
-    } else if (event.target.id == "toggle_all_on") {
-      handleToggleAllOn();
-    } else if (event.target.id == "apply-all-switch") {
-      handleApplyAllSwitch();
-    } else if (
-      event.target.id == "allow-future-btn" ||
-      event.target.id == "dont-allow-future-btn"
-    ) {
-      handleFutureSettingPromptEvent(event);
-    } else if (event.target.id == "delete_all_domainlist") {
-      handleDeleteDomainListEvent();
-    }
-  });
-}
-
-// Update the check list based on the user's choice in scheme 3
-function updatePrefScheme3() {
-  chrome.storage.local.get(
-    ["DOMAINS", "CHECKLIST", "USER_CHOICES", "NPSLIST"],
-    function (result) {
-      let domains = result.DOMAINS;
-      for (let d in domains) {
-        // by default, do not send GPC signals
-        let value = false;
-        // if user chose extremely privacy sensitive: send GPC signals
-        if (result.USER_CHOICES == "High Privacy-Sensitivity") value = true;
-        // if user chose not privacy sensitive: do not send GPC signals
-        else if (result.USER_CHOICES == "Low Privacy-Sensitivity") {
-          value = false;
-          if (result.NPSLIST.includes(d)) value = true;
-        }
-        // if the user chose moderately gpc signals
-        else if (result.USER_CHOICES == "Medium Privacy-Sensitivity") {
-          // by default, the GPC signals are not sent unless the currentDomain is the the checkList
-          value = false;
-          if (result.CHECKLIST.includes(d)) value = true;
-        }
-        // add the currentDomain and store it in the local storage
-        domains[d].bool = value;
-      }
-      chrome.storage.local.set({ DOMAINS: domains });
-      createList();
-      addToggleListeners();
-      // notify background to update the cache used for look up
-      chrome.runtime.sendMessage({
-        greeting: "UPDATE CACHE",
-        newEnabled: "dontSet",
-        newDomains: domains,
-        newDomainlistEnabled: "dontSet",
-        newApplyAll: "dontSet",
-      });
-    }
-  );
-}
-
-// Update the check list based on the user's choice in scheme 4
-async function updatePrefScheme4() {
-  chrome.storage.local.get(
-    ["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
-    async function (result) {
-      let checkList = [];
-      let checkNotList = [];
-      let userChoices = result.USER_CHOICES;
-      // Parse the networks json file based on the user's response to JSON
-      await fetch("../../json/services.json")
-        .then((response) => response.text())
-        .then((result) => {
-          let networks = JSON.parse(result)["categories"];
-          for (let category of Object.keys(userChoices)) {
-            if (userChoices[category] == true) {
-              if (category != "Others") {
-                if (category === "Fingerprinting") {
-                  for (let cat of [
-                    "FingerprintingGeneral",
-                    "FingerprintingInvasive",
-                  ]) {
-                    for (let n of networks[cat]) {
-                      for (let c of Object.values(n)) {
-                        for (let list of Object.values(c)) {
-                          checkList = checkList.concat(list);
-                        }
-                      }
-                    }
-                  }
-                } else if (category === "Content & Social") {
-                  for (let cat of ["Content", "Social", "Disconnect"]) {
-                    for (let n of networks[cat]) {
-                      for (let c of Object.values(n)) {
-                        for (let list of Object.values(c)) {
-                          checkList = checkList.concat(list);
-                        }
-                      }
-                    }
-                  }
-                } else {
-                  for (let n of networks[category]) {
-                    for (let c of Object.values(n)) {
-                      for (let list of Object.values(c)) {
-                        checkList = checkList.concat(list);
-                      }
-                    }
-                  }
-                }
-              }
-            } else {
-              if (category != "Others") {
-                if (category === "Fingerprinting") {
-                  for (let cat of [
-                    "FingerprintingGeneral",
-                    "FingerprintingInvasive",
-                  ]) {
-                    for (let n of networks[cat]) {
-                      for (let c of Object.values(n)) {
-                        for (let list of Object.values(c)) {
-                          checkNotList = checkNotList.concat(list);
-                        }
-                      }
-                    }
-                  }
-                } else if (category === "Content & Social") {
-                  for (let cat of ["Content", "Social", "Disconnect"]) {
-                    for (let n of networks[cat]) {
-                      for (let c of Object.values(n)) {
-                        for (let list of Object.values(c)) {
-                          checkNotList = checkNotList.concat(list);
-                        }
-                      }
-                    }
-                  }
-                } else {
-                  for (let n of networks[category]) {
-                    for (let c of Object.values(n)) {
-                      for (let list of Object.values(c)) {
-                        checkNotList = checkNotList.concat(list);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        });
-      chrome.storage.local.set({
-        CHECKLIST: checkList,
-        CHECKNOTLIST: checkNotList,
-      });
-
-      let domains = result.DOMAINS;
-      for (let currentDomain in domains) {
-        // by default, do not send GPC signals
-        let value = false;
-        // send GPC signals if the currentDomain is in the checkList
-        if (checkList.includes(currentDomain)) value = true;
-        else {
-          // send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
-          if (result.USER_CHOICES["Others"] == true) {
-            if (!checkNotList.includes(currentDomain)) value = true;
-          }
-        }
-        // add the currentDomain and store it in the local storage
-        domains[currentDomain].bool = value;
-      }
-      chrome.storage.local.set({ DOMAINS: domains });
-      createList();
-      addToggleListeners();
-      // notify background to update the cache used for look up
-      chrome.runtime.sendMessage({
-        greeting: "UPDATE CACHE",
-        newEnabled: "dontSet",
-        newDomains: domains,
-        newDomainlistEnabled: "dontSet",
-        newApplyAll: "dontSet",
-      });
-    }
-  );
 }

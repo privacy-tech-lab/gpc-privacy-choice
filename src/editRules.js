@@ -4,6 +4,7 @@ export function addRule(domain, id) {
     addRules: [
       {
         id: id,
+        priority: 1,
         action: {
           type: "modifyHeaders",
           requestHeaders: [
@@ -12,7 +13,8 @@ export function addRule(domain, id) {
           ],
         },
         condition: {
-          urlFilter: "||^" + domain + "*",
+          urlFilter: domain,
+          resourceTypes: ["main_frame"],
         },
       },
     ],
@@ -25,6 +27,7 @@ export function addRule(domain, id) {
 export function rmRule(id) {
   console.log("Remove rule with id", id);
   chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
+  chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
 }
 
 // Clear rules from the rule set
@@ -38,13 +41,33 @@ async function clearRules() {
 }
 
 // Update rule set when user toggles domain on
-export function updateToggleOnRuleSet(){
-  console.log("updateToggleOnRuleSet to be implemented");
+export function updateToggleOnRuleSet(domainKey) {
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    console.log("updating the toggles in scheme " + result.UI_SCHEME);
+    chrome.declarativeNetRequest.getDynamicRules((rules) => {
+      for (let i = 0; i < rules.length; i++) {
+        let url = rules[i].condition.urlFilter;
+        if (url.includes(domainKey)) return;
+      }
+      addRule(domainKey, rules.length + 1);
+    });
+  });
 }
 
 // Update rule set when user toggles domain off
-export function updateToggleOffRuleSet(){
-  console.log("updateToggleOffRuleSet to be implemented");
+export function updateToggleOffRuleSet(domainKey) {
+  chrome.storage.local.get(["UI_SCHEME"], function (result) {
+    console.log("updating the toggles in scheme " + result.UI_SCHEME);
+    chrome.declarativeNetRequest.getDynamicRules((rules) => {
+      for (let i = 0; i < rules.length; i++) {
+        let url = rules[i].condition.urlFilter;
+        if (url.includes(domainKey)) {
+          rmRule(rules[i]);
+          return;
+        }
+      }
+    });
+  });
 }
 
 // Update new rule sets based on the user privacy profile (scheme 3)
@@ -94,7 +117,7 @@ export async function updateProfileRuleSets() {
               ],
             },
             condition: {
-              urlFilter: "|*",
+              urlFilter: "*",
               domains: domains,
             },
           },
@@ -113,5 +136,3 @@ export async function updateProfileRuleSets() {
 export async function updateCategoryRuleSets() {
   console.log("updateCategoryRuleSets to be implemented");
 }
-
-

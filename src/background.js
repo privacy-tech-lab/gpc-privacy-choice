@@ -506,12 +506,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // user turns on the gpc for a domain from options page
   if (request.greeting == "DOMAIN SPECIFIC GPC ON") {
     console.log("Turning on GPC Signal for ", request.domainKey);
-    updateToggleOnRuleSet();
+    updateToggleOnRuleSet(request.domainKey);
   }
   // user turns off the gpc for a domain from options page
   if (request.greeting == "DOMAIN SPECIFIC GPC OFF") {
     console.log("Turning off GPC Signal for ", request.domainKey);
-    updateToggleOffRuleSet();
+    updateToggleOffRuleSet(request.domainKey);
   }
   // update cache from contentScript.js
   if (request.greeting == "UPDATE CACHE") {
@@ -571,7 +571,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
   }
 });
-
 
 // Listen for user opening a potential ad in a new tab
 chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
@@ -802,7 +801,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   });
 });
 
-
 // Set the ORIGIN_SITE property in local storage as current site url for option page
 chrome.action.onClicked.addListener(function (tab) {
   let url = tab.url;
@@ -855,7 +853,7 @@ async function retryOnTabUpdate(tabId, info, tab) {
   }
 }
 
-function updateCache(){
+function updateCache() {
   // Sets cache value to locally stored values after chrome booting up
   chrome.storage.local.get(
     ["DOMAINS", "ENABLED", "DOMAINLIST_ENABLED", "APPLY_ALL"],
