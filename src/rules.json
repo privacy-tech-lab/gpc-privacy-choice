@@ -1,12 +1,15 @@
-
-[{
- "id" : 1,
-  "action" : { "type" : "modifyHeaders",
-    "requestHeaders": [
+[
+  {
+    "id": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
         { "header": "Sec-GPC", "operation": "set", "value": "1" },
         { "header": "DNT", "operation": "set", "value": "1" }
-      ]},
-  "condition" : {
-    "urlFilter" : "*"
+      ]
+    },
+    "condition": {
+      "urlFilter": "*"
+    }
   }
-}]
+]
