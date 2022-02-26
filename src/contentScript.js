@@ -147,101 +147,106 @@ function addOpenOptionsEventListener(currentDomain) {
 
 //Enable GPC for the current domain
 function addSendEventListener(currentDomain) {
-  removeBanner();
-  chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
-  chrome.storage.local.get(
-    ["DOMAINS", "SEND_SIGNAL_BANNER"],
-    function (result) {
-      let new_domains = result.DOMAINS;
-      new_domains[currentDomain] = {};
-      new_domains[currentDomain].bool = true;
-      sendSignalBanner = result.SEND_SIGNAL_BANNER;
-      if (sendSignalBanner !== undefined) {
-        chrome.storage.local.set({
-          DOMAINS: new_domains,
-          SEND_SIGNAL_BANNER: sendSignalBanner + 1,
-        });
-      } else chrome.storage.local.set({ DOMAINS: new_domains });
-      chrome.runtime.sendMessage({
-        greeting: "UPDATE CACHE",
-        newEnabled: "dontSet",
-        newDomains: new_domains,
-        newDomainlistEnabled: true,
-        newApplyAll: "dontSet",
-      });
-      chrome.runtime.sendMessage({
-        greeting: "NEW RULE",
-        d: currentDomain,
-        id: new_domains[currentDomain].id,
-      });
-      // Sends data to Setting Interaction History
-      chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
-        chrome.runtime.sendMessage({
-          greeting: "INTERACTION",
-          domain: currentDomain,
-          setting: "GPC signal",
-          prevSetting: "Preference not set",
-          newSetting: "Send signal",
-          universalSetting: "Off",
-          location: "Banner",
-          subcollection: "Domain",
-        });
-      });
-    }
-  );
+	removeBanner();
+	chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
+	chrome.storage.local.get(
+		["DOMAINS", "SEND_SIGNAL_BANNER"],
+		function (result) {
+			let new_domains = result.DOMAINS;
+			new_domains[currentDomain] = {};
+			new_domains[currentDomain].bool = true;
+			new_domains[currentDomain].id = Object.keys(new_domains).length
+			sendSignalBanner = result.SEND_SIGNAL_BANNER;
+			if (sendSignalBanner !== undefined) {
+				chrome.storage.local.set({
+					DOMAINS: new_domains,
+					SEND_SIGNAL_BANNER: sendSignalBanner + 1,
+				});
+			}
+			else chrome.storage.local.set({ DOMAINS: new_domains });
+			chrome.runtime.sendMessage({
+				greeting: "UPDATE CACHE",
+				newEnabled: "dontSet",
+				newDomains: new_domains,
+				newDomainlistEnabled: true,
+				newApplyAll: "dontSet",
+			});
+			chrome.runtime.sendMessage({
+				greeting: "NEW RULE",
+				d: currentDomain,
+				id: new_domains[currentDomain].id,
+			});
+			// Sends data to Setting Interaction History
+			chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
+				chrome.runtime.sendMessage({
+					greeting: "INTERACTION",
+					domain: currentDomain,
+					setting: "GPC signal",
+					prevSetting: "Preference not set",
+					newSetting: "Send signal",
+					universalSetting: "Off",
+					location: "Banner",
+					subcollection: "Domain",
+				});
+			});
+			
+		}
+	);
 }
 
 // Enable GPC for all future domains
 function addSendAllEventListener(currentDomain) {
-  removeBanner();
-  chrome.storage.local.set({
-    UV_SETTING: "Send signal to all",
-    DOMAINLIST_ENABLED: false,
-    APPLY_ALL: true,
-  });
-  chrome.storage.local.get(["DOMAINS"], function (result) {
-    let new_domains = result.DOMAINS;
-    // sets all domains in list to 'enable gpc'
-    for (let currentD in new_domains) {
-      new_domains[currentD] = {};
-      new_domains[currentD].bool = true;
-      chrome.runtime.sendMessage({
-        greeting: "NEW RULE",
-        d: currentD,
-        id: new_domains[currentD].id,
-      });
-    }
-    // pretty repetitive, look into refactoring
-    // sets current domain to 'enable gpc'
-    new_domains[currentDomain] = {};
-    new_domains[currentDomain].bool = true;
-    chrome.storage.local.set({ DOMAINS: new_domains });
-    chrome.runtime.sendMessage({
-      greeting: "NEW RULE",
-      d: currentDomin,
-      id: new_domains[currentDomain].id,
-    });
-    chrome.runtime.sendMessage({
-      greeting: "UPDATE CACHE",
-      newEnabled: "dontSet",
-      newDomains: new_domains,
-      newDomainlistEnabled: false,
-      newApplyAll: true,
-    });
-  });
-  // Sends data to Setting Interaction History
-  chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
-    chrome.runtime.sendMessage({
-      greeting: "INTERACTION",
-      domain: "All existing and future domains",
-      setting: "GPC Signal",
-      prevSetting: "Preference not set",
-      newSetting: "Send signal",
-      universalSetting: "Send signal to all",
-      location: "Banner",
-      subcollection: "Domain",
-    });
-  });
+	removeBanner();
+	chrome.storage.local.set({
+		UV_SETTING: "Send signal to all",
+		DOMAINLIST_ENABLED: false,
+		APPLY_ALL: true,
+	});
+	chrome.storage.local.get(["DOMAINS"], function (result) {
+		let new_domains = result.DOMAINS;
+		// sets all domains in list to 'enable gpc'
+		for (let currentD in new_domains) {
+			new_domains[currentD] = {};
+			new_domains[currentD].bool = true;
+			new_domains[currentD].id = Object.keys(new_domains).length
+			chrome.runtime.sendMessage({
+				greeting: "NEW RULE",
+				d: currentD,
+				id: new_domains[currentD].id,
+			});
+		}
+		// pretty repetitive, look into refactoring
+		// sets current domain to 'enable gpc'
+		new_domains[currentDomain] = {}
+		new_domains[currentDomain].bool = true;
+		new_domains[currentDomain].id = Object.keys(new_domains).length
+		chrome.storage.local.set({ DOMAINS: new_domains });
+		chrome.runtime.sendMessage({
+			greeting: "NEW RULE",
+			d: currentDomin,
+			id: new_domains[currentDomain].id,
+		});
+		chrome.runtime.sendMessage({
+			greeting: "UPDATE CACHE",
+			newEnabled: "dontSet",
+			newDomains: new_domains,
+			newDomainlistEnabled: false,
+			newApplyAll: true,
+		});
+	});
+	// Sends data to Setting Interaction History
+	chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
+		chrome.runtime.sendMessage({
+			greeting: "INTERACTION",
+			domain: "All existing and future domains",
+			setting: "GPC Signal",
+			prevSetting: "Preference not set",
+			newSetting: "Send signal",
+			universalSetting: "Send signal to all",
+			location: "Banner",
+			subcollection: "Domain",
+		});
+	});
 }
 
 // Disable GPC for the current domain
@@ -625,30 +630,30 @@ function addToDomainListScheme3() {
           if (result.CHECKLIST.includes(currentDomain)) value = true;
         }
 
-        // add the currentDomain and store it in the local storage
-        domains[currentDomain] = {};
-        domains[currentDomain].bool = value;
-        domains[currentDomain].id = Object.keys(domains).length + 1;
-        // if (domains[currentDomain].bool) {
-        // 	chrome.runtime.sendMessage({
-        // 		greeting: "NEW RULE",
-        // 		d: currentDomain,
-        // 		id: domains[currentDomain].id,
-        // 	});
-        // }
-        console.log("domains: " + Object.values(Object.keys(domains)));
-        chrome.storage.local.set({ DOMAINS: domains });
-        // notify background to update the cache used for look up
-        chrome.runtime.sendMessage({
-          greeting: "UPDATE CACHE",
-          newEnabled: "dontSet",
-          newDomains: domains,
-          newDomainlistEnabled: "dontSet",
-          newApplyAll: "dontSet",
-        });
-      }
-    }
-  );
+				// add the currentDomain and store it in the local storage
+				domains[currentDomain] = {};
+				domains[currentDomain].bool = value;
+				domains[currentDomain].id = Object.keys(domains).length;
+				if (domains[currentDomain].bool) {
+					chrome.runtime.sendMessage({
+						greeting: "NEW RULE",
+						d: currentDomain,
+						id: domains[currentDomain].id,
+					});
+				}
+				console.log("domains: " + Object.values(Object.keys(domains)));
+				chrome.storage.local.set({ DOMAINS: domains });
+				// notify background to update the cache used for look up
+				chrome.runtime.sendMessage({
+					greeting: "UPDATE CACHE",
+					newEnabled: "dontSet",
+					newDomains: domains,
+					newDomainlistEnabled: "dontSet",
+					newApplyAll: "dontSet",
+				});
+			}
+		}
+	);
 }
 
 // SCHEME 4: add new domains to the domainlist in local storage based on the user's questionnaire response
@@ -670,109 +675,112 @@ function addToDomainListScheme4() {
           }
         }
 
-        // add the currentDomain and store it in the local storage
-        domains[currentDomain] = {};
-        domains[currentDomain].bool = value;
-        domains[currentDomain].id = Object.keys(domains).length + 1;
-        if (domains[currentDomain].bool) {
-          chrome.runtime.sendMessage({
-            greeting: "NEW RULE",
-            d: currentDomain,
-            id: domains[currentDomain].id,
-          });
-        }
-        domains[currentDomain] = value;
-        console.log("domains: " + Object.values(Object.keys(domains)));
-        chrome.storage.local.set({ DOMAINS: domains });
-        // notify background to update the cache used for look up
-        chrome.runtime.sendMessage({
-          greeting: "UPDATE CACHE",
-          newEnabled: "dontSet",
-          newDomains: domains,
-          newDomainlistEnabled: "dontSet",
-          newApplyAll: "dontSet",
-        });
-      }
-    }
-  );
+				// add the currentDomain and store it in the local storage
+				domains[currentDomain] = {};
+				domains[currentDomain].bool = value;
+				domains[currentDomain].id = Object.keys(domains).length;
+				if (domains[currentDomain].bool) {
+					chrome.runtime.sendMessage({
+						greeting: "NEW RULE",
+						d: currentDomain,
+						id: domains[currentDomain].id,
+					});
+				}
+				domains[currentDomain] = value;
+				console.log("domains: " + Object.values(Object.keys(domains)));
+				chrome.storage.local.set({ DOMAINS: domains });
+				// notify background to update the cache used for look up
+				chrome.runtime.sendMessage({
+					greeting: "UPDATE CACHE",
+					newEnabled: "dontSet",
+					newDomains: domains,
+					newDomainlistEnabled: "dontSet",
+					newApplyAll: "dontSet",
+				});
+			}
+		}
+	);
 }
 
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain
 chrome.storage.local.get(
-  ["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"],
-  function (result) {
-    let domains = result.DOMAINS;
-    let bannerMuted = result.MUTED;
-    //unmute banner if 6 hours have lapsed since mute
-    if (bannerMuted[0] == true) {
-      let currentDate = new Date();
-      let time = currentDate.getTime();
-      if (time > bannerMuted[1]) {
-        bannerMuted = false;
-        chrome.storage.local.set({ MUTED: [bannerMuted, undefined] });
-      }
-    }
-    let currentDomain = getDomain(window.location.href);
-    if (result.UI_SCHEME == 2) {
-      if (
-        !result.APPLY_ALL &&
-        (domains[currentDomain] === undefined ||
-          domains[currentDomain] == null) &&
-        bannerMuted[0] != true
-      )
-        showBanner(true, true);
-      else if (bannerMuted[0] != true) addToDomainListScheme1();
-    } else if (result.UI_SCHEME == 1) {
-      if (
-        !result.APPLY_ALL &&
-        (domains[currentDomain] === undefined || domains[currentDomain] == null)
-      )
-        showBanner(true, false);
-      else addToDomainListScheme1();
-    } else if (result.UI_SCHEME == 0) {
-      if (
-        (domains[currentDomain] === undefined ||
-          domains[currentDomain] == null) &&
-        bannerMuted[0] != true
-      )
-        showBanner(false, true);
-    } else if (result.UI_SCHEME == 5) {
-      // the user has 1/4 chance of seeing the banner
-      let random = Math.floor(Math.random() * 4);
-      if (random == 1 && !(currentDomain in domains)) {
-        showBanner(false);
-      } else {
-        chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result) {
-          let currentDomain = getDomain(window.location.href);
-          let domains = result.DOMAINS;
-          let value = false;
-          if (!(currentDomain in domains)) {
-            if (result.CHECKLIST.includes(currentDomain)) value = true;
-            domains[currentDomain].bool = value;
-            domains[currentDomain].id = Object.keys(domains).length + 1;
-            if (domains[currentDomain].bool) {
-              chrome.runtime.sendMessage({
-                greeting: "NEW RULE",
-                d: currentDomain,
-                id: domains[currentDomain].id,
-              });
-            }
-            chrome.storage.local.set({ DOMAINS: domains });
-            chrome.runtime.sendMessage({
-              greeting: "UPDATE CACHE",
-              newEnabled: "dontSet",
-              newDomains: domains,
-              newDomainlistEnabled: "dontSet",
-              newApplyAll: "dontSet",
-            });
-          }
-        });
-      }
-    } else {
-      if (result.UI_SCHEME == 4) addToDomainListScheme4();
-      else addToDomainListScheme3();
-    }
-  }
+	["APPLY_ALL", "DOMAINS", "UI_SCHEME", "MUTED"],
+	function (result) {
+		let domains = result.DOMAINS;
+		let bannerMuted = result.MUTED;
+		//unmute banner if 6 hours have lapsed since mute
+		if (bannerMuted[0] == true) {
+			let currentDate = new Date();
+			let time = currentDate.getTime();
+			if (time > bannerMuted[1]) {
+				bannerMuted = false;
+				chrome.storage.local.set({ MUTED: [bannerMuted, undefined] });
+			}
+		}
+		let currentDomain = getDomain(window.location.href);
+		if (result.UI_SCHEME == 2) {
+			if (
+				!result.APPLY_ALL &&
+				(domains[currentDomain] === undefined ||
+					domains[currentDomain] == null) &&
+				bannerMuted[0] != true
+			)
+				showBanner(true, true);
+			else if (bannerMuted[0] != true) addToDomainListScheme1();
+		} else if (result.UI_SCHEME == 1) {
+			if (
+				!result.APPLY_ALL &&
+				(domains[currentDomain] === undefined || domains[currentDomain] == null)
+			)
+				showBanner(true, false);
+			else addToDomainListScheme1();
+		} else if (result.UI_SCHEME == 0) {
+			if (
+				(domains[currentDomain] === undefined ||
+					domains[currentDomain] == null) &&
+				bannerMuted[0] != true
+			)
+				showBanner(false, true);
+		} else if (result.UI_SCHEME == 5) {
+			// the user has 1/4 chance of seeing the banner
+			let random = Math.floor(Math.random() * 4);
+			if (random == 1 && !(currentDomain in domains)) {
+				showBanner(false);
+			} 
+			else {
+				chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result) {
+					let currentDomain = getDomain(window.location.href);
+					let domains = result.DOMAINS;
+					let value = false;
+					if (!(currentDomain in domains)) {
+						if (result.CHECKLIST.includes(currentDomain)) value = true;
+						domains[currentDomain] = {};
+						domains[currentDomain].bool = value;
+						domains[currentDomain].id = Object.keys(domains).length;
+						if (domains[currentDomain].bool) {
+							chrome.runtime.sendMessage({
+								greeting: "NEW RULE",
+								d: currentDomain,
+								id: domains[currentDomain].id,
+							});
+						}
+						chrome.storage.local.set({ DOMAINS: domains });
+						chrome.runtime.sendMessage({
+							greeting: "UPDATE CACHE",
+							newEnabled: "dontSet",
+							newDomains: domains,
+							newDomainlistEnabled: "dontSet",
+							newApplyAll: "dontSet",
+						});
+					}
+				});
+			}
+		} 
+		else {
+			if (result.UI_SCHEME == 4) addToDomainListScheme4();
+			else addToDomainListScheme3();
+		}
+	}
 );
 
 // send information to background regarding the source  of a potential ad interaction
