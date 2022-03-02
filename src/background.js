@@ -502,31 +502,32 @@ chrome.runtime.onMessage.addListener(function (request) {
   }
   // user responds to the banner (enable GPC) (interaction with the Rule Set API)
   if (request.greeting == "BANNER ENABLE GPC") {
-    console.log("Banner Reaction: enable GPC for domain: ", request.domainKey);
+    console.log("Banner Reaction: enable GPC for domain: ", request.domain);
+    addRule(request.domain, request.id);
   }
   // user responds to the banner (disable GPC) (interaction with the Rule Set API)
   if (request.greeting == "BANNER DISABLE GPC") {
-    console.log("Banner Reaction: disable GPC for domain: ", request.domainKey);
+    console.log("Banner Reaction: disable GPC for domain: ", request.domain);
   }
   // user turns on the gpc for a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION ENABLE GPC") {
     console.log(
       "Option Page Reaction: enable GPC for domain: ",
-      request.domainKey
+      request.domain
     );
-    updateToggleOnRuleSet(request.domainKey);
+    updateToggleOnRuleSet(request.domain);
   }
   // user turns off the gpc for a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION DISABLE GPC") {
     console.log(
       "Option Page Reaction: disable GPC for domain: ",
-      request.domainKey
+      request.domain
     );
-    updateToggleOffRuleSet(request.domainKey);
+    updateToggleOffRuleSet(request.domain);
   }
   // user deletes a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION DELETE DOMAIN") {
-    console.log("Option Page Reaction: delete domain: ", request.domainKey);
+    console.log("Option Page Reaction: delete domain: ", request.domain);
   }
   // user deletes all the domains (interaction with the Rule Set API)
   if (request.greeting == "OPTION DELETE ALL DOMAINS") {
