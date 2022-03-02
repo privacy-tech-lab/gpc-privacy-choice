@@ -65,22 +65,14 @@ let liveAdEvents = {};
 //structure to map frames to urls
 let frames = {};
 
-// original background.js section
-// Initializers
-let sendSignal = true;
-let optout_headers = {};
-let currentDomain = null;
-
 // Fetching the networks dictionary
 let networks;
 let checkList = [];
 let npsList = [];
 
 // Store DOMAIN_LIST, ENABLED, and DOMAINLIST_ENABLED variables in cache for synchronous access: Make sure these are always in sync!
-let enabledCache = true;
 let domainsCache = {};
-let domainlistEnabledCache = true;
-let applyAllCache = false;
+
 //map tab and url to object containing third party request data for live sites
 let allThirdPartyData = {};
 
@@ -88,6 +80,7 @@ let allThirdPartyData = {};
 //used to get the previous url (referer) when navigation occurs
 let referer = {};
 
+//todo: maybe this should be moved into local storage
 fetch("json/services.json")
   .then((response) => response.text())
   .then((result) => {
@@ -483,54 +476,14 @@ This contains chrome api listeners for events
 ======================================================================================================================*/
 
 // Main driver listening to the run time message
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  // new domains added / user toggle from the domain page
-  if (request.greeting == "NEW RULE") {
-    console.log("Adding the new rules");
-    addRule(request.d, request.id);
-  }
-  if (request.greeting == "RM RULE") {
-    console.log("Removing the new rules");
-    rmRule(request.id);
-  }
-  // if user changes profile (rebuild the ruleset)
-  if (request.greeting == "UPDATE PROFILE") {
-    console.log("Updating the rule sets based on new profile");
-    updateProfileRuleSets();
-  }
-  // if user changes categories (rebuild the ruleset)
-  if (request.greeting == "UPDATE CATEGORIES") {
-    console.log("Updating the rule sets based on new categories");
-    updateCategoryRuleSets();
-  }
-  // user turns on the gpc for a domain from options page
-  if (request.greeting == "DOMAIN SPECIFIC GPC ON") {
-    console.log("Turning on GPC Signal for ", request.domainKey);
-    updateToggleOnRuleSet(request.domainKey);
-  }
-  // user turns off the gpc for a domain from options page
-  if (request.greeting == "DOMAIN SPECIFIC GPC OFF") {
-    console.log("Turning off GPC Signal for ", request.domainKey);
-    updateToggleOffRuleSet(request.domainKey);
-  }
-  // update cache from contentScript.js
-  if (request.greeting == "UPDATE CACHE") {
-    console.log("Updating the cache");
-    setCache(
-      request.newEnabled,
-      request.newDomains,
-      request.newDomainlistEnabled,
-      request.newApplyAll
-    );
-  }
-  // updates Setting Interaction History from contentScript.js and domainlist-view.js
+chrome.runtime.onMessage.addListener(function (request) {
+  // record setting interaction history from contentScript.js and domainlist-view.js (interaction with the DB API)
   if (request.greeting == "INTERACTION") {
     console.log("Recording interactions from the domain list page");
     chrome.storage.local.get(["USER_DOC_ID", "ORIGIN_SITE"], function (result) {
       let userDocID = result.USER_DOC_ID;
       let originSite = result.ORIGIN_SITE;
       if (result.USER_DOC_ID) {
-        // console.log("Adding into Doamin Interaction History")
         addSettingInteractionHistory(
           request.domain,
           originSite,
@@ -547,7 +500,49 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
     });
   }
-  // update the rule sets when the learning has finished
+  // user responds to the banner (enable GPC) (interaction with the Rule Set API)
+  if (request.greeting == "BANNER ENABLE GPC") {
+    console.log("Banner Reaction: enable GPC for domain: ", request.domainKey);
+  }
+  // user responds to the banner (disable GPC) (interaction with the Rule Set API)
+  if (request.greeting == "BANNER DISABLE GPC") {
+    console.log("Banner Reaction: disable GPC for domain: ", request.domainKey);
+  }
+  // user turns on the gpc for a domain from options page (interaction with the Rule Set API)
+  if (request.greeting == "OPTION ENABLE GPC") {
+    console.log(
+      "Option Page Reaction: enable GPC for domain: ",
+      request.domainKey
+    );
+    updateToggleOnRuleSet(request.domainKey);
+  }
+  // user turns off the gpc for a domain from options page (interaction with the Rule Set API)
+  if (request.greeting == "OPTION DISABLE GPC") {
+    console.log(
+      "Option Page Reaction: disable GPC for domain: ",
+      request.domainKey
+    );
+    updateToggleOffRuleSet(request.domainKey);
+  }
+  // user deletes a domain from options page (interaction with the Rule Set API)
+  if (request.greeting == "OPTION DELETE DOMAIN") {
+    console.log("Option Page Reaction: delete domain: ", request.domainKey);
+  }
+  // user deletes all the domains (interaction with the Rule Set API)
+  if (request.greeting == "OPTION DELETE ALL DOMAINS") {
+    console.log("Option Page Reaction: delete all domains");
+  }
+  // user changes profile (scheme 3) (interaction with the Rule Set API)
+  if (request.greeting == "UPDATE PRIVACY PROFILE") {
+    console.log("Updating the rule sets based on new profile");
+    updateProfileRuleSets();
+  }
+  // user changes categories (scheme 4) (interaction with the Rule Set API)
+  if (request.greeting == "UPDATE CATEGORIES") {
+    console.log("Updating the rule sets based on new categories");
+    updateCategoryRuleSets();
+  }
+  // learning phase completed (scheme 5) (interaction with the Rule Set API)
   if (request.greeting == "LEARNING COMPLETED") {
     console.log("Learning is finished. Automatically switching...");
     chrome.storage.local.set({ LEARNING: "Just Finished" }, function () {
@@ -569,6 +564,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         chrome.runtime.openOptionsPage();
       }
     });
+  }
+  // user changes global enable status (scheme 6) (interaction with the Rule Set API)
+  if (request.greeting == "UPDATE GLOBAL ENABLE") {
+    console.log("Updating the rule sets based on new categories");
+  }
+
+  // in the process of deprecating
+  if (request.greeting == "NEW RULE") {
+    console.log("Adding the new rules");
+    addRule(request.d, request.id);
+  }
+  if (request.greeting == "RM RULE") {
+    console.log("Removing the new rules");
+    rmRule(request.id);
+  }
+  if (request.greeting == "UPDATE CACHE") {
+    console.log("Updating the cache");
+    setCache(
+      request.newEnabled,
+      request.newDomains,
+      request.newDomainlistEnabled,
+      request.newApplyAll
+    );
   }
 });
 
