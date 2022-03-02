@@ -318,23 +318,6 @@ export function updateDomains(domainsList) {
   });
 }
 
-// Function used to set the locally stored values in the cache upon change
-function setCache(
-  enabled = "dontSet",
-  domains = "dontSet",
-  domainlistEnabled = "dontSet",
-  applyAll = "dontSet"
-) {
-  if (enabled != "dontSet") enabledCache = enabled;
-  if (domains != "dontSet") {
-    domainsCache = domains;
-    updateDomains(Object.keys(domains));
-  }
-  if (domainlistEnabled != "dontSet")
-    domainlistEnabledCache = domainlistEnabled;
-  if (applyAll != "dontSet") applyAllCache = applyAll;
-}
-
 //write locally stored third party request summary data to db
 export function writeThirdPartyDataToDb(data) {
   for (let d in Object.values(data.thirdPartyDomains)) {
@@ -523,7 +506,7 @@ chrome.runtime.onMessage.addListener(function (request) {
       "Option Page Reaction: disable GPC for domain: ",
       request.domain
     );
-    updateToggleOffRuleSet(request.domain);
+    rmRule(request.id);
   }
   // user deletes a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION DELETE DOMAIN") {
@@ -569,25 +552,6 @@ chrome.runtime.onMessage.addListener(function (request) {
   // user changes global enable status (scheme 6) (interaction with the Rule Set API)
   if (request.greeting == "UPDATE GLOBAL ENABLE") {
     console.log("Updating the rule sets based on new categories");
-  }
-
-  // in the process of deprecating
-  if (request.greeting == "NEW RULE") {
-    console.log("Adding the new rules");
-    addRule(request.d, request.id);
-  }
-  if (request.greeting == "RM RULE") {
-    console.log("Removing the new rules");
-    rmRule(request.id);
-  }
-  if (request.greeting == "UPDATE CACHE") {
-    console.log("Updating the cache");
-    setCache(
-      request.newEnabled,
-      request.newDomains,
-      request.newDomainlistEnabled,
-      request.newApplyAll
-    );
   }
 });
 
