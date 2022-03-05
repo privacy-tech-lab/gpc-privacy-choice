@@ -835,16 +835,3 @@ async function retryOnTabUpdate(tabId, info, tab) {
     keepAlive();
   }
 }
-
-function updateCache() {
-  // Sets cache value to locally stored values after chrome booting up
-  chrome.storage.local.get(
-    ["DOMAINS", "ENABLED", "DOMAINLIST_ENABLED", "APPLY_ALL"],
-    function (result) {
-      enabledCache = result.ENABLED;
-      domainsCache = result.DOMAINS;
-      domainlistEnabledCache = result.DOMAINLIST_ENABLED;
-      applyAllCache = result.APPLY_ALL;
-    }
-  );
-}
