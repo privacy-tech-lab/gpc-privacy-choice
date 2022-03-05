@@ -42,14 +42,7 @@ import {
   openPage,
 } from "./util.js";
 
-import {
-  addRule,
-  rmRule,
-  updateProfileRuleSets,
-  updateCategoryRuleSets,
-  updateToggleOnRuleSet,
-  updateToggleOffRuleSet,
-} from "./editRules.js";
+import { addRule, rmRule, clearRules } from "./editRules.js";
 
 /*================================================================================================================
 This section contains constant created for background.js
@@ -459,7 +452,7 @@ This contains chrome api listeners for events
 ======================================================================================================================*/
 
 // Main driver listening to the run time message
-chrome.runtime.onMessage.addListener(function (request) {
+chrome.runtime.onMessage.addListener(async function (request) {
   // record setting interaction history from contentScript.js and domainlist-view.js (interaction with the DB API)
   if (request.greeting == "INTERACTION") {
     console.log("Recording interactions from the domain list page");
@@ -486,7 +479,7 @@ chrome.runtime.onMessage.addListener(function (request) {
   // user responds to the banner (enable GPC) (interaction with the Rule Set API)
   if (request.greeting == "BANNER ENABLE GPC") {
     console.log("Banner Reaction: enable GPC for domain: ", request.domain);
-    addRule(request.domain, request.id);
+    addRule(request.domain, request.id, 2);
   }
   // user responds to the banner (disable GPC) (interaction with the Rule Set API)
   if (request.greeting == "BANNER DISABLE GPC") {
@@ -498,7 +491,7 @@ chrome.runtime.onMessage.addListener(function (request) {
       "Option Page Reaction: enable GPC for domain: ",
       request.domain
     );
-    updateToggleOnRuleSet(request.domain);
+    addRule(request.domain, request.id, 2);
   }
   // user turns off the gpc for a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION DISABLE GPC") {
@@ -511,20 +504,34 @@ chrome.runtime.onMessage.addListener(function (request) {
   // user deletes a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION DELETE DOMAIN") {
     console.log("Option Page Reaction: delete domain: ", request.domain);
+    rmRule(request.id);
   }
   // user deletes all the domains (interaction with the Rule Set API)
   if (request.greeting == "OPTION DELETE ALL DOMAINS") {
     console.log("Option Page Reaction: delete all domains");
+    await clearRules(request.ruleIds);
   }
   // user changes profile (scheme 3) (interaction with the Rule Set API)
   if (request.greeting == "UPDATE PRIVACY PROFILE") {
     console.log("Updating the rule sets based on new profile");
-    updateProfileRuleSets();
+    // first remove all the previous rules
+    await clearRules(request.ruleIds);
+    // if user toggle to high privacy sensitivity => add all domains
+    if (request.scheme == "High Privacy-Sensitivity") await addRule("*", 1, 1);
+    // if user toggle to medium privacy sensitivity => add all domains from CHECKLIST
+    // todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
+    else if (request.scheme == "Medium Privacy-Sensitivity") {
+      let domains = request.domainsToAdd;
+      for (let d in domains) await addRule(domains[d], d, 2);
+    }
+    // if user toggle to low privacy sensitivity => don't do anything
   }
   // user changes categories (scheme 4) (interaction with the Rule Set API)
   if (request.greeting == "UPDATE CATEGORIES") {
-    console.log("Updating the rule sets based on new categories");
-    updateCategoryRuleSets();
+    // first remove all the previous rules
+    await clearRules(request.ruleIds);
+    // todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
+    for (let d in domains) await addRule(domains[d], d, 2);
   }
   // learning phase completed (scheme 5) (interaction with the Rule Set API)
   if (request.greeting == "LEARNING COMPLETED") {
@@ -552,6 +559,10 @@ chrome.runtime.onMessage.addListener(function (request) {
   // user changes global enable status (scheme 6) (interaction with the Rule Set API)
   if (request.greeting == "UPDATE GLOBAL ENABLE") {
     console.log("Updating the rule sets based on new categories");
+    await rmRule(1);
+    if (request.global == true) {
+      addRule("*", 1, 1);
+    }
   }
 });
 
