@@ -485,6 +485,14 @@ chrome.runtime.onMessage.addListener(async function (request) {
   if (request.greeting == "BANNER DISABLE GPC") {
     console.log("Banner Reaction: disable GPC for domain: ", request.domain);
   }
+  if (request.greeting == "BANNER ENABLE GPC ALL") {
+    console.log("Banner Reaction: enale GPC for all");
+    await clearRules(request.ruleIds);
+    addRule("*", 1, 1);
+  }
+  if (request.greeting == "BANNER DISABLE GPC ALL") {
+    console.log("Banner Reaction: disable GPC for all");
+  }
   // user turns on the gpc for a domain from options page (interaction with the Rule Set API)
   if (request.greeting == "OPTION ENABLE GPC") {
     console.log(
