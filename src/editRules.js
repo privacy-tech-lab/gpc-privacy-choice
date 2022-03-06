@@ -29,7 +29,11 @@ function getEnabledDomains() {
 		let rule = res.filter((obj) => {
 			return obj.id === 2;
 		});
-		return rule[0].conditions.domains;
+		if (rule.length === 0) {
+			return [];
+		} else {
+			return rule[0].conditions.domains;
+		}
 	});
 	return domains;
 }
@@ -57,7 +61,38 @@ export async function addDomainRule(domain) {
 		removeRuleIds: [2],
 	});
 	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
-	console.log("New rule added with id", id);
+	console.log("Rule modified with id", id);
+}
+
+export async function removeDomainFromRule(domain) {
+	domains = getEnabledDomains();
+	for (var i = domains.length - 1; i >= 0; i--) {
+		if (domains[i] === domain) {
+			domains.splice(i, 1);
+		}
+	}
+	chrome.declarativeNetRequest.updateDynamicRules({
+		addRules: [
+			{
+				id: 2,
+				priority: 1,
+				action: {
+					type: "modifyHeaders",
+					requestHeaders: [
+						{ header: "Sec-GPC", operation: "set", value: "1" },
+						{ header: "DNT", operation: "set", value: "1" },
+					],
+				},
+				condition: {
+					domains: domains,
+					resourceTypes: ["main_frame"],
+				},
+			},
+		],
+		removeRuleIds: [2],
+	});
+	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
+	console.log("rule modified with id", id);
 }
 
 // Remove a rule with id from the rule set

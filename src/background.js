@@ -42,7 +42,13 @@ import {
 	openPage,
 } from "./util.js";
 
-import { addDomainRule, addUrlRule, rmRule, clearRules } from "./editRules.js";
+import {
+	addDomainRule,
+	addUrlRule,
+	rmRule,
+	clearRules,
+	removeDomainFromRule,
+} from "./editRules.js";
 
 /*================================================================================================================
 This section contains constant created for background.js
@@ -485,14 +491,16 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	// user responds to the banner (disable GPC) (interaction with the Rule Set API)
 	if (request.greeting == "BANNER DISABLE GPC") {
 		console.log("Banner Reaction: disable GPC for domain: ", request.domain);
+		removeDomainFromRule(request.domain);
 	}
 	if (request.greeting == "BANNER ENABLE GPC ALL") {
 		console.log("Banner Reaction: enale GPC for all");
 		await clearRules(request.ruleIds);
-		addRule("*", 1, 1);
+		addUrlRule("*", 1, 1);
 	}
 	if (request.greeting == "BANNER DISABLE GPC ALL") {
 		console.log("Banner Reaction: disable GPC for all");
+		await clearRules(request.ruleIds);
 	}
 	// user turns on the gpc for a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION ENABLE GPC") {
@@ -500,7 +508,13 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			"Option Page Reaction: enable GPC for domain: ",
 			request.domain
 		);
-		addRule(request.domain, request.id, 2);
+		chrome.storage.local.get(["UI_SCHEME"], function (result) {
+			if (result.UI_SCHEME < 3) {
+				addDomainRule(request.domain);
+			} else {
+				addUrlRule(request.domain);
+			}
+		});
 	}
 	// user turns off the gpc for a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION DISABLE GPC") {
@@ -508,12 +522,24 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			"Option Page Reaction: disable GPC for domain: ",
 			request.domain
 		);
-		rmRule(request.id);
+		chrome.storage.local.get(["UI_SCHEME"], function (result) {
+			if (result.UI_SCHEME < 3) {
+				removeDomainFromRule(request.domain);
+			} else {
+				rmRule(request.id);
+			}
+		});
 	}
 	// user deletes a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION DELETE DOMAIN") {
 		console.log("Option Page Reaction: delete domain: ", request.domain);
-		rmRule(request.id);
+		chrome.storage.local.get(["UI_SCHEME"], function (result) {
+			if (result.UI_SCHEME < 3) {
+				removeDomainFromRule(request.domain);
+			} else {
+				rmRule(request.id);
+			}
+		});
 	}
 	// user deletes all the domains (interaction with the Rule Set API)
 	if (request.greeting == "OPTION DELETE ALL DOMAINS") {
@@ -531,7 +557,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
 		else if (request.scheme == "Medium Privacy-Sensitivity") {
 			let domains = request.domainsToAdd;
-			for (let d in domains) await addRule(domains[d], d, 2);
+			for (let d in domains) await adUrlRule(domains[d], d, 2);
 		}
 		// if user toggle to low privacy sensitivity => don't do anything
 	}
@@ -540,7 +566,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// first remove all the previous rules
 		await clearRules(request.ruleIds);
 		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
-		for (let d in domains) await addRule(domains[d], d, 2);
+		for (let d in domains) await addUrlRule(domains[d], d, 2);
 	}
 	// learning phase completed (scheme 5) (interaction with the Rule Set API)
 	if (request.greeting == "LEARNING COMPLETED") {
