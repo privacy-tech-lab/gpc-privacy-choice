@@ -478,6 +478,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
   }
   // user responds to the banner (enable GPC) (interaction with the Rule Set API)
   if (request.greeting == "BANNER ENABLE GPC") {
+    console.log("MESSAGE RECEIVED")
     console.log("Banner Reaction: enable GPC for domain: ", request.domain);
     addRule(request.domain, request.id, 2);
   }
@@ -486,7 +487,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
     console.log("Banner Reaction: disable GPC for domain: ", request.domain);
   }
   if (request.greeting == "BANNER ENABLE GPC ALL") {
-    console.log("Banner Reaction: enale GPC for all");
+    console.log("Banner Reaction: enable GPC for all");
     await clearRules(request.ruleIds);
     addRule("*", 1, 1);
   }
@@ -655,7 +656,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
   // let userScheme = Math.floor(Math.random() * 7);
-  let userScheme = 3;
+  let userScheme = 1;
   chrome.storage.local.set(
     {
       MUTED: [false, undefined],

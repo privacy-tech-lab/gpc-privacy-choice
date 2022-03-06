@@ -189,7 +189,11 @@ function addSendEventListener(currentDomain) {
 					subcollection: "Domain",
 				});
 			});
-			
+			chrome.runtime.sendMessage({
+				greeting: "BANNER ENABLE GPC", 
+				domain: currentDomain, 
+				id: new_domains[currentDomain].id
+			});
 		}
 	);
 }
@@ -204,6 +208,7 @@ function addSendAllEventListener(currentDomain) {
 	});
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		let new_domains = result.DOMAINS;
+		let rule_ids = []
 		// sets all domains in list to 'enable gpc'
 		for (let currentD in new_domains) {
 			new_domains[currentD] = {};
@@ -223,9 +228,14 @@ function addSendAllEventListener(currentDomain) {
 		chrome.storage.local.set({ DOMAINS: new_domains });
 		chrome.runtime.sendMessage({
 			greeting: "NEW RULE",
-			d: currentDomin,
+			d: currentDomain,
 			id: new_domains[currentDomain].id,
 		});
+		for (let d in new_domains) {
+			rule_ids.push(new_domains[d].id)
+		}
+		console.log(rule_ids)
+		chrome.runtime.sendMessage({greeting:"BANNER ENABLE GPC ALL", ruleIds: rule_ids})
 		chrome.runtime.sendMessage({
 			greeting: "UPDATE CACHE",
 			newEnabled: "dontSet",
@@ -288,6 +298,7 @@ function addDontSendEventListener(currentDomain) {
       });
     }
   );
+  chrome.runtime.sendMessage({greeting: "BANNER DISABLE GPC", domain: currentDomain});
 }
 
 // Disable GPC for all future domains
@@ -329,6 +340,7 @@ function addDontSendAllEventListener(currentDomain) {
       subcollection: "Domain",
     });
   });
+  chrome.runtime.sendMessage({greeting: "BANNER DISABLE GPC ALL"})
 }
 
 // function used to show the modal
