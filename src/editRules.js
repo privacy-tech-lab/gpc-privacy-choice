@@ -16,10 +16,11 @@ function getIdFromUrl(url) {
 
 // Add a new rule with id to the rule set that adds gpc to requests being sent to domain
 export async function addUrlRule(domain) {
+	let id = getIdFromUrl(domain);
 	chrome.declarativeNetRequest.updateDynamicRules({
 		addRules: [
 			{
-				id: getIdFromUrl(domain),
+				id: id,
 				priority: 3,
 				action: {
 					type: "modifyHeaders",
@@ -81,7 +82,7 @@ export async function addDomainRule(domain) {
 }
 
 export async function removeDomainFromRule(domain) {
-	domains = getEnabledDomains();
+	let domains = await getEnabledDomains();
 	for (var i = domains.length - 1; i >= 0; i--) {
 		if (domains[i] === domain) {
 			domains.splice(i, 1);
@@ -112,7 +113,8 @@ export async function removeDomainFromRule(domain) {
 }
 
 // Remove a rule with id from the rule set
-export async function rmRule(id) {
+export async function rmRule(url) {
+	let id = await getIdFromUrl(url);
 	console.log("Remove rule with id", id);
 	chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
 	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));

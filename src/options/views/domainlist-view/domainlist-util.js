@@ -119,13 +119,11 @@ async function turnOnGPC(domainKey) {
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		new_domains = result.DOMAINS;
 		new_domains[domainKey].bool = true;
-		id = new_domains[domainKey].id;
 		chrome.storage.local.set({ DOMAINS: new_domains });
 	});
 	chrome.runtime.sendMessage({
 		greeting: "OPTION ENABLE GPC",
 		domain: domainKey,
-		id: id,
 	});
 }
 
@@ -136,12 +134,11 @@ async function turnOffGPC(domainKey) {
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		new_domains = result.DOMAINS;
 		new_domains[domainKey].bool = false;
-		id = new_domains[domainKey].id;
+		// id = new_domains[domainKey].id;
 		chrome.storage.local.set({ DOMAINS: new_domains });
 		chrome.runtime.sendMessage({
 			greeting: "OPTION DISABLE GPC",
 			domain: domainKey,
-			id: id,
 		});
 	});
 }

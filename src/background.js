@@ -526,7 +526,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			if (result.UI_SCHEME < 3) {
 				removeDomainFromRule(request.domain);
 			} else {
-				rmRule(request.id);
+				rmRule(request.domain);
 			}
 		});
 	}
