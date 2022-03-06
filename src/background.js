@@ -556,8 +556,10 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// if user toggle to medium privacy sensitivity => add all domains from CHECKLIST
 		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
 		else if (request.scheme == "Medium Privacy-Sensitivity") {
-			let domains = request.domainsToAdd;
-			for (let d in domains) await addUrlRule(domains[d]);
+			chrome.storage.local.get(["CHECKLIST"], function (result) {
+				let domains = result.CHECKLIST;
+				for (let d in domains) addUrlRule(domains[d]);
+			});
 		}
 		// if user toggle to low privacy sensitivity => don't do anything
 	}
