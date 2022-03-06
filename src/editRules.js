@@ -23,13 +23,24 @@ export async function addUrlRule(domain, id, priority) {
 	console.log("New rule added with id", id);
 }
 
+// Get list of originating domains where GPC is enabled
+function getEnabledDomains() {
+	let domains = chrome.declarativeNetRequest.getDynamicRules((res) => {
+		let rule = res.filter((obj) => {
+			return obj.id === 2;
+		});
+		return rule[0].conditions.domains;
+	});
+	return domains;
+}
+
 // Add a new rule with id to the rule set that adds gpc to requests originating from a set of domains
-export async function addDomainRule(domains, id, priority) {
+export async function addDomainRule(domain) {
 	chrome.declarativeNetRequest.updateDynamicRules({
 		addRules: [
 			{
-				id: id,
-				priority: priority,
+				id: 2,
+				priority: 1,
 				action: {
 					type: "modifyHeaders",
 					requestHeaders: [
@@ -38,11 +49,12 @@ export async function addDomainRule(domains, id, priority) {
 					],
 				},
 				condition: {
-					domains: domains,
+					domains: getEnabledDomains().push(domain),
 					resourceTypes: ["main_frame"],
 				},
 			},
 		],
+		removeRuleIds: [2],
 	});
 	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
 	console.log("New rule added with id", id);
