@@ -418,6 +418,10 @@ export function addPrivacyProfileEventListener() {
 			});
 			chrome.storage.local.set({ USER_CHOICES: "High Privacy-Sensitivity" });
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+			chrome.runtime.sendMessage({
+				greeting: "UPDATE PRIVACY PROFILE",
+				scheme: "High Privacy-Sensitivity",
+			});
 		} else if (event.target.id == "medium-privacy-sensitivity") {
 			chrome.storage.local.get(["USER_CHOICES"], function (result) {
 				if (result.USER_CHOICES !== "Medium Privacy-Sensitivity") {
@@ -434,6 +438,10 @@ export function addPrivacyProfileEventListener() {
 			});
 			chrome.storage.local.set({ USER_CHOICES: "Medium Privacy-Sensitivity" });
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+			chrome.runtime.sendMessage({
+				greeting: "UPDATE PRIVACY PROFILE",
+				scheme: "Medium Privacy-Sensitivity",
+			});
 		} else if (event.target.id == "low-privacy-sensitivity") {
 			chrome.storage.local.get(["USER_CHOICES"], function (result) {
 				if (result.USER_CHOICES !== "Low Privacy-Sensitivity") {
@@ -450,6 +458,10 @@ export function addPrivacyProfileEventListener() {
 			});
 			chrome.storage.local.set({ USER_CHOICES: "Low Privacy-Sensitivity" });
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
+			chrome.runtime.sendMessage({
+				greeting: "UPDATE PRIVACY PROFILE",
+				scheme: "Low Privacy-Sensitivity",
+			});
 		}
 		createDefaultSettingInfo();
 		updatePrefScheme3();

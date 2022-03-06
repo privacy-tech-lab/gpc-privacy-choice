@@ -125,7 +125,7 @@ export async function clearRules() {
 	chrome.declarativeNetRequest.getDynamicRules((rules) => {
 		for (let r in rules) {
 			chrome.declarativeNetRequest.updateDynamicRules({
-				removeRuleIds: [r.id],
+				removeRuleIds: [rules[r].id],
 			});
 		}
 	});
