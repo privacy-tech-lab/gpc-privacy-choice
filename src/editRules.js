@@ -121,8 +121,12 @@ export async function rmRule(url) {
 }
 
 // Clear all rules from the rule set
-export async function clearRules(ruleIds) {
-	for (let id in ruleIds) {
-		rmRule(id);
-	}
+export async function clearRules() {
+	chrome.declarativeNetRequest.getDynamicRules((rules) => {
+		for (let r in rules) {
+			chrome.declarativeNetRequest.updateDynamicRules({
+				removeRuleIds: [r.id],
+			});
+		}
+	});
 }
