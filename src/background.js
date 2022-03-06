@@ -496,7 +496,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	if (request.greeting == "BANNER ENABLE GPC ALL") {
 		console.log("Banner Reaction: enale GPC for all");
 		await clearRules(request.ruleIds);
-		addUrlRule("*", 1, 1);
+		addUrlRule("*");
 	}
 	if (request.greeting == "BANNER DISABLE GPC ALL") {
 		console.log("Banner Reaction: disable GPC for all");
@@ -566,7 +566,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// first remove all the previous rules
 		await clearRules(request.ruleIds);
 		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
-		for (let d in domains) await addUrlRule(domains[d], d, 2);
+		for (let d in domains) await addUrlRule(d);
 	}
 	// learning phase completed (scheme 5) (interaction with the Rule Set API)
 	if (request.greeting == "LEARNING COMPLETED") {

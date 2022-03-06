@@ -1,10 +1,26 @@
+function getIdFromUrl(url) {
+	String.prototype.hashCode = function () {
+		var hash = 0,
+			i,
+			chr;
+		if (this.length === 0) return hash;
+		for (i = 0; i < this.length; i++) {
+			chr = this.charCodeAt(i);
+			hash = (hash << 5) - hash + chr;
+			hash |= 0; // Convert to 32bit integer
+		}
+		return hash;
+	};
+	return url.hashCode();
+}
+
 // Add a new rule with id to the rule set that adds gpc to requests being sent to domain
-export async function addUrlRule(domain, id, priority) {
+export async function addUrlRule(domain) {
 	chrome.declarativeNetRequest.updateDynamicRules({
 		addRules: [
 			{
-				id: id,
-				priority: priority,
+				id: getIdFromUrl(domain),
+				priority: 3,
 				action: {
 					type: "modifyHeaders",
 					requestHeaders: [
