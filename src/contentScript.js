@@ -208,7 +208,6 @@ function addSendAllEventListener(currentDomain) {
 	});
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		let new_domains = result.DOMAINS;
-		let rule_ids = []
 		// sets all domains in list to 'enable gpc'
 		for (let currentD in new_domains) {
 			new_domains[currentD] = {};
@@ -231,10 +230,7 @@ function addSendAllEventListener(currentDomain) {
 			d: currentDomain,
 			id: new_domains[currentDomain].id,
 		});
-		for (let d in new_domains) {
-			rule_ids.push(new_domains[d].id)
-		}
-		console.log(rule_ids)
+		let rule_ids = chrome.declarativeNetRequest.getDynamicRules()
 		chrome.runtime.sendMessage({greeting:"BANNER ENABLE GPC ALL", ruleIds: rule_ids})
 		chrome.runtime.sendMessage({
 			greeting: "UPDATE CACHE",

@@ -30,7 +30,7 @@ export async function addUrlRule(domain) {
 					],
 				},
 				condition: {
-					urlFilter: domain,
+					urlFilter: '*' + domain + '*',
 					resourceTypes: ["main_frame"],
 				},
 			},
