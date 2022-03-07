@@ -171,11 +171,6 @@ function addSendEventListener(currentDomain) {
 				newDomainlistEnabled: true,
 				newApplyAll: "dontSet",
 			});
-			chrome.runtime.sendMessage({
-				greeting: "NEW RULE",
-				d: currentDomain,
-				id: new_domains[currentDomain].id,
-			});
 			// Sends data to Setting Interaction History
 			chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
 				chrome.runtime.sendMessage({
@@ -213,11 +208,6 @@ function addSendAllEventListener(currentDomain) {
 			new_domains[currentD] = {};
 			new_domains[currentD].bool = true;
 			new_domains[currentD].id = Object.keys(new_domains).length
-			chrome.runtime.sendMessage({
-				greeting: "NEW RULE",
-				d: currentD,
-				id: new_domains[currentD].id,
-			});
 		}
 		// pretty repetitive, look into refactoring
 		// sets current domain to 'enable gpc'
@@ -225,13 +215,8 @@ function addSendAllEventListener(currentDomain) {
 		new_domains[currentDomain].bool = true;
 		new_domains[currentDomain].id = Object.keys(new_domains).length
 		chrome.storage.local.set({ DOMAINS: new_domains });
-		chrome.runtime.sendMessage({
-			greeting: "NEW RULE",
-			d: currentDomain,
-			id: new_domains[currentDomain].id,
-		});
 		let rule_ids = chrome.declarativeNetRequest.getDynamicRules()
-		chrome.runtime.sendMessage({greeting:"BANNER ENABLE GPC ALL", ruleIds: rule_ids})
+		chrome.runtime.sendMessage({greeting:"BANNER ENABLE GPC ALL"})
 		chrome.runtime.sendMessage({
 			greeting: "UPDATE CACHE",
 			newEnabled: "dontSet",

@@ -46,21 +46,29 @@ function getEnabledDomains() {
 		let rule = res.filter((obj) => {
 			return obj.id === 2;
 		});
+    console.log(rule)
 		if (rule.length === 0) {
 			return [];
 		} else {
-			return rule[0].conditions.domains;
+			return rule[0].condition.domains;
 		}
 	});
-	return domains;
+  if (domains===undefined){return []}
+  else{
+    return domains;
+  }
 }
 
 // Add a new rule with id to the rule set that adds gpc to requests originating from a set of domains
 export async function addDomainRule(domain) {
+  let domains=await getEnabledDomains()
+  let id = 2
+  domains.push(domain);
+  console.log(domains, domain)
 	chrome.declarativeNetRequest.updateDynamicRules({
 		addRules: [
 			{
-				id: 2,
+				id: id,
 				priority: 1,
 				action: {
 					type: "modifyHeaders",
@@ -70,8 +78,23 @@ export async function addDomainRule(domain) {
 					],
 				},
 				condition: {
-					domains: getEnabledDomains().push(domain),
-					resourceTypes: ["main_frame"],
+					domains: domains,
+					resourceTypes: [
+						"main_frame",
+						"sub_frame",
+						"stylesheet",
+						"script",
+						"image",
+						"font",
+						"object",
+						"xmlhttprequest",
+						"ping",
+						"csp_report",
+						"media",
+						"websocket",
+						"webtransport",
+						"webbundle",
+					],
 				},
 			},
 		],

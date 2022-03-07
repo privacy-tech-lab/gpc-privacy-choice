@@ -494,8 +494,8 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		removeDomainFromRule(request.domain);
 	}
 	if (request.greeting == "BANNER ENABLE GPC ALL") {
-		console.log("Banner Reaction: enale GPC for all");
-		await clearRules(request.ruleIds);
+		console.log("Banner Reaction: enable GPC for all");
+		await clearRules();
 		addUrlRule("*");
 	}
 	if (request.greeting == "BANNER DISABLE GPC ALL") {
@@ -684,7 +684,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
 	// let userScheme = Math.floor(Math.random() * 7);
-	let userScheme = 3;
+	let userScheme = 1;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
