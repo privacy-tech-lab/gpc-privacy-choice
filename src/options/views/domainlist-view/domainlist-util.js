@@ -24,8 +24,8 @@ async function addDomainToggleListener(elementId, domain) {
 							turnOffGPC(domain);
 							// delegate the edit of rule set to the background
 							chrome.runtime.sendMessage({
-								greeting: "DOMAIN SPECIFIC GPC OFF",
-								domainKey: domain,
+								greeting: "OPTION DISABLE GPC",
+								domain: domain,
 							});
 							if (result.UI_SCHEME == 1) {
 								chrome.runtime.sendMessage({
@@ -53,8 +53,8 @@ async function addDomainToggleListener(elementId, domain) {
 						} else {
 							turnOnGPC(domain);
 							chrome.runtime.sendMessage({
-								greeting: "DOMAIN SPECIFIC GPC ON",
-								domainKey: domain,
+								greeting: "OPTION ENABLE GPC",
+								domain: domain,
 							});
 							if (result.UI_SCHEME == 1) {
 								chrome.runtime.sendMessage({
