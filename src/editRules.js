@@ -25,8 +25,8 @@ export async function addUrlRule(domain) {
 				action: {
 					type: "modifyHeaders",
 					requestHeaders: [
-						{ header: "Sec-GPC", operation: "set", value: "1" },
-						{ header: "DNT", operation: "set", value: "1" },
+						{ header: "Sec-GPC", operation: "set" },
+						{ header: "DNT", operation: "set" },
 					],
 				},
 				condition: {
@@ -97,6 +97,140 @@ export async function addDomainRule(domain) {
 	});
 }
 
+//disables GPC for certain domain when universal GPC is on
+export async function addDisableDomainRule(domain) {
+	chrome.declarativeNetRequest.getDynamicRules((res) => {
+		let domains;
+		let rule = res.filter((obj) => {
+			return obj.id === 3;
+		});
+		console.log(rule);
+		if (rule.length === 0) {
+			domains = [];
+		} else {
+			domains = rule[0].condition.domains;
+		}
+		console.log(domains);
+		let id = 3;
+		domains.push(domain);
+		console.log(domains, domain);
+		chrome.declarativeNetRequest.updateDynamicRules({
+			addRules: [
+				{
+					id: id,
+					priority: 1,
+					action: {
+						type: "modifyHeaders",
+						requestHeaders: [
+							{ header: "Sec-GPC", operation: "remove" },
+							{ header: "DNT", operation: "remove" },
+						],
+					},
+					condition: {
+						domains: domains,
+						resourceTypes: [
+							"main_frame",
+							"sub_frame",
+							"stylesheet",
+							"script",
+							"image",
+							"font",
+							"object",
+							"xmlhttprequest",
+							"ping",
+							"csp_report",
+							"media",
+							"websocket",
+							"webtransport",
+							"webbundle",
+						],
+					},
+				},
+			],
+			removeRuleIds: [3],
+		});
+		chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
+		console.log("Rule modified with id", id);
+	});
+}
+
+//enables GPC for certain domain when universal GPC is on
+export async function rmDisableDomainRule(domain) {
+	chrome.declarativeNetRequest.getDynamicRules((res) => {
+		let domains;
+		let rule = res.filter((obj) => {
+			return obj.id === 3;
+		});
+		console.log(rule);
+		if (rule.length === 0) {
+			domains = [];
+		} else {
+			domains = rule[0].condition.domains;
+		}
+		for (var i = domains.length - 1; i >= 0; i--) {
+			if (domains[i] === domain) {
+				domains.splice(i, 1);
+			}
+			if (domains.length == 0) {
+				rmRuleId(2);
+				return;
+			}
+		}
+		chrome.declarativeNetRequest.updateDynamicRules({
+			addRules: [
+				{
+					id: 3,
+					priority: 1,
+					action: {
+						type: "modifyHeaders",
+						requestHeaders: [
+							{ header: "Sec-GPC", operation: "remove" },
+							{ header: "DNT", operation: "remove" },
+						],
+					},
+					condition: {
+						domains: domains,
+						resourceTypes: [
+							"main_frame",
+							"sub_frame",
+							"stylesheet",
+							"script",
+							"image",
+							"font",
+							"object",
+							"xmlhttprequest",
+							"ping",
+							"csp_report",
+							"media",
+							"websocket",
+							"webtransport",
+							"webbundle",
+						],
+					},
+				},
+			],
+			removeRuleIds: [3],
+		});
+		chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
+		console.log("rule modified with id", 3);
+	});
+}
+
+//turn on global GPC
+export function globalRuleOn() {
+	chrome.declarativeNetRequest.updateEnabledRulesets(
+		{ enableRulesetIds: ["universal_GPC"] },
+		() => console.log("universal_GPC rule enabled")
+	);
+}
+//turn off global GPC
+export function globalRuleOff() {
+	chrome.declarativeNetRequest.updateEnabledRulesets(
+		{ disableRulesetIds: ["universal_GPC"] },
+		() => console.log("universal_GPC rule enabled")
+	);
+}
+
 // Add a new rule with id to the rule set that adds gpc to requests originating from a set of domains
 // export async function addDomainRule(domain) {
 // 	getEnabledDomains();
@@ -117,6 +251,10 @@ export async function removeDomainFromRule(domain) {
 		for (var i = domains.length - 1; i >= 0; i--) {
 			if (domains[i] === domain) {
 				domains.splice(i, 1);
+			}
+			if (domains.length == 0) {
+				rmRuleId(2);
+				return;
 			}
 		}
 		chrome.declarativeNetRequest.updateDynamicRules({
@@ -159,9 +297,16 @@ export async function removeDomainFromRule(domain) {
 	});
 }
 
-// Remove a rule with id from the rule set
-export async function rmRule(url) {
+// Remove a rule with url from the rule set
+export async function rmRuleURL(url) {
 	let id = await getIdFromUrl(url);
+	console.log("Remove rule with id", id);
+	chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
+	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
+}
+
+// Remove a rule with id from the rule set
+export async function rmRuleId(id) {
 	console.log("Remove rule with id", id);
 	chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
 	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
@@ -169,6 +314,7 @@ export async function rmRule(url) {
 
 // Clear all rules from the rule set
 export async function clearRules() {
+	console.log("Clearing All Rules");
 	chrome.declarativeNetRequest.getDynamicRules((rules) => {
 		for (let r in rules) {
 			chrome.declarativeNetRequest.updateDynamicRules({

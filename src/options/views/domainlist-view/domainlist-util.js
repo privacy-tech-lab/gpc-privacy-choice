@@ -22,11 +22,6 @@ async function addDomainToggleListener(elementId, domain) {
 						);
 						if (result.DOMAINS[domain].bool == true) {
 							turnOffGPC(domain);
-							// delegate the edit of rule set to the background
-							chrome.runtime.sendMessage({
-								greeting: "OPTION DISABLE GPC",
-								domain: domain,
-							});
 							if (result.UI_SCHEME == 1) {
 								chrome.runtime.sendMessage({
 									greeting: "INTERACTION",
@@ -52,10 +47,6 @@ async function addDomainToggleListener(elementId, domain) {
 							}
 						} else {
 							turnOnGPC(domain);
-							chrome.runtime.sendMessage({
-								greeting: "OPTION ENABLE GPC",
-								domain: domain,
-							});
 							if (result.UI_SCHEME == 1) {
 								chrome.runtime.sendMessage({
 									greeting: "INTERACTION",
@@ -93,10 +84,6 @@ function addDeleteButtonListener(domain) {
 		deleteDomain(domain);
 		document.getElementById(`li ${domain}`).remove();
 		// delegate the edit of rule set to the background
-		chrome.runtime.sendMessage({
-			greeting: "DELETE SPECIFIC DOMAIN",
-			domainKey: domain,
-		});
 		chrome.storage.local.get(["UV_SETTING"], function (result) {
 			chrome.runtime.sendMessage({
 				greeting: "INTERACTION",
@@ -229,6 +216,10 @@ export function handleToggleAllOn() {
 			let new_domains = result.DOMAINS;
 			for (let d in new_domains) {
 				new_domains[d].bool = true;
+				chrome.runtime.sendMessage({
+					greeting: "OPTION ENABLE GPC",
+					domain: d,
+				});
 			}
 			chrome.runtime.sendMessage({
 				greeting: "UPDATE CACHE",
@@ -285,6 +276,10 @@ export function handleToggleAllOff() {
 			let new_domains = result.DOMAINS;
 			for (let d in new_domains) {
 				new_domains[d].bool = false;
+				chrome.runtime.sendMessage({
+					greeting: "OPTION DISABLE GPC",
+					domain: d,
+				});
 			}
 			chrome.storage.local.set({ DOMAINS: new_domains });
 			chrome.runtime.sendMessage({
@@ -312,6 +307,9 @@ export function handleApplyAllSwitch() {
 				universalSetting: "Off",
 				location: "Options page",
 				subcollection: "Domain",
+			});
+			chrome.runtime.sendMessage({
+				greeting: "DISABLE FUTURE GLOBAL SETTING",
 			});
 			chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
 			chrome.storage.local.set({ UV_SETTING: "Off" });
@@ -341,6 +339,10 @@ export function handleFutureSettingPromptEvent(event) {
 		chrome.storage.local.set({ ENABLED: false });
 		createDefaultSettingInfo();
 		chrome.runtime.sendMessage({
+			greeting: "UPDATE FUTURE GLOBAL SETTING",
+			enable: false,
+		});
+		chrome.runtime.sendMessage({
 			greeting: "INTERACTION",
 			domain: "All future domains",
 			setting: "Universal Setting",
@@ -366,6 +368,13 @@ export function handleFutureSettingPromptEvent(event) {
 			universalSetting: "Send signal to all",
 			location: "Options page",
 			subcollection: "Domain",
+		});
+		chrome.storage.local.get(["DOMAINS"], (res) => {
+			chrome.runtime.sendMessage({
+				greeting: "UPDATE FUTURE GLOBAL SETTING",
+				enable: true,
+				domains: res.DOMAINS,
+			});
 		});
 	}
 	// Otherwise, they hit cancel and nothing changes
@@ -393,6 +402,10 @@ export function handleDeleteDomainListEvent() {
 			newEnabled: "dontSet",
 			newDomains: {},
 			newDomainlistEnabled: "dontSet",
+		});
+		console.log("deleting all domains");
+		chrome.runtime.sendMessage({
+			greeting: "OPTION DELETE ALL DOMAINS",
 		});
 	}
 	createList();

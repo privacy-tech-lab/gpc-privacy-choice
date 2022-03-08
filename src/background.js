@@ -45,9 +45,14 @@ import {
 import {
 	addDomainRule,
 	addUrlRule,
-	rmRule,
+	rmRuleURL,
+	rmRuleId,
+	addDisableDomainRule,
 	clearRules,
 	removeDomainFromRule,
+	globalRuleOn,
+	globalRuleOff,
+	rmDisableDomainRule,
 } from "./editRules.js";
 
 /*================================================================================================================
@@ -492,24 +497,28 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	if (request.greeting == "BANNER DISABLE GPC") {
 		console.log("Banner Reaction: disable GPC for domain: ", request.domain);
 	}
-	if (request.greeting == "BANNER ENABLE GPC ALL") {
-		console.log("Banner Reaction: enable GPC for all");
-		await clearRules();
-		addUrlRule("*");
-	}
-	if (request.greeting == "BANNER DISABLE GPC ALL") {
-		console.log("Banner Reaction: disable GPC for all");
-		await clearRules(request.ruleIds);
-	}
+	// if (request.greeting == "BANNER ENABLE GPC ALL") {
+	// 	console.log("Banner Reaction: enable GPC for all");
+	// 	await clearRules();
+	// 	addUrlRule("*");
+	// }
+	// if (request.greeting == "BANNER DISABLE GPC ALL") {
+	// 	console.log("Banner Reaction: disable GPC for all");
+	// 	await clearRules(request.ruleIds);
+	// }
 	// user turns on the gpc for a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION ENABLE GPC") {
 		console.log(
 			"Option Page Reaction: enable GPC for domain: ",
 			request.domain
 		);
-		chrome.storage.local.get(["UI_SCHEME"], function (result) {
+		chrome.storage.local.get(["UI_SCHEME", "UV_SETTING"], function (result) {
 			if (result.UI_SCHEME < 3) {
-				addDomainRule(request.domain);
+				if (result.UV_SETTING == "Send signal to all") {
+					rmDisableDomainRule(request.domain);
+				} else {
+					addDomainRule(request.domain);
+				}
 			} else {
 				addUrlRule(request.domain);
 			}
@@ -525,7 +534,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			if (result.UI_SCHEME < 3) {
 				removeDomainFromRule(request.domain);
 			} else {
-				rmRule(request.domain);
+				rmRuleUrl(request.domain);
 			}
 		});
 	}
@@ -536,14 +545,14 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			if (result.UI_SCHEME < 3) {
 				removeDomainFromRule(request.domain);
 			} else {
-				rmRule(request.id);
+				rmRuleUrl(request.id);
 			}
 		});
 	}
 	// user deletes all the domains (interaction with the Rule Set API)
 	if (request.greeting == "OPTION DELETE ALL DOMAINS") {
 		console.log("Option Page Reaction: delete all domains");
-		await clearRules(request.ruleIds);
+		await clearRules();
 	}
 	// user changes profile (scheme 3) (interaction with the Rule Set API)
 	if (request.greeting == "UPDATE PRIVACY PROFILE") {
@@ -593,11 +602,24 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		});
 	}
 	// user changes global enable status (scheme 6) (interaction with the Rule Set API)
-	if (request.greeting == "UPDATE GLOBAL ENABLE") {
-		console.log("Updating the rule sets based on new categories");
-		await rmRule(1);
-		if (request.global == true) {
-			addRule("*", 1, 1);
+	if (request.greeting == "UPDATE FUTURE GLOBAL SETTING") {
+		console.log("Updating the default setting");
+		if (request.enable == true) {
+			globalRuleOn();
+			for (let d in request.domains) {
+				if (request.domains[d].bool === false) addDisableDomainRule(d);
+			}
+		} else {
+			globalRuleOff();
+			rmRuleId(3);
+		}
+	}
+	if (request.greeting == "DISABLE FUTURE GLOBAL SETTING") {
+		console.log("Turning off default setting");
+		clearRules();
+		globalRuleOff();
+		for (let d in request.domains) {
+			if (request.domains[d].bool === true) addDomainRule(d);
 		}
 	}
 });
