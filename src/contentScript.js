@@ -195,6 +195,9 @@ function addSendEventListener(currentDomain) {
 // Enable GPC for all future domains
 function addSendAllEventListener(currentDomain) {
 	removeBanner();
+	chrome.runtime.sendMessage({
+		greeting: "BANNER ENABLE GPC ALL",
+	});
 	chrome.storage.local.set({
 		UV_SETTING: "Send signal to all",
 		DOMAINLIST_ENABLED: false,
@@ -247,6 +250,9 @@ function addSendAllEventListener(currentDomain) {
 // Disable GPC for the current domain
 function addDontSendEventListener(currentDomain) {
 	removeBanner();
+	chrome.runtime.sendMessage({
+		greeting: "BANNER DISABLE GPC ALL",
+	});
 	chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
 	chrome.storage.local.get(
 		["DOMAINS", "DO_NOT_SEND_SIGNAL_BANNER"],
@@ -594,7 +600,7 @@ function addToDomainListScheme1() {
 			else value = false;
 			// add the currentDomain and store it in the local storage
 			// todo: 564-565 returns an error
-			// domains[currentDomain].bool = value;
+			domains[currentDomain].bool = value;
 			// domains[currentDomain].id = Object.keys(domains).length + 1;
 			chrome.storage.local.set({ DOMAINS: domains });
 			// notify background to update the cache used for look up

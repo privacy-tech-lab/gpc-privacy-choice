@@ -495,17 +495,19 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	}
 	// user responds to the banner (disable GPC) (interaction with the Rule Set API)
 	if (request.greeting == "BANNER DISABLE GPC") {
+		await clearRules();
+		globalRuleOff();
 		console.log("Banner Reaction: disable GPC for domain: ", request.domain);
 	}
-	// if (request.greeting == "BANNER ENABLE GPC ALL") {
-	// 	console.log("Banner Reaction: enable GPC for all");
-	// 	await clearRules();
-	// 	addUrlRule("*");
-	// }
-	// if (request.greeting == "BANNER DISABLE GPC ALL") {
-	// 	console.log("Banner Reaction: disable GPC for all");
-	// 	await clearRules(request.ruleIds);
-	// }
+	if (request.greeting == "BANNER ENABLE GPC ALL") {
+		console.log("Banner Reaction: enable GPC for all");
+		await clearRules();
+		globalRuleOn();
+	}
+	if (request.greeting == "BANNER DISABLE GPC ALL") {
+		console.log("Banner Reaction: disable GPC for all");
+		await clearRules(request.ruleIds);
+	}
 	// user turns on the gpc for a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION ENABLE GPC") {
 		console.log(
