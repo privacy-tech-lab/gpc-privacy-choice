@@ -491,7 +491,6 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	// user responds to the banner (disable GPC) (interaction with the Rule Set API)
 	if (request.greeting == "BANNER DISABLE GPC") {
 		console.log("Banner Reaction: disable GPC for domain: ", request.domain);
-		removeDomainFromRule(request.domain);
 	}
 	if (request.greeting == "BANNER ENABLE GPC ALL") {
 		console.log("Banner Reaction: enable GPC for all");
