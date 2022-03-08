@@ -9,7 +9,7 @@ function getIdFromUrl(url) {
 			hash = (hash << 5) - hash + chr;
 			hash |= 0; // Convert to 32bit integer
 		}
-		return hash;
+		return Math.abs(hash);
 	};
 	return url.hashCode();
 }
@@ -30,7 +30,7 @@ export async function addUrlRule(domain) {
 					],
 				},
 				condition: {
-					urlFilter: '*' + domain + '*',
+					urlFilter: "*" + domain + "*",
 					resourceTypes: ["main_frame"],
 				},
 			},
