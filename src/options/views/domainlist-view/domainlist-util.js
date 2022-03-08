@@ -296,38 +296,42 @@ export function handleToggleAllOff() {
 
 // "Apply all" switch is hit
 export function handleApplyAllSwitch() {
-	chrome.storage.local.get(["UV_SETTING", "APPLY_ALL"], function (result) {
-		if (result.APPLY_ALL) {
-			chrome.runtime.sendMessage({
-				greeting: "INTERACTION",
-				domain: "All future domains",
-				setting: "Universal Setting",
-				prevSetting: result.UV_SETTING,
-				newSetting: "Off",
-				universalSetting: "Off",
-				location: "Options page",
-				subcollection: "Domain",
-			});
-			chrome.runtime.sendMessage({
-				greeting: "DISABLE FUTURE GLOBAL SETTING",
-			});
-			chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
-			chrome.storage.local.set({ UV_SETTING: "Off" });
-			chrome.storage.local.set({ APPLY_ALL: false });
-			chrome.storage.local.set({ ENABLED: true });
-			createDefaultSettingInfo();
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: true,
-				newDomains: "dontSet",
-				newDomainlistEnabled: true,
-			});
-		} else {
-			createDefaultSettingInfo();
-			UIkit.modal("#future_setting_prompt").show();
-			createDefaultSettingInfo();
+	chrome.storage.local.get(
+		["UV_SETTING", "APPLY_ALL", "DOMAINS"],
+		function (result) {
+			if (result.APPLY_ALL) {
+				chrome.runtime.sendMessage({
+					greeting: "INTERACTION",
+					domain: "All future domains",
+					setting: "Universal Setting",
+					prevSetting: result.UV_SETTING,
+					newSetting: "Off",
+					universalSetting: "Off",
+					location: "Options page",
+					subcollection: "Domain",
+				});
+				chrome.runtime.sendMessage({
+					greeting: "DISABLE FUTURE GLOBAL SETTING",
+					domains: result.DOMAINS,
+				});
+				chrome.storage.local.set({ DOMAINLIST_ENABLED: true });
+				chrome.storage.local.set({ UV_SETTING: "Off" });
+				chrome.storage.local.set({ APPLY_ALL: false });
+				chrome.storage.local.set({ ENABLED: true });
+				createDefaultSettingInfo();
+				chrome.runtime.sendMessage({
+					greeting: "UPDATE CACHE",
+					newEnabled: true,
+					newDomains: "dontSet",
+					newDomainlistEnabled: true,
+				});
+			} else {
+				createDefaultSettingInfo();
+				UIkit.modal("#future_setting_prompt").show();
+				createDefaultSettingInfo();
+			}
 		}
-	});
+	);
 }
 
 // User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch

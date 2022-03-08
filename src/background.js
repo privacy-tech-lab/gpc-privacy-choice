@@ -618,7 +618,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	}
 	if (request.greeting == "DISABLE FUTURE GLOBAL SETTING") {
 		console.log("Turning off default setting");
-		clearRules();
+		rmRuleId(3);
 		globalRuleOff();
 		for (let d in request.domains) {
 			if (request.domains[d].bool === true) addDomainRule(d);

@@ -599,7 +599,8 @@ function addToDomainListScheme1() {
 			if (result.UV_SETTING == "Send signal to all") value = true;
 			else value = false;
 			// add the currentDomain and store it in the local storage
-			// todo: 564-565 returns an error
+			console.log("adding domain to list", currentDomain);
+			domains[currentDomain] = {};
 			domains[currentDomain].bool = value;
 			// domains[currentDomain].id = Object.keys(domains).length + 1;
 			chrome.storage.local.set({ DOMAINS: domains });

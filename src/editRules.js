@@ -47,13 +47,11 @@ export async function addDomainRule(domain) {
 		let rule = res.filter((obj) => {
 			return obj.id === 2;
 		});
-		console.log(rule);
 		if (rule.length === 0) {
 			domains = [];
 		} else {
 			domains = rule[0].condition.domains;
 		}
-		console.log(domains);
 		let id = 2;
 		domains.push(domain);
 		console.log(domains, domain);
@@ -227,7 +225,7 @@ export function globalRuleOn() {
 export function globalRuleOff() {
 	chrome.declarativeNetRequest.updateEnabledRulesets(
 		{ disableRulesetIds: ["universal_GPC"] },
-		() => console.log("universal_GPC rule enabled")
+		() => console.log("universal_GPC rule disabled")
 	);
 }
 
