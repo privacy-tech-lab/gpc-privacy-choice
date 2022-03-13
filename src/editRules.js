@@ -214,6 +214,23 @@ export async function rmDisableDomainRule(domain) {
 	});
 }
 
+//turn on global medium profile
+export function mediumRulesOn() {
+	chrome.declarativeNetRequest.updateEnabledRulesets(
+		{
+			enableRulesetIds: [
+				"advertising",
+				"FG",
+				"FI",
+				"cryptomining",
+				"analytics",
+				"disconnect",
+			],
+		},
+		() => console.log("medium profile enbled")
+	);
+}
+
 //turn on global GPC
 export function globalRuleOn() {
 	chrome.declarativeNetRequest.updateEnabledRulesets(
@@ -226,6 +243,45 @@ export function globalRuleOff() {
 	chrome.declarativeNetRequest.updateEnabledRulesets(
 		{ disableRulesetIds: ["universal_GPC"] },
 		() => console.log("universal_GPC rule disabled")
+	);
+}
+
+export function updateCategories(choices) {
+	console.log(choices);
+	let enabled = [];
+	let disabled = [];
+	if (choices["Advertising"]) {
+		enabled.push("advertising");
+	} else disabled.push("advertising");
+	if (choices["Analytics"]) {
+		enabled.push("analytics");
+	} else disabled.push("analytics");
+	if (choices["Analytics"]) {
+		enabled.push("analytics");
+	} else disabled.push("analytics");
+	if (choices["Content & Social"]) {
+		enabled.push("content");
+		enabled.push("social");
+	} else {
+		disabled.push("content");
+		disabled.push("social");
+	}
+	if (choices["Fingerprinting"]) {
+		enabled.push("FG");
+		enabled.push("FI");
+	} else {
+		disabled.push("FG");
+		disabled.push("FI");
+	}
+	if (choices["Cryptomining"]) {
+		enabled.push("cryptomining");
+	} else {
+		disable.push("cryptomining");
+	}
+	if (choices["Others"]) globalRuleOn();
+	chrome.declarativeNetRequest.updateEnabledRulesets(
+		{ enableRulesetIds: enabled, disableRulesetIds: disabled },
+		() => console.log("categories updated")
 	);
 }
 
@@ -310,7 +366,7 @@ export async function rmRuleId(id) {
 	chrome.declarativeNetRequest.getDynamicRules((rules) => console.log(rules));
 }
 
-// Clear all rules from the rule set
+// Clear dynamic rules from the rule set
 export async function clearRules() {
 	console.log("Clearing All Rules");
 	chrome.declarativeNetRequest.getDynamicRules((rules) => {

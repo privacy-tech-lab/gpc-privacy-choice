@@ -44,15 +44,17 @@ import {
 
 import {
 	addDomainRule,
-	addUrlRule,
-	rmRuleURL,
-	rmRuleId,
-	addDisableDomainRule,
-	clearRules,
-	removeDomainFromRule,
-	globalRuleOn,
-	globalRuleOff,
-	rmDisableDomainRule,
+	// addUrlRule,
+	// rmRuleURL,
+	// rmRuleId,
+	// clearRules,
+	// removeDomainFromRule,
+	// globalRuleOn,
+	// globalRuleOff,
+	// rmDisableDomainRule,
+	// mediumRulesOn,
+	// updateCategories,
+	// addDisableDomainRule,
 } from "./editRules.js";
 
 /*================================================================================================================
@@ -566,19 +568,13 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// if user toggle to medium privacy sensitivity => add all domains from CHECKLIST
 		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
 		else if (request.scheme == "Medium Privacy-Sensitivity") {
-			chrome.storage.local.get(["CHECKLIST"], function (result) {
-				let domains = result.CHECKLIST;
-				for (let d in domains) addUrlRule(domains[d]);
-			});
+			mediumRulesOn();
 		}
 		// if user toggle to low privacy sensitivity => don't do anything
 	}
 	// user changes categories (scheme 4) (interaction with the Rule Set API)
 	if (request.greeting == "UPDATE CATEGORIES") {
-		// first remove all the previous rules
-		await clearRules(request.ruleIds);
-		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
-		for (let d in domains) await addUrlRule(d);
+		updateCategories();
 	}
 	// learning phase completed (scheme 5) (interaction with the Rule Set API)
 	if (request.greeting == "LEARNING COMPLETED") {
@@ -707,7 +703,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
 	// let userScheme = Math.floor(Math.random() * 7);
-	let userScheme = 1;
+	let userScheme = 4;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
