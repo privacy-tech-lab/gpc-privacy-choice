@@ -44,17 +44,17 @@ import {
 
 import {
 	addDomainRule,
-	// addUrlRule,
-	// rmRuleURL,
-	// rmRuleId,
-	// clearRules,
-	// removeDomainFromRule,
-	// globalRuleOn,
-	// globalRuleOff,
-	// rmDisableDomainRule,
-	// mediumRulesOn,
-	// updateCategories,
-	// addDisableDomainRule,
+	addUrlRule,
+	rmRuleURL,
+	rmRuleId,
+	clearRules,
+	removeDomainFromRule,
+	globalRuleOn,
+	globalRuleOff,
+	rmDisableDomainRule,
+	mediumRulesOn,
+	updateCategories,
+	addDisableDomainRule,
 } from "./editRules.js";
 
 /*================================================================================================================
@@ -485,6 +485,8 @@ chrome.runtime.onMessage.addListener(async function (request) {
 					request.location,
 					request.subcollection
 				);
+				if (request.setting === "Categories")
+					updateCategories(request.newSetting);
 			} else {
 				console.log("Unregistered user: not connected to the database");
 			}
@@ -574,7 +576,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	}
 	// user changes categories (scheme 4) (interaction with the Rule Set API)
 	if (request.greeting == "UPDATE CATEGORIES") {
-		updateCategories();
+		updateCategories(request.choices);
 	}
 	// learning phase completed (scheme 5) (interaction with the Rule Set API)
 	if (request.greeting == "LEARNING COMPLETED") {

@@ -67,7 +67,7 @@ document.querySelector(".submit-choice").onclick = (e) => {
 async function submit(prolificID) {
 	chrome.runtime.sendMessage({
 		greeting: "UPDATE CATEGORIES",
-		choices: "CHOICES",
+		choices: userChoices,
 	});
 	let checkList = [];
 	let checkNotList = [];

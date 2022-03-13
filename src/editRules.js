@@ -276,7 +276,7 @@ export function updateCategories(choices) {
 	if (choices["Cryptomining"]) {
 		enabled.push("cryptomining");
 	} else {
-		disable.push("cryptomining");
+		disabled.push("cryptomining");
 	}
 	if (choices["Others"]) globalRuleOn();
 	chrome.declarativeNetRequest.updateEnabledRulesets(
