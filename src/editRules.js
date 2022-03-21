@@ -25,8 +25,8 @@ export async function addUrlRule(domain) {
 				action: {
 					type: "modifyHeaders",
 					requestHeaders: [
-						{ header: "Sec-GPC", operation: "set" },
-						{ header: "DNT", operation: "set" },
+						{ header: "Sec-GPC", operation: "set", value: "1" },
+						{ header: "DNT", operation: "set", value: "1" },
 					],
 				},
 				condition: {
