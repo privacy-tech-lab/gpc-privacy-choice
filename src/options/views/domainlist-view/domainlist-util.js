@@ -5,6 +5,8 @@ import {
 	filterList,
 } from "./domainlist-ui.js";
 
+import { updatePrefScheme4, updatePrefScheme3 } from "./domainlist-view.js";
+
 // Turn on / off the domain from the setting page
 async function addDomainToggleListener(elementId, domain) {
 	document.getElementById(elementId).addEventListener("click", () => {
