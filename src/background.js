@@ -56,9 +56,6 @@ import {
   addDisableDomainRule,
 } from "./editRules.js";
 
-/*================================================================================================================
-This section contains constant created for background.js
-==================================================================================================================*/
 // Connect with Database
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
