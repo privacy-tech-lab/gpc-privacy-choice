@@ -279,6 +279,7 @@ export function updateCategories(choices) {
 		disabled.push("cryptomining");
 	}
 	if (choices["Others"]) globalRuleOn();
+	else globalRuleOff();
 	chrome.declarativeNetRequest.updateEnabledRulesets(
 		{ enableRulesetIds: enabled, disableRulesetIds: disabled },
 		() => console.log("categories updated")
