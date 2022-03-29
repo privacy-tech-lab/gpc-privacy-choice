@@ -212,13 +212,6 @@ export function createDefaultSettingInfo() {
         </p>
         <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
             <div class="choice" style="cursor: pointer;">
-                <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                uk-tooltip="title:First party sites are sites that you visit intentionally. This category also includes sites that do not fall under any of the other categories.; pos: top-right">
-                    <a class="uk-position-cover first" href="#" id="Others"></a>
-                    <h3 class="uk-card-title uk-margin">First Party Sites</h3>
-                </div>
-            </div>  
-            <div class="choice" style="cursor: pointer;">
                 <div id="advertising-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                 uk-tooltip="title:Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
                     <a class="uk-position-cover first" href="#" id="Advertising"></a>
@@ -232,15 +225,15 @@ export function createDefaultSettingInfo() {
                     <h3 class="uk-card-title uk-margin">Analytics</h3>
                 </div>
             </div>
+            <div class="choice" style="cursor: pointer;">
+              <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+              uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+                  <a class="uk-position-cover first" href="#" id="Content & Social"></a>
+                  <h3 class="uk-card-title uk-margin">Content & Social</h3>
+              </div>
+            </div>  
         </div>
         <div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
-            <div class="choice" style="cursor: pointer;">
-                <div id="social-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-                uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
-                    <a class="uk-position-cover first" href="#" id="Content & Social"></a>
-                    <h3 class="uk-card-title uk-margin">Content & Social</h3>
-                </div>
-            </div>  
             <div class="choice" style="cursor: pointer;">
                 <div id="cryptomining-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                 uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
@@ -254,7 +247,14 @@ export function createDefaultSettingInfo() {
                     <a class="uk-position-cover first" href="#" id="Fingerprinting"></a>
                     <h3 class="uk-card-title uk-margin">Browser Fingerprinting</h3>
                 </div>
-            </div> 
+            </div>
+            <div class="choice" style="cursor: pointer;">
+                <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
+                uk-tooltip="title:By selecting this card, GPC signals will be sent to all sites you visit, disregarding any of the other cards you may have or have not selected.; pos: top-right">
+                    <a class="uk-position-cover first" href="#" id="Others"></a>
+                    <h3 class="uk-card-title uk-margin">All Sites</h3>
+                </div>
+            </div>   
         </div>
         `;
       } else if (result.UI_SCHEME == 3) {
