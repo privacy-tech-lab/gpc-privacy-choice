@@ -279,6 +279,7 @@ export function updateCategories(choices) {
 		disabled.push("cryptomining");
 	}
 	if (choices["Others"]) globalRuleOn();
+	else globalRuleOff();
 	chrome.declarativeNetRequest.updateEnabledRulesets(
 		{ enableRulesetIds: enabled, disableRulesetIds: disabled },
 		() => console.log("categories updated")
@@ -352,7 +353,7 @@ export async function removeDomainFromRule(domain) {
 }
 
 // Remove a rule with url from the rule set
-export async function rmRuleURL(url) {
+export async function rmRuleUrl(url) {
 	let id = await getIdFromUrl(url);
 	console.log("Remove rule with id", id);
 	chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });
