@@ -352,7 +352,7 @@ export async function removeDomainFromRule(domain) {
 }
 
 // Remove a rule with url from the rule set
-export async function rmRuleURL(url) {
+export async function rmRuleUrl(url) {
 	let id = await getIdFromUrl(url);
 	console.log("Remove rule with id", id);
 	chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: [id] });

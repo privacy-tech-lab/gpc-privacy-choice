@@ -45,6 +45,7 @@ import {
 	addDomainRule,
 	addUrlRule,
 	rmRuleId,
+	rmRuleUrl,
 	clearRules,
 	removeDomainFromRule,
 	globalRuleOn,
