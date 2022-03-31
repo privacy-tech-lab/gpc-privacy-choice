@@ -4,13 +4,11 @@ Copyright (c) 2021 Chunyue Ma, Isabella Tassone, Eliza Kuller, Sebastian Zimmeck
 privacy-tech-lab, https://privacytechlab.org/
 */
 
-
 /*
 util.js
 ================================================================================
 util.js contains global helper functions to help render the options page
 */
-
 
 /**
  * Get local html file as string
@@ -19,14 +17,13 @@ util.js contains global helper functions to help render the options page
  *                          prints an error
  */
 export async function fetchTemplate(path) {
-    try {
-        let response = await fetch(path)
-        let data = await response.text()
-        return data
-    }
-    catch (e) {
-        console.log('Failed to fetch page: ', e);
-    }
+  try {
+    let response = await fetch(path);
+    let data = await response.text();
+    return data;
+  } catch (e) {
+    console.log("Failed to fetch page: ", e);
+  }
 }
 
 /**
@@ -35,9 +32,9 @@ export async function fetchTemplate(path) {
  * @returns {HTMLDocument} - also a Document
  */
 export function parseTemplate(template) {
-    let parser = new DOMParser()
-    let doc = parser.parseFromString(template, "text/html")
-    return doc
+  let parser = new DOMParser();
+  let doc = parser.parseFromString(template, "text/html");
+  return doc;
 }
 
 /**
@@ -48,8 +45,8 @@ export function parseTemplate(template) {
  * @returns {Object} - element object related to the id parameter
  */
 export async function fetchParse(path, id) {
-    let template = await fetchTemplate(path)
-    return parseTemplate(template).getElementById(id)
+  let template = await fetchTemplate(path);
+  return parseTemplate(template).getElementById(id);
 }
 
 /**
@@ -60,8 +57,8 @@ export async function fetchParse(path, id) {
  * @returns {Object} - element object related to the id parameter
  */
 export function renderParse(template, data, id) {
-    let renderedTemplate = Mustache.render(template, data)
-    return parseTemplate(renderedTemplate).getElementById(id)
+  let renderedTemplate = Mustache.render(template, data);
+  return parseTemplate(renderedTemplate).getElementById(id);
 }
 
 /**
@@ -72,8 +69,8 @@ export function renderParse(template, data, id) {
  * @returns {Object} - element object related to the id parameter
  */
 export async function fetchRenderParse(path, data, id) {
-    let template = await fetchTemplate(path)
-    return renderParse(template, data, id).getElementById(id)
+  let template = await fetchTemplate(path);
+  return renderParse(template, data, id).getElementById(id);
 }
 
 /**
@@ -84,15 +81,15 @@ export async function fetchRenderParse(path, data, id) {
  * @param {function} callback - callback function
  */
 export function animateCSS(element, animationName, callback) {
-    const node = document.querySelector(element)
-    node.classList.add('animated', animationName)
+  const node = document.querySelector(element);
+  node.classList.add("animated", animationName);
 
-    function handleAnimationEnd() {
-        node.classList.remove('animated', animationName)
-        node.removeEventListener('animationend', handleAnimationEnd)
+  function handleAnimationEnd() {
+    node.classList.remove("animated", animationName);
+    node.removeEventListener("animationend", handleAnimationEnd);
 
-        if (typeof callback === 'function') callback()
-    }
+    if (typeof callback === "function") callback();
+  }
 
-    node.addEventListener('animationend', handleAnimationEnd)
+  node.addEventListener("animationend", handleAnimationEnd);
 }

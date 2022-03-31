@@ -5,32 +5,56 @@ privacy-tech-lab, https://privacytechlab.org/
 -->
 
 <template id="domainlist-view-plain">
-  <div class="uk-width-1-1" style="margin-top: 0px;">
+  <div class="uk-width-1-1" style="margin-top: 0px">
     <div id="future_setting_prompt" uk-modal>
-      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px;">
-        Before turning off the GPC banner you must select a GPC setting to apply to future sites.
+      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px">
+        Before turning off the GPC banner you must select a GPC setting to apply
+        to future sites.
         <h2 class="uk-modal-title"></h2>
-        <button class="uk-modal-close" style="font-size: 15px;" type="button">Cancel</button>
-        <button class="uk-modal-close" id="dont-allow-future-btn" type="button" style="font-size: 15px; float:right;">Enable GPC on Future Sites</button>
-        <button class="uk-modal-close" id="allow-future-btn" type="button" style="font-size: 15px; float:right;margin-right:4px;">Disable GPC on Future Sites</button>
+        <button class="uk-modal-close" style="font-size: 15px" type="button">
+          Cancel
+        </button>
+        <button
+          class="uk-modal-close"
+          id="dont-allow-future-btn"
+          type="button"
+          style="font-size: 15px; float: right"
+        >
+          Enable GPC on Future Sites
+        </button>
+        <button
+          class="uk-modal-close"
+          id="allow-future-btn"
+          type="button"
+          style="font-size: 15px; float: right; margin-right: 4px"
+        >
+          Disable GPC on Future Sites
+        </button>
       </div>
     </div>
     <div id="learning-finish-modal" uk-modal>
       <div class="uk-modal-dialog">
-          <button class="uk-modal-close-default" type="button" uk-close></button>
-          <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-              <img src="./img/green_tick.png" alt="" style="margin: 0px;">
-              <h2 class="uk-align-center text-color-darker">Learning Finished</h2>
-          </div>
-          <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-            We have successfully determined your privacy profile based on your GPC banner choices. You can review or modify your GPC setting, also for individual sites, in the extension settings. 
-          </div>
-          <div class="uk-modal-footer">
-            <button id="learning-finish-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
-          </div>
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+          <img src="./img/green_tick.png" alt="" style="margin: 0px" />
+          <h2 class="uk-align-center text-color-darker">Learning Finished</h2>
+        </div>
+        <div class="uk-modal-body" style="font-size: 15px; text-align: center">
+          We have successfully determined your privacy profile based on your GPC
+          banner choices. You can review or modify your GPC setting, also for
+          individual sites, in the extension settings.
+        </div>
+        <div class="uk-modal-footer">
+          <button
+            id="learning-finish-modal-button"
+            class="uk-button uk-button-primary uk-align-right"
+            style="margin: 0px 10px"
+          >
+            GOT IT
+          </button>
+        </div>
       </div>
-    </div> 
+    </div>
   </div>
-  <p id='current-apply-all-setting' style="font-size: medium;">
-  </p>
+  <p id="current-apply-all-setting" style="font-size: medium"></p>
 </template>

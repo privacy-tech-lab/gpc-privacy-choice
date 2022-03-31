@@ -5,38 +5,65 @@ privacy-tech-lab, https://privacytechlab.org/
 -->
 
 <template id="domainlist-view">
-  <div class="uk-width-1-1" style="margin-top: 0px;">
+  <div class="uk-width-1-1" style="margin-top: 0px">
     <div id="future_setting_prompt" uk-modal>
-      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px;">
-        Before turning off the GPC banner you must select a GPC setting to apply to future sites.
+      <div class="uk-modal-dialog uk-modal-body" style="font-size: 15px">
+        Before turning off the GPC banner you must select a GPC setting to apply
+        to future sites.
         <h2 class="uk-modal-title"></h2>
-        <button class="uk-modal-close" style="font-size: 15px;" type="button">Cancel</button>
-        <button class="uk-modal-close" id="dont-allow-future-btn" type="button" style="font-size: 15px; float:right;">Enable GPC on Future Sites</button>
-        <button class="uk-modal-close" id="allow-future-btn" type="button" style="font-size: 15px; float:right;margin-right:4px;">Disable GPC on Future Sites</button>
+        <button class="uk-modal-close" style="font-size: 15px" type="button">
+          Cancel
+        </button>
+        <button
+          class="uk-modal-close"
+          id="dont-allow-future-btn"
+          type="button"
+          style="font-size: 15px; float: right"
+        >
+          Enable GPC on Future Sites
+        </button>
+        <button
+          class="uk-modal-close"
+          id="allow-future-btn"
+          type="button"
+          style="font-size: 15px; float: right; margin-right: 4px"
+        >
+          Disable GPC on Future Sites
+        </button>
       </div>
     </div>
     <div id="learning-finish-modal" uk-modal>
       <div class="uk-modal-dialog">
-          <button class="uk-modal-close-default" type="button" uk-close></button>
-          <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-              <img src="./img/green_tick.png" alt="" style="margin: 0px;">
-              <h2 class="uk-align-center text-color-darker">Learning Finished</h2>
-          </div>
-          <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-            We have successfully determined your privacy profile based on your GPC banner choices. You can review or modify your GPC setting, also for individual sites, in the extension settings. 
-          </div>
-          <div class="uk-modal-footer">
-            <button id="learning-finish-modal-button" class="uk-button uk-button-primary uk-align-right" style="margin: 0px 10px;">GOT IT</button>
-          </div>
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
+          <img src="./img/green_tick.png" alt="" style="margin: 0px" />
+          <h2 class="uk-align-center text-color-darker">Learning Finished</h2>
+        </div>
+        <div class="uk-modal-body" style="font-size: 15px; text-align: center">
+          We have successfully determined your privacy profile based on your GPC
+          banner choices. You can review or modify your GPC setting, also for
+          individual sites, in the extension settings.
+        </div>
+        <div class="uk-modal-footer">
+          <button
+            id="learning-finish-modal-button"
+            class="uk-button uk-button-primary uk-align-right"
+            style="margin: 0px 10px"
+          >
+            GOT IT
+          </button>
+        </div>
       </div>
-    </div> 
+    </div>
     <!-- Search Form -->
     <div class="domainlist-navbar" id="domainlist-navbar">
-      <p id='current-apply-all-setting' 
-        style="font-size: medium;">
+      <p id="current-apply-all-setting" style="font-size: medium">
         <!-- Information on Default/Apply-all Setting-->
       </p>
-      <form class="uk-search uk-search-default uk-width-3-4" style="margin-top: 1%;">
+      <form
+        class="uk-search uk-search-default uk-width-3-4"
+        style="margin-top: 1%"
+      >
         <div class="uk-margin">
           <div class="uk-inline uk-width-expand">
             <span
@@ -45,65 +72,74 @@ privacy-tech-lab, https://privacytechlab.org/
             ></span>
             <input
               class="uk-input search"
-              style="border-radius: 5px;"
+              style="border-radius: 5px"
               id="searchbar"
               type="text"
-              placeholder="Seach for a site" />
+              placeholder="Seach for a site"
+            />
           </div>
         </div>
       </form>
-    <div id='domainlist-manager-btns'  
-      style="margin-top: 3px;
-        margin-bottom: 20px;">
-      <!-- Buttons to manage entire domainlist at once -->
-    </div>
+      <div
+        id="domainlist-manager-btns"
+        style="margin-top: 3px; margin-bottom: 20px"
+      >
+        <!-- Buttons to manage entire domainlist at once -->
+      </div>
     </div>
     <!-- List of Domains -->
     <ul
       class="uk-list uk-list-divider uk-width-1-1"
-      style="margin-top: 0px; margin-bottom: 0px;"
+      style="margin-top: 0px; margin-bottom: 0px"
       id="domainlist-main"
     >
-    <li>
-      <div uk-grid class="uk-grid-small uk-width-1-1" style="font-size: medium;">
-        <div>
-          <label>
-            <input type="checkbox" id="select" class="check text-color dark-checkbox" />
-          </label>
-        </div>
-        <div class="domain uk-width-expand" >
-          instagram.com
-        </div>
-        <div style="
-          margin-right: 5px;
-          margin-left: 5px;
-          margin-top: auto;
-          margin-bottom: auto;
-          "
-        >
-          <label class="switch" >
-            <input type="checkbox" id="instagram.com" />
-            <span></span>
-          </label>
-        </div>
+      <li>
         <div
-          class="uk-badge button"
-          style="
-            margin-right: 5px;
-            margin-left: 5px;
-            margin-top: auto;
-            margin-bottom: auto;
-            padding-right: 5px;
-            padding-left: 5px;
-            background-color: white;
-            border: 1px solid #f44336;
-            color: #f44336;
-          "
+          uk-grid
+          class="uk-grid-small uk-width-1-1"
+          style="font-size: medium"
         >
-          Delete
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                id="select"
+                class="check text-color dark-checkbox"
+              />
+            </label>
+          </div>
+          <div class="domain uk-width-expand">instagram.com</div>
+          <div
+            style="
+              margin-right: 5px;
+              margin-left: 5px;
+              margin-top: auto;
+              margin-bottom: auto;
+            "
+          >
+            <label class="switch">
+              <input type="checkbox" id="instagram.com" />
+              <span></span>
+            </label>
+          </div>
+          <div
+            class="uk-badge button"
+            style="
+              margin-right: 5px;
+              margin-left: 5px;
+              margin-top: auto;
+              margin-bottom: auto;
+              padding-right: 5px;
+              padding-left: 5px;
+              background-color: white;
+              border: 1px solid #f44336;
+              color: #f44336;
+            "
+          >
+            Delete
+          </div>
         </div>
-      </div>
-    </li>
+      </li>
     </ul>
   </div>
 </template>
