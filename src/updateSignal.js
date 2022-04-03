@@ -33,16 +33,11 @@ export async function updateSendSignalScheme4() {
   if (currentDomain in domainsCache) sendSignal = domainsCache[currentDomain];
   else {
     await chrome.storage.local.get(
-      ["CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
+      ["CHECKLIST", "USER_CHOICES"],
       function (result) {
-        if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
+        if (result.USER_CHOICES["Others"] == true) sendSignal = true;
         else {
-          if (
-            result.USER_CHOICES["Others"] == true &&
-            !result.CHECKNOTLIST.includes(currentDomain)
-          ) {
-            sendSignal = true;
-          }
+          if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
         }
       }
     );

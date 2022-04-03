@@ -670,20 +670,17 @@ function addToDomainListScheme3() {
 // SCHEME 4: add new domains to the domainlist in local storage based on the user's questionnaire response
 function addToDomainListScheme4() {
 	chrome.storage.local.get(
-		["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
+		["DOMAINS", "CHECKLIST", "USER_CHOICES"],
 		function (result) {
 			let currentDomain = getDomain(window.location.href);
 			let domains = result.DOMAINS;
 			// by default, do not send GPC signals
 			let value = false;
 			if (!(currentDomain in domains)) {
-				// send GPC signals if the currentDomain is in the checkList
-				if (result.CHECKLIST.includes(currentDomain)) value = true;
+				if (result.USER_CHOICES["Others"] == true) value = true;
 				else {
-					// send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
-					if (result.USER_CHOICES["Others"] == true) {
-						if (!result.CHECKNOTLIST.includes(currentDomain)) value = true;
-					}
+					// send GPC signals if the currentDomain is in the checkList
+					if (result.CHECKLIST.includes(currentDomain)) value = true;
 				}
 
 				// add the currentDomain and store it in the local storage

@@ -70,15 +70,14 @@ async function submit(prolificID) {
 		choices: userChoices,
 	});
 	let checkList = [];
-	let checkNotList = [];
 	// Parse the networks json file based on the user's response to JSON
 	await fetch("../json/services.json")
 		.then((response) => response.text())
 		.then((result) => {
 			let networks = JSON.parse(result)["categories"];
 			for (let category of Object.keys(userChoices)) {
-				if (userChoices[category] == true) {
-					if (category != "Others") {
+				if (!(userChoices["Others"] == true)) {
+					if (userChoices[category] == true) {
 						if (category === "Fingerprinting") {
 							for (let cat of [
 								"FingerprintingGeneral",
@@ -112,41 +111,6 @@ async function submit(prolificID) {
 							}
 						}
 					}
-				} else {
-					if (category != "Others") {
-						if (category === "Fingerprinting") {
-							for (let cat of [
-								"FingerprintingGeneral",
-								"FingerprintingInvasive",
-							]) {
-								for (let n of networks[cat]) {
-									for (let c of Object.values(n)) {
-										for (let list of Object.values(c)) {
-											checkNotList = checkNotList.concat(list);
-										}
-									}
-								}
-							}
-						} else if (category === "Content & Social") {
-							for (let cat of ["Content", "Social", "Disconnect"]) {
-								for (let n of networks[cat]) {
-									for (let c of Object.values(n)) {
-										for (let list of Object.values(c)) {
-											checkNotList = checkNotList.concat(list);
-										}
-									}
-								}
-							}
-						} else {
-							for (let n of networks[category]) {
-								for (let c of Object.values(n)) {
-									for (let list of Object.values(c)) {
-										checkNotList = checkNotList.concat(list);
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		});
@@ -156,7 +120,6 @@ async function submit(prolificID) {
 		chrome.storage.local.set(
 			{
 				CHECKLIST: checkList,
-				CHECKNOTLIST: checkNotList,
 				USER_CHOICES: userChoices,
 			},
 			async function () {

@@ -108,10 +108,9 @@ export function updatePrefScheme3() {
 // Update the check list based on the user's choice in scheme 4
 export async function updatePrefScheme4() {
 	chrome.storage.local.get(
-		["DOMAINS", "CHECKLIST", "CHECKNOTLIST", "USER_CHOICES"],
+		["DOMAINS", "CHECKLIST", "USER_CHOICES"],
 		async function (result) {
 			let checkList = [];
-			let checkNotList = [];
 			let userChoices = result.USER_CHOICES;
 			// Parse the networks json file based on the user's response to JSON
 			await fetch("../../json/services.json")
@@ -119,8 +118,8 @@ export async function updatePrefScheme4() {
 				.then((result) => {
 					let networks = JSON.parse(result)["categories"];
 					for (let category of Object.keys(userChoices)) {
-						if (userChoices[category] == true) {
-							if (category != "Others") {
+						if (!(userChoices["Others"] == true)) {
+							if (userChoices[category] == true) {
 								if (category === "Fingerprinting") {
 									for (let cat of [
 										"FingerprintingGeneral",
@@ -154,47 +153,11 @@ export async function updatePrefScheme4() {
 									}
 								}
 							}
-						} else {
-							if (category != "Others") {
-								if (category === "Fingerprinting") {
-									for (let cat of [
-										"FingerprintingGeneral",
-										"FingerprintingInvasive",
-									]) {
-										for (let n of networks[cat]) {
-											for (let c of Object.values(n)) {
-												for (let list of Object.values(c)) {
-													checkNotList = checkNotList.concat(list);
-												}
-											}
-										}
-									}
-								} else if (category === "Content & Social") {
-									for (let cat of ["Content", "Social", "Disconnect"]) {
-										for (let n of networks[cat]) {
-											for (let c of Object.values(n)) {
-												for (let list of Object.values(c)) {
-													checkNotList = checkNotList.concat(list);
-												}
-											}
-										}
-									}
-								} else {
-									for (let n of networks[category]) {
-										for (let c of Object.values(n)) {
-											for (let list of Object.values(c)) {
-												checkNotList = checkNotList.concat(list);
-											}
-										}
-									}
-								}
-							}
 						}
 					}
 				});
 			chrome.storage.local.set({
 				CHECKLIST: checkList,
-				CHECKNOTLIST: checkNotList,
 			});
 
 			let domains = result.DOMAINS;
@@ -202,12 +165,9 @@ export async function updatePrefScheme4() {
 				// by default, do not send GPC signals
 				let value = false;
 				// send GPC signals if the currentDomain is in the checkList
-				if (checkList.includes(currentDomain)) value = true;
+				if (result.USER_CHOICES["Others"] == true) value = true;
 				else {
-					// send GPC is the currentDomain is not on the checkList, but the user has chosen Others and the currentDomain is not on the checknotlist
-					if (result.USER_CHOICES["Others"] == true) {
-						if (!checkNotList.includes(currentDomain)) value = true;
-					}
+					if (checkList.includes(currentDomain)) value = true;
 				}
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain].bool = value;
