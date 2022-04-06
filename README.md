@@ -42,6 +42,7 @@ Follow the instructions below in order to download and use this browser extensio
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
 ## Files and Directories in this Repo
+- `src/_metadata/generated_indexed_rulesets:
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
   - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
@@ -58,7 +59,6 @@ Follow the instructions below in order to download and use this browser extensio
 - `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
-- `src/popup`: Contains the UI elements and scripts for the popup inside the extensions bar.
 - `src/registration`: Contains all user registration scripts relevant for performing the research
   - html files for different user schemes
     - `src/registration/oneQuestion.html`
@@ -69,11 +69,14 @@ Follow the instructions below in order to download and use this browser extensio
     - `src/registration/profile.js`
     - `src/registration/questionnaire.js`
     - `src/registration/registration.js`
+- `src/rulesets`:
 - `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
-- `src/domainlist.js`: This is the main JS file that allows the extension to communicate with the `domain list` stored in the browser's local storage.
+- `src/editRules.js`:
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
+- `src/thirdPartyData.js`:
+- `src/updateSignal.js`:
 - `src/util.js`: This provided utility functions for `background.js`
 
 
@@ -120,7 +123,7 @@ This is our **Privacy Profile** scheme. Upon running the extension, users will b
 
 This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
 
-<img width="1267" alt="Screen Shot 2022-01-10 at 10 20 25 AM" src="https://user-images.githubusercontent.com/54873610/148790754-31236b00-bb07-4b63-b082-9a83afd56bd6.png">
+<img width="1135" alt="Screen Shot 2022-04-06 at 7 30 14 PM" src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
 
 ### Scheme 5
 
@@ -172,7 +175,7 @@ This category would be relevant for schemes where the mute button is present, th
 
 Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. The team has tried its best to ensure the UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalies of the banner are not affected.
 
-Because of the ambiguity of ad interactions, our method of recording them is not full proof. While a vast majority of ad interaction data is correcrt, the extension may incorrectly record or miss a user clicking on an ad.
+Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may incorrectly record or miss a user clicking on an ad.
 
 ## Future Directions
 
