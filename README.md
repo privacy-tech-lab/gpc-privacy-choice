@@ -42,7 +42,7 @@ Follow the instructions below in order to download and use this browser extensio
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
 ## Files and Directories in this Repo
-- `src/_metadata/generated_indexed_rulesets:
+- `src/_metadata/generated_indexed_rulesets`:
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
   - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
