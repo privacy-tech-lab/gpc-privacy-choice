@@ -190,7 +190,6 @@ export const enable = () => {
 		.then((response) => response.text())
 		.then((value) => {
 			optout_headers = JSON.parse(value);
-			// chrome.webRequest.onBeforeSendHeaders.addListener(addHeaders, {urls: ["<all_urls>"]}, ["requestHeaders", "extraHeaders", "blocking"]);
 			chrome.storage.local.set({ ENABLED: true });
 			// setCache(enabled=true)
 		})

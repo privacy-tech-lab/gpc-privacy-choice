@@ -9,8 +9,7 @@
 		"tabs",
 		"contentSettings",
 		"geolocation",
-		"declarativeNetRequest",
-		"scripting"
+		"declarativeNetRequest"
 	],
 	"host_permissions": ["<all_urls>"],
 	"action": {
