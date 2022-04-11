@@ -14,6 +14,10 @@
 
 This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
 
+<p align="center">
+  <a href="https://chrome.google.com/webstore/detail/gpc-privacy-choice/ambkmcacbikgdchhjohhkfngeahpolnk"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/blob/main/chrome-web-store-badge.png" width="200px" alt="Chrome Web Store badge"></a>
+<p>
+
 GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). **Kuba Alicki**, **Daniel Knopf**, **Abdallah Salia** contributed earlier.
 
 ## Developer's Guide On Using GPC Privacy Choice
@@ -42,6 +46,7 @@ Follow the instructions below in order to download and use this browser extensio
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
 ## Files and Directories in this Repo
+
 - `src/_metadata/generated_indexed_rulesets`:
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
@@ -55,7 +60,7 @@ Follow the instructions below in order to download and use this browser extensio
 - `src/img`: Contains all image resources
 - `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
   - `src/json/headers.json`: Contains the opt out HTTP header specs.
-  - `src/json/services.json`: 
+  - `src/json/services.json`:
 - `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all of the JS libraries used in the browser extension.
 - `src/options`: Contains the UI elements and scripts for the supplemental options page.
@@ -78,7 +83,6 @@ Follow the instructions below in order to download and use this browser extensio
 - `src/thirdPartyData.js`:
 - `src/updateSignal.js`:
 - `src/util.js`: This provided utility functions for `background.js`
-
 
 ## Third Party Libraries
 
@@ -182,5 +186,5 @@ Because of the ambiguity of ad interactions, our method of recording them is not
 The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
 
 <p align="center">
-  <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+  <a href="https://www.privacytechlab.org/"><img src="https://github.com/privacy-tech-lab/blob/main/gpc-privacy-choice/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
 </p>
