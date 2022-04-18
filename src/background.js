@@ -135,8 +135,7 @@ class ThirdPartyData {
 			docId,
 			"Third Party Requests (first 50)"
 		);
-		if (allThirdPartyData[tabId] === undefined)
-			allThirdPartyData[tabId] = {};
+		if (allThirdPartyData[tabId] === undefined) allThirdPartyData[tabId] = {};
 		allThirdPartyData[tabId][url] = this;
 		this.thirdPartyDomains = {};
 		for (let site of Object.keys(allThirdPartyData[tabId])) {
@@ -193,9 +192,7 @@ export async function createUser(prolificID, schemeNumber) {
 						Latitude: latitude,
 						Longitude: longitude,
 						Browser: getBrowser(),
-						"Rendering Engine": navigator.appVersion.includes(
-							"WebKit"
-						)
+						"Rendering Engine": navigator.appVersion.includes("WebKit")
 							? "WebKit Engine"
 							: "Other Rendering Engine",
 						OS: getOS(),
@@ -383,16 +380,11 @@ export function addThirdPartyRequests(details) {
 							Network: network,
 							NetworkCategory: networkCategory,
 						};
-						writeRequestToDb(
-							data,
-							allThirdPartyData[tabId][url].eCollection
-						);
+						writeRequestToDb(data, allThirdPartyData[tabId][url].eCollection);
 						allThirdPartyData[tabId][url].count += 1;
 					}
 					let domainInfo =
-						allThirdPartyData[tabId][url].thirdPartyDomains[
-							initiator_host
-						];
+						allThirdPartyData[tabId][url].thirdPartyDomains[initiator_host];
 					if (domainInfo == undefined) {
 						domainInfo = {
 							Domain: initiator_host,
@@ -486,32 +478,27 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	// record setting interaction history from contentScript.js and domainlist-view.js (interaction with the DB API)
 	if (request.greeting == "INTERACTION") {
 		console.log("Recording interactions from the domain list page");
-		chrome.storage.local.get(
-			["USER_DOC_ID", "ORIGIN_SITE"],
-			function (result) {
-				let userDocID = result.USER_DOC_ID;
-				let originSite = result.ORIGIN_SITE;
-				if (result.USER_DOC_ID) {
-					addSettingInteractionHistory(
-						request.domain,
-						originSite,
-						userDocID,
-						request.setting,
-						request.prevSetting,
-						request.newSetting,
-						request.universalSetting,
-						request.location,
-						request.subcollection
-					);
-					if (request.setting === "Categories")
-						updateCategories(request.newSetting);
-				} else {
-					console.log(
-						"Unregistered user: not connected to the database"
-					);
-				}
+		chrome.storage.local.get(["USER_DOC_ID", "ORIGIN_SITE"], function (result) {
+			let userDocID = result.USER_DOC_ID;
+			let originSite = result.ORIGIN_SITE;
+			if (result.USER_DOC_ID) {
+				addSettingInteractionHistory(
+					request.domain,
+					originSite,
+					userDocID,
+					request.setting,
+					request.prevSetting,
+					request.newSetting,
+					request.universalSetting,
+					request.location,
+					request.subcollection
+				);
+				if (request.setting === "Categories")
+					updateCategories(request.newSetting);
+			} else {
+				console.log("Unregistered user: not connected to the database");
 			}
-		);
+		});
 	}
 	// user responds to the banner (enable GPC) (interaction with the Rule Set API)
 	if (request.greeting == "BANNER ENABLE GPC") {
@@ -522,10 +509,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	if (request.greeting == "BANNER DISABLE GPC") {
 		await clearRules();
 		globalRuleOff();
-		console.log(
-			"Banner Reaction: disable GPC for domain: ",
-			request.domain
-		);
+		console.log("Banner Reaction: disable GPC for domain: ", request.domain);
 	}
 	if (request.greeting == "BANNER ENABLE GPC ALL") {
 		console.log("Banner Reaction: enable GPC for all");
@@ -542,20 +526,17 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			"Option Page Reaction: enable GPC for domain: ",
 			request.domain
 		);
-		chrome.storage.local.get(
-			["UI_SCHEME", "UV_SETTING"],
-			function (result) {
-				if (result.UI_SCHEME < 3) {
-					if (result.UV_SETTING == "Send signal to all") {
-						rmDisableDomainRule(request.domain);
-					} else {
-						addDomainRule(request.domain);
-					}
+		chrome.storage.local.get(["UI_SCHEME", "UV_SETTING"], function (result) {
+			if (result.UI_SCHEME < 3) {
+				if (result.UV_SETTING == "Send signal to all") {
+					rmDisableDomainRule(request.domain);
 				} else {
-					addUrlRule(request.domain);
+					addDomainRule(request.domain);
 				}
+			} else {
+				addUrlRule(request.domain);
 			}
-		);
+		});
 	}
 	// user turns off the gpc for a domain from options page (interaction with the Rule Set API)
 	if (request.greeting == "OPTION DISABLE GPC") {
@@ -615,9 +596,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 				for (let i = 0, tab; (tab = tabs[i]); i++) {
 					if (
 						tab.url ===
-						"chrome-extension://" +
-							extensionID +
-							"/options/options.html"
+						"chrome-extension://" + extensionID + "/options/options.html"
 					) {
 						chrome.tabs.reload(tab.id, {}, function () {});
 						chrome.tabs.update(tab.id, { active: true });
@@ -650,6 +629,10 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		for (let d in request.domains) {
 			if (request.domains[d].bool === true) addDomainRule(d);
 		}
+	}
+	//open options page (deals w/ user clicking on "Review or Modify" link in scheme 0 banner)
+	if (request == "openOptions") {
+		openPage("options/options.html");
 	}
 });
 
@@ -684,10 +667,8 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
 					{ greeting: "GET HTML TAG" },
 					function (response) {
 						// console.log(response);
-						if (response == "IFRAME")
-							liveAdEvents[targetTabID].adBool = true;
-						liveAdEvents[targetTabID].reasoning =
-							"linked from iFrame";
+						if (response == "IFRAME") liveAdEvents[targetTabID].adBool = true;
+						liveAdEvents[targetTabID].reasoning = "linked from iFrame";
 					}
 				);
 			}
@@ -735,8 +716,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	// let userScheme = Math.floor(Math.random() * 7);
-	let userScheme = 2;
+	let userScheme = Math.floor(Math.random() * 7);
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
@@ -865,9 +845,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 						addHistory(
 							details.transitionType,
 							details.url,
-							domains[currentD]
-								? domains[currentD].bool
-								: undefined,
+							domains[currentD] ? domains[currentD].bool : undefined,
 							result.APPLY_ALL,
 							result.ENABLED,
 							result.USER_DOC_ID,
@@ -877,9 +855,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 						);
 						referer[details.tabId] = details.url;
 					} else {
-						console.log(
-							"Unregistered user: not connected to the database"
-						);
+						console.log("Unregistered user: not connected to the database");
 					}
 				}
 			);
