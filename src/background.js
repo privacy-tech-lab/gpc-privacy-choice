@@ -219,7 +219,7 @@ export async function createUser(prolificID, schemeNumber) {
 }
 
 // Add users' browsing entries to firestore
-export function addHistory(
+function addHistory(
 	transitionType,
 	site,
 	GPC,
@@ -228,10 +228,8 @@ export function addHistory(
 	currentUserDocID,
 	tabId,
 	uiScheme,
-	time,
 	referer
 ) {
-	console.log("addHistory function is triggered!");
 	let date = new Date();
 	if (referer != site || referer === undefined) {
 		if (transitionType != "link") {
@@ -875,7 +873,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 							result.USER_DOC_ID,
 							details.tabId,
 							result.UI_SCHEME,
-							details.timeStamp,
 							referer[details.tabId]
 						);
 						referer[details.tabId] = details.url;
