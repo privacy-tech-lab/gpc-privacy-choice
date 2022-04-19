@@ -1,91 +1,164 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<title>User Registration Page</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../libs-css/uikit.min.css" />
+		<link rel="stylesheet" href="../libs-css/animate.compat.css" />
+		<script src="../libs-js/uikit.min.js"></script>
+		<script src="../libs-js/mustache.js"></script>
+		<script src="thirdPartyCookies.js"></script>
+	</head>
 
-<head>
-  <title>User Registration Page</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../libs-css/uikit.min.css" />
-  <link rel="stylesheet" href="../libs-css/animate.compat.css" />
-  <script src="../libs-js/uikit.min.js"></script>
-  <script src="../libs-js/mustache.js"></script>
-  <script src="thirdPartyCookies.js"></script>
-</head>
-
-<body>
-  <div class="uk-section">
-    <div class="uk-container loading" style="display: none;">
-      <div class="uk-position-center uk-text-large" uk-spinner="ratio: 3">Give us a second to initialize your
-        registration ...</div>
-    </div>
-    <div class="uk-container welcome">
-      <div id="welcome-modal" uk-modal>
-        <div class="uk-modal-dialog uk-margin-auto-vertical">
-          <div class="uk-modal-header uk-flex uk-flex-column uk-flex-middle">
-            <img src="../img/green_tick.png" alt="" style="margin: 0px;">
-            <h2 class="uk-align-center text-color-darker">You are all set!</h2>
-          </div>
-          <div class="uk-modal-body" style="font-size: 15px; text-align: center;">
-            Your registration was successful!
-          </div>
-          <div class="uk-modal-footer">
-            <button id="welcome-modal-button" class="uk-button uk-button-primary uk-align-right"
-              style="margin: 0px 10px;">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="uk-container main">
-      <h2 class="uk-h1 uk-text-center">GPC Privacy Choice Research</h2>
-      <hr>
-      <div class="uk-card uk-card-default uk-grid-collapse uk-margin" uk-grid>
-        <div>
-          <div class="uk-card-body">
-            <div class="uk-flex-middle" uk-grid>
-              <div class="uk-width-2-3@m">
-                <h3 class="uk-card-title">Welcome!</h3>
-                <p>
-                  We are computer science researchers at Wesleyan University, a liberal arts University in Connecticut, United States. 
-                  We are studying the usability of a new privacy feature in web browsers called <b>Global Privacy Control (GPC)</b>.
-                </p>
-              </div>
-              <div class="uk-width-1-3@m uk-flex-first">
-                <img class="uk-align-center" src="../img/plt_logo.png" alt="privacy tech lab logo">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h1 class="uk-heading-line uk-text-center"><span>What is GPC?</span></h1>
-      <p class="uk-h5 uk-text-bold uk-text-italic">
-        <b>Global Privacy Control (GPC)</b> is an online privacy standard in development at the W3C.
-      </p>
-      <ul class="uk-list uk-list-bullet">
-        <li>Enable GPC to <b>opt out from data selling/sharing</b></li>
-        <li>Whether a website must respect <b>your opt out depends on local law.</b> E.g., if you reside in California, the
-          California Consumer Privacy Act requires so</li>
-        <li>Websites respecting GPC can still collect your data and show ads, but <b>they are no longer allowed to disclose
-          your data to advertisers</b></li>
-      </ul>
-      <a href="https://globalprivacycontrol.org/" target="_blank">Learn More about GPC</a>
-      <h1 class="uk-heading-line uk-text-center"><span>Participant Registration</span></h1>
-      <p class="uk-h5 uk-text-bold uk-text-italic">Let's get you registered!</p>
-      <form>
-        <fieldset class="uk-fieldset">
-          <div class="uk-margin">
-            <input id="prolific-id" class="uk-input" type="text" placeholder="Prolific ID">
-          </div>
-          <div class="uk-margin">
-            <input id="password" class="uk-input" type="text" placeholder="Access Password">
-          </div>
-        </fieldset>
-      </form>
-      <div class="form-validation uk-margin-medium-top"></div>
-      <button class="uk-button uk-button-secondary uk-width-1-1 submit-choice">Submit</button>
-      <p id="3rd_party_cookie_test_results" class='loading' style="visibility: hidden;">Testing&hellip;</p>
-    </div>
-  </div>
-  <script type="module" src="registration.js"></script>
-</body>
-
+	<body>
+		<div class="uk-section">
+			<div class="uk-container loading" style="display: none">
+				<div
+					class="uk-position-center uk-text-large"
+					uk-spinner="ratio: 3"
+				>
+					Give us a second to initialize your registration ...
+				</div>
+			</div>
+			<div class="uk-container welcome">
+				<div id="welcome-modal" uk-modal>
+					<div class="uk-modal-dialog uk-margin-auto-vertical">
+						<div
+							class="uk-modal-header uk-flex uk-flex-column uk-flex-middle"
+						>
+							<img
+								src="../img/green_tick.png"
+								alt=""
+								style="margin: 0px"
+							/>
+							<h2 class="uk-align-center text-color-darker">
+								You are all set!
+							</h2>
+						</div>
+						<div
+							class="uk-modal-body"
+							style="font-size: 15px; text-align: center"
+						>
+							Your registration was successful!
+						</div>
+						<div class="uk-modal-footer">
+							<button
+								id="welcome-modal-button"
+								class="uk-button uk-button-primary uk-align-right"
+								style="margin: 0px 10px"
+							>
+								Close
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="uk-container main">
+				<h2 class="uk-h1 uk-text-center">
+					GPC Privacy Choice Research
+				</h2>
+				<hr />
+				<div
+					class="uk-card uk-card-default uk-grid-collapse uk-margin"
+					uk-grid
+				>
+					<div>
+						<div class="uk-card-body">
+							<div class="uk-flex-middle" uk-grid>
+								<div class="uk-width-2-3@m">
+									<h3 class="uk-card-title">Welcome!</h3>
+									<p>
+										We are computer science researchers at
+										Wesleyan University, a liberal arts
+										University in Connecticut, United
+										States. We are studying the usability of
+										a new privacy feature in web browsers
+										called
+										<b>Global Privacy Control (GPC)</b>.
+									</p>
+								</div>
+								<div class="uk-width-1-3@m uk-flex-first">
+									<img
+										class="uk-align-center"
+										src="../img/plt_logo.png"
+										alt="privacy tech lab logo"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h1 class="uk-heading-line uk-text-center">
+					<span>What is GPC?</span>
+				</h1>
+				<p class="uk-h5 uk-text-bold uk-text-italic">
+					<b>Global Privacy Control (GPC)</b> is an online privacy
+					standard in development at the W3C.
+				</p>
+				<ul class="uk-list uk-list-bullet">
+					<li>
+						Enable GPC to <b>opt out from data selling/sharing</b>
+					</li>
+					<li>
+						Whether a website must respect
+						<b>your opt out depends on local law.</b> E.g., if you
+						reside in California, the California Consumer Privacy
+						Act requires so
+					</li>
+					<li>
+						Websites respecting GPC can still collect your data and
+						show ads, but
+						<b
+							>they are no longer allowed to disclose your data to
+							advertisers</b
+						>
+					</li>
+				</ul>
+				<a href="https://globalprivacycontrol.org/" target="_blank"
+					>Learn More about GPC</a
+				>
+				<h1 class="uk-heading-line uk-text-center">
+					<span>Participant Registration</span>
+				</h1>
+				<p class="uk-h5 uk-text-bold uk-text-italic">
+					Let's get you registered!
+				</p>
+				<form>
+					<fieldset class="uk-fieldset">
+						<div class="uk-margin">
+							<input
+								id="prolific-id"
+								class="uk-input"
+								type="text"
+								placeholder="Prolific ID"
+							/>
+						</div>
+						<div class="uk-margin">
+							<input
+								id="password"
+								class="uk-input"
+								type="text"
+								placeholder="Access Password"
+							/>
+						</div>
+					</fieldset>
+				</form>
+				<div class="form-validation uk-margin-medium-top"></div>
+				<button
+					class="uk-button uk-button-secondary uk-width-1-1 submit-choice"
+				>
+					Submit
+				</button>
+				<p
+					id="3rd_party_cookie_test_results"
+					class="loading"
+					style="visibility: hidden"
+				>
+					Testing&hellip;
+				</p>
+			</div>
+		</div>
+		<script type="module" src="registration.js"></script>
+	</body>
 </html>
