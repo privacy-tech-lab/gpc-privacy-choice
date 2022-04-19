@@ -112,7 +112,7 @@ function addMuteEventListener(currentDomain) {
 	let endMuteTime;
 	let currentDate = new Date();
 	let time = currentDate.getTime();
-	let muteTime = 21600000;
+	let muteTime = 43200000;
 	endMuteTime = time + muteTime;
 	chrome.storage.local.set({ MUTED: [muteBool, endMuteTime] });
 	removeBanner();
