@@ -95,6 +95,14 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 -   [uikit](https://github.com/uikit/uikit)
 -   [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
 
+## GPC Privacy Choice Architeatural Overview
+
+The overview of GPC Privacy Choice extension architecture can be found in the figure below.
+
+<p align="center">
+  <img src="./src/img/gpc-choice-architecture.png" width="500px" alt="GPC Privacy Choice Architecture"></a>
+<p>
+
 ## Comprehensive Scheme List
 
 The GPC Privacy Choice extension is made up of 7 different schemes, each having different defining features. Upon downloading, a user could end up with any one of the different schemes. The purpose behind having so many variations is to provide researchers with valuable information on how users make privacy choices when given varying levels of usability. Listed below are the main components of each scheme.
@@ -174,6 +182,7 @@ This category records any privacy decisions made from the banner (schemes 0, 1 o
 This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
 
 <img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
+
 
 ## Existing Issues For The Extension
 
