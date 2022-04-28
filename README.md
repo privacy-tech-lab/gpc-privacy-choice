@@ -12,7 +12,7 @@
 
 # GPC Privacy Choice
 
-This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices.
+This browser extension is entirely for research purposes, allowing us to better understand the inner-workings of users' decisions concerning privacy choices. Its primary focus is the exploration of different user interaction schemes. However, it also sends header-based GPC signals (though, not via the DOM).
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/gpc-privacy-choice/ambkmcacbikgdchhjohhkfngeahpolnk"><img src="./src/img/chrome-web-store-badge.png" width="200px" alt="Chrome Web Store badge"></a>
@@ -47,53 +47,53 @@ Follow the instructions below in order to download and use this browser extensio
 
 ## Files and Directories in this Repo
 
--   `src/_metadata/generated_indexed_rulesets`:
--   `src/firebase`: Contains all the Firebase related configurations/scripts
-    -   `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
-    -   `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
-    -   `src/firebase/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
-    -   locally hosted firestore script for connecting with the data base
-        -   `src/firebase/firebase-app.js`
-        -   `src/firebase/firebase-auth.js`
-        -   `src/firebase/firebase-firestore.js`
-    -   `src/firebase/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
--   `src/img`: Contains all image resources
--   `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
-    -   `src/json/headers.json`: Contains the opt out HTTP header specs.
-    -   `src/json/services.json`:
--   `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
--   `src/libs-js`: Contains all of the JS libraries used in the browser extension.
--   `src/options`: Contains the UI elements and scripts for the supplemental options page.
--   `src/registration`: Contains all user registration scripts relevant for performing the research
-    -   html files for different user schemes
-        -   `src/registration/oneQuestion.html`
-        -   `src/registration/profile.html`
-        -   `src/registration/questionnaire.html`
-        -   `src/registration/registration.html`
-    -   javascript files for registering users
-        -   `src/registration/profile.js`
-        -   `src/registration/questionnaire.js`
-        -   `src/registration/registration.js`
--   `src/rulesets`:
--   `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
--   `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
--   `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
--   `src/editRules.js`:
--   `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
--   `src/thirdPartyData.js`:
--   `src/updateSignal.js`:
--   `src/util.js`: This provided utility functions for `background.js`
+- `src/_metadata/generated_indexed_rulesets`:
+- `src/firebase`: Contains all the Firebase related configurations/scripts
+  - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
+  - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
+  - `src/firebase/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
+  - locally hosted firestore script for connecting with the data base
+    - `src/firebase/firebase-app.js`
+    - `src/firebase/firebase-auth.js`
+    - `src/firebase/firebase-firestore.js`
+  - `src/firebase/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
+- `src/img`: Contains all image resources
+- `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
+  - `src/json/headers.json`: Contains the opt out HTTP header specs.
+  - `src/json/services.json`:
+- `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
+- `src/libs-js`: Contains all of the JS libraries used in the browser extension.
+- `src/options`: Contains the UI elements and scripts for the supplemental options page.
+- `src/registration`: Contains all user registration scripts relevant for performing the research
+  - html files for different user schemes
+    - `src/registration/oneQuestion.html`
+    - `src/registration/profile.html`
+    - `src/registration/questionnaire.html`
+    - `src/registration/registration.html`
+  - javascript files for registering users
+    - `src/registration/profile.js`
+    - `src/registration/questionnaire.js`
+    - `src/registration/registration.js`
+- `src/rulesets`:
+- `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
+- `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
+- `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
+- `src/editRules.js`:
+- `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
+- `src/thirdPartyData.js`:
+- `src/updateSignal.js`:
+- `src/util.js`: This provided utility functions for `background.js`
 
 ## Third Party Libraries
 
 The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
--   [animate.css](https://github.com/animate-css/animate.css)
--   [FileSaver.js](https://github.com/eligrey/FileSaver.js)
--   [mustache.js](https://github.com/janl/mustache.js)
--   [psl (Public Suffix List)](https://github.com/lupomontero/psl)
--   [uikit](https://github.com/uikit/uikit)
--   [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
+- [animate.css](https://github.com/animate-css/animate.css)
+- [FileSaver.js](https://github.com/eligrey/FileSaver.js)
+- [mustache.js](https://github.com/janl/mustache.js)
+- [psl (Public Suffix List)](https://github.com/lupomontero/psl)
+- [uikit](https://github.com/uikit/uikit)
+- [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
 
 ## GPC Privacy Choice Architeatural Overview
 
@@ -183,16 +183,11 @@ This category would be relevant for schemes where the mute button is present, th
 
 <img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
 
-
 ## Existing Issues For The Extension
 
 Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. The team has tried its best to ensure the UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalies of the banner are not affected.
 
 Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may incorrectly record or miss a user clicking on an ad.
-
-## Future Directions
-
-The team is currently working on the upgrade from [Manifest V2 to Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/). However, this process is restricted due to the face that service workers in [MV3 currently do not support Firebase Cloud Firestore](https://github.com/privacy-tech-lab/gpc-privacy-choice/issues/144). Moving into the future, we tentatively decide to switch into another database if the support for Cloud Firestore is still missing.
 
 <p align="center">
   <a href="https://www.privacytechlab.org/"><img src="./src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
