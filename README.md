@@ -20,7 +20,7 @@ This browser extension is entirely for research purposes, allowing us to better 
 
 GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). **Kuba Alicki**, **Daniel Knopf**, **Abdallah Salia** contributed earlier.
 
-## Developer's Guide On Using GPC Privacy Choice
+## 1. Developer's Guide On Using GPC Privacy Choice
 
 Follow the instructions below in order to download and use this browser extension.
 
@@ -45,7 +45,7 @@ Follow the instructions below in order to download and use this browser extensio
 5. Turn on the developer mode, and then click the `Load unpacked`. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
 
-## Files and Directories in this Repo
+## 2. Files and Directories in this Repo
 
 - `src/_metadata/generated_indexed_rulesets`:
 - `src/firebase`: Contains all the Firebase related configurations/scripts
@@ -84,7 +84,7 @@ Follow the instructions below in order to download and use this browser extensio
 - `src/updateSignal.js`:
 - `src/util.js`: This provided utility functions for `background.js`
 
-## Third Party Libraries
+## 3. Third Party Libraries
 
 The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
@@ -95,15 +95,15 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - [uikit](https://github.com/uikit/uikit)
 - [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
 
-## GPC Privacy Choice Architectural Overview
+## 4. GPC Privacy Choice Architectural Overview
 
 The overview of GPC Privacy Choice extension architecture can be found in the figure below.
 
 <p align="center">
-  <img src="./src/img/gpc-choice-architecture.png" width="500px" alt="GPC Privacy Choice Architecture"></a>
+  <img src="./src/img/gpc-choice-architecture.png" width="800" alt="GPC Privacy Choice Architecture"></a>
 <p>
 
-## Comprehensive Scheme List
+## 5. Comprehensive Scheme List
 
 The GPC Privacy Choice extension is made up of 7 different schemes, each having different defining features. Upon downloading, a user could end up with any one of the different schemes. The purpose behind having so many variations is to provide researchers with valuable information on how users make privacy choices when given varying levels of usability. Listed below are the main components of each scheme.
 
@@ -111,45 +111,59 @@ The GPC Privacy Choice extension is made up of 7 different schemes, each having 
 
 Users are presented the **GPC Privacy Choice Banner** on each new site they visit with no **apply-all** option. There is instead a **snooze** button that, upon being selected, will prevent the banner from popping up on new sites for 6 hours. The domain list is present on the Options Page.
 
-<img width="298" alt="0" src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
+<p align="center">
+  <img width="250" alt="scheme 0 screenshot" src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
+</p>
 
 ### Scheme 1
 
 This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
 
-<img width="297" alt="1" src="https://user-images.githubusercontent.com/54873610/148790364-f41b418d-a6ec-41f4-bc79-78647f2e4096.png">
+<p align="center">
+  <img width="250" alt="scheme 1 screenshot" src="https://user-images.githubusercontent.com/54873610/148790364-f41b418d-a6ec-41f4-bc79-78647f2e4096.png">
+</p>
 
 ### Scheme 2
 
 This is somewhat a combination of **Scheme 0** and **Scheme 1**. The **GPC Privacy Choice Banner** contains both the **apply-all** option as well as the **snooze** button. All **universal toggles**, as well as the domain list may be accessed from the Options Page.
 
-<img width="298" alt="2" src="https://user-images.githubusercontent.com/54873610/148790378-31a501e2-3e63-4096-b74a-695b02405468.png">
+<p align="center">
+  <img width="250" alt="scheme 2 screenshot" src="https://user-images.githubusercontent.com/54873610/148790378-31a501e2-3e63-4096-b74a-695b02405468.png">
+</p>
 
 ### Scheme 3
 
 This is our **Privacy Profile** scheme. Upon running the extension, users will be prompted to choose the privacy profile that they find most similar to themselves. Their privacy choices will then be personalized based on the selected profile. They may further personalize their privacy choices by accessing the domain list on the Options Page.
 
-<img width="1261" alt="3" src="https://user-images.githubusercontent.com/54873610/148790400-24901af2-596c-439d-bcac-34318a3a685f.png">
+<p align="center">
+  <img width="800" alt="scheme 3 screenshot" src="https://user-images.githubusercontent.com/54873610/148790400-24901af2-596c-439d-bcac-34318a3a685f.png">
+</p>
 
 ### Scheme 4
 
 This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
 
-<img width="1135" alt="Screen Shot 2022-04-06 at 7 30 14 PM" src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
+<p align="center">
+  <img width="800" alt="scheme 4 screenshot" src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
+</p>
 
 ### Scheme 5
 
 A combination of **Scheme 1** and **Scheme 3**, this is our **Machine-Learning** scheme. The user is randomly presented 10 banners in total on websites they visit. Their choices are recorded by the extension, which it then uses to make an educated selection on which **Privacy Profile** would suit them most. No banners are shown beyond the initial 10, and after the learning period is over users may change their privacy profile by accessing the Options Page.
 
-<img width="602" alt="Screen Shot 2022-01-10 at 10 17 03 AM" src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
+<p align="center">
+  <img width="400" alt="scheme 5 screenshot" src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
+</p>
 
 ### Scheme 6
 
 This scheme is the most simple of all. Users are initially prompted as to whether they'd like to send **GPC Signals** to all websites they visit or not. They may change this preference from the Options Page, but no domain list is present, so they cannot personalize their choices.
 
-<img width="1258" alt="Screen Shot 2022-01-10 at 10 17 39 AM" src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
+<p align="center">
+  <img width="800" alt="scheme 6 screenshot" src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
+</p>
 
-## Data Collection
+## 6. Data Collection
 
 The GPC Privacy Choice browser extension records how users interact with different sites and make privacy choices. In the database, each user is represented by a unique ID, and all of their interactions are recorded under that ID. Below are some different categories of data that might be recorded. **DISCLAIMER: The GPC Privacy Choice browser extension records all of the different sites visited by users, as there could be possible relationships between the types of sites visited and the corresponding privacy choice made.**
 
@@ -157,41 +171,50 @@ The GPC Privacy Choice browser extension records how users interact with differe
 
 This category records the information of each site the user is on while using the browser extension.
 
-<img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138903258-935eec9d-7845-487f-ab0f-0e53410623c2.png">
+<p align="center">
+  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138903258-935eec9d-7845-487f-ab0f-0e53410623c2.png">
+</p>
 
-#### Ad Interaction Detection
+### Ad Interaction Detection
 
 Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect list.
 
-<img width="757" alt="Screen Shot 2022-01-10 at 10 20 23 AM" src="https://user-images.githubusercontent.com/77850710/148790993-f8db77c0-aa2e-40b6-9fca-50f0aa0aed76.png">
+<p align="center">
+  <img width="600" alt="" src="https://user-images.githubusercontent.com/77850710/148790993-f8db77c0-aa2e-40b6-9fca-50f0aa0aed76.png">
+</p>
 
 ### Privacy Configuration Interaction History
 
 This category records the privacy decisions users might make on schemes 3, 4, 5 and 6 from the user registration page. That is, more general privacy decisions based on groups or categorizations of tracking
 
-<img width="920" alt="Screen Shot 2021-10-26 at 10 20 03 AM" src="https://user-images.githubusercontent.com/54873610/138898583-863899bf-367a-4312-812a-e5b56b561ec4.png">
+<p align="center">
+  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138898583-863899bf-367a-4312-812a-e5b56b561ec4.png">
+</p>
 
 ### Domain Interaction History
 
 This category records any privacy decisions made from the banner (schemes 0, 1 or 2), as well as changes made from the Options Page for any scheme. More specific privacy decisions are handled in this category, personalized choices for individual domains.
 
-<img width="920" alt="Screen Shot 2021-10-26 at 10 17 39 AM" src="https://user-images.githubusercontent.com/54873610/138897990-302be371-ec1b-469c-a5f0-962955b4d035.png">
+<p align="center">
+  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138897990-302be371-ec1b-469c-a5f0-962955b4d035.png">
+</p>
 
-### Mute Interaction History
+### Snooze Interaction History
 
-This category would be relevant for schemes where the mute button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the mute button.
-
-<img width="919" alt="Screen Shot 2021-10-26 at 10 44 25 AM" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
-
-## Existing Issues
-
-- Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. We have tried our best to ensure UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalities of the banner are not affected.
-- Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may incorrectly record or miss a user clicking on an ad.
-- For scheme 6, `GPC Current Site Status` does not behave predictably. It is either recorded as `False` or `Unset`. However, for scheme 6, `GPC Current Site Status` is irrelevant because this scheme is entirely about the global status. The respective `GPC Global Status` is working properly.
+This category would be relevant for schemes where the snooze button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the snooze button.
 
 <p align="center">
-  <a href="https://www.privacytechlab.org/"><img src="./src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
 </p>
+
+## 7. Known Issues
+
+- Our extension is sending [header-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#the-sec-gpc-header-field-for-http-requests). However, we **[did not implement DOM-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#javascript-property-to-detect-preference)**.
+- Due to lack of control on the styling of injected HTML, the **banner UI may vary on certain sites**. We have tried our best to ensure UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalities of the banner are not affected.
+- Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may **incorrectly record or miss a user clicking on an ad**.
+- **For scheme 6, `GPC Current Site Status` does not behave predictably.** It is either recorded as `False` or `Unset`. However, for scheme 6, `GPC Current Site Status` is irrelevant because this scheme is entirely about the global status. The respective `GPC Global Status` is working properly.
+
+## 8. Thank You!
 
 <p align="center"><strong>We would like to thank our financial supporters!</strong></p><br>
 
@@ -199,7 +222,7 @@ This category would be relevant for schemes where the mute button is present, th
 
 <p align="center">
   <a href="https://sloan.org/grant-detail/9631">
-    <img class="img-fluid" src="./src/img/sloan_logo.png" height="100px" alt="Sloan Foundation Logo">
+    <img class="img-fluid" src="./src/img/sloan_logo.jpg" height="100px" alt="Sloan Foundation Logo">
   </a>
 </p>
 
@@ -215,3 +238,9 @@ This category would be relevant for schemes where the mute button is present, th
 </p>
 
 <p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.</p>
+
+##
+
+<p align="center">
+  <a href="https://www.privacytechlab.org/"><img src="./src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+</p>
