@@ -12,7 +12,7 @@
 
 # GPC Privacy Choice
 
-This research browser extension explores usable privacy choice mechanisms, particularly, for [Global Privacy Control](https://globalprivacycontrol.org/). Its primary focus is the exploration of different user interaction schemes. However, it actually sends header-based GPC signals as well.
+This research browser extension explores usable privacy choice schemes, particularly, for [Global Privacy Control (GPC)](https://globalprivacycontrol.org/). It actually sends header-based GPC signals as well.
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/gpc-privacy-choice/ambkmcacbikgdchhjohhkfngeahpolnk"><img src="./src/img/chrome-web-store-badge.png" width="200px" alt="Chrome Web Store badge"></a>
