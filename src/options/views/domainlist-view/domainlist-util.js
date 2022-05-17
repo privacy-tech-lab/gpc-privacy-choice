@@ -81,25 +81,27 @@ async function addDomainToggleListener(elementId, domain) {
 }
 
 // Toggle delete buttons for each domain
-function addDeleteButtonListener(domain) {
-	document.getElementById(`delete ${domain}`).addEventListener("click", () => {
-		deleteDomain(domain);
-		document.getElementById(`li ${domain}`).remove();
-		// delegate the edit of rule set to the background
-		chrome.storage.local.get(["UV_SETTING"], function (result) {
-			chrome.runtime.sendMessage({
-				greeting: "INTERACTION",
-				domain: domain,
-				setting: "Delete domain",
-				prevSetting: null,
-				newSetting: null,
-				universalSetting: result.UV_SETTING,
-				location: "Options page",
-				subcollection: "Domain",
-			});
-		});
-	});
-}
+// function addDeleteButtonListener(domain) {
+// 	document
+// 		.getElementById(`delete ${domain}`)
+// 		.addEventListener("click", () => {
+// 			deleteDomain(domain);
+// 			document.getElementById(`li ${domain}`).remove();
+// 			// delegate the edit of rule set to the background
+// 			chrome.storage.local.get(["UV_SETTING"], function (result) {
+// 				chrome.runtime.sendMessage({
+// 					greeting: "INTERACTION",
+// 					domain: domain,
+// 					setting: "Delete domain",
+// 					prevSetting: null,
+// 					newSetting: null,
+// 					universalSetting: result.UV_SETTING,
+// 					location: "Options page",
+// 					subcollection: "Domain",
+// 				});
+// 			});
+// 		});
+// }
 
 // Sets DOMAINS[domainKey] to true
 async function turnOnGPC(domainKey) {
@@ -150,27 +152,27 @@ function allOff(domains) {
 
 // Removes DOMAINS[domainKey] from DOMAINS
 // TODO: Send a different message to the background
-async function deleteDomain(domainKey) {
-	let new_domains = {};
-	chrome.storage.local.get(["DOMAINS"], function (result) {
-		new_domains = result.DOMAINS;
-		id = new_domains[domainKey].id;
-		delete new_domains[domainKey];
-		chrome.storage.local.set({ DOMAINS: new_domains });
-		chrome.runtime.sendMessage({
-			greeting: "OPTION DELETE DOMAIN",
-			domain: domainKey,
-			id: id,
-		});
-	});
-}
+// async function deleteDomain(domainKey) {
+// 	let new_domains = {};
+// 	chrome.storage.local.get(["DOMAINS"], function (result) {
+// 		new_domains = result.DOMAINS;
+// 		id = new_domains[domainKey].id;
+// 		delete new_domains[domainKey];
+// 		chrome.storage.local.set({ DOMAINS: new_domains });
+// 		chrome.runtime.sendMessage({
+// 			greeting: "OPTION DELETE DOMAIN",
+// 			domain: domainKey,
+// 			id: id,
+// 		});
+// 	});
+// }
 
 // Creates the specific Domain List toggles as well as the perm delete
 export function addToggleListeners() {
 	chrome.storage.local.get(["DOMAINS"], function (result) {
 		for (let domain in result.DOMAINS) {
 			addDomainToggleListener(domain, domain);
-			addDeleteButtonListener(domain);
+			// addDeleteButtonListener(domain);
 		}
 	});
 }
@@ -181,7 +183,10 @@ export function handleToggleAllOn() {
 	let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`;
 	if (confirm(toggleOn_prompt)) {
 		chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-			if (allOff(result.DOMAINS) === false && allOn(result.DOMAINS) !== true) {
+			if (
+				allOff(result.DOMAINS) === false &&
+				allOn(result.DOMAINS) !== true
+			) {
 				chrome.runtime.sendMessage({
 					greeting: "INTERACTION",
 					domain: "All existing domains",
@@ -241,7 +246,10 @@ export function handleToggleAllOff() {
 	let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`;
 	if (confirm(toggleOff_prompt)) {
 		chrome.storage.local.get(["DOMAINS", "UV_SETTING"], function (result) {
-			if (allOn(result.DOMAINS) === false && allOff(result.DOMAINS) === false) {
+			if (
+				allOn(result.DOMAINS) === false &&
+				allOff(result.DOMAINS) === false
+			) {
 				chrome.runtime.sendMessage({
 					greeting: "INTERACTION",
 					domain: "All existing domains",
@@ -387,36 +395,36 @@ export function handleFutureSettingPromptEvent(event) {
 }
 
 // Entire domain list is deleted
-export function handleDeleteDomainListEvent() {
-	let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`;
-	if (confirm(delete_prompt)) {
-		chrome.storage.local.get(["UV_SETTING"], function (result) {
-			chrome.runtime.sendMessage({
-				greeting: "INTERACTION",
-				domain: "All existing domains",
-				setting: "Delete domain",
-				prevSetting: null,
-				newSetting: null,
-				universalSetting: result.UV_SETTING,
-				location: "Options page",
-				subcollection: "Domain",
-			});
-		});
-		chrome.storage.local.set({ DOMAINS: {} });
-		chrome.runtime.sendMessage({
-			greeting: "UPDATE CACHE",
-			newEnabled: "dontSet",
-			newDomains: {},
-			newDomainlistEnabled: "dontSet",
-		});
-		console.log("deleting all domains");
-		chrome.runtime.sendMessage({
-			greeting: "OPTION DELETE ALL DOMAINS",
-		});
-	}
-	createList();
-	addToggleListeners();
-}
+// export function handleDeleteDomainListEvent() {
+// 	let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`;
+// 	if (confirm(delete_prompt)) {
+// 		chrome.storage.local.get(["UV_SETTING"], function (result) {
+// 			chrome.runtime.sendMessage({
+// 				greeting: "INTERACTION",
+// 				domain: "All existing domains",
+// 				setting: "Delete domain",
+// 				prevSetting: null,
+// 				newSetting: null,
+// 				universalSetting: result.UV_SETTING,
+// 				location: "Options page",
+// 				subcollection: "Domain",
+// 			});
+// 		});
+// 		chrome.storage.local.set({ DOMAINS: {} });
+// 		chrome.runtime.sendMessage({
+// 			greeting: "UPDATE CACHE",
+// 			newEnabled: "dontSet",
+// 			newDomains: {},
+// 			newDomainlistEnabled: "dontSet",
+// 		});
+// 		console.log("deleting all domains");
+// 		chrome.runtime.sendMessage({
+// 			greeting: "OPTION DELETE ALL DOMAINS",
+// 		});
+// 	}
+// 	createList();
+// 	addToggleListeners();
+// }
 
 // User changes their privacy profile on scheme 3
 export function addPrivacyProfileEventListener() {
@@ -435,7 +443,9 @@ export function addPrivacyProfileEventListener() {
 					});
 				}
 			});
-			chrome.storage.local.set({ USER_CHOICES: "High Privacy-Sensitivity" });
+			chrome.storage.local.set({
+				USER_CHOICES: "High Privacy-Sensitivity",
+			});
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
 			chrome.runtime.sendMessage({
 				greeting: "UPDATE PRIVACY PROFILE",
@@ -457,7 +467,9 @@ export function addPrivacyProfileEventListener() {
 					});
 				}
 			});
-			chrome.storage.local.set({ USER_CHOICES: "Medium Privacy-Sensitivity" });
+			chrome.storage.local.set({
+				USER_CHOICES: "Medium Privacy-Sensitivity",
+			});
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
 			chrome.runtime.sendMessage({
 				greeting: "UPDATE PRIVACY PROFILE",
@@ -479,7 +491,9 @@ export function addPrivacyProfileEventListener() {
 					});
 				}
 			});
-			chrome.storage.local.set({ USER_CHOICES: "Low Privacy-Sensitivity" });
+			chrome.storage.local.set({
+				USER_CHOICES: "Low Privacy-Sensitivity",
+			});
 			chrome.runtime.sendMessage({ greeting: "UPDATE PROFILE" });
 			chrome.runtime.sendMessage({
 				greeting: "UPDATE PRIVACY PROFILE",
@@ -558,7 +572,8 @@ export function addCategoriesEventListener() {
 				createDefaultSettingInfo();
 				updatePrefScheme4();
 			} else if (event.target.id == "Content & Social") {
-				userChoices["Content & Social"] = !userChoices["Content & Social"];
+				userChoices["Content & Social"] =
+					!userChoices["Content & Social"];
 				chrome.storage.local.set({ USER_CHOICES: userChoices });
 				chrome.storage.local.get(
 					["USER_CHOICES", "PREV_CHOICE"],
