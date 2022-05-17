@@ -273,8 +273,14 @@ export function addSettingInteractionHistory(
 	subcollection
 ) {
 	let date = new Date();
-	const intDoc = doc(
+	const intDoc1 = doc(
 		collection(db, "users", currentUserDocID, "Domain Interaction History")
+	);
+	const intDoc2 = doc(
+		collection(db, "users", currentUserDocID, "Privacy Configuration Interaction History")
+	);
+	const intDoc3 = doc(
+		collection(db, "users", currentUserDocID, "Mute Interaction History")
 	);
 	if (subcollection === "Domain") {
 		const intData = {
@@ -291,7 +297,7 @@ export function addSettingInteractionHistory(
 			"Origin Site": originSite,
 			Location: location,
 		};
-		setDoc(intDoc, intData);
+		setDoc(intDoc1, intData);
 	} else if (subcollection === "Privacy Choice") {
 		const intData = {
 			Timestamp: Timestamp.fromDate(date),
@@ -306,14 +312,14 @@ export function addSettingInteractionHistory(
 			"Origin Site": originSite,
 			Location: location,
 		};
-		setDoc(intDoc, intData);
+		setDoc(intDoc2, intData);
 	} else if (subcollection == "Choice Banner Mute") {
 		const intData = {
 			Timestamp: Timestamp.fromDate(date),
 			Domain: domain,
 			"Recorded Change": setting,
 		};
-		setDoc(intDoc, intData);
+		setDoc(intDoc3, intData);
 	}
 }
 
@@ -716,7 +722,8 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = Math.floor(Math.random() * 7);
+	let userScheme = 3;
+	//let userScheme = Math.floor(Math.random() * 7);
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],

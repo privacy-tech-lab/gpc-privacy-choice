@@ -473,7 +473,7 @@ export function addPrivacyProfileEventListener() {
 						domain: "All future domains",
 						setting: "Privacy Profile",
 						prevSetting: result.USER_CHOICES,
-						newSetting: "Not Privacy Sensitive",
+						newSetting: "Low Privacy-Sensitivity",
 						location: "Options page",
 						subcollection: "Privacy Choice",
 					});
