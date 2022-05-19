@@ -89,11 +89,8 @@ chrome.webRequest.onSendHeaders.addListener(
 //check if domain is in disconnect list
 function isInDisconnect(domain) {
 	if (Object.keys(disconnectList).includes(domain)) {
-		// console.log(true, disconnectList[domain])
 		return true;
 	} else return false;
-	// if(i.includes(domain))
-	// console.log(Object.keys(c))
 }
 
 //todo: maybe this should be moved into local storage
@@ -112,7 +109,6 @@ fetch("json/services.json")
 					}
 				}
 			}
-		// console.log(disconnectList)
 	});
 
 //class to locally store info on third party requests when a site is live
@@ -577,22 +573,6 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			}
 		});
 	}
-	// // user deletes a domain from options page (interaction with the Rule Set API)
-	// if (request.greeting == "OPTION DELETE DOMAIN") {
-	// 	console.log("Option Page Reaction: delete domain: ", request.domain);
-	// 	chrome.storage.local.get(["UI_SCHEME"], function (result) {
-	// 		if (result.UI_SCHEME < 3) {
-	// 			removeDomainFromRule(request.domain);
-	// 		} else {
-	// 			rmRuleUrl(request.id);
-	// 		}
-	// 	});
-	// }
-	// // user deletes all the domains (interaction with the Rule Set API)
-	// if (request.greeting == "OPTION DELETE ALL DOMAINS") {
-	// 	console.log("Option Page Reaction: delete all domains");
-	// 	await clearRules();
-	// }
 	// user changes profile (scheme 3) (interaction with the Rule Set API)
 	if (request.greeting == "UPDATE PRIVACY PROFILE") {
 		console.log("Updating the rule sets based on new profile");
@@ -601,7 +581,6 @@ chrome.runtime.onMessage.addListener(async function (request) {
 		// if user toggle to high privacy sensitivity => add all domains
 		if (request.scheme == "High Privacy-Sensitivity") await addUrlRule("*");
 		// if user toggle to medium privacy sensitivity => add all domains from CHECKLIST
-		// todo: I think we need to redesign this checklist to be a dictionary instead, with both id and gpc enabled status
 		else if (request.scheme == "Medium Privacy-Sensitivity") {
 			mediumRulesOn();
 		}
@@ -711,7 +690,6 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
 chrome.webNavigation.onCommitted.addListener((e) => {
 	if (liveAdEvents[e.tabId] === undefined) new AdEvent(e.tabId, e.tabId);
 	if (e.transitionType == "link") {
-		// console.log(liveAdEvents[e.tabId])
 		if (liveAdEvents[e.tabId].adBool === true) addAd(liveAdEvents[e.tabId]);
 	}
 	delete liveAdEvents[e.tabId];
@@ -720,7 +698,7 @@ chrome.webNavigation.onCommitted.addListener((e) => {
 chrome.webNavigation.onCommitted.addListener((details) => {
 	if (
 		(details.transitionType == "auto_subframe" ||
-			details.transitionType == "manual_subframe") &&
+		details.transitionType == "manual_subframe") &&
 		details.frameId > 0 &&
 		details.tabId > 0
 	) {
@@ -855,9 +833,6 @@ chrome.runtime.onInstalled.addListener(async function (object) {
 // add user's browsing history to the database
 chrome.webNavigation.onCommitted.addListener(function (details) {
 	chrome.tabs.get(details.tabId, (tab) => {
-		// console.log("details.frameId:", details.frameId)
-		// console.log("tab: ", tab)
-		// console.log("details.transitionType: ", details.transitionType)
 		if (
 			details.frameId == 0 &&
 			tab != undefined &&
@@ -893,7 +868,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 				}
 			);
 		} else {
-			// console.log("Not writing browser history to the database!");
+			console.log("Not writing browser history to the database!");
 		}
 	});
 });
