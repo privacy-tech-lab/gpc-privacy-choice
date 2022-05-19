@@ -47,7 +47,6 @@ Follow the instructions below in order to download and use this browser extensio
 
 ## 2. Files and Directories in this Repo
 
-- `src/_metadata/generated_indexed_rulesets`:
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
   - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
@@ -171,41 +170,31 @@ The GPC Privacy Choice browser extension records how users interact with differe
 
 This category records the information of each site the user is on while using the browser extension.
 
-<p align="center">
-  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138903258-935eec9d-7845-487f-ab0f-0e53410623c2.png">
-</p>
+<img width="815" alt="Browser History Screenshot" src="https://user-images.githubusercontent.com/54873610/169369971-d1a1a062-afc6-4822-9a73-dfeb8a27aeff.png">
 
 ### Ad Interaction Detection
 
 Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect list.
 
-<p align="center">
-  <img width="600" alt="" src="https://user-images.githubusercontent.com/77850710/148790993-f8db77c0-aa2e-40b6-9fca-50f0aa0aed76.png">
-</p>
+<img width="753" alt="Ad Interaction Screenshot" src="https://user-images.githubusercontent.com/54873610/169371068-86aa4bcf-3b04-45ae-8c96-8935252762bd.png">
 
 ### Privacy Configuration Interaction History
 
 This category records the privacy decisions users might make on schemes 3, 4, 5 and 6 from the user registration page. That is, more general privacy decisions based on groups or categorizations of tracking
 
-<p align="center">
-  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138898583-863899bf-367a-4312-812a-e5b56b561ec4.png">
-</p>
+<img width="714" alt="Privacy Configuration Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371284-e4c6064c-c829-43bb-89cb-b171a3cb2f12.png">
 
 ### Domain Interaction History
 
 This category records any privacy decisions made from the banner (schemes 0, 1 or 2), as well as changes made from the Options Page for any scheme. More specific privacy decisions are handled in this category, personalized choices for individual domains.
 
-<p align="center">
-  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138897990-302be371-ec1b-469c-a5f0-962955b4d035.png">
-</p>
+<img width="722" alt="Domain Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371517-21bac9bb-1566-4259-b119-ea738e25c900.png">
 
-### Snooze Interaction History
+### Mute Interaction History
 
 This category would be relevant for schemes where the snooze button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the snooze button.
 
-<p align="center">
-  <img width="700" alt="" src="https://user-images.githubusercontent.com/54873610/138905999-26886431-c397-44e8-9250-c7038ca52920.png">
-</p>
+<img width="711" alt="Mute Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371757-e957143b-e7a2-4973-9bf4-e11c87e825d7.png">
 
 ## 7. Known Issues
 
