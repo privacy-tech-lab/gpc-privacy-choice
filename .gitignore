@@ -16,3 +16,4 @@ yarn-debug.log*
 yarn-error.log*
 
 config.js
+_metadata/
