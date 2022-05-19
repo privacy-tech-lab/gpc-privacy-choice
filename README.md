@@ -73,14 +73,13 @@ Follow the instructions below in order to download and use this browser extensio
     - `src/registration/profile.js`
     - `src/registration/questionnaire.js`
     - `src/registration/registration.js`
-- `src/rulesets`:
+- `src/rulesets`: This file contains the rule sets for different categories of sites (eg advertising, analytics, etc.)
 - `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
 - `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
-- `src/editRules.js`:
+- `src/editRules.js`: Takes care of any changes to the rule sets that are responsible for adding GPC to domain requests 
 - `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
-- `src/thirdPartyData.js`:
-- `src/updateSignal.js`:
+- `src/updateSignal.js`: This file updates the status of whether a GPC signal is sent or not on any given site.
 - `src/util.js`: This provided utility functions for `background.js`
 
 ## 3. Third Party Libraries
