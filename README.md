@@ -12,77 +12,200 @@
 
 # GPC Privacy Choice
 
-This research browser extension explores usable privacy choice schemes, particularly, for [Global Privacy Control (GPC)](https://globalprivacycontrol.org/). It actually sends header-based GPC signals as well.
+GPC Privacy Choice is a browser extension for researching the usability of making privacy choices on websites with [Global Privacy Control (GPC)](https://globalprivacycontrol.org/). There is a tension between representing users' privacy choices accurately and not overburdening them with too many or too complicated choices. This tension proved insurmountable for Do Not Track (DNT). Enabling or disabling DNT by default and generally allowing choices only for all sites or none proved to be a major roadblock for DNT adoption. We take the learnings from DNT and use them to improve GPC.
+
+Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme, for example, a banner asking whether the user wants to enable GPC on the current website they visit. Data about the user's choices as well as details about the visited websites are then transmitted to a backend for analysis. The focus of this extension is on researching user interface design. However, the extension is fully functional and is sending header-based GPC signals. Thus, it serves as a working prototype for all privacy choice schemes we implement.
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/gpc-privacy-choice/ambkmcacbikgdchhjohhkfngeahpolnk"><img src="./src/img/chrome-web-store-badge.png" width="200px" alt="Chrome Web Store badge"></a>
 <p>
 
-GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). **Kuba Alicki**, **Daniel Knopf**, **Abdallah Salia** contributed earlier.
+GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://www.privacytechlab.org/). Kuba Alicki, Daniel Knopf, and Abdallah Salia contributed earlier.
 
-## 1. Developer's Guide On Using GPC Privacy Choice
+## 1. Privacy Choice Schemes
 
-Follow the instructions below in order to download and use this browser extension.
+The GPC Privacy Choice extension includes 7 schemes for enabling GPC signals on websites. Which scheme a user is assigned upon installation of the extension is randomized, though, it is also possible to set the extension to a particular scheme (see `background.js`).
 
-1. Clone the repository: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
-2. Create a Firebase Cloud Firestore project, Follow this link [here](https://firebase.google.com/docs/firestore/quickstart) to get detailed instructions on how to set up a Firebase server for data collection.
-3. In the `src` folder, create `config.js` file, and add in the following code, be sure to update the fields accordingly based on the project you have set up. The password can be randomly initialized, and it will be the password required later while using the extension.
+Here are the main features of each scheme:
 
-```
-  export const PASSWORD = "*******";
+### Scheme 0: GPC Privacy Choice Banner with Snooze Option
 
-  export const firebaseConfig = {
-      apiKey: "********",
-      authDomain: "******",
-      projectId: "******",
-      storageBucket: "******",
-      messagingSenderId: "******",
-      appId: "******",
-  };
-```
+Scheme 0 is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. There is a **Snooze** button that, upon being selected, will prevent the banner from popping up on new sites for a few hours. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
-4. To test the browser extension from local repository, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner, and then clicking `Manage Extensions`.
-5. Turn on the developer mode, and then click the `Load unpacked`. Select the folder `gpc-privacy-choice/src` from your files.
-6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a valid prolific ID and password (mentioned above) to go through the registration process.
+<p align="center">
+  <img width="250" alt="Scheme 0 screenshot." src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
+</p>
 
-## 2. Files and Directories in this Repo
+### Scheme 1: GPC Privacy Choice Banner with Apply-all Option
 
+In scheme 1 the **GPC Privacy Choice Banner** is presented on every new site, however, with an **Apply-all** option but no **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="250" alt="Scheme 1 screenshot." src="https://user-images.githubusercontent.com/54873610/148790364-f41b418d-a6ec-41f4-bc79-78647f2e4096.png">
+</p>
+
+### Scheme 2: GPC Privacy Choice Banner with Snooze and Apply-all Option
+
+Scheme 2 is a combination of schemes 0 and 1. The **GPC Privacy Choice Banner** contains both the **Apply-all** option as well as the **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="250" alt="Scheme 2 screenshot." src="https://user-images.githubusercontent.com/54873610/148790378-31a501e2-3e63-4096-b74a-695b02405468.png">
+</p>
+
+### Scheme 3: Privacy Profiles
+
+Scheme 3 makes use of **Privacy Profiles**. Upon running the extension for the first time, users are prompted to choose a privacy profile. Their choice will then determine which sites will receive GPC signals. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="800" alt="Scheme 3 screenshot." src="https://user-images.githubusercontent.com/54873610/148790400-24901af2-596c-439d-bcac-34318a3a685f.png">
+</p>
+
+### Scheme 4: Website Categories
+
+Scheme 4 makes use of **Website Categories**. Upon running the extension for the first time, users are prompted to select the categories that they would like to opt out from. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="800" alt="Scheme 4 screenshot." src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
+</p>
+
+### Scheme 5: Learning Privacy Profiles
+
+Scheme 5 is a combination of schemes 1 and 3 and makes use of a simple technique to **Learn Privacy Profiles**. The user is randomly presented a total of 10 **GPC Privacy Choice Banners** on websites they visit. Their choices are recorded and then used to select a **Privacy Profile** that suits the user best. No **GPC Privacy Choice Banners** are shown beyond the initial 10. After the learning period is over a user may change their privacy profile on the Options Page.
+
+<p align="center">
+  <img width="400" alt="Scheme 5 screenshot." src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
+</p>
+
+### Scheme 6: Enabling/Disabling GPC for All Sites
+
+Scheme 6 is the simplest of all schemes. Upon running the extension for the first time, users are prompted as to whether they would like to send GPC signals to all websites they visit or not. They may change this preference on the Options Page. However, no domain list is present, and they cannot personalize their choices.
+
+<p align="center">
+  <img width="800" alt="Scheme 6 screenshot." src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
+</p>
+
+## 2. Data Collection
+
+**NOTE: Please make sure that you have your users' consent to collect their data. If you are at a university, you may need IRB approval or a determination that your research is exempt.**
+
+The GPC Privacy Choice browser extension records how users interact with the sites they visit and which privacy choices they make in a Firestore database. In the database each user is represented by a unique ID (e.g., `uDMVrtzy7lxf1sQqsmd8`) and all their interactions are recorded under that ID. In addition, each user is requested to enter their unique [Prolific](https://www.prolific.co/) ID upon installing the extension. The Prolific ID allows us to correlate the collected data with data from surveys about the use of our extension, which we administer via Prolific.
+
+Here are the different categories of data that the extension collects:
+
+### Browser History
+
+Browser History covers site-specific information that is collected for every site while a user is using the extension.
+
+<p align="center">
+  <img width="600" alt="Browser History screenshot." src="https://user-images.githubusercontent.com/54873610/169369971-d1a1a062-afc6-4822-9a73-dfeb8a27aeff.png">
+</p>
+
+### Ad Interactions
+
+Ad Interactions cover a users interaction with an ad, specifically, the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the Disconnect list, which we use to identify different types of websites. As it cannot be determined with certainty that such interaction is, in fact, an Ad Interaction, a confidence level is assigned.
+
+<p align="center">
+  <img width="600" alt="Ad Interaction screenshot." src="https://user-images.githubusercontent.com/54873610/169371068-86aa4bcf-3b04-45ae-8c96-8935252762bd.png">
+</p>
+
+### Privacy Configuration Interaction History
+
+The Privacy Configuration Interaction History covers the privacy choices users make for schemes 3, 4, 5 and 6. It covers the initial choice upon registration as well as later modifications, e.g., the initial **Privacy Profile** choice and its later modification for scheme 3.
+
+<p align="center">
+  <img width="600" alt="Privacy Configuration Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371284-e4c6064c-c829-43bb-89cb-b171a3cb2f12.png">
+</p>
+
+### Domain Interaction History
+
+Domain Interaction History covers any privacy choices made via the **GPC Privacy Choice Banner** on schemes 0, 1 or 2. It also covers changes made on the Options Page for all schemes that include it.
+
+<p align="center">
+  <img width="600" alt="Domain Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371517-21bac9bb-1566-4259-b119-ea738e25c900.png">
+</p>
+
+### Mute Interaction History
+
+The Mute Interaction History covers schemes where the **Snooze** button is present, that is, schemes 0 and 2. It records when users choose to use the **Snooze** button.
+
+<p align="center">
+  <img width="600" alt="Mute Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371757-e957143b-e7a2-4973-9bf4-e11c87e825d7.png">
+</p>
+
+## 3. Developer's Guide to Implement GPC Privacy Choice
+
+Follow the instructions to implement the GPC Privacy Choice browser extension for your own projects.
+
+1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
+2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection.
+3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase.
+
+   ```javascript
+   export const PASSWORD = "*******";
+
+   export const firebaseConfig = {
+     apiKey: "********",
+     authDomain: "******",
+     projectId: "******",
+     storageBucket: "******",
+     messagingSenderId: "******",
+     appId: "******",
+   };
+   ```
+
+4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
+5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
+6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID. You also need to supply the password mentioned above. The registration process should start.
+
+## 4. GPC Privacy Choice Architectural Overview
+
+The extension makes use of [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
+
+<p align="center">
+  <img src="./src/img/gpc-choice-architecture.png" width="800" alt="GPC Privacy Choice Architecture"></a>
+<p>
+
+## 5. Files and Directories in this Repo
+
+Here are the most important files and directories:
+
+- `assets`: Image assets used on the Chrome Web Store listing for the extension.
+- `scripts/writerules.py`: This script is used to render the rulesets for appropriately attaching the GPC signal by privacy sensitivity (scheme 3) and third party category (scheme 4). It generates the files in `src/rulesets` and is not run in the browser or on the backend.
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
-  - `src/firebase/firestore.json.index`: Contains the indexes used by the extension to sort and filter the Firestore database.
-  - `src/firebase/firebase.js`: This is a background script that holds the functions used to add data to the Firestore database.
-  - locally hosted Firestore script for connecting with the data base
+  - `src/firebase/firestore.json.indexes`: Contains the indexes used by the extension to sort and filter the Firestore database.
+  - Background scripts for connecting to the Firestore database and adding data to it.
     - `src/firebase/firebase-app.js`
     - `src/firebase/firebase-auth.js`
     - `src/firebase/firebase-firestore.js`
   - `src/firebase/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
-- `src/img`: Contains all image resources
-- `src/json`: Contains the JSON configuration files for the extensions Do Not Sell headers.
-  - `src/json/headers.json`: Contains the opt out HTTP header specs.
-  - `src/json/services.json`:
-- `src/libs-css`: Contains all of the CSS libraries used in the browser extension.
-- `src/libs-js`: Contains all of the JS libraries used in the browser extension.
-- `src/options`: Contains the UI elements and scripts for the supplemental options page.
-- `src/registration`: Contains all user registration scripts relevant for performing the research
-  - html files for different user schemes
+- `src/img`: Contains all image resources.
+- `src/json`:
+  - `src/json/headers.json`: Contains the JSON configuration files for the extensions Do Not Sell and Do Not Track headers.
+  - `src/json/services.json`: Contains the third party services and their categories used in some of the schemes.
+- `src/libs-css`: Contains all CSS libraries used in the browser extension.
+- `src/libs-js`: Contains all JS libraries used in the browser extension.
+- `src/options`: Contains the UI elements and scripts for the supplemental Options Page.
+- `src/registration`: Contains all user registration scripts relevant for performing the research.
+  - HTML files for different user schemes:
     - `src/registration/oneQuestion.html`
     - `src/registration/profile.html`
     - `src/registration/questionnaire.html`
     - `src/registration/registration.html`
-  - javascript files for registering users
+  - JavaScript files for registering users:
     - `src/registration/profile.js`
     - `src/registration/questionnaire.js`
     - `src/registration/registration.js`
-- `src/rulesets`: This file contains the rule sets for different categories of sites (eg advertising, analytics, etc.)
-- `src/background.js`: This is the main service worker running the extension. It controls all of the major backend, regarding whether the extension is on/off, sending the Do Not Sell signal, etc.
+- `src/rulesets`: This file contains the rule sets for different categories of sites (e.g., advertising or analytics).
+- `src/background.js`: This is the main service worker running the extension. It controls all of the major backend regarding whether the extension is on/off, sending Do Not Sell signals, etc.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
-- `src/dom.js`: This is a JS file that implements the functionality of setting a DOM GPC signal to an outgoing request
-- `src/editRules.js`: Takes care of any changes to the rule sets that are responsible for adding GPC to domain requests 
-- `src/manifest.json`: This provides the browser with metadata about the extension, regarding its name, permissions, etc.
-- `src/updateSignal.js`: This file updates the status of whether a GPC signal is sent or not on any given site.
-- `src/util.js`: This provided utility functions for `background.js`
+- `src/dom.js`: Implements the functionality of setting a DOM GPC signal to an outgoing request.
+- `src/editRules.js`: Takes care of any changes to the rule sets that are responsible for adding GPC to domain requests.
+- `src/manifest.json`: Provides the browser with metadata about the extension regarding its name, permissions, etc.
+- `src/updateSignal.js`: Updates the status of whether a GPC signal is sent or not on any given site.
+- `src/util.js`: Provides utility functions for `background.js`.
 
-## 3. Third Party Libraries
+## 6. Third Party Libraries
 
 The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
@@ -92,108 +215,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [uikit](https://github.com/uikit/uikit)
 - [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
-
-## 4. GPC Privacy Choice Architectural Overview
-
-The overview of GPC Privacy Choice extension architecture can be found in the figure below.
-
-<p align="center">
-  <img src="./src/img/gpc-choice-architecture.png" width="800" alt="GPC Privacy Choice Architecture"></a>
-<p>
-
-## 5. Comprehensive Scheme List
-
-The GPC Privacy Choice extension is made up of 7 different schemes, each having different defining features. Upon downloading, a user could end up with any one of the different schemes. The purpose behind having so many variations is to provide researchers with valuable information on how users make privacy choices when given varying levels of usability. Listed below are the main components of each scheme.
-
-### Scheme 0
-
-Users are presented the **GPC Privacy Choice Banner** on each new site they visit with no **apply-all** option. There is instead a **snooze** button that, upon being selected, will prevent the banner from popping up on new sites for 6 hours. The domain list is present on the Options Page.
-
-<p align="center">
-  <img width="250" alt="scheme 0 screenshot" src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
-</p>
-
-### Scheme 1
-
-This was our first scheme, the original. The **GPC Privacy Choice Banner** is presented on every new site _with_ an **apply-all** option, but no **snooze** button. All **universal toggles** are present on the Options Page, as well as the domain list.
-
-<p align="center">
-  <img width="250" alt="scheme 1 screenshot" src="https://user-images.githubusercontent.com/54873610/148790364-f41b418d-a6ec-41f4-bc79-78647f2e4096.png">
-</p>
-
-### Scheme 2
-
-This is somewhat a combination of **Scheme 0** and **Scheme 1**. The **GPC Privacy Choice Banner** contains both the **apply-all** option as well as the **snooze** button. All **universal toggles**, as well as the domain list may be accessed from the Options Page.
-
-<p align="center">
-  <img width="250" alt="scheme 2 screenshot" src="https://user-images.githubusercontent.com/54873610/148790378-31a501e2-3e63-4096-b74a-695b02405468.png">
-</p>
-
-### Scheme 3
-
-This is our **Privacy Profile** scheme. Upon running the extension, users will be prompted to choose the privacy profile that they find most similar to themselves. Their privacy choices will then be personalized based on the selected profile. They may further personalize their privacy choices by accessing the domain list on the Options Page.
-
-<p align="center">
-  <img width="800" alt="scheme 3 screenshot" src="https://user-images.githubusercontent.com/54873610/148790400-24901af2-596c-439d-bcac-34318a3a685f.png">
-</p>
-
-### Scheme 4
-
-This is our **Categories Questionnaire** scheme. Users are initially prompted to select the categories of tracking that they would like to "opt out" from. This personalizes their privacy choices, which again they may further alter by accessing the Options Page.
-
-<p align="center">
-  <img width="800" alt="scheme 4 screenshot" src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
-</p>
-
-### Scheme 5
-
-A combination of **Scheme 1** and **Scheme 3**, this is our **Machine-Learning** scheme. The user is randomly presented 10 banners in total on websites they visit. Their choices are recorded by the extension, which it then uses to make an educated selection on which **Privacy Profile** would suit them most. No banners are shown beyond the initial 10, and after the learning period is over users may change their privacy profile by accessing the Options Page.
-
-<p align="center">
-  <img width="400" alt="scheme 5 screenshot" src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
-</p>
-
-### Scheme 6
-
-This scheme is the most simple of all. Users are initially prompted as to whether they'd like to send **GPC Signals** to all websites they visit or not. They may change this preference from the Options Page, but no domain list is present, so they cannot personalize their choices.
-
-<p align="center">
-  <img width="800" alt="scheme 6 screenshot" src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
-</p>
-
-## 6. Data Collection
-
-The GPC Privacy Choice browser extension records how users interact with different sites and make privacy choices. In the database, each user is represented by a unique ID, and all of their interactions are recorded under that ID. Below are some different categories of data that might be recorded. **DISCLAIMER: The GPC Privacy Choice browser extension records all of the different sites visited by users, as there could be possible relationships between the types of sites visited and the corresponding privacy choice made.**
-
-### Browser History
-
-This category records the information of each site the user is on while using the browser extension.
-
-<img width="815" alt="Browser History Screenshot" src="https://user-images.githubusercontent.com/54873610/169369971-d1a1a062-afc6-4822-9a73-dfeb8a27aeff.png">
-
-### Ad Interaction Detection
-
-Certain behaviors will cause an event to be flagged as an ad interaction with varying degrees of confidence. The reason the event is being flagged and the corresponding confidence level will be recorded under "Evidence of Ad Interaction" in the document that contains the data on the interaction. This data includes the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect list.
-
-<img width="753" alt="Ad Interaction Screenshot" src="https://user-images.githubusercontent.com/54873610/169371068-86aa4bcf-3b04-45ae-8c96-8935252762bd.png">
-
-### Privacy Configuration Interaction History
-
-This category records the privacy decisions users might make on schemes 3, 4, 5 and 6 from the user registration page. That is, more general privacy decisions based on groups or categorizations of tracking
-
-<img width="714" alt="Privacy Configuration Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371284-e4c6064c-c829-43bb-89cb-b171a3cb2f12.png">
-
-### Domain Interaction History
-
-This category records any privacy decisions made from the banner (schemes 0, 1 or 2), as well as changes made from the Options Page for any scheme. More specific privacy decisions are handled in this category, personalized choices for individual domains.
-
-<img width="722" alt="Domain Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371517-21bac9bb-1566-4259-b119-ea738e25c900.png">
-
-### Mute Interaction History
-
-This category would be relevant for schemes where the snooze button is present, that is, schemes 0 and 2. It simply records when users choose to utilize the snooze button.
-
-<img width="711" alt="Mute Interaction History Screenshot" src="https://user-images.githubusercontent.com/54873610/169371757-e957143b-e7a2-4973-9bf4-e11c87e825d7.png">
+- [Google Firebase](https://firebase.google.com/docs/web/setup)
 
 ## 7. Known Issues
 
@@ -201,7 +223,6 @@ This category would be relevant for schemes where the snooze button is present, 
 - **The GPC choice banner UI may not display well on certain sites**: Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. We have tried our best to ensure UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalities of the banner are not affected.
 - **Incorrect recording or missing of a user clicking on an ad**: Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may in individual cases incorrectly record or miss a user clicking on an ad.
 - **Random assignment of schemes seems to perform poorly**: The library for randomly assigning each user a scheme seems to perform poorly. To get a uniform distribution of schemes among users, it may be necessary to hardcode the scheme number and sign up the desired number of users for that scheme. This process can then be repeated for each scheme.
-- **Unpredictable behavior of `GPC Current Site Status` for scheme 6.** It is either recorded as `False` or `Unset`. However, for scheme 6, `GPC Current Site Status` is irrelevant because this scheme is entirely about the global status. The respective `GPC Global Status` is working properly.
 
 ## 8. Thank You!
 
