@@ -15,7 +15,6 @@ import {
 	handleToggleAllOn,
 	handleToggleAllOff,
 	handleApplyAllSwitch,
-	handleDeleteDomainListEvent,
 	handleFutureSettingPromptEvent,
 	addCategoriesEventListener,
 	addGPCEventListener,
