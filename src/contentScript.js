@@ -781,7 +781,7 @@ chrome.storage.local.get(
 					}
 				});
 			}
-		} else {
+		} else if (result.UI_SCHEME != 6) {
 			if (result.UI_SCHEME == 4) addToDomainListScheme4();
 			else addToDomainListScheme3();
 		}
