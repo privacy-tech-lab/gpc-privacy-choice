@@ -102,7 +102,7 @@ Browser History covers site-specific information that is collected for every sit
 
 ### Ad Interactions
 
-Ad Interactions cover a users interaction with an ad, specifically, the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the ad interaction. Characteristics that cause an event to be flagged as an ad interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the Disconnect list, which we use to identify different types of websites. As it cannot be determined with certainty that such interaction is, in fact, an Ad Interaction, a confidence level is assigned.
+Ad Interactions cover a users interaction with an ad, specifically, the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the Ad Interaction. Characteristics that cause an event to be flagged as an Ad Interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the Disconnect list, which we use to identify different types of websites. As it cannot be determined with certainty that such interaction is, in fact, an Ad Interaction, a confidence level is assigned.
 
 <p align="center">
   <img width="600" alt="Ad Interaction screenshot." src="https://user-images.githubusercontent.com/54873610/169371068-86aa4bcf-3b04-45ae-8c96-8935252762bd.png">
@@ -221,7 +221,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 
 - **Only header-based GPC signals**: Our extension is sending [header-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#the-sec-gpc-header-field-for-http-requests). However, we [did not implement DOM-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#javascript-property-to-detect-preference).
 - **The GPC choice banner UI may not display well on certain sites**: Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. We have tried our best to ensure UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalities of the banner are not affected.
-- **Incorrect recording or missing of a user clicking on an ad**: Because of the ambiguity of ad interactions, our method of recording them is not fool-proof. While a vast majority of ad interaction data is correct, the extension may in individual cases incorrectly record or miss a user clicking on an ad.
+- **Incorrect recording or missing of a user clicking on an ad**: Because of the ambiguity of Ad Interactions, our method of recording them is not fool-proof. While a vast majority of Ad Interaction data is correct, the extension may in individual cases incorrectly record or miss a user clicking on an ad.
 - **Random assignment of schemes seems to perform poorly**: The library for randomly assigning each user a scheme seems to perform poorly. To get a uniform distribution of schemes among users, it may be necessary to hardcode the scheme number and sign up the desired number of users for that scheme. This process can then be repeated for each scheme.
 
 ## 8. Thank You!
