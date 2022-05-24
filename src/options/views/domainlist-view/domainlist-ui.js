@@ -35,7 +35,8 @@ export function createDomainlistManagerButtons() {
 		if (
 			result.UI_SCHEME == 3 ||
 			result.UI_SCHEME == 4 ||
-			result.UI_SCHEME == 5
+			result.UI_SCHEME == 5 ||
+      result.UI_SCHEME == 6
 		)
 			document
 				.getElementById("domainlist-manager-btns")

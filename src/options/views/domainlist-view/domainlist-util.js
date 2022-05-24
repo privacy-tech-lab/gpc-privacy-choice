@@ -641,7 +641,7 @@ export function addCategoriesEventListener() {
 export function addGPCEventListener() {
 	document.addEventListener("click", (event) => {
 		if (event.target.id == "privacy-on") {
-			chrome.storage.local.get(["USER_CHOICES"], function (result) {
+			chrome.storage.local.get(["USER_CHOICES", "DOMAINS"], function (result) {
 				if (result.USER_CHOICES !== "Enable GPC") {
 					chrome.declarativeNetRequest.updateEnabledRulesets(
 						{ enableRulesetIds: ["universal_GPC"] },
@@ -657,11 +657,26 @@ export function addGPCEventListener() {
 						subcollection: "Privacy Choice",
 					});
 				}
+				chrome.storage.local.set({ USER_CHOICES: "Enable GPC" });
+				createDefaultSettingInfo();
+				let domains = result.DOMAINS;
+				for (let currentDomain in domains) {
+					let value = true;
+					domains[currentDomain].bool = value;
+				}
+				chrome.storage.local.set({ DOMAINS: domains });
+				createList();
+				addToggleListeners();
+				chrome.runtime.sendMessage({
+					greeting: "UPDATE CACHE",
+					newEnabled: "dontSet",
+					newDomains: domains,
+					newDomainlistEnabled: "dontSet",
+					newApplyAll: "dontSet",
+				});
 			});
-			chrome.storage.local.set({ USER_CHOICES: "Enable GPC" });
-			createDefaultSettingInfo();
 		} else if (event.target.id == "privacy-off") {
-			chrome.storage.local.get(["USER_CHOICES"], function (result) {
+			chrome.storage.local.get(["USER_CHOICES", "DOMAINS"], function (result) {
 				if (result.USER_CHOICES !== "Disable GPC") {
 					chrome.declarativeNetRequest.updateEnabledRulesets(
 						{ disableRulesetIds: ["universal_GPC"] },
@@ -677,9 +692,24 @@ export function addGPCEventListener() {
 						subcollection: "Privacy Choice",
 					});
 				}
+				chrome.storage.local.set({ USER_CHOICES: "Disable GPC" });
+				createDefaultSettingInfo();
+				let domains = result.DOMAINS;
+				for (let currentDomain in domains) {
+					let value = false;
+					domains[currentDomain].bool = value;
+				}
+				chrome.storage.local.set({ DOMAINS: domains });
+				createList();
+				addToggleListeners();
+				chrome.runtime.sendMessage({
+					greeting: "UPDATE CACHE",
+					newEnabled: "dontSet",
+					newDomains: domains,
+					newDomainlistEnabled: "dontSet",
+					newApplyAll: "dontSet",
+				});
 			});
-			chrome.storage.local.set({ USER_CHOICES: "Disable GPC" });
-			createDefaultSettingInfo();
 		}
 	});
 }

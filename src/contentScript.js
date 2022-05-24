@@ -640,6 +640,12 @@ function addToDomainListScheme3() {
 					value = false;
 					if (result.CHECKLIST.includes(currentDomain)) value = true;
 				}
+				else if (result.USER_CHOICES == "Enable GPC") {
+					value = true;
+				}
+				else if (result.USER_CHOICES == "Disable GPC") {
+					value = false;
+				}
 
 				// add the currentDomain and store it in the local storage
 				domains[currentDomain] = {};
@@ -781,7 +787,7 @@ chrome.storage.local.get(
 					}
 				});
 			}
-		} else if (result.UI_SCHEME != 6) {
+		} else {
 			if (result.UI_SCHEME == 4) addToDomainListScheme4();
 			else addToDomainListScheme3();
 		}
