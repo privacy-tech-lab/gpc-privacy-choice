@@ -96,6 +96,13 @@ function isInDisconnect(domain) {
 	// console.log(Object.keys(c))
 }
 
+//check if domain is in advertising category in disconnect list
+function isAdvertising(domain) {
+	if (Object.keys(disconnectList).includes(domain)) {
+		if (disconnectList[domain][0].includes("Advertising")) return true;
+	} else return false;
+}
+
 //todo: maybe this should be moved into local storage
 fetch("json/services.json")
 	.then((response) => response.text())
@@ -277,7 +284,12 @@ export function addSettingInteractionHistory(
 		collection(db, "users", currentUserDocID, "Domain Interaction History")
 	);
 	const intDoc2 = doc(
-		collection(db, "users", currentUserDocID, "Privacy Configuration Interaction History")
+		collection(
+			db,
+			"users",
+			currentUserDocID,
+			"Privacy Configuration Interaction History"
+		)
 	);
 	const intDoc3 = doc(
 		collection(db, "users", currentUserDocID, "Mute Interaction History")
@@ -660,13 +672,13 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
 			let initialLoad = getDomain(details.url);
 			liveAdEvents[targetTabID].redirectionTo = initialLoad;
 			if (
-				(isInDisconnect(origin) && details.sourceFrameId != 0) ||
-				(isInDisconnect(initialLoad) &&
+				(isAdvertising(origin) && details.sourceFrameId != 0) ||
+				(isAdvertising(initialLoad) &&
 					(details.sourceFrameId != 0 || initialLoad != origin))
 			) {
 				liveAdEvents[targetTabID].adBool = true;
 				liveAdEvents[targetTabID].reasoning =
-					"navigation via ad network (highest confidence)";
+					"navigation via ad network and linked from subframe";
 			} else {
 				chrome.tabs.sendMessage(
 					tabId,
