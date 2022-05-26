@@ -144,12 +144,12 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
    export const PASSWORD = "*******";
 
    export const firebaseConfig = {
-     apiKey: "********",
-     authDomain: "******",
-     projectId: "******",
-     storageBucket: "******",
-     messagingSenderId: "******",
-     appId: "******",
+   	apiKey: "********",
+   	authDomain: "******",
+   	projectId: "******",
+   	storageBucket: "******",
+   	messagingSenderId: "******",
+   	appId: "******",
    };
    ```
 
@@ -199,7 +199,6 @@ Here are the most important files and directories:
 - `src/rulesets`: This file contains the rule sets for different categories of sites (e.g., advertising or analytics).
 - `src/background.js`: This is the main service worker running the extension. It controls all of the major backend regarding whether the extension is on/off, sending Do Not Sell signals, etc.
 - `src/contentScript.js`: This is the main supplemental script that passes data to `background.js` and runs on every webpage loaded.
-- `src/dom.js`: Implements the functionality of setting a DOM GPC signal to an outgoing request.
 - `src/editRules.js`: Takes care of any changes to the rule sets that are responsible for adding GPC to domain requests.
 - `src/manifest.json`: Provides the browser with metadata about the extension regarding its name, permissions, etc.
 - `src/updateSignal.js`: Updates the status of whether a GPC signal is sent or not on any given site.
