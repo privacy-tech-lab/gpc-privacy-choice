@@ -102,10 +102,11 @@ Browser History covers site-specific information that is collected for every sit
 
 ### Ad Interactions
 
-Ad Interactions cover a users interaction with an ad, specifically, the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the Ad Interaction. Characteristics that cause an event to be flagged as an Ad Interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect-tracking-protection list, which we use to identify different types of websites. As it cannot be determined with certainty that such interaction is, in fact, an Ad Interaction, a confidence level is assigned.
+Ad Interactions cover a users interaction with an ad, specifically, the timing of the interaction, the source of the ad, and the domain that was initially navigated to after the Ad Interaction. Characteristics that cause an event to be flagged as an Ad Interaction are the following: if the event causes a new tab to open and if either the click that initialized the event occurred in a subframe or if the navigation involved the domain of a network identified in the disconnect-tracking-protection list, which we use to identify different types of websites. As it cannot be determined with certainty that such interaction is, in fact, an Ad Interaction, the reason that the interaction is recordered is noted.
 
 <p align="center">
-  <img width="600" alt="Ad Interaction screenshot." src="https://user-images.githubusercontent.com/54873610/169371068-86aa4bcf-3b04-45ae-8c96-8935252762bd.png">
+  <img width="600" alt="Ad Interactions screenshot." src="https://user-images.githubusercontent.com/77850710/170414471-bc3ba86c-7260-4a22-a77a-c68d0260e0f4.png">
+
 </p>
 
 ### Privacy Configuration Interaction History
