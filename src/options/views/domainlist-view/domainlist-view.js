@@ -92,14 +92,6 @@ export function updatePrefScheme3() {
 			chrome.storage.local.set({ DOMAINS: domains });
 			createList();
 			addToggleListeners();
-			// notify background to update the cache used for look up
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: domains,
-				newDomainlistEnabled: "dontSet",
-				newApplyAll: "dontSet",
-			});
 		}
 	);
 }
@@ -174,14 +166,6 @@ export async function updatePrefScheme4() {
 			chrome.storage.local.set({ DOMAINS: domains });
 			createList();
 			addToggleListeners();
-			// notify background to update the cache used for look up
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: domains,
-				newDomainlistEnabled: "dontSet",
-				newApplyAll: "dontSet",
-			});
 		}
 	);
 }

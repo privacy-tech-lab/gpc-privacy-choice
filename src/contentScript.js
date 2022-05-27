@@ -163,13 +163,6 @@ function addSendEventListener(currentDomain) {
 					SEND_SIGNAL_BANNER: sendSignalBanner + 1,
 				});
 			} else chrome.storage.local.set({ DOMAINS: new_domains });
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: new_domains,
-				newDomainlistEnabled: true,
-				newApplyAll: "dontSet",
-			});
 			// Sends data to Setting Interaction History
 			chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
 				chrome.runtime.sendMessage({
@@ -224,13 +217,6 @@ function addSendAllEventListener(currentDomain) {
 		chrome.storage.local.set({ DOMAINS: new_domains });
 		let rule_ids = chrome.declarativeNetRequest.getDynamicRules();
 		chrome.runtime.sendMessage({ greeting: "BANNER ENABLE GPC ALL" });
-		chrome.runtime.sendMessage({
-			greeting: "UPDATE CACHE",
-			newEnabled: "dontSet",
-			newDomains: new_domains,
-			newDomainlistEnabled: false,
-			newApplyAll: true,
-		});
 	});
 	// Sends data to Setting Interaction History
 	chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
@@ -267,13 +253,6 @@ function addDontSendEventListener(currentDomain) {
 					DO_NOT_SEND_SIGNAL_BANNER: notSendSignalBanner + 1,
 				});
 			else chrome.storage.local.set({ DOMAINS: new_domains });
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: new_domains,
-				newDomainlistEnabled: true,
-				newApplyAll: "dontSet",
-			});
 			// Sends data to Setting Interaction History
 			chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
 				chrome.runtime.sendMessage({
@@ -317,13 +296,6 @@ function addDontSendAllEventListener(currentDomain) {
 		new_domains[currentDomain] = {};
 		new_domains[currentDomain].bool = false;
 		chrome.storage.local.set({ DOMAINS: new_domains, ENABLED: false });
-		chrome.runtime.sendMessage({
-			greeting: "UPDATE CACHE",
-			newEnabled: false,
-			newDomains: new_domains,
-			newDomainlistEnabled: false,
-			newApplyAll: true,
-		});
 	});
 	// Sends data to Setting Interaction History
 	chrome.storage.local.set({ ORIGIN_SITE: "Banner Decision" }, () => {
@@ -604,14 +576,6 @@ function addToDomainListScheme1() {
 			domains[currentDomain].bool = value;
 			// domains[currentDomain].id = Object.keys(domains).length + 1;
 			chrome.storage.local.set({ DOMAINS: domains });
-			// notify background to update the cache used for look up
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: domains,
-				newDomainlistEnabled: "dontSet",
-				newApplyAll: "dontSet",
-			});
 		}
 	});
 }
@@ -653,14 +617,6 @@ function addToDomainListScheme3() {
 				}
 				console.log("domains: " + Object.values(Object.keys(domains)));
 				chrome.storage.local.set({ DOMAINS: domains });
-				// notify background to update the cache used for look up
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: "dontSet",
-					newDomains: domains,
-					newDomainlistEnabled: "dontSet",
-					newApplyAll: "dontSet",
-				});
 			}
 		}
 	);
@@ -695,14 +651,6 @@ function addToDomainListScheme4() {
 				}
 				console.log("domains: " + Object.values(Object.keys(domains)));
 				chrome.storage.local.set({ DOMAINS: domains });
-				// notify background to update the cache used for look up
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: "dontSet",
-					newDomains: domains,
-					newDomainlistEnabled: "dontSet",
-					newApplyAll: "dontSet",
-				});
 			}
 		}
 	);
@@ -735,13 +683,6 @@ function addToDomainListScheme6() {
 				}
 				console.log("domains: " + Object.values(Object.keys(domains)));
 				chrome.storage.local.set({ DOMAINS: domains });
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: "dontSet",
-					newDomains: domains,
-					newDomainlistEnabled: "dontSet",
-					newApplyAll: "dontSet",
-				});
 			}
 		}
 	);
@@ -809,13 +750,6 @@ chrome.storage.local.get(
 							});
 						}
 						chrome.storage.local.set({ DOMAINS: domains });
-						chrome.runtime.sendMessage({
-							greeting: "UPDATE CACHE",
-							newEnabled: "dontSet",
-							newDomains: domains,
-							newDomainlistEnabled: "dontSet",
-							newApplyAll: "dontSet",
-						});
 					}
 				});
 			}

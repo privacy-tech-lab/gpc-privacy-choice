@@ -228,12 +228,6 @@ export function handleToggleAllOn() {
 					domain: d,
 				});
 			}
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: new_domains,
-				newDomainlistEnabled: "dontSet",
-			});
 			chrome.storage.local.set({ DOMAINS: new_domains });
 			createList();
 			addToggleListeners();
@@ -292,12 +286,6 @@ export function handleToggleAllOff() {
 				});
 			}
 			chrome.storage.local.set({ DOMAINS: new_domains });
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: new_domains,
-				newDomainlistEnabled: "dontSet",
-			});
 			createList();
 			addToggleListeners();
 		});
@@ -329,12 +317,6 @@ export function handleApplyAllSwitch() {
 				chrome.storage.local.set({ APPLY_ALL: false });
 				chrome.storage.local.set({ ENABLED: true });
 				createDefaultSettingInfo();
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: true,
-					newDomains: "dontSet",
-					newDomainlistEnabled: true,
-				});
 			} else {
 				createDefaultSettingInfo();
 				UIkit.modal("#future_setting_prompt").show();
@@ -393,38 +375,6 @@ export function handleFutureSettingPromptEvent(event) {
 	}
 	// Otherwise, they hit cancel and nothing changes
 }
-
-// Entire domain list is deleted
-// export function handleDeleteDomainListEvent() {
-// 	let delete_prompt = `Are you sure you would like to permanently delete all domains from the Domain List? NOTE: Domains will be automatically added back to the list when the domain is requested again.`;
-// 	if (confirm(delete_prompt)) {
-// 		chrome.storage.local.get(["UV_SETTING"], function (result) {
-// 			chrome.runtime.sendMessage({
-// 				greeting: "INTERACTION",
-// 				domain: "All existing domains",
-// 				setting: "Delete domain",
-// 				prevSetting: null,
-// 				newSetting: null,
-// 				universalSetting: result.UV_SETTING,
-// 				location: "Options page",
-// 				subcollection: "Domain",
-// 			});
-// 		});
-// 		chrome.storage.local.set({ DOMAINS: {} });
-// 		chrome.runtime.sendMessage({
-// 			greeting: "UPDATE CACHE",
-// 			newEnabled: "dontSet",
-// 			newDomains: {},
-// 			newDomainlistEnabled: "dontSet",
-// 		});
-// 		console.log("deleting all domains");
-// 		chrome.runtime.sendMessage({
-// 			greeting: "OPTION DELETE ALL DOMAINS",
-// 		});
-// 	}
-// 	createList();
-// 	addToggleListeners();
-// }
 
 // User changes their privacy profile on scheme 3
 export function addPrivacyProfileEventListener() {
@@ -667,13 +617,6 @@ export function addGPCEventListener() {
 				chrome.storage.local.set({ DOMAINS: domains });
 				createList();
 				addToggleListeners();
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: "dontSet",
-					newDomains: domains,
-					newDomainlistEnabled: "dontSet",
-					newApplyAll: "dontSet",
-				});
 			});
 		} else if (event.target.id == "privacy-off") {
 			chrome.storage.local.get(["USER_CHOICES", "DOMAINS"], function (result) {
@@ -702,13 +645,6 @@ export function addGPCEventListener() {
 				chrome.storage.local.set({ DOMAINS: domains });
 				createList();
 				addToggleListeners();
-				chrome.runtime.sendMessage({
-					greeting: "UPDATE CACHE",
-					newEnabled: "dontSet",
-					newDomains: domains,
-					newDomainlistEnabled: "dontSet",
-					newApplyAll: "dontSet",
-				});
 			});
 		}
 	});
