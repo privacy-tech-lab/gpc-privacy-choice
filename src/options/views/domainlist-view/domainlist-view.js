@@ -35,9 +35,9 @@ const domainListHeadings = {
 
 // Creates all the event listeners for the options page buttons
 function addEventListeners() {
+	addToggleListeners();
 	// Add event listener based on the user's scheme
 	chrome.storage.local.get(["UI_SCHEME"], function (result) {
-		if (result.UI_SCHEME != 6) addToggleListeners();
 		if (result.UI_SCHEME == 3) addPrivacyProfileEventListener();
 		if (result.UI_SCHEME == 4) addCategoriesEventListener();
 		if (result.UI_SCHEME == 6) addGPCEventListener();
@@ -92,14 +92,6 @@ export function updatePrefScheme3() {
 			chrome.storage.local.set({ DOMAINS: domains });
 			createList();
 			addToggleListeners();
-			// notify background to update the cache used for look up
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: domains,
-				newDomainlistEnabled: "dontSet",
-				newApplyAll: "dontSet",
-			});
 		}
 	);
 }
@@ -174,14 +166,6 @@ export async function updatePrefScheme4() {
 			chrome.storage.local.set({ DOMAINS: domains });
 			createList();
 			addToggleListeners();
-			// notify background to update the cache used for look up
-			chrome.runtime.sendMessage({
-				greeting: "UPDATE CACHE",
-				newEnabled: "dontSet",
-				newDomains: domains,
-				newDomainlistEnabled: "dontSet",
-				newApplyAll: "dontSet",
-			});
 		}
 	);
 }
