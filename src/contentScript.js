@@ -659,33 +659,31 @@ function addToDomainListScheme4() {
 // SCHEME 6: add new domains to the domainlist in local storage based on the user's choice
 // MODIFIED VERSION OF addToDomainListScheme3()
 function addToDomainListScheme6() {
-	chrome.storage.local.get(
-		["DOMAINS", "USER_CHOICES"],
-		function (result) {
-			let currentDomain = getDomain(window.location.href);
-			let domains = result.DOMAINS;
-			console.log(domains);
-			let value = false;
-			if (!(currentDomain in domains)) {
-				if (result.USER_CHOICES == "Enable GPC") {
-					value = true;
-				}
-				else {value = false;}
-				domains[currentDomain] = {};
-				domains[currentDomain].bool = value;
-				domains[currentDomain].id = Object.keys(domains).length;
-				if (domains[currentDomain].bool) {
-					chrome.runtime.sendMessage({
-						greeting: "NEW RULE",
-						d: currentDomain,
-						id: domains[currentDomain].id,
-					});
-				}
-				console.log("domains: " + Object.values(Object.keys(domains)));
-				chrome.storage.local.set({ DOMAINS: domains });
+	chrome.storage.local.get(["DOMAINS", "USER_CHOICES"], function (result) {
+		let currentDomain = getDomain(window.location.href);
+		let domains = result.DOMAINS;
+		console.log(domains);
+		let value = false;
+		if (!(currentDomain in domains)) {
+			if (result.USER_CHOICES == "Enable GPC") {
+				value = true;
+			} else {
+				value = false;
 			}
+			domains[currentDomain] = {};
+			domains[currentDomain].bool = value;
+			domains[currentDomain].id = Object.keys(domains).length;
+			if (domains[currentDomain].bool) {
+				chrome.runtime.sendMessage({
+					greeting: "NEW RULE",
+					d: currentDomain,
+					id: domains[currentDomain].id,
+				});
+			}
+			console.log("domains: " + Object.values(Object.keys(domains)));
+			chrome.storage.local.set({ DOMAINS: domains });
 		}
-	);
+	});
 }
 
 // logic for the banner pop up: only when DOMAINLIST_ENABLED == true && the current domain is a new domain
@@ -756,17 +754,12 @@ chrome.storage.local.get(
 		} else {
 			if (result.UI_SCHEME == 4) addToDomainListScheme4();
 			else if (result.UI_SCHEME == 6) addToDomainListScheme6();
-			else {addToDomainListScheme3();}
+			else {
+				addToDomainListScheme3();
+			}
 		}
 	}
 );
-
-// send information to background regarding the source  of a potential ad interaction
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-	if (request.greeting == "GET HTML TAG") {
-		sendResponse(document.activeElement.tagName);
-	}
-});
 
 // watcher function to switch from scheme 5 to scheme 3
 chrome.storage.local.get(
