@@ -210,9 +210,7 @@ Here are the most important files and directories:
 The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
 - [animate.css](https://github.com/animate-css/animate.css)
-- [FileSaver.js](https://github.com/eligrey/FileSaver.js)
 - [mustache.js](https://github.com/janl/mustache.js)
-- [psl (Public Suffix List)](https://github.com/lupomontero/psl)
 - [uikit](https://github.com/uikit/uikit)
 - [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
 - [Google Firebase](https://firebase.google.com/docs/web/setup)
