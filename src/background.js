@@ -865,7 +865,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 						}
 						domains[currentD] = {};
 						referer[details.tabId] = details.url;
-						updateDomains(domains);
+						updateDomains(Object.keys(domains));
 					} else {
 						console.log(
 							"Unregistered user: not connected to the database"
