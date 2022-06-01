@@ -327,7 +327,6 @@ export function updateDomains(domainsList) {
 	console.log("updating the domain list");
 	chrome.storage.local.get(["USER_DOC_ID"], function (result) {
 		if (result.USER_DOC_ID) {
-			console.log(domainsList)
 			const userRef = doc(db, "users", result.USER_DOC_ID);
 			updateDoc(userRef, {
 				"Domain List": domainsList,
@@ -860,12 +859,11 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 							result.UI_SCHEME,
 							referer[details.tabId]
 						);
-						for (let d in domains) {
-							domains[d] = {};
-						}
 						domains[currentD] = {};
 						referer[details.tabId] = details.url;
 						updateDomains(Object.keys(domains));
+						console.log(result.DOMAINS)
+						console.log(domains)
 					} else {
 						console.log(
 							"Unregistered user: not connected to the database"
