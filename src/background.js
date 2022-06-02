@@ -822,9 +822,10 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 		) {
 			cleanFrames(details.tabId);
 			chrome.storage.local.get(
-				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS"],
+				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS", "MUTED"],
 				function (result) {
 					if (result.USER_DOC_ID) {
+						let mutebool = result.MUTED;
 						let domains = result.DOMAINS;
 						let currentD = getDomain(details.url);
 						console.log("Writting into the Browser History");
@@ -840,6 +841,9 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 							referer[details.tabId]
 						);
 						referer[details.tabId] = details.url;
+						if (!(domains[currentD])) domains[currentD] = {};
+						if (!mutebool[0]) updateDomains(Object.keys(domains));
+						else updateDomains({});
 					} else {
 						console.log("Unregistered user: not connected to the database");
 					}
