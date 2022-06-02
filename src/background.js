@@ -230,6 +230,11 @@ function addHistory(
 	uiScheme,
 	referer
 ) {
+	chrome.storage.local.get(["DOMAINS", "MUTED"], function (result) {
+		let mutebool = result.MUTED;
+		let domains = result.DOMAINS;
+		if (!mutebool[0]) updateDomains(Object.keys(domains));
+	});
 	let date = new Date();
 	if (referer != site || referer === undefined) {
 		if (transitionType != "link") {
@@ -705,7 +710,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = 6;
+	let userScheme = 2;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
@@ -825,7 +830,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS", "MUTED"],
 				function (result) {
 					if (result.USER_DOC_ID) {
-						let mutebool = result.MUTED;
 						let domains = result.DOMAINS;
 						let currentD = getDomain(details.url);
 						console.log("Writting into the Browser History");
@@ -841,9 +845,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 							referer[details.tabId]
 						);
 						referer[details.tabId] = details.url;
-						if (!(domains[currentD])) domains[currentD] = {};
-						if (!mutebool[0]) updateDomains(Object.keys(domains));
-						else updateDomains({});
 					} else {
 						console.log("Unregistered user: not connected to the database");
 					}
