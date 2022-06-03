@@ -230,6 +230,11 @@ function addHistory(
 	uiScheme,
 	referer
 ) {
+	chrome.storage.local.get(["DOMAINS", "MUTED"], function (result) {
+		let mutebool = result.MUTED;
+		let domains = result.DOMAINS;
+		if (!mutebool[0]) updateDomains(Object.keys(domains));
+	});
 	let date = new Date();
 	if (referer != site || referer === undefined) {
 		if (transitionType != "link") {
@@ -705,7 +710,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = 6;
+	let userScheme = 1;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
@@ -822,7 +827,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 		) {
 			cleanFrames(details.tabId);
 			chrome.storage.local.get(
-				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS"],
+				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS", "MUTED"],
 				function (result) {
 					if (result.USER_DOC_ID) {
 						let domains = result.DOMAINS;
