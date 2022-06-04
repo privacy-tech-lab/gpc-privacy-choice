@@ -145,12 +145,12 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
    export const PASSWORD = "*******";
 
    export const firebaseConfig = {
-   	apiKey: "********",
-   	authDomain: "******",
-   	projectId: "******",
-   	storageBucket: "******",
-   	messagingSenderId: "******",
-   	appId: "******",
+     apiKey: "********",
+     authDomain: "******",
+     projectId: "******",
+     storageBucket: "******",
+     messagingSenderId: "******",
+     appId: "******",
    };
    ```
 
@@ -222,6 +222,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - **Incorrect recording or missing of a user clicking on an ad**: Because of the ambiguity of Ad Interactions, our method of recording them is not fool-proof. While a vast majority of Ad Interaction data is correct, the extension may in individual cases incorrectly record or miss a user clicking on an ad. Ad Interaction is also based on a heuristic, especially, a click event occurring in a subframe, that may not always correctly identify an ad.
 - **Random assignment of schemes seems to perform poorly**: The library for randomly assigning each user a scheme seems to perform poorly. To get a uniform distribution of schemes among users, it may be necessary to hardcode the scheme number and sign up the desired number of users for that scheme. This process can then be repeated for each scheme.
 - **GPC Current Site Status**, i.e., whether GPC is enabled on a site or not does show a result on Firebase when the site is visited the first time. It shows "N/A". The reason is that at the moment the site is visited the first time, the user has not yet made a GPC choice. The GPC Current Site Status corresponds to the GPC status in the domain list.
+- **The domain list on Firebase updates on leaving a site.** So, when a user visits site A and then site B, site A will show up in the domain list at the time the user opens site B.
 
 ## 8. Thank You!
 
