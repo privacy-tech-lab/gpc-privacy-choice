@@ -109,6 +109,22 @@ Ad Interactions cover a users interaction with an ad, specifically, the timing o
 
 </p>
 
+### Third Party Requests
+
+Data on third party requests are stored in two collections: Third Party Requests (first 50) and Third Party Requests Summary. Instances of both collections are found under the Browser History documents that correspond to the website on which the documented requests occur.
+
+Third Party Requests (first 50) documents hold specific data for the first 50 third party requests that occur upon visiting a site. This data includes the url that the request is sent from, the url's domain and network, any categories that the domain is listed under in the Disconnect List, the timestamp of the request, the request type, and the site to which the request is sent.
+
+<p align="center">
+<img width="600" alt="Screen Shot 2022-06-06 at 8 20 00 AM" src="https://user-images.githubusercontent.com/77850710/172389623-1e2d5876-7679-4881-9c73-8e91c794e076.png">
+</p>
+
+Third Party Requests Summary documents record how many requests are sent by each third party domain that sends requests during a visit to a certain site. This data is recorded in firebase once a user navigates away from a site or closes the tab on which the site was visited.
+
+<p align="center">
+<img width="600" alt="Screen Shot 2022-06-06 at 8 19 49 AM" src="https://user-images.githubusercontent.com/77850710/172389643-c890144f-63e6-478f-adb0-214dab59a3bf.png">
+</p>
+
 ### Privacy Configuration Interaction History
 
 The Privacy Configuration Interaction History covers the privacy choices users make for schemes 3, 4, 5 and 6. It covers the initial choice upon registration as well as later modifications, e.g., the initial **Privacy Profile** choice and its later modification for scheme 3.
