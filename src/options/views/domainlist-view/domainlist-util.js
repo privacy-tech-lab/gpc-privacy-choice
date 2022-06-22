@@ -29,8 +29,8 @@ async function addDomainToggleListener(elementId, domain) {
 									greeting: "INTERACTION",
 									domain: domain,
 									setting: "GPC signal",
-									prevSetting: "Don't allow tracking",
-									newSetting: "Allow tracking",
+									prevSetting: "Send signal",
+									newSetting: "Don't send signal",
 									universalSetting: result.UV_SETTING,
 									location: "Options page",
 									subcollection: "Domain",
@@ -40,8 +40,8 @@ async function addDomainToggleListener(elementId, domain) {
 									greeting: "INTERACTION",
 									domain: domain,
 									setting: "GPC signal",
-									prevSetting: "Don't allow tracking",
-									newSetting: "Allow tracking",
+									prevSetting: "Send signal",
+									newSetting: "Don't send signal",
 									universalSetting: null,
 									location: "Options page",
 									subcollection: "Domain",
@@ -54,8 +54,8 @@ async function addDomainToggleListener(elementId, domain) {
 									greeting: "INTERACTION",
 									domain: domain,
 									setting: "GPC signal",
-									prevSetting: "Allow tracking",
-									newSetting: "Don't allow tracking",
+									prevSetting: "Don't send signal",
+									newSetting: "Send signal",
 									universalSetting: result.UV_SETTING,
 									location: "Options page",
 									subcollection: "Domain",
@@ -65,8 +65,8 @@ async function addDomainToggleListener(elementId, domain) {
 									greeting: "INTERACTION",
 									domain: domain,
 									setting: "GPC signal",
-									prevSetting: "Allow tracking",
-									newSetting: "Don't allow tracking",
+									prevSetting: "Don't send signal",
+									newSetting: "Send signal",
 									universalSetting: null,
 									location: "Options page",
 									subcollection: "Domain",
@@ -177,7 +177,7 @@ export function addToggleListeners() {
 	});
 }
 
-// "Do not allow tracking for all" button is clicked
+// "Send signal for all" button is clicked
 export function handleToggleAllOn() {
 	// "Apply all" box isn't checked
 	let toggleOn_prompt = `Are you sure you would like to toggle on the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`;
@@ -235,7 +235,7 @@ export function handleToggleAllOn() {
 	}
 }
 
-// "Allow tracking for all" button is clicked
+// "Don't send signal for all" button is clicked
 export function handleToggleAllOff() {
 	let toggleOff_prompt = `Are you sure you would like to toggle off the GPC setting for all sites on the website list? NOTE: Your current preferences will be overwritten.`;
 	if (confirm(toggleOff_prompt)) {
@@ -328,7 +328,7 @@ export function handleApplyAllSwitch() {
 
 // User interacts with future setting prompt, shown when users attempt to turn on the "Apply all" switch
 export function handleFutureSettingPromptEvent(event) {
-	// User hits "Allow tracking for all"
+	// User hits "Don't send signal for all"
 	if (event.target.id == "allow-future-btn") {
 		chrome.storage.local.set({ APPLY_ALL: true });
 		chrome.storage.local.set({ UV_SETTING: "Don't send signal to all" });
@@ -349,7 +349,7 @@ export function handleFutureSettingPromptEvent(event) {
 			subcollection: "Domain",
 		});
 	}
-	// User hits "Don't allow tracking" for all
+	// User hits "Send signal" for all
 	else if (event.target.id == "dont-allow-future-btn") {
 		chrome.storage.local.set({ APPLY_ALL: true });
 		chrome.storage.local.set({ UV_SETTING: "Send signal to all" });
