@@ -412,22 +412,19 @@ export function createDefaultSettingInfo() {
 				<p class="uk-h5 uk-text">Select one or more categories to specify what types of data sites should be prohibited from selling/sharing. If you are okay with all types of data being sold/shared, simply hit <strong>submit</strong>.</p>
 				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
 					<div class="choice" style="cursor: pointer">
-						<div id="phone-number-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
+						<div id="phone-number-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Phone Number"></a>
 							<h3 class="uk-card-title uk-margin">Phone Number</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="email-address-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+						<div id="email-address-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Email Address"></a>
 							<h3 class="uk-card-title uk-margin">Email Address</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="gps-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+						<div id="gps-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="GPS Location"></a>
 							<h3 class="uk-card-title uk-margin">GPS Location</h3>
 						</div>
@@ -435,22 +432,19 @@ export function createDefaultSettingInfo() {
 				</div>
 				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
 					<div class="choice" style="cursor: pointer">
-						<div id="zip-code-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Some sites integrate malicious services that will use your computer to mine for cryptocurrencies.; pos: top-right">
+						<div id="zip-code-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Zip Code"></a>
 							<h3 class="uk-card-title uk-margin">Zip Code</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="browsing-history-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Some sites integrate browser fingerprinting, which is a technique that is usually used for advertising and that identifies you based on the characteristics of your browser, e.g., your browser version or the plugins you use.; pos: top-right">
+						<div id="browsing-history-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Browsing History"></a>
 							<h3 class="uk-card-title uk-margin">Browsing History</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="age-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:By selecting this card, GPC signals will be sent to all sites you visit, disregarding any of the other cards you may have or have not selected.; pos: top-right">
+						<div id="age-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Age"></a>
 							<h3 class="uk-card-title uk-margin">Age</h3>
 						</div>
@@ -458,22 +452,19 @@ export function createDefaultSettingInfo() {
 				</div>
 				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
 					<div class="choice" style="cursor: pointer">
-						<div id="ethnicity-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate third party ad networks that sell/share your data for advertising purposes.; pos: top-right">
+						<div id="ethnicity-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Ethnicity/Race"></a>
 							<h3 class="uk-card-title uk-margin">Ethnicity/Race</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="income-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate third party services that will keep track of site metrics, for example, your geographical location or IP address.; pos: top-right">
+						<div id="income-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Income"></a>
 							<h3 class="uk-card-title uk-margin">Income</h3>
 						</div>
 					</div>
 					<div class="choice" style="cursor: pointer">
-						<div id="gender-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
-							uk-tooltip="title:Many sites integrate content delivery networks to serve images, videos, and other content files. They may also show you content from social networks and sell your data to those or share it with them.; pos: top-right">
+						<div id="gender-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
 							<a class="uk-position-cover first" href="#" id="Gender"></a>
 							<h3 class="uk-card-title uk-margin">Gender</h3>
 						</div>
