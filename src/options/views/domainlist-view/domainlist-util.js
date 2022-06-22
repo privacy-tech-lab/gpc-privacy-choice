@@ -587,6 +587,188 @@ export function addCategoriesEventListener() {
 	});
 }
 
+export function addDataCategoriesEventListener() {
+	document.addEventListener("click", function (event) {
+		chrome.storage.local.get(["USER_CHOICES"], function (result) {
+			chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+			let userChoices = result.USER_CHOICES;
+			if (event.target.id == "Phone Number") {
+				userChoices["Phone Number"] = !userChoices["Phone Number"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Email Address") {
+				userChoices["Email Address"] = !userChoices["Email Address"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "GPS Location") {
+				userChoices["GPS Location"] = !userChoices["GPS Location"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Zip Code") {
+				userChoices["Zip Code"] =
+					!userChoices["Zip Code"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Browsing History") {
+				userChoices["Browsing History"] = !userChoices["Browsing History"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Age") {
+				userChoices["Age"] = !userChoices["Age"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Ethnicity/Race") {
+				userChoices["Ethnicity/Race"] = !userChoices["Ethnicity/Race"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Income") {
+				userChoices["Income"] = !userChoices["Income"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			} else if (event.target.id == "Gender") {
+				userChoices["Gender"] = !userChoices["Gender"];
+				chrome.storage.local.set({ USER_CHOICES: userChoices });
+				chrome.storage.local.get(
+					["USER_CHOICES", "PREV_CHOICE"],
+					function (result) {
+						chrome.runtime.sendMessage({
+							greeting: "INTERACTION",
+							domain: "All domains",
+							setting: "Data Categories",
+							prevSetting: result.PREV_CHOICE,
+							newSetting: result.USER_CHOICES,
+							location: "Options page",
+							subcollection: "Privacy Choice",
+						});
+					}
+				);
+				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
+				createDefaultSettingInfo();
+			}
+		});
+	});
+}
+
 // User changes GPC signal send status on scheme 6
 export function addGPCEventListener() {
 	document.addEventListener("click", (event) => {
