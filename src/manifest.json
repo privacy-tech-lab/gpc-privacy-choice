@@ -1,6 +1,6 @@
 {
   "name": "GPC Privacy Choice",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "GPC Privacy Choice is a research extension that studies usable privacy choice mechanisms on the web",
   "permissions": [
     "webRequest",
