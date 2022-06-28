@@ -312,6 +312,7 @@ export function addSettingInteractionHistory(
 		};
 		setDoc(intDoc1, intData);
 	} else if (subcollection === "Privacy Choice") {
+		if (originSite == undefined) {originSite = "None"};
 		const intData = {
 			Timestamp: Timestamp.fromDate(date),
 			Domain: domain,
