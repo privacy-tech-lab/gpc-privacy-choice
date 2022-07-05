@@ -811,6 +811,8 @@ chrome.runtime.onInstalled.addListener(async function (object) {
 					.then(openPage("registration/registration.html"));
 			} else if (userScheme == 6) {
 				openPage("registration/oneQuestion.html");
+			} else if (userScheme == 7) {
+				openPage("registration/data-categories.html");
 			} else {
 				console.log("ERROR: Unknown scheme number!");
 			}

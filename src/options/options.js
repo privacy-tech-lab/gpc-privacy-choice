@@ -1,5 +1,8 @@
 import { mainView }from './views/main-view/main-view.js'
 
 document.addEventListener('DOMContentLoaded', function(){
-    mainView(true);
-})     
+    chrome.storage.local.get(["UI_SCHEME"], function(result){
+        if (result.UI_SCHEME == 7) mainView(false);
+        else mainView(true);
+    })
+}) 

@@ -134,7 +134,6 @@ export function cardInteractionSettings(scheme, userChoice) {
 			document
 				.getElementById("privacy-on-card")
 				.classList.remove("uk-card-primary");
-
 		if (userChoice == "Disable GPC") {
 			document
 				.getElementById("privacy-off-card")
@@ -143,7 +142,80 @@ export function cardInteractionSettings(scheme, userChoice) {
 			document
 				.getElementById("privacy-off-card")
 				.classList.remove("uk-card-primary");
-	}
+	} else if (scheme == 7) {
+		if (userChoice["Phone Number"]) {
+			document
+				.getElementById("phone-number-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("phone-number-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["Email Address"]) {
+			document
+				.getElementById("email-address-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("email-address-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["GPS Location"]) {
+			document
+				.getElementById("gps-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("gps-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["Zip Code"]) {
+			document
+				.getElementById("zip-code-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("zip-code-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["Browsing History"]) {
+			document
+				.getElementById("browsing-history-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("browsing-history-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["Age"]) {
+			document
+				.getElementById("age-card")
+				.classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("age-card")
+				.classList.remove("uk-card-primary");
+    if (userChoice["Ethnicity/Race"]) {
+      document
+        .getElementById("ethnicity-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("ethnicity-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Income"]) {
+      document
+        .getElementById("income-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("income-card")
+        .classList.remove("uk-card-primary");
+    if (userChoice["Gender"]) {
+      document
+        .getElementById("gender-card")
+        .classList.add("uk-card-primary");
+    } else
+      document
+        .getElementById("gender-card")
+        .classList.remove("uk-card-primary");
+  }
 }
 
 // Create HTML for the buttons and information on default/apply-all setting
@@ -333,6 +405,71 @@ export function createDefaultSettingInfo() {
           </div>
         </div>
         <hr>
+        `;
+			} else if (result.UI_SCHEME == 7) {
+				defaultSettingInfo = `
+        <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
+				<p class="uk-h5 uk-text">Select one or more categories to specify what types of data sites should be prohibited from selling/sharing. If you are okay with all types of data being sold/shared, simply hit <strong>submit</strong>.</p>
+				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+					<div class="choice" style="cursor: pointer">
+						<div id="phone-number-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Phone Number"></a>
+							<h3 class="uk-card-title uk-margin">Phone Number</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="email-address-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Email Address"></a>
+							<h3 class="uk-card-title uk-margin">Email Address</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="gps-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="GPS Location"></a>
+							<h3 class="uk-card-title uk-margin">GPS Location</h3>
+						</div>
+					</div>
+				</div>
+				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+					<div class="choice" style="cursor: pointer">
+						<div id="zip-code-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Zip Code"></a>
+							<h3 class="uk-card-title uk-margin">Zip Code</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="browsing-history-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Browsing History"></a>
+							<h3 class="uk-card-title uk-margin">Browsing History</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="age-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Age"></a>
+							<h3 class="uk-card-title uk-margin">Age</h3>
+						</div>
+					</div>
+				</div>
+				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
+					<div class="choice" style="cursor: pointer">
+						<div id="ethnicity-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Ethnicity/Race"></a>
+							<h3 class="uk-card-title uk-margin">Ethnicity/Race</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="income-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Income"></a>
+							<h3 class="uk-card-title uk-margin">Income</h3>
+						</div>
+					</div>
+					<div class="choice" style="cursor: pointer">
+						<div id="gender-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
+							<a class="uk-position-cover first" href="#" id="Gender"></a>
+							<h3 class="uk-card-title uk-margin">Gender</h3>
+						</div>
+					</div>
+				</div>
         `;
 			}
 			document.getElementById("current-apply-all-setting").innerHTML =
