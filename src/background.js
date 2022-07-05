@@ -124,7 +124,7 @@ class ThirdPartyData {
 		this.count = 0;
 		this.sCollection = collection(
 			db,
-			"users-scheme3",
+			"users-scheme4",
 			userDocId,
 			"Browser History",
 			docId,
@@ -132,7 +132,7 @@ class ThirdPartyData {
 		);
 		this.eCollection = collection(
 			db,
-			"users-scheme3",
+			"users-scheme4",
 			userDocId,
 			"Browser History",
 			docId,
@@ -179,7 +179,7 @@ export async function createUser(prolificID, schemeNumber) {
 	let latitude = crd.latitude ? crd.latitude : "unknown latitude";
 	let date = new Date();
 	// generate unique user document and storage the id into local storage
-	const newUserRef = doc(collection(db, "users-scheme3"));
+	const newUserRef = doc(collection(db, "users-scheme4"));
 	console.log("new user reference created: ", newUserRef);
 	chrome.storage.local.set(
 		{ USER_DOC_ID: newUserRef.id, UI_SCHEME: schemeNumber },
@@ -247,7 +247,7 @@ function addHistory(
 			GPC = "unset";
 		}
 		const newBrowserRef = doc(
-			collection(db, "users-scheme3", currentUserDocID, "Browser History")
+			collection(db, "users-scheme4", currentUserDocID, "Browser History")
 		);
 		const userData = {
 			Timestamp: Timestamp.fromDate(date),
@@ -282,18 +282,18 @@ export function addSettingInteractionHistory(
 ) {
 	let date = new Date();
 	const intDoc1 = doc(
-		collection(db, "users-scheme3", currentUserDocID, "Domain Interaction History")
+		collection(db, "users-scheme4", currentUserDocID, "Domain Interaction History")
 	);
 	const intDoc2 = doc(
 		collection(
 			db,
-			"users-scheme3",
+			"users-scheme4",
 			currentUserDocID,
 			"Privacy Configuration Interaction History"
 		)
 	);
 	const intDoc3 = doc(
-		collection(db, "users-scheme3", currentUserDocID, "Mute Interaction History")
+		collection(db, "users-scheme4", currentUserDocID, "Mute Interaction History")
 	);
 	if (subcollection === "Domain") {
 		const intData = {
@@ -342,7 +342,7 @@ export function updateDomains(domainsList) {
 	console.log("updating the domain list");
 	chrome.storage.local.get(["USER_DOC_ID"], function (result) {
 		if (result.USER_DOC_ID) {
-			const userRef = doc(db, "users-scheme3", result.USER_DOC_ID);
+			const userRef = doc(db, "users-scheme4", result.USER_DOC_ID);
 			updateDoc(userRef, {
 				"Domain List": domainsList,
 			});
@@ -429,7 +429,7 @@ export function addAd(adEvent) {
 	chrome.storage.local.get(["USER_DOC_ID"], function (result) {
 		const historyRef = collection(
 			db,
-			"users-scheme3",
+			"users-scheme4",
 			result.USER_DOC_ID,
 			"Browser History"
 		);
@@ -443,7 +443,7 @@ export function addAd(adEvent) {
 			querySnapshot.forEach((d) => {
 				const newBrowserRef = collection(
 					db,
-					"users-scheme3",
+					"users-scheme4",
 					result.USER_DOC_ID,
 					"Browser History",
 					d.id,
@@ -461,7 +461,7 @@ export function addAd(adEvent) {
 					// console.log(adEvent.targetTabId)
 					const docRef = doc(
 						db,
-						"users-scheme3",
+						"users-scheme4",
 						result.USER_DOC_ID,
 						"Browser History",
 						d.id,
@@ -711,7 +711,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = 3;
+	let userScheme = 4;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
