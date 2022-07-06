@@ -86,7 +86,7 @@ Scheme 6 is the simplest of all schemes. Upon running the extension for the firs
 
 ### Scheme 7: Data Categories
 
-Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would __not__ like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality.
+Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their settings on the Options Page.
 
 <p align="center">
   <img width="1188" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
@@ -249,6 +249,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - **GPC Current Site Status.**, i.e., whether GPC is enabled on a site or not does show a result on Firebase when the site is visited the first time. It shows "N/A." The reason is that at the moment the site is visited the first time, the user has not yet made a GPC choice. The GPC Current Site Status corresponds to the GPC status in the domain list.
 - **The domain list on Firebase updates on leaving a site.** So, when a user visits site A and then site B, site A will show up in the domain list at the time the user opens site B.
 - **In rare instances browser updates may require re-registration.** For already registered users, upon browser updates, the extension may display the user registration page again. No data may be collected on Firebase until the user re-registers. If the user re-registers, a second Firebase ID will be created and data will be collected from that moment on under that Firebase ID. Data for the same user under different Firebase IDs can be combined in the post-processing stages.
+- **Scheme 7 does not send GPC Signals.** It is a front-end implementation only.
 
 ## 8. Thank You!
 
