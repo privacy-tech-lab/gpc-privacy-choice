@@ -84,6 +84,14 @@ Scheme 6 is the simplest of all schemes. Upon running the extension for the firs
   <img width="800" alt="Scheme 6 screenshot." src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
 </p>
 
+### Scheme 7: Data Categories
+
+Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would __not__ like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality.
+
+<p align="center">
+  <img width="1188" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
+</p>
+
 ## 2. Data Collection
 
 **NOTE: Please make sure that you have your users' consent to collect their data. If you are at a university, you may need IRB approval or a determination that your research is exempt.**
