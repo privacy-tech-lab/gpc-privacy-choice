@@ -409,7 +409,9 @@ export function createDefaultSettingInfo() {
 			} else if (result.UI_SCHEME == 7) {
 				defaultSettingInfo = `
         <p class="uk-h5 uk-text-bold uk-text-italic">The law gives you a privacy right:</p>
-				<p class="uk-h5 uk-text">Select one or more categories to specify what types of data sites should be prohibited from selling/sharing. If you are okay with all types of data being sold/shared, simply hit <strong>submit</strong>.</p>
+				<p class="uk-h5 uk-text">
+          Select one or more categories to specify what types of data sites should be prohibited from selling/sharing. If you are okay with all types of data being sold/shared, simply hit <strong>submit</strong>.
+          <i>Please note that our extension is not a full implementation of the described functionality and should not be relied upon for opting out.</i></p>
 				<div class="uk-child-width-1-3@m uk-grid-match uk-text-center uk-margin-medium-top" uk-grid>
 					<div class="choice" style="cursor: pointer">
 						<div id="phone-number-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary">
