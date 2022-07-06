@@ -711,7 +711,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = 7;
+	let userScheme = 4;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
