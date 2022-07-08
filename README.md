@@ -181,6 +181,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID. You also need to supply the password mentioned above. The registration process should start.
+7. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
 ## 4. GPC Privacy Choice Architectural Overview
 
