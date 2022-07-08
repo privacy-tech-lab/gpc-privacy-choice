@@ -89,7 +89,7 @@ Scheme 6 is the simplest of all schemes. Upon running the extension for the firs
 Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their settings on the Options Page.
 
 <p align="center">
-  <img width="1188" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
+  <img width="800" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
 </p>
 
 ## 2. Data Collection
@@ -163,7 +163,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 
 1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
 2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection.
-3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase.
+3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase. If you are running a study with multiple schemes one after another, it is recommended to change the password between schemes. Otherwise, data from study participants running a previous scheme may continue to be collected inadvertently.
 
    ```javascript
    export const PASSWORD = "*******";
