@@ -249,6 +249,8 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 - [disconnect-tracking-protection](https://github.com/disconnectme/disconnect-tracking-protection)
 - [Google Firebase](https://firebase.google.com/docs/web/setup)
 
+The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
+
 ## 8. Known Issues
 
 - **Only header-based GPC signals.**: Our extension is sending [header-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#the-sec-gpc-header-field-for-http-requests). However, we [did not implement DOM-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#javascript-property-to-detect-preference).
@@ -284,7 +286,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
   </a>
 </p>
 
-<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff. The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.</p>
+<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.</p>
 
 ##
 
