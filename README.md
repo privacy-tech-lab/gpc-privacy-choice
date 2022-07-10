@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="hhttps://github.com/privacy-tech-lab/gpc-privacy-choice/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/blob/main/assets/icon_180_180.png" width="150px" height="150px" alt="Dolphin logo">*</a>
+  <br><a href="hhttps://github.com/privacy-tech-lab/gpc-privacy-choice/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/blob/main/assets/icon_180_180.png" width="120px" height="120px" alt="Dolphin logo"></a>
 </p>
 
 # GPC Privacy Choice
@@ -284,7 +284,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
   </a>
 </p>
 
-<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.<br><sup>*</sup> The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.</p>
+<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.<br><sup></sup> The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.</p>
 
 ##
 
