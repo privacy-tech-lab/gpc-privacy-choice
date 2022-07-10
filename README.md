@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="hhttps://github.com/privacy-tech-lab/gpc-privacy-choice/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/assets/icon_180_180.png" width="180px" height="180px" alt="Dolphin logo">*</a>
+  <a href="hhttps://github.com/privacy-tech-lab/gpc-privacy-choice/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/blob/main/assets/icon_180_180.png" width="150px" height="150px" alt="Dolphin logo">*</a>
 </p>
 
 # GPC Privacy Choice
