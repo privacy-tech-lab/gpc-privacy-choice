@@ -10,6 +10,10 @@
   <a href="https://github.com/privacy-tech-lab/gpc-privacy-choice/network/members"><img alt="GitHub forks" src="https://img.shields.io/github/forks/privacy-tech-lab/gpc-privacy-choice?style=social"></a>
 </p>
 
+<p align="center">
+  <a href="hhttps://github.com/privacy-tech-lab/gpc-privacy-choice/"><img src="https://github.com/privacy-tech-lab/gpc-privacy-choice/assets/icon_180_180.png" width="180px" height="180px" alt="Dolphin logo">*</a>
+</p>
+
 # GPC Privacy Choice
 
 GPC Privacy Choice is a browser extension for researching the usability of making privacy choices on websites with [Global Privacy Control (GPC)](https://globalprivacycontrol.org/). There is a tension between representing users' privacy choices accurately and not overburdening them with too many or too complicated choices. This tension proved insurmountable for Do Not Track (DNT). Enabling or disabling DNT by default and generally allowing choices only for all sites or none proved to be a major roadblock for DNT adoption. We take the learnings from DNT and use them to improve GPC.
@@ -280,7 +284,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
   </a>
 </p>
 
-<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.</p>
+<p align="center">Conclusions reached or positions taken are our own and not necessarily those of our financial supporters, its trustees, officers, or staff.<br><sup>*</sup> The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.</p>
 
 ##
 
