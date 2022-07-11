@@ -278,7 +278,7 @@ export function updateCategories(choices) {
 	} else {
 		disabled.push("cryptomining");
 	}
-	if (choices["Others"]) globalRuleOn();
+	if (choices["All Sites"]) globalRuleOn();
 	else globalRuleOff();
 	chrome.declarativeNetRequest.updateEnabledRulesets(
 		{ enableRulesetIds: enabled, disableRulesetIds: disabled },

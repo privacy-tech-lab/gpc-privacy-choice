@@ -562,8 +562,8 @@ export function addCategoriesEventListener() {
 				chrome.storage.local.set({ PREV_CHOICE: result.USER_CHOICES });
 				createDefaultSettingInfo();
 				updatePrefScheme4();
-			} else if (event.target.id == "Others") {
-				userChoices["Others"] = !userChoices["Others"];
+			} else if (event.target.id == "All Sites") {
+				userChoices["All Sites"] = !userChoices["All Sites"];
 				chrome.storage.local.set({ USER_CHOICES: userChoices });
 				chrome.storage.local.get(
 					["USER_CHOICES", "PREV_CHOICE"],
