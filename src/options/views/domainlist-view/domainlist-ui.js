@@ -117,7 +117,7 @@ export function cardInteractionSettings(scheme, userChoice) {
 			document
 				.getElementById("cryptomining-card")
 				.classList.remove("uk-card-primary");
-		if (userChoice["Others"]) {
+		if (userChoice["All Sites"]) {
 			document
 				.getElementById("others-card")
 				.classList.add("uk-card-primary");
@@ -315,7 +315,7 @@ export function createDefaultSettingInfo() {
             <div class="choice" style="cursor: pointer;">
                 <div id="others-card" class="uk-card uk-card-default uk-box-shadow-medium uk-card-hover uk-card-body uk-inline" uk-toggle="cls: uk-card-primary"
                 uk-tooltip="title:By selecting this card, GPC signals will be sent to all sites you visit, disregarding any of the other cards you may have or have not selected.; pos: top-right">
-                    <a class="uk-position-cover first" href="#" id="Others"></a>
+                    <a class="uk-position-cover first" href="#" id="All Sites"></a>
                     <h3 class="uk-card-title uk-margin">All Sites</h3>
                 </div>
             </div>   

@@ -8,7 +8,7 @@ let userChoices = {
 	Fingerprinting: false,
 	"Content & Social": false,
 	Cryptomining: false,
-	Others: false,
+	"All Sites": false,
 };
 
 // Add event listeners for toggling user choice
@@ -76,7 +76,7 @@ async function submit(prolificID) {
 		.then((result) => {
 			let networks = JSON.parse(result)["categories"];
 			for (let category of Object.keys(userChoices)) {
-				if (!(userChoices["Others"] == true)) {
+				if (!(userChoices["All Sites"] == true)) {
 					if (userChoices[category] == true) {
 						if (category === "Fingerprinting") {
 							for (let cat of [

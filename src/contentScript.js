@@ -632,7 +632,7 @@ function addToDomainListScheme4() {
 			// by default, do not send GPC signals
 			let value = false;
 			if (!(currentDomain in domains)) {
-				if (result.USER_CHOICES["Others"] == true) value = true;
+				if (result.USER_CHOICES["All Sites"] == true) value = true;
 				else {
 					// send GPC signals if the currentDomain is in the checkList
 					if (result.CHECKLIST.includes(currentDomain)) value = true;

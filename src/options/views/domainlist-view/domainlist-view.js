@@ -111,7 +111,7 @@ export async function updatePrefScheme4() {
 				.then((result) => {
 					let networks = JSON.parse(result)["categories"];
 					for (let category of Object.keys(userChoices)) {
-						if (!(userChoices["Others"] == true)) {
+						if (!(userChoices["All Sites"] == true)) {
 							if (userChoices[category] == true) {
 								if (category === "Fingerprinting") {
 									for (let cat of [
@@ -158,7 +158,7 @@ export async function updatePrefScheme4() {
 				// by default, do not send GPC signals
 				let value = false;
 				// send GPC signals if the currentDomain is in the checkList
-				if (result.USER_CHOICES["Others"] == true) value = true;
+				if (result.USER_CHOICES["All Sites"] == true) value = true;
 				else {
 					if (checkList.includes(currentDomain)) value = true;
 				}

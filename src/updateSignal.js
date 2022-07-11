@@ -35,7 +35,7 @@ export async function updateSendSignalScheme4() {
 		await chrome.storage.local.get(
 			["CHECKLIST", "USER_CHOICES"],
 			function (result) {
-				if (result.USER_CHOICES["Others"] == true) sendSignal = true;
+				if (result.USER_CHOICES["All Sites"] == true) sendSignal = true;
 				else {
 					if (result.CHECKLIST.includes(currentDomain)) sendSignal = true;
 				}
