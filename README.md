@@ -101,6 +101,15 @@ Scheme 7 makes use of **Data Categories**. Upon running the extension for the fi
   <img width="800" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
 </p>
 
+### How To Create Additional Schemes
+
+Although – to some extent – it depends on what you want, there are certain generalities when it comes to developing schemes. These are listed below.
+
+ - You'll need a registration page. You can either make use `registration.js` and `registration.html`, which are used for the banner schemes, or you'll have to create your own files, which are necessary for category schemes. See `questionnaire.js` and `questionnaire.html` for examples.
+ - You'll have to create a corresponding **Options Page**. For this, you would be working in `domainlist-ui.js`.
+ - In order to set the browser extension to your scheme, you'll need to link it to a scheme **number** in `background.js`.
+ - You will also need to create a collection for your scheme in firebase. You can do this by working in `background.js` to change the collection name, and then developing your firebase security rules to accept that collection name.
+
 ## 3. Data Collection
 
 **NOTE: Please make sure that you have your users' consent to collect their data. If you are at a university, you may need IRB approval or a determination that your research is exempt.**
