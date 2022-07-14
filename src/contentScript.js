@@ -727,8 +727,8 @@ chrome.storage.local.get(
 				showBanner(false, true);
 		} else if (result.UI_SCHEME == 5) {
 			// the user has 1/4 chance of seeing the banner
-			let random = Math.floor(Math.random() * 4);
-			if (random == 1 && !(currentDomain in domains)) {
+			// let random = Math.floor(Math.random() * 4);
+			if (!(currentDomain in domains)) {
 				showBanner(false);
 			} else {
 				chrome.storage.local.get(["DOMAINS", "CHECKLIST"], function (result) {
@@ -768,7 +768,7 @@ chrome.storage.local.get(
 		let sendSignalBanner = result.SEND_SIGNAL_BANNER;
 		let doNotSendSignalBanner = result.DO_NOT_SEND_SIGNAL_BANNER;
 		if (result.LEARNING == "In Progress") {
-			if (sendSignalBanner + doNotSendSignalBanner == 5) {
+			if (sendSignalBanner + doNotSendSignalBanner == 10) {
 				let userProfile;
 				if (sendSignalBanner <= 1) {
 					userProfile = "Low Privacy-Sensitivity";

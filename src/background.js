@@ -56,6 +56,10 @@ import {
 	addDisableDomainRule,
 } from "./editRules.js";
 
+import {
+	updatePrefScheme3,
+} from "./options/views/domainlist-view/domainlist-view.js"
+
 // Connect with Database
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
@@ -592,6 +596,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 	// learning phase completed (scheme 5) (interaction with the Rule Set API)
 	if (request.greeting == "LEARNING COMPLETED") {
 		console.log("Learning is finished. Automatically switching...");
+		updatePrefScheme3();
 		chrome.storage.local.set({ LEARNING: "Just Finished" }, function () {
 			let alreadyOpen = false;
 			let extensionID = chrome.runtime.id;
@@ -608,7 +613,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 				}
 			});
 			if (!alreadyOpen) {
-				chrome.runtime.openOptionsPage();
+				openPage("options/options.html");
 			}
 		});
 	}
