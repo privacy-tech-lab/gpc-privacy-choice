@@ -779,6 +779,16 @@ chrome.storage.local.get(
 				}
 				chrome.storage.local.set({ UI_SCHEME: 3, USER_CHOICES: userProfile });
 				chrome.runtime.sendMessage({ greeting: "LEARNING COMPLETED" });
+				chrome.runtime.sendMessage({
+					greeting: "INTERACTION",
+					domain: "All future domains",
+					setting: "Privacy Profile",
+					prevSetting: "Preference not set",
+					newSetting: userProfile,
+					universalSetting: result.UV_SETTING,
+					location: "Privacy Profile",
+					subcollection: "Privacy Choice",
+				});
 			}
 		}
 	}
