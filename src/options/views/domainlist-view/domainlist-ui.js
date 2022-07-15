@@ -367,7 +367,7 @@ export function createDefaultSettingInfo() {
           <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
             <p>
-            You will see 5 GPC banners popping up randomized on sites you visit. 
+            You will see 10 GPC banners popping up randomized on sites you visit. 
             Based on your choices, the extension will learn your privacy preferences. 
             You will no longer need to make choices after the learning phase is completed. 
             The learning phase is currently in progress.

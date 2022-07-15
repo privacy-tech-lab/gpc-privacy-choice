@@ -770,9 +770,9 @@ chrome.storage.local.get(
 		if (result.LEARNING == "In Progress") {
 			if (sendSignalBanner + doNotSendSignalBanner == 10) {
 				let userProfile;
-				if (sendSignalBanner <= 1) {
+				if (sendSignalBanner <= 3) {
 					userProfile = "Low Privacy-Sensitivity";
-				} else if (sendSignalBanner >= 4) {
+				} else if (sendSignalBanner >= 8) {
 					userProfile = "High Privacy-Sensitivity";
 				} else {
 					userProfile = "Medium Privacy-Sensitivity";
