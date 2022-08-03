@@ -79,7 +79,7 @@ Scheme 4 makes use of **Website Categories**. Upon running the extension for the
 
 ### Scheme 5: Learning Privacy Profiles
 
-Scheme 5 is a combination of schemes 1 and 3 and makes use of a simple technique to **Learn Privacy Profiles**. The user is presented with **GPC Privacy Choice Banners** on the first 10 websites they visit. Their choices are recorded and then used to select a **Privacy Profile** that suits the user best. No **GPC Privacy Choice Banners** are shown beyond the initial 10. Users that choose to enable GPC signals on 8 or more of the first 10 websites will be assigned a **High-Sensitivity Privacy Profile**. 4-7 enables (inclusive) will yield a **Medium-Sensitivity Privacy Profile** and 3 or fewer will give users a **Low-Sensitivity Privacy Profile**. After the learning period is over a user may change their privacy profile on the Options Page.
+Scheme 5 is a combination of schemes 1 and 3 and makes use of a simple technique to **Learn Privacy Profiles**. The user is presented with **GPC Privacy Choice Banners** on the first 10 websites they visit. Their choices are recorded and then used to select a **Privacy Profile** that suits the user best. No **GPC Privacy Choice Banners** are shown beyond the initial 10. Users that choose to enable GPC signals on 8 or more of the first 10 websites will be assigned a **High-Sensitivity Privacy Profile**. 4-7 enables (inclusive) will yield a **Medium-Sensitivity Privacy Profile** and 3 or fewer will give users a **Low-Sensitivity Privacy Profile**. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. After the learning period is over a user may change their privacy profile on the Options Page.
 
 <p align="center">
   <img width="400" alt="Scheme 5 screenshot." src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
@@ -95,7 +95,7 @@ Scheme 6 is the simplest of all schemes. Upon running the extension for the firs
 
 ### Scheme 7: Data Categories
 
-Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their settings on the Options Page.
+Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their categories on the Options Page. In scheme 7 users are _not_ able to select to which domains they want to send GPC signals.
 
 <p align="center">
   <img width="800" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
