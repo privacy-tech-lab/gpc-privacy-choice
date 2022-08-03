@@ -95,7 +95,7 @@ Scheme 6 is the simplest of all schemes. Upon running the extension for the firs
 
 ### Scheme 7: Data Categories
 
-Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their categories on the Options Page. In scheme 7 users are _not_ able to select to which domains they want to send GPC signals.
+Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their categories on the Options Page. In scheme 7 users are **not** able to select individual domains to which they want to send GPC signals.
 
 <p align="center">
   <img width="800" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
