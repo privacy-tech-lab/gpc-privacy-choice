@@ -153,7 +153,7 @@ Third Party Requests Summary documents record how many requests are sent by each
 
 ### Privacy Configuration Interaction History
 
-The Privacy Configuration Interaction History covers the privacy choices users make for schemes 3, 4, 5 and 6. It covers the initial choice upon registration as well as later modifications, e.g., the initial **Privacy Profile** choice and its later modification for scheme 3.
+The Privacy Configuration Interaction History covers the privacy choices users make for schemes 3, 4, 5, 6 and 7. It covers the initial choice upon registration as well as later modifications, e.g., the initial **Privacy Profile** choice and its later modification for scheme 3.
 
 <p align="center">
   <img width="600" alt="Privacy Configuration Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371284-e4c6064c-c829-43bb-89cb-b171a3cb2f12.png">
