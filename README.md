@@ -301,5 +301,5 @@ The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
 ##
 
 <p align="center">
-  <a href="https://www.privacytechlab.org/"><img src="./src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
+  <a href="https://privacytechlab.org/"><img src="./src/img/plt_logo.png" width="200px" height="200px" alt="privacy-tech-lab logo"></a>
 </p>
