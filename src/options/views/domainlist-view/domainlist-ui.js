@@ -36,12 +36,10 @@ export function createDomainlistManagerButtons() {
 			result.UI_SCHEME == 3 ||
 			result.UI_SCHEME == 4 ||
 			result.UI_SCHEME == 5 ||
-      result.UI_SCHEME == 6
+			result.UI_SCHEME == 6
 		)
-			document
-				.getElementById("domainlist-manager-btns")
-				.classList.add("hide");
-		if (result.UI_SCHEME == 0) {
+			document.getElementById("domainlist-manager-btns").classList.add("hide");
+		if (result.UI_SCHEME == 0 || result.UI_SCHEME == 9) {
 			document.getElementById("toggle_all_on").classList.add("hide");
 			document.getElementById("toggle_all_off").classList.add("hide");
 			document.getElementById("apply_to_all_label").classList.add("hide");
@@ -102,9 +100,7 @@ export function cardInteractionSettings(scheme, userChoice) {
 				.getElementById("fingerprinting-card")
 				.classList.remove("uk-card-primary");
 		if (userChoice["Content & Social"]) {
-			document
-				.getElementById("social-card")
-				.classList.add("uk-card-primary");
+			document.getElementById("social-card").classList.add("uk-card-primary");
 		} else
 			document
 				.getElementById("social-card")
@@ -118,9 +114,7 @@ export function cardInteractionSettings(scheme, userChoice) {
 				.getElementById("cryptomining-card")
 				.classList.remove("uk-card-primary");
 		if (userChoice["All Sites"]) {
-			document
-				.getElementById("others-card")
-				.classList.add("uk-card-primary");
+			document.getElementById("others-card").classList.add("uk-card-primary");
 		} else
 			document
 				.getElementById("others-card")
@@ -160,17 +154,11 @@ export function cardInteractionSettings(scheme, userChoice) {
 				.getElementById("email-address-card")
 				.classList.remove("uk-card-primary");
 		if (userChoice["GPS Location"]) {
-			document
-				.getElementById("gps-card")
-				.classList.add("uk-card-primary");
+			document.getElementById("gps-card").classList.add("uk-card-primary");
 		} else
-			document
-				.getElementById("gps-card")
-				.classList.remove("uk-card-primary");
+			document.getElementById("gps-card").classList.remove("uk-card-primary");
 		if (userChoice["Zip Code"]) {
-			document
-				.getElementById("zip-code-card")
-				.classList.add("uk-card-primary");
+			document.getElementById("zip-code-card").classList.add("uk-card-primary");
 		} else
 			document
 				.getElementById("zip-code-card")
@@ -184,38 +172,30 @@ export function cardInteractionSettings(scheme, userChoice) {
 				.getElementById("browsing-history-card")
 				.classList.remove("uk-card-primary");
 		if (userChoice["Age"]) {
+			document.getElementById("age-card").classList.add("uk-card-primary");
+		} else
+			document.getElementById("age-card").classList.remove("uk-card-primary");
+		if (userChoice["Ethnicity/Race"]) {
 			document
-				.getElementById("age-card")
+				.getElementById("ethnicity-card")
 				.classList.add("uk-card-primary");
 		} else
 			document
-				.getElementById("age-card")
+				.getElementById("ethnicity-card")
 				.classList.remove("uk-card-primary");
-    if (userChoice["Ethnicity/Race"]) {
-      document
-        .getElementById("ethnicity-card")
-        .classList.add("uk-card-primary");
-    } else
-      document
-        .getElementById("ethnicity-card")
-        .classList.remove("uk-card-primary");
-    if (userChoice["Income"]) {
-      document
-        .getElementById("income-card")
-        .classList.add("uk-card-primary");
-    } else
-      document
-        .getElementById("income-card")
-        .classList.remove("uk-card-primary");
-    if (userChoice["Gender"]) {
-      document
-        .getElementById("gender-card")
-        .classList.add("uk-card-primary");
-    } else
-      document
-        .getElementById("gender-card")
-        .classList.remove("uk-card-primary");
-  }
+		if (userChoice["Income"]) {
+			document.getElementById("income-card").classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("income-card")
+				.classList.remove("uk-card-primary");
+		if (userChoice["Gender"]) {
+			document.getElementById("gender-card").classList.add("uk-card-primary");
+		} else
+			document
+				.getElementById("gender-card")
+				.classList.remove("uk-card-primary");
+	}
 }
 
 // Create HTML for the buttons and information on default/apply-all setting
@@ -376,7 +356,7 @@ export function createDefaultSettingInfo() {
         </div>
         <hr>
         `;
-			} else if (result.UI_SCHEME == 0) {
+			} else if (result.UI_SCHEME == 0 || result.UI_SCHEME == 9) {
 				defaultSettingInfo = `
         <div class="important-text"> Below you can change your GPC setting for an individual site.
         </div>
@@ -474,8 +454,9 @@ export function createDefaultSettingInfo() {
 				</div>
         `;
 			}
-			document.getElementById("current-apply-all-setting").innerHTML =
-				defaultSettingInfo;
+			document.getElementById(
+				"current-apply-all-setting"
+			).innerHTML = defaultSettingInfo;
 			cardInteractionSettings(result.UI_SCHEME, result.USER_CHOICES);
 		}
 	);

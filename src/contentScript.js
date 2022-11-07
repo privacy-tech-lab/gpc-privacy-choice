@@ -725,6 +725,12 @@ chrome.storage.local.get(
 				bannerMuted[0] != true
 			)
 				showBanner(false, true);
+		} else if (result.UI_SCHEME == 9) {
+			if (
+				domains[currentDomain] === undefined ||
+				domains[currentDomain] == null
+			)
+				showBanner(false, false);
 		} else if (result.UI_SCHEME == 5) {
 			// the user has 1/4 chance of seeing the banner
 			// let random = Math.floor(Math.random() * 4);

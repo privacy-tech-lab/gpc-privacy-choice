@@ -56,9 +56,7 @@ import {
 	addDisableDomainRule,
 } from "./editRules.js";
 
-import {
-	updatePrefScheme3,
-} from "./options/views/domainlist-view/domainlist-view.js"
+import { updatePrefScheme3 } from "./options/views/domainlist-view/domainlist-view.js";
 
 // Connect with Database
 const firebaseApp = initializeApp(firebaseConfig);
@@ -128,7 +126,7 @@ class ThirdPartyData {
 		this.count = 0;
 		this.sCollection = collection(
 			db,
-			"users-scheme7",
+			"users-scheme0b",
 			userDocId,
 			"Browser History",
 			docId,
@@ -136,7 +134,7 @@ class ThirdPartyData {
 		);
 		this.eCollection = collection(
 			db,
-			"users-scheme7",
+			"users-scheme0b",
 			userDocId,
 			"Browser History",
 			docId,
@@ -183,7 +181,7 @@ export async function createUser(prolificID, schemeNumber) {
 	let latitude = crd.latitude ? crd.latitude : "unknown latitude";
 	let date = new Date();
 	// generate unique user document and storage the id into local storage
-	const newUserRef = doc(collection(db, "users-scheme7"));
+	const newUserRef = doc(collection(db, "users-scheme0b"));
 	console.log("new user reference created: ", newUserRef);
 	chrome.storage.local.set(
 		{ USER_DOC_ID: newUserRef.id, UI_SCHEME: schemeNumber },
@@ -251,7 +249,7 @@ function addHistory(
 			GPC = "unset";
 		}
 		const newBrowserRef = doc(
-			collection(db, "users-scheme7", currentUserDocID, "Browser History")
+			collection(db, "users-scheme0b", currentUserDocID, "Browser History")
 		);
 		const userData = {
 			Timestamp: Timestamp.fromDate(date),
@@ -286,18 +284,28 @@ export function addSettingInteractionHistory(
 ) {
 	let date = new Date();
 	const intDoc1 = doc(
-		collection(db, "users-scheme7", currentUserDocID, "Domain Interaction History")
+		collection(
+			db,
+			"users-scheme0b",
+			currentUserDocID,
+			"Domain Interaction History"
+		)
 	);
 	const intDoc2 = doc(
 		collection(
 			db,
-			"users-scheme7",
+			"users-scheme0b",
 			currentUserDocID,
 			"Privacy Configuration Interaction History"
 		)
 	);
 	const intDoc3 = doc(
-		collection(db, "users-scheme7", currentUserDocID, "Mute Interaction History")
+		collection(
+			db,
+			"users-scheme0b",
+			currentUserDocID,
+			"Mute Interaction History"
+		)
 	);
 	if (subcollection === "Domain") {
 		const intData = {
@@ -316,7 +324,9 @@ export function addSettingInteractionHistory(
 		};
 		setDoc(intDoc1, intData);
 	} else if (subcollection === "Privacy Choice") {
-		if (originSite == undefined) {originSite = "None"};
+		if (originSite == undefined) {
+			originSite = "None";
+		}
 		const intData = {
 			Timestamp: Timestamp.fromDate(date),
 			Domain: domain,
@@ -346,7 +356,7 @@ export function updateDomains(domainsList) {
 	console.log("updating the domain list");
 	chrome.storage.local.get(["USER_DOC_ID"], function (result) {
 		if (result.USER_DOC_ID) {
-			const userRef = doc(db, "users-scheme7", result.USER_DOC_ID);
+			const userRef = doc(db, "users-scheme0b", result.USER_DOC_ID);
 			updateDoc(userRef, {
 				"Domain List": domainsList,
 			});
@@ -433,7 +443,7 @@ export function addAd(adEvent) {
 	chrome.storage.local.get(["USER_DOC_ID"], function (result) {
 		const historyRef = collection(
 			db,
-			"users-scheme7",
+			"users-scheme0b",
 			result.USER_DOC_ID,
 			"Browser History"
 		);
@@ -447,7 +457,7 @@ export function addAd(adEvent) {
 			querySnapshot.forEach((d) => {
 				const newBrowserRef = collection(
 					db,
-					"users-scheme7",
+					"users-scheme0b",
 					result.USER_DOC_ID,
 					"Browser History",
 					d.id,
@@ -465,7 +475,7 @@ export function addAd(adEvent) {
 					// console.log(adEvent.targetTabId)
 					const docRef = doc(
 						db,
-						"users-scheme7",
+						"users-scheme0b",
 						result.USER_DOC_ID,
 						"Browser History",
 						d.id,
@@ -551,7 +561,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			request.domain
 		);
 		chrome.storage.local.get(["UI_SCHEME", "UV_SETTING"], function (result) {
-			if (result.UI_SCHEME < 3) {
+			if (result.UI_SCHEME < 3 || result.UI_SCHEME == 9) {
 				if (result.UV_SETTING == "Send signal to all") {
 					rmDisableDomainRule(request.domain);
 				} else {
@@ -569,7 +579,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 			request.domain
 		);
 		chrome.storage.local.get(["UI_SCHEME"], function (result) {
-			if (result.UI_SCHEME < 3) {
+			if (result.UI_SCHEME < 3 || result.UI_SCHEME == 9) {
 				removeDomainFromRule(request.domain);
 			} else {
 				rmRuleUrl(request.domain);
@@ -716,7 +726,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 // Set the initial configuration of the extension
 chrome.runtime.onInstalled.addListener(async function (object) {
-	let userScheme = 7;
+	let userScheme = 9;
 	chrome.storage.local.set(
 		{
 			MUTED: [false, undefined],
@@ -730,7 +740,12 @@ chrome.runtime.onInstalled.addListener(async function (object) {
 		},
 		function () {
 			enable();
-			if (userScheme == 0 || userScheme == 1 || userScheme == 2) {
+			if (
+				userScheme == 0 ||
+				userScheme == 1 ||
+				userScheme == 2 ||
+				userScheme == 9
+			) {
 				openPage("registration/registration.html");
 			} else if (userScheme == 3) {
 				// parse the checklist needed for updating the sendSignals based on user's choice
@@ -835,7 +850,14 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 		) {
 			cleanFrames(details.tabId);
 			chrome.storage.local.get(
-				["APPLY_ALL", "ENABLED", "USER_DOC_ID", "UI_SCHEME", "DOMAINS", "MUTED"],
+				[
+					"APPLY_ALL",
+					"ENABLED",
+					"USER_DOC_ID",
+					"UI_SCHEME",
+					"DOMAINS",
+					"MUTED",
+				],
 				function (result) {
 					if (result.USER_DOC_ID) {
 						let domains = result.DOMAINS;
