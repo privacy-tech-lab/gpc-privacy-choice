@@ -40,10 +40,18 @@ Here are the main features of each scheme:
 
 ### Scheme 0: GPC Privacy Choice Banner with Snooze Option
 
-Scheme 0 is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. There is a **Snooze** button that, upon being selected, will prevent the banner from popping up on new sites for a few hours. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+Users are presented a **GPC Privacy Choice Banner** on each new site they visit. There is a **Snooze** button that, upon being selected, will prevent the banner from popping up on new sites for a few hours. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
 <p align="center">
   <img width="250" alt="Scheme 0 screenshot." src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
+</p>
+
+### Scheme 0b: GPC Privacy Choice Banner
+
+Scheme 0b is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="294" alt="Screen Shot 2022-12-19 at 11 57 06 AM" src="https://user-images.githubusercontent.com/54873610/208479232-0b2752b2-0bf2-4b3e-8ff1-319b4dd9ab65.png">
 </p>
 
 ### Scheme 1: GPC Privacy Choice Banner with Apply-all Option
