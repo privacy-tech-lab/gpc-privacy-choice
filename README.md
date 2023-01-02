@@ -50,7 +50,7 @@ Users are presented a **GPC Privacy Choice Banner** on each new site they visit.
 
 ### Scheme 0b: GPC Privacy Choice Banner
 
-Scheme 0b is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+Scheme 0b is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. In the code the number used to represent Scheme 0b is "9". The paper refers to Scheme 0b as Scheme B.
 
 <p align="center">
   <img width="294" alt="Screen Shot 2022-12-19 at 11 57 06 AM" src="https://user-images.githubusercontent.com/54873610/208479232-0b2752b2-0bf2-4b3e-8ff1-319b4dd9ab65.png">
