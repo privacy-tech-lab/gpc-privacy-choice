@@ -26,6 +26,16 @@ Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme
 
 GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki, Daniel Knopf, and Abdallah Salia contributed earlier.
 
+[1. Research Publications](#1-research-publications)  
+[2. Privacy Choice Schemes](#2-privacy-choice-schemes)  
+[3. Data Collection](#3-data-collection)  
+[4. Developer's Guide to Implement GPC Privacy Choice](#4-developers-guide-to-implement-gpc-privacy-choice)  
+[5. GPC Privacy Choice Architectural Overview](#5-gpc-privacy-choice-architectural-overview)  
+[6. Files and Directories in this Repo](#6-files-and-directories-in-this-repo)  
+[7. Third Party Libraries](#7-third-party-libraries)  
+[8. Known Issues](#8-known-issues)  
+[9. Thank You!](#9-thank-you)
+
 ## 1. Research Publications
 
 - Sebastian Zimmeck, Oliver Wang, Kuba Alicki, Jocelyn Wang and Sophie Eng, [Usability and Enforceability of Global Privacy Control](https://sebastianzimmeck.de/zimmeckEtAlGPC2023.pdf), 23rd Privacy Enhancing Technologies Symposium (PETS)
@@ -295,7 +305,7 @@ The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
   </a>
 </p>
 
-<p align="center">Additional financial support provided by the Anil Fernando Endowment, the National Science Foundation, and Wesleyan University.</p>
+<p align="center">Additional financial support provided by the National Science Foundation, Wesleyan University, and the Anil Fernando Endowment.</p>
 
 <p align="center">
   <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2055196">
