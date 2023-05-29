@@ -20,10 +20,6 @@ GPC Privacy Choice is a browser extension for researching the usability of priva
 
 Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme, for example, a banner asking whether a user wants to enable GPC on the current website they visit. Data about the user's choices as well as details about the visited websites are then transmitted to a backend for analysis. The focus of this extension is on researching user interface design. However, the extension is fully functional and is sending header-based GPC signals. Thus, it serves as a working prototype for all privacy choice schemes we implement.
 
-<p align="center">
-  <a href="https://chrome.google.com/webstore/detail/gpc-privacy-choice/ambkmcacbikgdchhjohhkfngeahpolnk"><img src="./src/img/chrome-web-store-badge.png" width="200px" alt="Chrome Web Store badge"></a>
-<p>
-
 GPC Privacy Choice is developed and maintained by **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Eliza Kuller (@ekuller)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki, Daniel Knopf, and Abdallah Salia contributed earlier.
 
 [1. Research Publications](#1-research-publications)  
@@ -234,7 +230,7 @@ The extension makes use of [Manifest V3](https://developer.chrome.com/docs/exten
 
 Here are the most important files and directories:
 
-- `assets`: Image assets used on the Chrome Web Store listing for the extension.
+- `assets`: Image assets that can be used on the Chrome Web Store listing for the extension.
 - `scripts/writerules.py`: This script is used to render the rulesets for appropriately attaching the GPC signal by privacy sensitivity (scheme 3) and third party category (scheme 4). It generates the files in `src/rulesets` and is not run in the browser or on the backend.
 - `src/firebase`: Contains all the Firebase related configurations/scripts
   - `src/firebase/firebase.json`: The Firebase (Firestore) configuration file.
