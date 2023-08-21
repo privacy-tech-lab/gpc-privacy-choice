@@ -725,6 +725,17 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 });
 
 // Set the initial configuration of the extension
+/**
+ * SB-Base: 9
+ * S0-Snooze: 0
+ * S1-Apply-All: 1
+ * S2-Snooze+Apply-All: 2
+ * S3-Profile: 3
+ * S4-Website: 4
+ * S5-Learn: 5
+ * S6-Universal: 6
+ * S7-Data: 7
+*/
 chrome.runtime.onInstalled.addListener(async function (object) {
 	let userScheme = 9;
 	chrome.storage.local.set(
