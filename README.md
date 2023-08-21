@@ -199,7 +199,7 @@ The Mute Interaction History covers schemes where the **Snooze** button is prese
 Follow the instructions to implement the GPC Privacy Choice browser extension for your own projects.
 
 1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
-2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection. We have already added the required dependencies, client libraries, and initialized an instance of Cloud Firestore.
+2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection. We have already added the required dependencies, client libraries, and initialized an instance of Cloud Firestore. Before proceeding, make sure that you have created a Firebase account and ac Cloud Firestore database, as well as installed Firebase to your local machine through the command `npm install firebase`.
 3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the Firebase Cloud Firestore project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase. If you are running a study with multiple schemes one after another, it is recommended to change the password between schemes. Otherwise, data from study participants running a previous scheme may continue to be collected inadvertently.
 
    ```javascript
@@ -217,7 +217,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 
 4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID. You also need to supply the password mentioned above. The registration process should start.
+6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
 7. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
 ## 5. GPC Privacy Choice Architectural Overview
