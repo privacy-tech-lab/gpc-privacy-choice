@@ -199,8 +199,8 @@ The Mute Interaction History covers schemes where the **Snooze** button is prese
 Follow the instructions to implement the GPC Privacy Choice browser extension for your own projects.
 
 1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
-2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection.
-3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase. If you are running a study with multiple schemes one after another, it is recommended to change the password between schemes. Otherwise, data from study participants running a previous scheme may continue to be collected inadvertently.
+2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection. We have already added the required dependencies, client libraries, and initialized an instance of Cloud Firestore.
+3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the Firebase Cloud Firestore project you have set up. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase. If you are running a study with multiple schemes one after another, it is recommended to change the password between schemes. Otherwise, data from study participants running a previous scheme may continue to be collected inadvertently.
 
    ```javascript
    export const PASSWORD = "*******";
