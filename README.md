@@ -195,6 +195,7 @@ The Mute Interaction History covers schemes where the **Snooze** button is prese
 </p>
 
 ## 4. Developer's Guide to Implement GPC Privacy Choice
+**NOTE: In order to create a Firebase project, you need 'Cloud Resource Manager project creation' to be enabled. This may be disabled if you are using an institutional account.**
 
 Follow the instructions to implement the GPC Privacy Choice browser extension for your own projects.
 
