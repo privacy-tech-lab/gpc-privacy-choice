@@ -44,11 +44,19 @@ GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, *
 
 ## 2. Privacy Choice Schemes
 
-The GPC Privacy Choice extension includes 7 schemes for enabling GPC signals on websites. Which scheme a user is assigned upon installation of the extension is randomized, though, it is also possible to set the extension to a particular scheme (see `background.js`).
+The GPC Privacy Choice extension includes nine schemes for enabling GPC signals on websites. Which scheme a user is assigned upon installation of the extension is intentionally set within the extension (see `background.js`).
 
 Here are the main features of each scheme:
 
-### Scheme 0: GPC Privacy Choice Banner with Snooze Option
+### SB-Base: GPC Privacy Choice Banner
+
+SB-Base is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+
+<p align="center">
+  <img width="250" alt="Screen Shot 2022-12-19 at 11 57 06 AM" src="https://user-images.githubusercontent.com/54873610/208479232-0b2752b2-0bf2-4b3e-8ff1-319b4dd9ab65.png">
+</p>
+
+### S0-Snooze: GPC Privacy Choice Banner with Snooze Option
 
 Users are presented a **GPC Privacy Choice Banner** on each new site they visit. There is a **Snooze** button that, upon being selected, will prevent the banner from popping up on new sites for a few hours. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
@@ -56,65 +64,57 @@ Users are presented a **GPC Privacy Choice Banner** on each new site they visit.
   <img width="250" alt="Scheme 0 screenshot." src="https://user-images.githubusercontent.com/54873610/148790325-ef5ae195-e024-4177-9119-9f21865108df.png">
 </p>
 
-### Scheme 0b: GPC Privacy Choice Banner
+### S1-Apply-All: GPC Privacy Choice Banner with Apply-all Option
 
-Scheme 0b is the base scheme. Users are presented a **GPC Privacy Choice Banner** on each new site they visit. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. In the code the number used to represent Scheme 0b is "9". The paper refers to Scheme 0b as Scheme B.
-
-<p align="center">
-  <img width="250" alt="Screen Shot 2022-12-19 at 11 57 06 AM" src="https://user-images.githubusercontent.com/54873610/208479232-0b2752b2-0bf2-4b3e-8ff1-319b4dd9ab65.png">
-</p>
-
-### Scheme 1: GPC Privacy Choice Banner with Apply-all Option
-
-In scheme 1 the **GPC Privacy Choice Banner** is presented on every new site, however, with an **Apply-all** option but no **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+In S1-Apply-All the **GPC Privacy Choice Banner** is presented on every new site, however, with an **Apply-all** option but no **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
 <p align="center">
   <img width="250" alt="Scheme 1 screenshot." src="https://user-images.githubusercontent.com/54873610/148790364-f41b418d-a6ec-41f4-bc79-78647f2e4096.png">
 </p>
 
-### Scheme 2: GPC Privacy Choice Banner with Snooze and Apply-all Option
+### S2-Snooze+Apply-All: GPC Privacy Choice Banner with Snooze and Apply-all Option
 
-Scheme 2 is a combination of schemes 0 and 1. The **GPC Privacy Choice Banner** contains both the **Apply-all** option as well as the **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+S2-Snooze+Apply-All is a combination of schemes 0 and 1. The **GPC Privacy Choice Banner** contains both the **Apply-all** option as well as the **Snooze** button. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
 <p align="center">
   <img width="250" alt="Scheme 2 screenshot." src="https://user-images.githubusercontent.com/54873610/148790378-31a501e2-3e63-4096-b74a-695b02405468.png">
 </p>
 
-### Scheme 3: Privacy Profiles
+### S3-Profile: Privacy Profiles
 
-Scheme 3 makes use of **Privacy Profiles**. Upon running the extension for the first time, users are prompted to choose a privacy profile. Their choice will then determine which sites will receive GPC signals. We use the [disconnect-tracking-protection list](https://github.com/disconnectme/disconnect-tracking-protection) to identify sites that should receive signals under a certain Privacy Profile. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. The GPC values for domains on the domain list depend on in which category, if any, the domain is included in the disconnect-tracking-protection list as well as the choices a user makes on the domain list.
+S3-Profile makes use of **Privacy Profiles**. Upon running the extension for the first time, users are prompted to choose a privacy profile. Their choice will then determine which sites will receive GPC signals. We use the [disconnect-tracking-protection list](https://github.com/disconnectme/disconnect-tracking-protection) to identify sites that should receive signals under a certain Privacy Profile. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. The GPC values for domains on the domain list depend on in which category, if any, the domain is included in the disconnect-tracking-protection list as well as the choices a user makes on the domain list.
 
 <p align="center">
   <img width="800" alt="Scheme 3 screenshot." src="https://user-images.githubusercontent.com/54873610/148790400-24901af2-596c-439d-bcac-34318a3a685f.png">
 </p>
 
-### Scheme 4: Website Categories
+### S4-Website: Website Categories
 
-Scheme 4 makes use of **Website Categories**. Upon running the extension for the first time, users are prompted to select the categories that they would like to opt out from. We use the disconnect-tracking-protection list to identify sites that should receive signals under a certain Website Category. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. The GPC values for domains on the domain list depend on in which category, if any, the domain is included in the disconnect-tracking-protection list as well as the choices a user makes on the domain list.
+S4-Website makes use of **Website Categories**. Upon running the extension for the first time, users are prompted to select the categories that they would like to opt out from. We use the disconnect-tracking-protection list to identify sites that should receive signals under a certain Website Category. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. The GPC values for domains on the domain list depend on in which category, if any, the domain is included in the disconnect-tracking-protection list as well as the choices a user makes on the domain list.
 
 <p align="center">
   <img width="800" alt="Scheme 4 screenshot." src="https://user-images.githubusercontent.com/54873610/162093136-451a4898-a8f2-4c3e-8d37-a444a71b96f3.png">
 </p>
 
-### Scheme 5: Learning Privacy Profiles
+### S5-Learn: Learning Privacy Profiles
 
-Scheme 5 is a combination of schemes 1 and 3 and makes use of a simple technique to **Learn Privacy Profiles**. The user is presented with **GPC Privacy Choice Banners** on the first 10 websites they visit. Their choices are recorded and then used to select a **Privacy Profile** that suits the user best. No **GPC Privacy Choice Banners** are shown beyond the initial 10. Users that choose to enable GPC signals on 8 or more of the first 10 websites will be assigned a **High-Sensitivity Privacy Profile**. 4-7 enables (inclusive) will yield a **Medium-Sensitivity Privacy Profile** and 3 or fewer will give users a **Low-Sensitivity Privacy Profile**. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. After the learning period is over a user may change their privacy profile on the Options Page.
+S5-Learn is a combination of schemes 1 and 3 and makes use of a simple technique to **Learn Privacy Profiles**. The user is presented with **GPC Privacy Choice Banners** on the first 10 websites they visit. Their choices are recorded and then used to select a **Privacy Profile** that suits the user best. No **GPC Privacy Choice Banners** are shown beyond the initial 10. Users that choose to enable GPC signals on 8 or more of the first 10 websites will be assigned a **High-Sensitivity Privacy Profile**. 4-7 enables (inclusive) will yield a **Medium-Sensitivity Privacy Profile** and 3 or fewer will give users a **Low-Sensitivity Privacy Profile**. Users can select to which domains they want to send GPC signals via a domain list on the Options Page. After the learning period is over a user may change their privacy profile on the Options Page.
 
 <p align="center">
   <img width="400" alt="Scheme 5 screenshot." src="https://user-images.githubusercontent.com/54873610/148790447-63aa0939-309c-413d-af31-4599326a53a5.png">
 </p>
 
-### Scheme 6: Enabling/Disabling GPC for All Sites
+### S6-Universal: Enabling/Disabling GPC for All Sites
 
-Scheme 6 is the simplest of all schemes. Upon running the extension for the first time, users are prompted as to whether they would like to send GPC signals to all websites they visit or not. They may change this preference on the Options Page. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
+S6-Universal is the simplest of all schemes. Upon running the extension for the first time, users are prompted as to whether they would like to send GPC signals to all websites they visit or not. They may change this preference on the Options Page. Users can select to which domains they want to send GPC signals via a domain list on the Options Page.
 
 <p align="center">
   <img width="800" alt="Scheme 6 screenshot." src="https://user-images.githubusercontent.com/54873610/148790468-28c41e3e-b9db-408e-a927-65a0c4955131.png">
 </p>
 
-### Scheme 7: Data Categories
+### S7-Data: Data Categories
 
-Scheme 7 makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with scheme 7, as our extension is not a full implementation of the described functionality. Users can adjust their categories on the Options Page. In scheme 7 users are **not** able to select individual domains to which they want to send GPC signals.
+S7-Data makes use of **Data Categories**. Upon running the extension for the first time, users are prompted to select the types of data that they would **not** like to be shared with or sold to advertisers. Users should not rely on being opted out with S7-Data, as our extension is not a full implementation of the described functionality. Users can adjust their categories on the Options Page. In S7-Data users are **not** able to select individual domains to which they want to send GPC signals.
 
 <p align="center">
   <img width="800" alt="Screen Shot 2022-07-06 at 11 32 54 AM" src="https://user-images.githubusercontent.com/54873610/177589363-70910692-d1ac-49dc-b76f-f4b2abdb2450.png">
