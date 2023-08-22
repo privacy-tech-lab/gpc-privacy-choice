@@ -1,92 +1,92 @@
 {
-	"name": "GPC Privacy Choice",
-	"version": "2.9.0",
-	"description": "GPC Privacy Choice is a research extension that studies usable privacy choice mechanisms on the web",
-	"permissions": [
-		"webRequest",
-		"webNavigation",
-		"storage",
-		"tabs",
-		"contentSettings",
-		"geolocation",
-		"declarativeNetRequest"
-	],
-	"host_permissions": ["<all_urls>"],
-	"action": {
-		"default_title": "GPC Privacy Choice"
-	},
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["contentScript.js"],
-			"run_at": "document_end"
-		}
-	],
-	"background": {
-		"service_worker": "background.js",
-		"type": "module"
-	},
-	"manifest_version": 3,
-	"web_accessible_resources": [
-		{
-			"resources": ["adDomains.txt", "json/*.json"],
-			"matches": ["<all_urls>"]
-		}
-	],
-	"icons": {
-		"32": "./img/gpc-choice-icon.png",
-		"128": "./img/gpc-choice-icon.png"
-	},
-	"content_security_policy": {
-		"extension_pages": "script-src 'self'; object-src 'self'"
-	},
-	"declarative_net_request": {
-		"rule_resources": [
-			{
-				"id": "universal_GPC",
-				"enabled": false,
-				"path": "rulesets/global.json"
-			},
-			{
-				"id": "advertising",
-				"enabled": false,
-				"path": "rulesets/Advertising.json"
-			},
-			{
-				"id": "FG",
-				"enabled": false,
-				"path": "rulesets/FingerprintingGeneral.json"
-			},
-			{
-				"id": "FI",
-				"enabled": false,
-				"path": "rulesets/FingerprintingInvasive.json"
-			},
-			{
-				"id": "social",
-				"enabled": false,
-				"path": "rulesets/Social.json"
-			},
-			{
-				"id": "disconnect",
-				"enabled": false,
-				"path": "rulesets/Disconnect.json"
-			},
-			{
-				"id": "cryptomining",
-				"enabled": false,
-				"path": "rulesets/Cryptomining.json"
-			},
-			{
-				"id": "analytics",
-				"enabled": false,
-				"path": "rulesets/Analytics.json"
-			},
-			{
-				"id": "content",
-				"enabled": false,
-				"path": "rulesets/Content.json"
-			}
-		]
-	}
+  "name": "GPC Privacy Choice",
+  "version": "2.10.1",
+  "description": "GPC Privacy Choice is a research extension that studies usable privacy choice mechanisms on the web",
+  "permissions": [
+    "webRequest",
+    "webNavigation",
+    "storage",
+    "tabs",
+    "contentSettings",
+    "geolocation",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "GPC Privacy Choice"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "manifest_version": 3,
+  "web_accessible_resources": [
+    {
+      "resources": ["adDomains.txt", "json/*.json"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "32": "./img/gpc-choice-icon.png",
+    "128": "./img/gpc-choice-icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "universal_GPC",
+        "enabled": false,
+        "path": "rulesets/global.json"
+      },
+      {
+        "id": "advertising",
+        "enabled": false,
+        "path": "rulesets/Advertising.json"
+      },
+      {
+        "id": "FG",
+        "enabled": false,
+        "path": "rulesets/FingerprintingGeneral.json"
+      },
+      {
+        "id": "FI",
+        "enabled": false,
+        "path": "rulesets/FingerprintingInvasive.json"
+      },
+      {
+        "id": "social",
+        "enabled": false,
+        "path": "rulesets/Social.json"
+      },
+      {
+        "id": "disconnect",
+        "enabled": false,
+        "path": "rulesets/Disconnect.json"
+      },
+      {
+        "id": "cryptomining",
+        "enabled": false,
+        "path": "rulesets/Cryptomining.json"
+      },
+      {
+        "id": "analytics",
+        "enabled": false,
+        "path": "rulesets/Analytics.json"
+      },
+      {
+        "id": "content",
+        "enabled": false,
+        "path": "rulesets/Content.json"
+      }
+    ]
+  }
 }
