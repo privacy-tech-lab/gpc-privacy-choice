@@ -48,7 +48,7 @@ In order to set up the environment for our extension, you should have Git instal
 
 1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
 
-2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided Prolific ID (5f473753tbf20b123d695213) and password (12345).
+2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided password (12345).
 
 ```javascript
 export const PASSWORD = "12345";
