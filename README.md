@@ -63,7 +63,7 @@ export const firebaseConfig = {
 };
 ```
 
-Alternatively, if you wish to set up your own Firebase backend, I recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
+Alternatively, if you wish to set up your own Firebase backend, I recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-full-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
 
 3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
 4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
