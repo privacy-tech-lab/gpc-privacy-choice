@@ -135,7 +135,41 @@ Although – to some extent – it depends on what you want, there are certain g
 
 The GPC Privacy Choice browser extension records how users interact with the sites they visit and which privacy choices they make in a Firestore database. In the database each user is represented by a unique ID (e.g., `uDMVrtzy7lxf1sQqsmd8`) and all their interactions are recorded under that ID. In addition, each user is requested to enter their unique [Prolific](https://www.prolific.co/) ID upon installing the extension. The Prolific ID allows us to correlate the collected data with data from surveys about the use of our extension, which we administer via Prolific.
 
-Here are the different categories of data that the extension collects:
+The browser extension collects the following data types from users, but data is never disclosed to any third-party. We never disclose any identifiable information.
+
+Below is the list of data types that the browser extension generally collects from users of the GPC Privacy Choice Extension:
+
+#### General:
+
+- Prolific ID
+- Browser (e.g. Google Chrome)
+- Whether you have HTTP cookies enabled (true or false)
+- Whether you have Do Not Track enabled (true or false)
+- Whether you have JavaScript enabled (true of false)
+- Operating system language (e.g. en-US)
+- Geographic location (e.g., your latitude/longitude coordinates)
+- Whether you have Local Storage enabled in your browser (true or false)
+- Operating system (e.g. Mac/iOS)
+- Browser plugins (e.g. Chrome PDF Plugin)
+- Browser's rendering engine (e.g., WebKit)
+- Whether you have Session Storage enabled (true or false)
+- Time zone
+- UI scheme of your browser
+- User agent of your browser
+
+#### Browser history and Interaction with our extensions:
+
+- The website URLs you visit (e.g. https://www.cnbc.com/finance/)
+- A timestamp when you visited a website
+- The GPC status you selected for the current website you are on (true or false)
+- Whether you have GPC globally enabled for all websites you visit
+- Referer (i.e., the previous website you visited before coming to the current site)
+- The TabIDs of the different tabs in your browser
+- Whether you click on an ad on a website
+- The website URL that your browser goes to when you click on an ad
+- The website URLs of the ad networks integrated in the sites you visit
+
+Here is how we categorize the data that the extension collects:
 
 ### Browser History
 
@@ -220,7 +254,8 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
-7. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
+7. Reviewer may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme.
+8. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
 ## 5. GPC Privacy Choice Architectural Overview
 
