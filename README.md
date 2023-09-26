@@ -42,7 +42,35 @@ GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, *
 - Sebastian Zimmeck, [Improving Internet Privacy with Global Privacy Control (GPC)](https://sebastianzimmeck.de/SaTC_PI_Meeting_2022_Poster_GPC_Zimmeck.pdf), 5th NSF Secure and Trustworthy Cyberspace Principal Investigator Meeting (2022 SaTC PI Meeting), Arlington, Virginia, USA, June 2022
 - Eliza Kuller, Chunyue Ma, Isabella Tassone, Sebastian Zimmeck, [Making Online Privacy Choice Mechanisms Effective and Usable](http://summer21.research.wesleyan.edu/2021/07/22/balancing-usability-and-active-choice-while-developing-privacy-permission-schemes/), Summer Research 2021 Poster Session, Wesleyan University, Online, July 2021
 
-## 2. Privacy Choice Schemes
+## 2. Quick DEV Guide
+
+In order to set up the environment for our artifact, you should have Git installed.
+
+1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
+
+2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided Prolific ID (5f473753tbf20b123d695213) and password (12345).
+
+```javascript
+export const PASSWORD = "12345";
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyC08Bt3IUPn_6Sn469x-M1VwIb4KTXHYNo",
+  authDomain: "gpc-example.firebaseapp.com",
+  projectId: "gpc-example",
+  storageBucket: "gpc-example.appspot.com",
+  messagingSenderId: "403632222995",
+  appId: "1:403632222995:web:6f72eb626ff4214ba060e6",
+};
+```
+
+Alternatively, if you wish to set up your own Firebase backend, I recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
+
+3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
+4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
+5. The extension should now be loaded and you should see the registration page pop up on the browser. In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+6. You may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme. See [Privacy Choice Schemes](https://github.com/privacy-tech-lab/gpc-privacy-choice#3-privacy-choice-schemes) for full descriptions of each scheme.
+
+## 3. Privacy Choice Schemes
 
 The GPC Privacy Choice extension includes nine schemes for enabling GPC signals on websites. Which scheme a user is assigned upon installation of the extension is intentionally set within the extension (see `background.js`).
 
@@ -129,7 +157,7 @@ Although – to some extent – it depends on what you want, there are certain g
 - In order to set the browser extension to your scheme, you'll need to link it to a scheme **number** in `background.js`.
 - You will also need to create a collection for your scheme in firebase. You can do this by working in `background.js` to change the collection name, and then developing your firebase security rules to accept that collection name.
 
-## 3. Data Collection
+## 4. Data Collection
 
 **NOTE: Please make sure that you have your users' consent to collect their data. If you are at a university, you may need IRB approval or a determination that your research is exempt.**
 
@@ -228,7 +256,7 @@ The Mute Interaction History covers schemes where the **Snooze** button is prese
   <img width="600" alt="Mute Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371757-e957143b-e7a2-4973-9bf4-e11c87e825d7.png">
 </p>
 
-## 4. Developer's Guide to Implement GPC Privacy Choice
+## 5. Full Developer's Guide to Implement GPC Privacy Choice
 
 **NOTE: In order to create a Firebase project, you need 'Cloud Resource Manager project creation' to be enabled. This may be disabled if you are using an institutional account.**
 
@@ -257,7 +285,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 7. Reviewer may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme.
 8. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
-## 5. GPC Privacy Choice Architectural Overview
+## 6. GPC Privacy Choice Architectural Overview
 
 The extension makes use of [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/).
 
@@ -265,7 +293,7 @@ The extension makes use of [Manifest V3](https://developer.chrome.com/docs/exten
   <img src="./src/img/gpc-choice-architecture.png" width="800" alt="GPC Privacy Choice Architecture"></a>
 <p>
 
-## 6. Files and Directories in this Repo
+## 7. Files and Directories in this Repo
 
 Here are the most important files and directories:
 
@@ -304,7 +332,7 @@ Here are the most important files and directories:
 - `src/updateSignal.js`: Updates the status of whether a GPC signal is sent or not on any given site.
 - `src/util.js`: Provides utility functions for `background.js`.
 
-## 7. Third Party Libraries
+## 8. Third Party Libraries
 
 The GPC Privacy Choice extension uses the following third party libraries. We thank the developers.
 
@@ -316,7 +344,7 @@ The GPC Privacy Choice extension uses the following third party libraries. We th
 
 The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
 
-## 8. Known Issues
+## 9. Known Issues
 
 - **Only header-based GPC signals**: Our extension is sending [header-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#the-sec-gpc-header-field-for-http-requests). However, we [did not implement DOM-based GPC signals](https://globalprivacycontrol.github.io/gpc-spec/#javascript-property-to-detect-preference).
 - **The GPC choice banner UI may not display well on certain sites**: Due to lack of control on the styling of injected HTML, the banner UI may vary on certain sites. We have tried our best to ensure UI consistency. Based on our testing during the development phase, the UI consistency is only not well maintained on a small set of sites, and the functionalities of the banner are not affected.
@@ -328,7 +356,7 @@ The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
 - **In rare instances browser updates may require re-registration**: For already registered users, upon browser updates, the extension may display the user registration page again. No data may be collected on Firebase until the user re-registers. If the user re-registers, a second Firebase ID will be created and data will be collected from that moment on under that Firebase ID. Data for the same user under different Firebase IDs can be combined in the post-processing stages.
 - **Scheme 7 does not send GPC Signals.** It is a front-end implementation only.
 
-## 9. Thank You!
+## 10. Thank You!
 
 <p align="center"><strong>We would like to thank our financial supporters!</strong></p><br>
 
