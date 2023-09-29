@@ -355,6 +355,8 @@ The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
 - **The domain list on Firebase updates on leaving a site**: So, when a user visits site A and then site B, site A will show up in the domain list at the time the user opens site B.
 - **In rare instances browser updates may require re-registration**: For already registered users, upon browser updates, the extension may display the user registration page again. No data may be collected on Firebase until the user re-registers. If the user re-registers, a second Firebase ID will be created and data will be collected from that moment on under that Firebase ID. Data for the same user under different Firebase IDs can be combined in the post-processing stages.
 - **Scheme 7 does not send GPC Signals.** It is a front-end implementation only.
+- **Errors in the Chrome Manage Extensions tab** If you have successfully installed the GPC Privacy Choice extension, you may have noticed that the extension has multiple documented errors on the Manage Extensions page. As far as we can tell, none of these errors have ever inhibited the functionality of our extension, and as such, we have not yet addressed them.
+- **Available only on Chromium browsers** Although our extension is generally available on Chromium browsers (Chrome, Brave, etc.) it cannot be installed on other browsers, such as Firefox.
 
 ## 10. Thank You!
 
