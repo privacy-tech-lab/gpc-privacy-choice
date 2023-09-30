@@ -24,14 +24,15 @@ Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme
 GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki (@kalicki1), Daniel Knopf (@dknopf), and Abdallah Salia (@asalia-1) contributed earlier.
 
 [1. Research Publications](#1-research-publications)  
-[2. Privacy Choice Schemes](#2-privacy-choice-schemes)  
-[3. Data Collection](#3-data-collection)  
-[4. Developer's Guide to Implement GPC Privacy Choice](#4-developers-guide-to-implement-gpc-privacy-choice)  
-[5. GPC Privacy Choice Architectural Overview](#5-gpc-privacy-choice-architectural-overview)  
-[6. Files and Directories in this Repo](#6-files-and-directories-in-this-repo)  
-[7. Third Party Libraries](#7-third-party-libraries)  
-[8. Known Issues](#8-known-issues)  
-[9. Thank You!](#9-thank-you)
+[2. Quick DEV Set-Up Guide](#2-quick-dev-set-up-guide)  
+[3. Privacy Choice Schemes](#3-privacy-choice-schemes)  
+[4. Data Collection](#4-data-collection)  
+[5. Full Developer's Guide to Implement GPC Privacy Choice](#5-full-developers-guide-to-implement-gpc-privacy-choice)  
+[6. GPC Privacy Choice Architectural Overview](#6-gpc-privacy-choice-architectural-overview)  
+[7. Files and Directories in this Repo](#7-files-and-directories-in-this-repo)  
+[8. Third Party Libraries](#8-third-party-libraries)  
+[9. Known Issues](#9-known-issues)  
+[10. Thank You!](#10-thank-you)
 
 ## 1. Research Publications
 
@@ -67,7 +68,7 @@ Alternatively, if you wish to set up your own Firebase backend, we recommend loo
 
 3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
 4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-5. The extension should now be loaded and you should see the registration page pop up on the browser. In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+5. The extension should now be loaded and you should see the registration page pop up on the browser. We signed up participants for our usability study to test the different schemes via [Prolific](https://www.prolific.com). In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
 6. You may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme. See [Privacy Choice Schemes](https://github.com/privacy-tech-lab/gpc-privacy-choice#3-privacy-choice-schemes) for full descriptions of each scheme.
 
 ## 3. Privacy Choice Schemes
