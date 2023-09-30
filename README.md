@@ -21,7 +21,7 @@ GPC Privacy Choice is a Chromium browser extension for researching the usability
 
 Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme, for example, a banner asking whether a user wants to enable GPC on the current website they visit. Data about the user's choices as well as details about the visited websites are then transmitted to a backend for analysis. The focus of this extension is on researching user interface design. However, the extension is fully functional and is sending header-based GPC signals. Thus, it serves as a working prototype for all privacy choice schemes we implement.
 
-GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki (@kalicki1), Daniel Knopf (@dknopf), and Abdallah Salia (@asalia-1) contributed earlier.
+GPC Privacy Choice is developed and maintained by **Sebastian Zimmeck (@SebastianZimmeck)**, **Eliza Kuller (@ekuller)**, **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, and **Joe Champeau (@JoeChampeau)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki (@kalicki1), Daniel Knopf (@dknopf), and Abdallah Salia (@asalia-1) contributed earlier.
 
 [1. Research Publications](#1-research-publications)  
 [2. Quick Developer Set-Up Guide](#2-quick-developer-set-up-guide)  
@@ -36,8 +36,8 @@ GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, *
 
 ## 1. Research Publications
 
-- Sebastian Zimmeck, Oliver Wang, Kuba Alicki, Jocelyn Wang and Sophie Eng, [Usability and Enforceability of Global Privacy Control](https://sebastianzimmeck.de/zimmeckEtAlGPC2023.pdf), 23rd Privacy Enhancing Technologies Symposium (PETS)
-  Lausanne, Switzerland and Online Event, July 2023
+- Sebastian Zimmeck, Eliza Kuller, Chunyue Ma, Bella Tassone and Joe Champeau, [Generalizable Active Privacy Choice: Designing a Graphical User Interface for Global Privacy Control](https://sebastianzimmeck.de/zimmeckEtAlGPC2024.pdf), 24th Privacy Enhancing Technologies Symposium (PETS), Bristol, UK and Online Event, July 2024, [BibTeX](https://sebastianzimmeck.de/citations.html#zimmeckEtAlGPC2024Bibtex). If you are using code or schemes from this repo, please cite this paper.
+- Sebastian Zimmeck, Oliver Wang, Kuba Alicki, Jocelyn Wang and Sophie Eng, [Usability and Enforceability of Global Privacy Control](https://sebastianzimmeck.de/zimmeckEtAlGPC2023.pdf), 23rd Privacy Enhancing Technologies Symposium (PETS), Lausanne, Switzerland and Online Event, July 2023, [BibTeX](https://sebastianzimmeck.de/citations.html#zimmeckEtAlGPC2023Bibtex)
 - Eliza Kuller, [Privacy Choice Mechanisms and Online Advertising: Can Generalizable Active Privacy Choices and Online Advertising Coexist?](https://doi.org/10.14418/wes01.1.2797), Undergraduate Honors Thesis, Wesleyan University, April 2023
 - Isabella Tassone, Chunyue Ma, Eliza Kuller, Joe Champeau, Sebastian Zimmeck, [Enhancing Online Privacy: The Development of Practical Privacy Choice Mechanisms](https://github.com/privacy-tech-lab/gpc-privacy-choice/blob/main/research/tassoneEtAlEnhancingOnlinePrivacy2022Poster.pdf), Summer Research 2022 Poster Session, Wesleyan University, July 2022
 - Sebastian Zimmeck, [Improving Internet Privacy with Global Privacy Control (GPC)](https://sebastianzimmeck.de/SaTC_PI_Meeting_2022_Poster_GPC_Zimmeck.pdf), 5th NSF Secure and Trustworthy Cyberspace Principal Investigator Meeting (2022 SaTC PI Meeting), Arlington, Virginia, USA, June 2022
