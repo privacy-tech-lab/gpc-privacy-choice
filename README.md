@@ -68,7 +68,7 @@ Alternatively, if you wish to set up your own Firebase backend, we recommend loo
 
 3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
 4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-5. The extension should now be loaded and you should see the registration page pop up on the browser. We signed up participants for our usability study to test the different schemes via [Prolific](https://www.prolific.com). In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+5. The extension should now be loaded and you should see the registration page pop up on the browser. We signed up participants for our usability study to test the different schemes via [Prolific](https://www.prolific.com). In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 6. You may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme. See [Privacy Choice Schemes](https://github.com/privacy-tech-lab/gpc-privacy-choice#3-privacy-choice-schemes) for full descriptions of each scheme.
 
 ## 3. Privacy Choice Schemes
@@ -282,7 +282,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 
 4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 7. Reviewer may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme.
 8. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
