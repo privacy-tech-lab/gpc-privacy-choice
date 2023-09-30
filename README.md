@@ -24,14 +24,15 @@ Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme
 GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, **Joe Champeau (@JoeChampeau)**, and **Sebastian Zimmeck (@SebastianZimmeck)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki (@kalicki1), Daniel Knopf (@dknopf), and Abdallah Salia (@asalia-1) contributed earlier.
 
 [1. Research Publications](#1-research-publications)  
-[2. Privacy Choice Schemes](#2-privacy-choice-schemes)  
-[3. Data Collection](#3-data-collection)  
-[4. Developer's Guide to Implement GPC Privacy Choice](#4-developers-guide-to-implement-gpc-privacy-choice)  
-[5. GPC Privacy Choice Architectural Overview](#5-gpc-privacy-choice-architectural-overview)  
-[6. Files and Directories in this Repo](#6-files-and-directories-in-this-repo)  
-[7. Third Party Libraries](#7-third-party-libraries)  
-[8. Known Issues](#8-known-issues)  
-[9. Thank You!](#9-thank-you)
+[2. Quick Developer Set-Up Guide](#2-quick-developer-set-up-guide)  
+[3. Privacy Choice Schemes](#3-privacy-choice-schemes)  
+[4. Data Collection](#4-data-collection)  
+[5. Full Developer Set-Up Guide to Implement GPC Privacy Choice](#5-full-developer-set-up-guide-to-implement-gpc-privacy-choice)  
+[6. GPC Privacy Choice Architectural Overview](#6-gpc-privacy-choice-architectural-overview)  
+[7. Files and Directories in this Repo](#7-files-and-directories-in-this-repo)  
+[8. Third Party Libraries](#8-third-party-libraries)  
+[9. Known Issues](#9-known-issues)  
+[10. Thank You!](#10-thank-you)
 
 ## 1. Research Publications
 
@@ -42,32 +43,36 @@ GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, *
 - Sebastian Zimmeck, [Improving Internet Privacy with Global Privacy Control (GPC)](https://sebastianzimmeck.de/SaTC_PI_Meeting_2022_Poster_GPC_Zimmeck.pdf), 5th NSF Secure and Trustworthy Cyberspace Principal Investigator Meeting (2022 SaTC PI Meeting), Arlington, Virginia, USA, June 2022
 - Eliza Kuller, Chunyue Ma, Isabella Tassone, Sebastian Zimmeck, [Making Online Privacy Choice Mechanisms Effective and Usable](http://summer21.research.wesleyan.edu/2021/07/22/balancing-usability-and-active-choice-while-developing-privacy-permission-schemes/), Summer Research 2021 Poster Session, Wesleyan University, Online, July 2021
 
-## 2. Quick DEV Guide
+## 2. Quick Developer Set-Up Guide
 
-In order to set up the environment for our artifact, you should have Git installed.
+In order to set up the environment for our extension, you should have Git installed.
 
-1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
+1. Clone this repo:
 
-2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided Prolific ID (5f473753tbf20b123d695213) and password (12345).
+   ```bash
+   git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git
+   ```
 
-```javascript
-export const PASSWORD = "12345";
+2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided password (12345).
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyC08Bt3IUPn_6Sn469x-M1VwIb4KTXHYNo",
-  authDomain: "gpc-example.firebaseapp.com",
-  projectId: "gpc-example",
-  storageBucket: "gpc-example.appspot.com",
-  messagingSenderId: "403632222995",
-  appId: "1:403632222995:web:6f72eb626ff4214ba060e6",
-};
-```
+   ```javascript
+   export const PASSWORD = "12345";
 
-Alternatively, if you wish to set up your own Firebase backend, I recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
+   export const firebaseConfig = {
+     apiKey: "AIzaSyC08Bt3IUPn_6Sn469x-M1VwIb4KTXHYNo",
+     authDomain: "gpc-example.firebaseapp.com",
+     projectId: "gpc-example",
+     storageBucket: "gpc-example.appspot.com",
+     messagingSenderId: "403632222995",
+     appId: "1:403632222995:web:6f72eb626ff4214ba060e6",
+   };
+   ```
+
+   Alternatively, if you wish to set up your own Firebase backend, we recommend looking at our [Full Developer Set-Up Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-full-developer-set-up-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
 
 3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
-4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-5. The extension should now be loaded and you should see the registration page pop up on the browser. In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src`.
+5. The extension should now be loaded and you should see the registration page pop up on the browser. We signed up participants for our usability study to test the different schemes via [Prolific](https://www.prolific.com). In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 6. You may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme. See [Privacy Choice Schemes](https://github.com/privacy-tech-lab/gpc-privacy-choice#3-privacy-choice-schemes) for full descriptions of each scheme.
 
 ## 3. Privacy Choice Schemes
@@ -256,13 +261,18 @@ The Mute Interaction History covers schemes where the **Snooze** button is prese
   <img width="600" alt="Mute Interaction History screenshot." src="https://user-images.githubusercontent.com/54873610/169371757-e957143b-e7a2-4973-9bf4-e11c87e825d7.png">
 </p>
 
-## 5. Full Developer's Guide to Implement GPC Privacy Choice
+## 5. Full Developer Set-Up Guide to Implement GPC Privacy Choice
 
 **NOTE: In order to create a Firebase project, you need 'Cloud Resource Manager project creation' to be enabled. This may be disabled if you are using an institutional account.**
 
 Follow the instructions to implement the GPC Privacy Choice browser extension for your own projects.
 
-1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
+1. Clone this repo:
+
+   ```bash
+   git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git
+   ```
+
 2. Create a Firebase Cloud Firestore project. [Here](https://firebase.google.com/docs/firestore/quickstart) are detailed instructions on how to set up a Firebase server for data collection. Before proceeding, make sure that you have created a Firebase account, a Cloud Firestore database and a web app within the database, and selected **Test Mode** as the starting mode for your Cloud Firestore Security Rules. Do not worry about installing the SDK; we have already added the required dependencies, client libraries, and initialized an instance of Cloud Firestore.
 3. In the `src` folder, create a `config.js` file and add in the following code. Be sure to update the fields based on the Firebase Cloud Firestore project you have set up. The information should be in **Project Settings**, under the **General** tab. Make sure you have your web app selected, then switch the **SDK setup and configuration** from `npm` to `config` to see all the necessary information. You can pick any password you like. Upon installing the extension users will be asked for the password. If users do not enter a password or enter a wrong password, no data will be collected on Firebase. If you are running a study with multiple schemes one after another, it is recommended to change the password between schemes. Otherwise, data from study participants running a previous scheme may continue to be collected inadvertently.
 
@@ -281,7 +291,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
 
 4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
-6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5f473753tbf20b123d695213 for testing purposes). You also need to supply the password you created above. The registration process should start.
+6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 7. Reviewer may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme.
 8. The best way to deploy GPC Privacy Choice, for example, to participants in a research study, is via the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
@@ -355,6 +365,8 @@ The Dolphin logo is used under the CC-BY 4.0 license copyright Twitter, Inc.
 - **The domain list on Firebase updates on leaving a site**: So, when a user visits site A and then site B, site A will show up in the domain list at the time the user opens site B.
 - **In rare instances browser updates may require re-registration**: For already registered users, upon browser updates, the extension may display the user registration page again. No data may be collected on Firebase until the user re-registers. If the user re-registers, a second Firebase ID will be created and data will be collected from that moment on under that Firebase ID. Data for the same user under different Firebase IDs can be combined in the post-processing stages.
 - **Scheme 7 does not send GPC Signals.** It is a front-end implementation only.
+- **Errors in the Chrome Manage Extensions tab** If you have successfully installed the GPC Privacy Choice extension, you may have noticed that the extension has multiple documented errors on the Manage Extensions page. As far as we can tell, none of these errors have ever inhibited the functionality of our extension, and as such, we have not yet addressed them.
+- **Available only on Chromium browsers** Although our extension is generally available on Chromium browsers (Chrome, Brave, etc.) it cannot be installed on other browsers, such as Firefox.
 
 ## 10. Thank You!
 
