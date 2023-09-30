@@ -48,23 +48,22 @@ GPC Privacy Choice is developed and maintained by **Eliza Kuller (@ekuller)**, *
 In order to set up the environment for our extension, you should have Git installed.
 
 1. Clone this repo: `git clone https://github.com/privacy-tech-lab/gpc-privacy-choice.git`.
-
 2. In the `src` folder, create a `config.js` file. If you not wish to set up a Firebase backend and only want to observe the frontend UI, you can copy the following information into the required config file and use the provided password (12345).
 
-```javascript
-export const PASSWORD = "12345";
+   ```javascript
+   export const PASSWORD = "12345";
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyC08Bt3IUPn_6Sn469x-M1VwIb4KTXHYNo",
-  authDomain: "gpc-example.firebaseapp.com",
-  projectId: "gpc-example",
-  storageBucket: "gpc-example.appspot.com",
-  messagingSenderId: "403632222995",
-  appId: "1:403632222995:web:6f72eb626ff4214ba060e6",
-};
-```
+   export const firebaseConfig = {
+     apiKey: "AIzaSyC08Bt3IUPn_6Sn469x-M1VwIb4KTXHYNo",
+     authDomain: "gpc-example.firebaseapp.com",
+     projectId: "gpc-example",
+     storageBucket: "gpc-example.appspot.com",
+     messagingSenderId: "403632222995",
+     appId: "1:403632222995:web:6f72eb626ff4214ba060e6",
+   };
+   ```
 
-Alternatively, if you wish to set up your own Firebase backend, we recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-full-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
+   Alternatively, if you wish to set up your own Firebase backend, we recommend looking at our [Full Developer's Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-full-developers-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
 
 3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
 4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
