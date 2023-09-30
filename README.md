@@ -19,7 +19,7 @@
 
 GPC Privacy Choice is a Chromium browser extension for researching the usability of privacy choices, especially, opting out from web tracking with [Global Privacy Control (GPC)](https://globalprivacycontrol.org/). Our goal is to strike a balance between giving people sufficient options to make their privacy choices on one side and not overburdening them with too many or too complicated choices on the other. Enabling opting out by default for all websites proved to be a major roadblock for the adoption of [Do Not Track (DNT)](https://www.w3.org/TR/tracking-dnt/). We take the learnings from DNT to improve GPC.
 
-Once installed, our GPC Privacy Choice Extension injects a privacy choice scheme, for example, a banner asking whether a user wants to enable GPC on the current website they visit. Data about the user's choices as well as details about the visited websites are then transmitted to a backend for analysis. The focus of this extension is on researching user interface design. However, the extension is fully functional and is sending header-based GPC signals. Thus, it serves as a working prototype for all privacy choice schemes we implement.
+Once installed, our GPC Privacy Choice extension injects a privacy choice scheme, for example, a banner asking whether a user wants to enable GPC on the current website they visit. Data about the user's choices as well as details about the visited websites are then transmitted to a backend for analysis. The focus of this extension is on researching user interface design. However, the extension is fully functional and is sending header-based GPC signals. Thus, it serves as a working prototype for all privacy choice schemes we implement.
 
 GPC Privacy Choice is developed and maintained by **Sebastian Zimmeck (@SebastianZimmeck)**, **Eliza Kuller (@ekuller)**, **Chunyue Ma (@chunyuema)**, **Isabella Tassone (@bella-tassone)**, and **Joe Champeau (@JoeChampeau)** of the [privacy-tech-lab](https://privacytechlab.org/). Kuba Alicki (@kalicki1), Daniel Knopf (@dknopf), and Abdallah Salia (@asalia-1) contributed earlier.
 
@@ -70,7 +70,7 @@ In order to set up the environment for our extension, you should have Git instal
 
    Alternatively, if you wish to set up your own Firebase backend, we recommend looking at our [Full Developer Set-Up Guide to Implement GPC Privacy Choice](https://github.com/privacy-tech-lab/gpc-privacy-choice#5-full-developer-set-up-guide-to-implement-gpc-privacy-choice) for more in-depth instructions.
 
-3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings.
+3. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the Manage Extension options from settings.
 4. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src`.
 5. The extension should now be loaded and you should see the registration page pop up on the browser. We signed up participants for our usability study to test the different schemes via [Prolific](https://www.prolific.com). In order to access the extension, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 6. You may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme. See [Privacy Choice Schemes](https://github.com/privacy-tech-lab/gpc-privacy-choice#3-privacy-choice-schemes) for full descriptions of each scheme.
@@ -170,7 +170,7 @@ The GPC Privacy Choice browser extension records how users interact with the sit
 
 The browser extension collects the following data types from users, but data is never disclosed to any third-party. We never disclose any identifiable information.
 
-Below is the list of data types that the browser extension generally collects from users of the GPC Privacy Choice Extension:
+Below is the list of data types that the browser extension generally collects from users of the GPC Privacy Choice extension:
 
 #### General:
 
@@ -190,7 +190,7 @@ Below is the list of data types that the browser extension generally collects fr
 - UI scheme of your browser
 - User agent of your browser
 
-#### Browser history and Interaction with our extensions:
+#### Browser history and Interaction with our extension:
 
 - The website URLs you visit (e.g. https://www.cnbc.com/finance/)
 - A timestamp when you visited a website
@@ -289,7 +289,7 @@ Follow the instructions to implement the GPC Privacy Choice browser extension fo
    };
    ```
 
-4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the manage extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
+4. To test the extension from a local repo, open the browser (Chrome, Brave, etc) and find the Manage Extension options from settings. In Google Chrome, this can be done by clicking on the puzzle icon on the top right corner and then clicking `Manage Extensions`.
 5. Turn on developer mode, and then click the `Load unpacked` button. Select the folder `gpc-privacy-choice/src` from your files.
 6. The extension should now be loaded and you should see the registration page popping up on the browser. In order to access the extension and start writing to your database, supply a string formatted as a valid Prolific ID (you may use 5a123456xyz12u123v123456 for testing purposes). You also need to supply the password you created above. The registration process should start.
 7. Reviewer may switch between schemes by manually setting it in line 741 of the `background.js` file of the repository, where there is a list of what number corresponds to which scheme.
@@ -319,7 +319,7 @@ Here are the most important files and directories:
   - `src/firebase/firestore.rules`: This file contains the rules for reading and writing to the Firestore database.
 - `src/img`: Contains all image resources.
 - `src/json`:
-  - `src/json/headers.json`: Contains the JSON configuration files for the extensions Do Not Sell and Do Not Track headers.
+  - `src/json/headers.json`: Contains the JSON configuration files for the extension's Do Not Sell and Do Not Track headers.
   - `src/json/services.json`: Contains the third party services and their categories used in some of the schemes.
 - `src/libs-css`: Contains all CSS libraries used in the browser extension.
 - `src/libs-js`: Contains all JS libraries used in the browser extension.
